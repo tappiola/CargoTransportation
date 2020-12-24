@@ -1,7 +1,7 @@
 import { someMiddleware } from './someMiddleware';
 
 const middlewares = [
-    someMiddleware,
-]
+  someMiddleware,
+];
 
 export default middlewares;

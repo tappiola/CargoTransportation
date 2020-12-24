@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import { someActionCreator } from "../../redux/actions";
-import Main from "../Main/Main";
+import React from 'react';
+import { connect } from 'react-redux';
+import { someActionCreator } from '../../redux/actions';
+import Main from '../Main/Main';
 
 function App() {
   return (

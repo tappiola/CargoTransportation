@@ -1,1 +1,1 @@
-export { someActionCreator } from "./someActionCreator";
+export { someActionCreator } from './someActionCreator';
