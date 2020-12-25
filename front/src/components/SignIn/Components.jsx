@@ -38,7 +38,7 @@ export const PasswordField = (props) => (
 
 export const SubmitButton = (props) => (
   <Button
-    type="button"
+    type="submit"
     fullWidth
     variant="contained"
     color="primary"

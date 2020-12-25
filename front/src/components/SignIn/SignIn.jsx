@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useInput } from '../../utils';
+import { useInput, validateEmail, validatePassword } from '../../utils';
 
 import {
-  EmailField,
-  PasswordField,
-  SubmitButton,
-  Logo,
+  EmailField, PasswordField, SubmitButton, Logo,
 } from './Components';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,17 +36,31 @@ function SignIn(props) {
   const { value: email, bind: bindEmail } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
 
-  const handleSubmit = () => props.onSubmit(email, password);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isPasswordValid = validatePassword(password);
+    const isEmailValid = validateEmail(email);
+
+    setEmailError(!isEmailValid);
+    setPasswordError(!isPasswordValid);
+
+    if (props.onSubmit && isEmailValid && isPasswordValid) {
+      props.onSubmit(email, password);
+    }
+  };
 
   return (
     <Container maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Logo className={classes.avatar} />
-        <form className={classes.form} noValidate>
-          <EmailField {...bindEmail} />
-          <PasswordField {...bindPassword} />
-          <SubmitButton className={classes.submit} onClick={handleSubmit} />
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
+          <EmailField error={emailError} {...bindEmail} />
+          <PasswordField error={passwordError} {...bindPassword} />
+          <SubmitButton className={classes.submit} />
         </form>
       </div>
     </Container>
