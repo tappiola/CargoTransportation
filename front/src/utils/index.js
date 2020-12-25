@@ -1,2 +1,2 @@
 export { someUtil } from './someUtil';
-export { useInput } from './useInput'; 
+export { useInput } from './useInput';

@@ -1,16 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+
+import { useInput } from '../../utils';
+
+import {
+  EmailField,
+  PasswordField,
+  SubmitButton,
+  Logo,
+} from './Components';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,59 +33,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const onSubmit = (email, password) => {
+  console.log(`Email: ${email} Password: ${password}`);
+};
+
 function SignIn() {
   const classes = useStyles();
 
+  const { value: email, bind: bindEmail } = useInput('');
+  const { value: password, bind: bindPassword } = useInput('');
+
+  const handleSubmit = () => onSubmit(email, password);
+
   return (
-    <Container component="main" maxWidth="xs">
+    <Container maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h2" variant="h5">
-          Sign in
-        </Typography>
+        <Logo className={classes.avatar} />
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
+          <EmailField {...bindEmail} />
+          <PasswordField {...bindPassword} />
+          <SubmitButton className={classes.submit} onClick={handleSubmit} />
         </form>
       </div>
     </Container>
   );
 }
-
-export default connect()(SignIn);
+export default SignIn;
