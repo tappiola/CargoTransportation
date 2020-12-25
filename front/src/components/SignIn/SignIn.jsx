@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { useInput, validateEmail, validatePassword } from '../../utils';
-
+import { loginUser } from '../../redux/actions';
 import {
   EmailField, PasswordField, SubmitButton, Logo,
 } from './Components';
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn(props) {
   const classes = useStyles();
+  const routerHistory = useHistory();
 
   const { value: email, bind: bindEmail } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
@@ -48,7 +51,7 @@ function SignIn(props) {
     setPasswordError(!isPasswordValid);
 
     if (props.onSubmit && isEmailValid && isPasswordValid) {
-      props.onSubmit(email, password);
+      props.onSubmit({ email, password, routerHistory });
     }
   };
 
@@ -66,4 +69,12 @@ function SignIn(props) {
     </Container>
   );
 }
-export default SignIn;
+
+export default connect(
+  null,
+  (dispatch) => ({
+    onSubmit({ email, password, routerHistory }) {
+      dispatch(loginUser(email, password, routerHistory));
+    },
+  }),
+)(SignIn);
