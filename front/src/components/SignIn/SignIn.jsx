@@ -33,17 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const onSubmit = (email, password) => {
-  console.log(`Email: ${email} Password: ${password}`);
-};
-
-function SignIn() {
+function SignIn(props) {
   const classes = useStyles();
 
   const { value: email, bind: bindEmail } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
 
-  const handleSubmit = () => onSubmit(email, password);
+  const handleSubmit = () => props.onSubmit(email, password);
 
   return (
     <Container maxWidth="xs">
