@@ -10,60 +10,57 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ReportIcon from '@material-ui/icons/Report';
 import EmailIcon from '@material-ui/icons/Email';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import { useLocation } from 'react-router-dom';
+import { ALLOWED_MODULES } from '../App/ModulesConfig';
+import { MODULES } from '../../constants/permissions';
 
-// TODO: get from redux store
-export const AllowedPaths = [
-  '/acts',
-  '/clients',
-  '/warehouses',
-  '/consignment-notes',
-  '/reports',
-  '/waybills',
-  '/mailings',
-  '/users',
-];
-
-const PATHS_TO_MENU_ITEMS = [
-  {
-    position: 0, path: '/clients', menuItemName: 'Клиенты', icon: PeopleIcon,
+const MENU_ITEMS_CONFIG = {
+  [MODULES.CLIENTS]: {
+    menuItemName: 'Клиенты', icon: PeopleIcon,
   },
-  {
-    position: 1, path: '/warehouses', menuItemName: 'Склады', icon: ShoppingCartIcon,
+  [MODULES.ACTS]: {
+    menuItemName: 'Акты', icon: ReportIcon,
   },
-  {
-    position: 2, path: '/acts', menuItemName: 'Акты', icon: ReportIcon,
+  [MODULES.USERS]: {
+    menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
-  {
-    position: 3, path: '/waybills', menuItemName: 'Путевые листы', icon: LocalShippingIcon,
+  [MODULES.WAREHOUSES]: {
+    menuItemName: 'Склады', icon: ShoppingCartIcon,
   },
-  {
-    position: 4, path: '/reports', menuItemName: 'Отчеты', icon: BarChartIcon,
+  [MODULES.WAYBILLS]: {
+    menuItemName: 'Путевые листы', icon: LocalShippingIcon,
   },
-  {
-    position: 5, path: '/consignment-notes', menuItemName: 'ТТН', icon: AssignmentIcon,
+  [MODULES.CONSIGNMENT_NOTES]: {
+    menuItemName: 'ТТН', icon: AssignmentIcon,
   },
-  {
-    position: 6, path: '/users', menuItemName: 'Пользователи', icon: AccountBoxIcon,
+  [MODULES.REPORTS]: {
+    menuItemName: 'Отчеты', icon: BarChartIcon,
   },
-  {
-    position: 7, path: '/mailings', menuItemName: 'Рассылки', icon: EmailIcon,
+  [MODULES.MAILINGS]: {
+    menuItemName: 'Рассылки', icon: EmailIcon,
   },
-];
+};
 
 export function MenuItems() {
+  const { pathname } = useLocation();
   return (
     <div>
-      {PATHS_TO_MENU_ITEMS
-        .filter((i) => AllowedPaths.includes(i.path))
-        .sort((a, b) => a.position - b.position)
-        .map((i) => {
-          const Icon = i.icon;
+      {Object.entries(ALLOWED_MODULES)
+        .map(([module, { basePath }]) => {
+          const itemConfig = MENU_ITEMS_CONFIG[module];
+          const Icon = itemConfig.icon;
           return (
-            <ListItem key={i.path.slice(1)} button component="a" href={i.path}>
+            <ListItem
+              selected={pathname.startsWith(basePath)}
+              key={basePath.slice(1)}
+              button
+              component="a"
+              href={basePath}
+            >
               <ListItemIcon>
                 <Icon />
               </ListItemIcon>
-              <ListItemText primary={i.menuItemName} />
+              <ListItemText primary={itemConfig.menuItemName} />
             </ListItem>
           );
         })}

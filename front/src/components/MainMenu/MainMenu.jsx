@@ -7,11 +7,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PropTypes from 'prop-types';
 import { MenuItems } from './MenuItems';
 
@@ -111,9 +111,10 @@ export default function MainMenu({ children }) {
             Грузоперевозки
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+            <SettingsIcon />
+          </IconButton>
+          <IconButton color="inherit">
+            <ExitToAppIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
