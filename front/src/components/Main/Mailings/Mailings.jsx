@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
 export default function Mailings() {
-    return <div>Рассылки</div>;
+  return <div>Рассылки</div>;
 }

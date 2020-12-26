@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
 export default function Warehouses() {
-    return <div>Склады</div>;
+  return <div>Склады</div>;
 }

@@ -20,6 +20,6 @@ module.exports = {
   ],
   rules: {
     'import/prefer-default-export': 'off',
-    "linebreak-style": 0
+    'linebreak-style': 0,
   },
 };

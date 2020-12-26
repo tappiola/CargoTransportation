@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
 export default function Acts() {
-    return <div>Путевые листы</div>;
+  return <div>Путевые листы</div>;
 }

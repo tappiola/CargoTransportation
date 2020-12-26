@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +12,7 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import PropTypes from 'prop-types';
 import { MenuItems } from './MenuItems';
 
 const drawerWidth = 240;
@@ -130,7 +130,7 @@ export default function MainMenu({ children }) {
           </IconButton>
         </div>
         <Divider />
-        <MenuItems/>
+        <MenuItems />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -139,3 +139,7 @@ export default function MainMenu({ children }) {
     </div>
   );
 }
+
+MainMenu.propTypes = {
+  children: PropTypes.node.isRequired,
+};
