@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ruRU } from '@material-ui/core/locale';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { someActionCreator } from '../../redux/actions';
 import MainMenu from '../MainMenu/MainMenu';
 import { ALLOWED_MODULES } from './ModulesConfig';
@@ -16,6 +17,7 @@ const theme = createMuiTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <MainMenu>
           <Switch>

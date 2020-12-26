@@ -10,7 +10,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import ReportIcon from '@material-ui/icons/Report';
 import EmailIcon from '@material-ui/icons/Email';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { ALLOWED_MODULES } from '../App/ModulesConfig';
 import { MODULES } from '../../constants/permissions';
 
@@ -54,8 +54,8 @@ export function MenuItems() {
               selected={pathname.startsWith(basePath)}
               key={basePath.slice(1)}
               button
-              component="a"
-              href={basePath}
+              component={NavLink}
+              to={basePath}
             >
               <ListItemIcon>
                 <Icon />
