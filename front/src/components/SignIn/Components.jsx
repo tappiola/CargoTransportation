@@ -13,7 +13,7 @@ export const EmailField = (props) => (
     required
     fullWidth
     id="email"
-    label="Email Address"
+    label="Email"
     name="email"
     autoComplete="email"
     autoFocus
@@ -28,7 +28,7 @@ export const PasswordField = (props) => (
     required
     fullWidth
     name="password"
-    label="Password"
+    label="Пароль"
     type="password"
     id="password"
     autoComplete="current-password"
@@ -44,7 +44,7 @@ export const SubmitButton = (props) => (
     color="primary"
     {...props}
   >
-    Sign In
+    Вход
   </Button>
 );
 
@@ -54,7 +54,7 @@ export const Logo = ({ className }) => (
       <LockOutlinedIcon />
     </Avatar>
     <Typography component="h2" variant="h5">
-      Sign in
+      Войти в Систему
     </Typography>
   </>
 );

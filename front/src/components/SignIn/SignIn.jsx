@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -57,7 +56,6 @@ function SignIn(props) {
 
   return (
     <Container maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Logo className={classes.avatar} />
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
