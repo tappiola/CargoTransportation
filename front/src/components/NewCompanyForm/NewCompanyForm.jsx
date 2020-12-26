@@ -1,13 +1,10 @@
-import React /* useState */ from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
-// import { useInput, validateEmail, validatePassword } from '../../utils';
-// import { loginUser } from '../../redux/actions';
 import {
   NameField,
   SurnameField,
@@ -19,7 +16,21 @@ import {
   RoleField,
 } from './Components';
 
-const useInput = () => ['some temp data', () => null];
+const useInput = (initialValue) => {
+  const [value, setValue] = useState(initialValue);
+
+  return {
+    value,
+    setValue,
+    bind: {
+      value,
+      onChange: (event) => {
+        setValue(event.target.value);
+      },
+    },
+  };
+};
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -39,33 +50,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignIn() {
+function SignIn({ onSubmit }) {
   const classes = useStyles();
-
-  const { value: name, bind: bindName } = useInput('');
+  const [adress, setAdress] = useState(null);
+  const [birthDate, setBirthDate] = useState(null);
+  const { value: firstname, bind: bindName } = useInput('');
   const { value: surname, bind: bindSurname } = useInput('');
   const { value: middleName, bind: bindMiddleName } = useInput('');
-
-  // const [emailError, setEmailError] = useState(false);
-  // const [passwordError, setPasswordError] = useState(false);
+  const { value: email, bind: bindEmail } = useInput('');
 
   const handleSubmit = (e) => {
-    console.log(name, surname, middleName);
     e.preventDefault();
+
+    if (firstname && surname && email && adress) {
+      onSubmit({
+        firstname,
+        surname,
+        middleName,
+        email,
+        adress,
+        birthDate,
+      });
+    }
   };
 
   return (
     <Container maxWidth="sm">
-      <CssBaseline />
       <div className={classes.paper}>
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container justify="space-between" spacing={3}>
             <NameField {...bindName} />
             <MiddleNameField {...bindMiddleName} />
             <SurnameField {...bindSurname} />
-            <BirthdayField />
-            <EmailField />
-            <AdressBlock />
+            <BirthdayField bindBirthDate={setBirthDate} />
+            <EmailField {...bindEmail} />
+            <AdressBlock bindAdress={setAdress} />
             <RoleField />
             <SubmitButton className={classes.submit} />
           </Grid>
@@ -75,4 +94,24 @@ function SignIn() {
   );
 }
 
-export default connect(null, (/* dispatch */) => ({}))(SignIn);
+export default connect(null, (/* dispatch */) => ({
+  onSubmit({
+    firstname, surname, middleName, email, birthDate, adress,
+  }) {
+    // dispatch();
+    console.log(
+      'Name: ',
+      firstname,
+      '\nSurname:',
+      surname,
+      '\nMiddle:',
+      middleName,
+      '\nEmail: ',
+      email,
+      '\nBirthday: ',
+      birthDate,
+      '\n\nAdress: ',
+      adress,
+    );
+  },
+}))(SignIn);

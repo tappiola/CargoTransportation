@@ -1,34 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import DatePicker from 'react-date-picker';
 
-export const SurnameField = () => (
+// temp
+const useInput = (initialValue) => {
+  const [value, setValue] = useState(initialValue);
+
+  return {
+    value,
+    setValue,
+    bind: {
+      value,
+      onChange: (event) => {
+        setValue(event.target.value);
+      },
+    },
+  };
+};
+
+export const SurnameField = (props) => (
   <Grid item xs={12} md={12}>
-    <TextField label="Surname" fullWidth required />
+    <TextField
+      label="Фамилия"
+      autoComplete="family-name"
+      name="surname"
+      fullWidth
+      required
+      {...props}
+    />
   </Grid>
 );
 
-export const NameField = () => (
+export const NameField = (props) => (
   <Grid item xs={12} md={6}>
-    <TextField label="Name" fullWidth required />
+    <TextField
+      label="Имя"
+      autoComplete="given-name"
+      name="name"
+      fullWidth
+      required
+      {...props}
+    />
   </Grid>
 );
-export const MiddleNameField = () => (
+
+export const MiddleNameField = (props) => (
   <Grid item xs={12} md={6}>
-    <TextField label="Middle name" fullWidth required />
+    <TextField
+      label="Отчество"
+      name="middle-name"
+      autoComplete="additional-name"
+      fullWidth
+      {...props}
+    />
   </Grid>
 );
 
 export const SubmitButton = (props) => (
-  <Grid item xs={12} maxWidth="sm">
+  <Grid item xs={12}>
     <Button
       type="submit"
       variant="contained"
@@ -36,44 +69,41 @@ export const SubmitButton = (props) => (
       {...props}
       fullWidth
     >
-      Sign In
+      Готово
     </Button>
   </Grid>
 );
 
-export const BirthdayField = () => {
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+export const BirthdayField = ({ bindBirthDate }) => {
+  const [birthDate, setBirthDate] = useState(new Date());
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    setBirthDate(date);
+    bindBirthDate(date);
   };
 
   return (
     <Grid item>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          margin="normal"
-          id="date-picker-dialog"
-          label="Date of birth"
-          format="MM/dd/yyyy"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-      </MuiPickersUtilsProvider>
+      <DatePicker
+        margin="normal"
+        name="bday"
+        id="date-picker-dialog"
+        label="Дата рождения"
+        format="dd/MM/yyyy"
+        value={birthDate}
+        autoComplete="bday"
+        onChange={handleDateChange}
+      />
     </Grid>
   );
 };
 
 export const EmailField = (props) => (
-  <Grid item xs={10}>
+  <Grid item xs={12}>
     <TextField
       required
       fullWidth
-      id="email"
-      label="Email Address"
+      label="Email"
       name="email"
       autoComplete="email"
       autoFocus
@@ -82,29 +112,71 @@ export const EmailField = (props) => (
   </Grid>
 );
 
-export const AdressBlock = () => (
-  <Grid container item spacing={1}>
-    <Grid item xs={6} sm={4}>
-      <TextField label="City" fullWidth required />
+export const AdressBlock = ({ bindAdress }) => {
+  const { value: city, bind: bindCity } = useInput('');
+  const { value: street, bind: bindStreet } = useInput('');
+  const { value: house, bind: bindHouse } = useInput('');
+  const { value: apartment, bind: bindApartment } = useInput('');
+
+  useEffect(
+    () => bindAdress({
+      city,
+      street,
+      house,
+      apartment,
+    }),
+    [city, street, house, apartment],
+  );
+
+  return (
+    <Grid container item spacing={1}>
+      <Grid item xs={6} sm={4}>
+        <TextField
+          label="Город"
+          name="city"
+          autoComplete="address-level2"
+          fullWidth
+          required
+          {...bindCity}
+        />
+      </Grid>
+      <Grid item xs={6} sm={4}>
+        <TextField
+          label="Улица"
+          name="street"
+          fullWidth
+          required
+          {...bindStreet}
+        />
+      </Grid>
+      <Grid item xs={6} sm={2}>
+        <TextField
+          label="Дом"
+          name="house"
+          autoComplete="address-level3"
+          fullWidth
+          required
+          {...bindHouse}
+        />
+      </Grid>
+      <Grid item xs={6} sm={2}>
+        <TextField
+          label="Квартира"
+          autoComplete="address-level4"
+          fullWidth
+          {...bindApartment}
+        />
+      </Grid>
     </Grid>
-    <Grid item xs={6} sm={4}>
-      <TextField label="Street" fullWidth required />
-    </Grid>
-    <Grid item xs={6} sm={2}>
-      <TextField label="House" fullWidth required />
-    </Grid>
-    <Grid item xs={6} sm={2}>
-      <TextField label="Apartment" fullWidth />
-    </Grid>
-  </Grid>
-);
+  );
+};
 
 export const RoleField = () => {
-  const [role, setRole] = React.useState('EUR');
+  const [role, setRole] = useState('admin');
   const roles = [
-    { value: 'admin', label: 'Admin' },
-    { value: 'dispatcher', label: 'Dispatcher' },
-    { value: 'company-owner', label: 'Company owner' },
+    { value: 'admin', label: 'Администратор' },
+    { value: 'dispatcher', label: 'Диспетчер' },
+    { value: 'company-owner', label: 'Владелец компании' },
   ];
 
   const handleChange = (event) => {
@@ -112,11 +184,11 @@ export const RoleField = () => {
   };
 
   return (
-    <Grid item xs={6}>
+    <Grid item xs={12} sm={6}>
       <TextField
-        id="standard-select-currency"
         select
-        label="Role"
+        label="Роль"
+        name="role"
         value={role}
         onChange={handleChange}
         fullWidth
