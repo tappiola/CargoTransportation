@@ -5,25 +5,37 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import DatePicker from 'react-date-picker';
+import { Typography } from '@material-ui/core';
 
 const useStyle = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
+  },
+  label: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+  },
+  wrapper: {
     border: 'hidden',
     '& > div': {
+      padding: theme.spacing(0, 0, 0.5),
       border: 'none',
       borderBottomColor: theme.palette.text.secondary,
       borderBottomWidth: 1,
       borderBottomStyle: 'solid',
     },
     '& svg': {
+      display: 'none',
       stroke: theme.palette.text.secondary,
     },
     '& *:focus': {
       outlineWidth: 0,
     },
     '& input': {
-      ...theme.typography.subtitle2,
+      ...theme.typography.subtitle1,
+      minWidth: 40,
+      textAlign: 'center',
+      letterSpacing: 'initial',
       color: theme.palette.text.secondary,
     },
   },
@@ -106,9 +118,12 @@ export const BirthdayField = ({ bindBirthDate }) => {
   };
 
   return (
-    <Grid item>
+    <Grid item container alignItems="center" className={classes.root}>
+      <Typography variant="subtitle1" className={classes.label}>
+        Дата рождения:
+      </Typography>
       <DatePicker
-        className={classes.root}
+        className={classes.wrapper}
         timeClassName={classes.date}
         margin="normal"
         name="bday"
