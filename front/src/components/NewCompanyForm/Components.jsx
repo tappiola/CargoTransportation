@@ -1,10 +1,33 @@
 import React, { useEffect, useState } from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import DatePicker from 'react-date-picker';
+
+const useStyle = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(2),
+    border: 'hidden',
+    '& > div': {
+      border: 'none',
+      borderBottomColor: theme.palette.text.secondary,
+      borderBottomWidth: 1,
+      borderBottomStyle: 'solid',
+    },
+    '& svg': {
+      stroke: theme.palette.text.secondary,
+    },
+    '& *:focus': {
+      outlineWidth: 0,
+    },
+    '& input': {
+      ...theme.typography.subtitle2,
+      color: theme.palette.text.secondary,
+    },
+  },
+}));
 
 // temp
 const useInput = (initialValue) => {
@@ -76,7 +99,7 @@ export const SubmitButton = (props) => (
 
 export const BirthdayField = ({ bindBirthDate }) => {
   const [birthDate, setBirthDate] = useState(new Date());
-
+  const classes = useStyle();
   const handleDateChange = (date) => {
     setBirthDate(date);
     bindBirthDate(date);
@@ -85,6 +108,8 @@ export const BirthdayField = ({ bindBirthDate }) => {
   return (
     <Grid item>
       <DatePicker
+        className={classes.root}
+        timeClassName={classes.date}
         margin="normal"
         name="bday"
         id="date-picker-dialog"
