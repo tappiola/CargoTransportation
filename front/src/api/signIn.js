@@ -1,5 +1,5 @@
 export const signIn = async (email, password) => {
-  const url = 'http://localhost:9000/users/login';
+  const url = '/users/login';
   const data = { user: { email, password } };
   const params = {
     method: 'POST',
