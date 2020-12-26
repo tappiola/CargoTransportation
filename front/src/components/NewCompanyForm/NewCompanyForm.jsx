@@ -16,6 +16,9 @@ import {
   RoleField,
 } from './Components';
 
+// will be imported from /utils
+import { userDataValidator } from './validators';
+
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
@@ -50,34 +53,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignIn({ onSubmit }) {
+//
+function SignIn({ prevUserData = {}, onSubmit }) {
   const classes = useStyles();
-  const [adress, setAdress] = useState(null);
-  const [birthDate, setBirthDate] = useState(null);
-  const { value: firstname, bind: bindName } = useInput('');
-  const { value: surname, bind: bindSurname } = useInput('');
-  const { value: middleName, bind: bindMiddleName } = useInput('');
-  const { value: email, bind: bindEmail } = useInput('');
+  const [adress, setAdress] = useState(prevUserData.adress || null);
+  const [birthDate, setBirthDate] = useState(prevUserData.birthDate || null);
+  const { value: firstname, bind: bindName } = useInput(prevUserData.firstname || '');
+  const { value: surname, bind: bindSurname } = useInput(prevUserData.surname || '');
+  const { value: middleName, bind: bindMiddleName } = useInput(prevUserData.middleName || '');
+  const { value: email, bind: bindEmail } = useInput(prevUserData.email || '');
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const userData = {
+      firstname,
+      surname,
+      middleName,
+      email,
+      adress,
+      birthDate,
+    };
 
-    if (firstname && surname && email && adress) {
-      onSubmit({
-        firstname,
-        surname,
-        middleName,
-        email,
-        adress,
-        birthDate,
-      });
+    if (userDataValidator(userData)) {
+      onSubmit(userData);
     }
   };
 
   return (
     <Container maxWidth="sm">
       <div className={classes.paper}>
-        <form className={classes.form} onSubmit={handleSubmit} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container justify="space-between" spacing={3}>
             <NameField {...bindName} />
             <MiddleNameField {...bindMiddleName} />
@@ -95,23 +100,7 @@ function SignIn({ onSubmit }) {
 }
 
 export default connect(null, (/* dispatch */) => ({
-  onSubmit({
-    firstname, surname, middleName, email, birthDate, adress,
-  }) {
+  onSubmit() {
     // dispatch();
-    console.log(
-      'Name: ',
-      firstname,
-      '\nSurname:',
-      surname,
-      '\nMiddle:',
-      middleName,
-      '\nEmail: ',
-      email,
-      '\nBirthday: ',
-      birthDate,
-      '\n\nAdress: ',
-      adress,
-    );
   },
 }))(SignIn);

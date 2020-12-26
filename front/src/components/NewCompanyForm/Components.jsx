@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import DatePicker from 'react-date-picker';
-import { Typography } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -217,6 +217,7 @@ export const RoleField = () => {
     { value: 'admin', label: 'Администратор' },
     { value: 'dispatcher', label: 'Диспетчер' },
     { value: 'company-owner', label: 'Владелец компании' },
+    { value: 'Driver', label: 'Водитель' },
   ];
 
   const handleChange = (event) => {
