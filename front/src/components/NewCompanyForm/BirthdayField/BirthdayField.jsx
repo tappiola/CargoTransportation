@@ -21,9 +21,13 @@ const useStyle = makeStyles((theme) => ({
     '& > div': {
       padding: theme.spacing(0, 0, 0.5),
       border: 'none',
-      borderBottomColor: error ? theme.palette.error.light : theme.palette.text.secondary,
-      borderBottomWidth: 1,
+      borderBottomColor: error ? theme.palette.error.main : theme.palette.text.secondary,
+      borderBottomWidth: error ? 2 : 1,
       borderBottomStyle: 'solid',
+    },
+    '& > div:focus': {
+      borderBottomWidth: 2,
+      borderBottomColor: error ? 'red' : theme.palette.primary.main,
     },
     '& svg': {
       display: 'none',
@@ -37,7 +41,7 @@ const useStyle = makeStyles((theme) => ({
       minWidth: 30,
       textAlign: 'center',
       letterSpacing: 'initial',
-      color: theme.palette.text.secondary,
+      color: error ? theme.palette.error.main : theme.palette.text.secondary,
     },
     '& span[class$="leadingZero"]': {
       // zero before date < 10

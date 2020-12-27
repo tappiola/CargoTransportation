@@ -1,6 +1,6 @@
 export const textValidator = (str) => typeof str === 'string' && str.length > 2;
 
-export const emailValidator = () => true; // already exist
+export const emailValidator = (str) => textValidator(str); // already exist
 
 export const dateValidator = (date) => (
   date instanceof Date
