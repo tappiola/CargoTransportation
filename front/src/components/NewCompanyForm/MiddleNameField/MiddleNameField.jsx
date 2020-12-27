@@ -9,7 +9,7 @@ export const MiddleNameField = ({ onChange, defaultValue }) => {
   const { value: middleName, bind: bindMiddleName } = useInput(defaultValue);
 
   useEffect(() => {
-    onChange(middleName);
+    onChange((prev) => ({ ...prev, middleName }));
   }, [middleName]);
 
   return (

@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { useInput } from '../../../utils';
 import * as validators from '../validators';
 
-export const AdressBlock = ({ bindAdress, defaultValue }) => {
+export const AdressBlock = ({ onChange, defaultValue }) => {
   const { value: city, bind: bindCity } = useInput(defaultValue.city);
   const { value: street, bind: bindStreet } = useInput(defaultValue.street);
   const { value: house, bind: bindHouse } = useInput(defaultValue.house);
@@ -33,12 +33,12 @@ export const AdressBlock = ({ bindAdress, defaultValue }) => {
 
   useEffect(() => {
     if (!cityError && !streetError && !houseError) {
-      bindAdress({
-        city,
-        street,
-        house,
-        apartment,
-      });
+      onChange((prev) => ({
+        ...prev,
+        adress: {
+          city, street, house, apartment,
+        },
+      }));
     }
   }, [city, street, house, apartment]);
 
@@ -92,7 +92,7 @@ export const AdressBlock = ({ bindAdress, defaultValue }) => {
 };
 
 AdressBlock.propTypes = {
-  bindAdress: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   defaultValue: PropTypes.PropTypes.exact({
     city: PropTypes.string,
     street: PropTypes.string,

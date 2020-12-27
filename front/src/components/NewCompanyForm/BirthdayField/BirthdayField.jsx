@@ -46,16 +46,16 @@ const useStyle = makeStyles((theme) => ({
   }),
 }));
 
-export const BirthdayField = ({ bindBirthDate }) => {
-  const [birthDate, setBirthDate] = useState(new Date());
+export const BirthdayField = ({ onChange, defaultValue }) => {
+  const [birthDate, setBirthDate] = useState(defaultValue);
   const [dateError, setDateError] = useState(false);
   const classes = useStyle(dateError);
   const handleDateChange = (date) => {
     setDateError(!dateValidator(date));
 
     if (dateValidator(date)) {
+      onChange((prev) => ({ ...prev, birthDate: date }));
       setBirthDate(date);
-      bindBirthDate(date);
     }
   };
 
@@ -81,5 +81,6 @@ export const BirthdayField = ({ bindBirthDate }) => {
 };
 
 BirthdayField.propTypes = {
-  bindBirthDate: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  defaultValue: PropTypes.instanceOf(Date).isRequired,
 };

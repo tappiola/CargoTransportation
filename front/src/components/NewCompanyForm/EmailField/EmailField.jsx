@@ -9,7 +9,7 @@ export const EmailField = ({ onChange, defaultValue }) => {
   const { value: email, bind: bindEmail } = useInput(defaultValue);
 
   useEffect(() => {
-    onChange(email);
+    onChange((prev) => ({ ...prev, email }));
   }, [email]);
 
   return (

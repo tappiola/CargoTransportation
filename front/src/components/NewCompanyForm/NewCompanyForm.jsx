@@ -39,24 +39,10 @@ const useStyles = makeStyles((theme) => ({
 //
 function SignIn({ prevUserData, onSubmit }) {
   const classes = useStyles();
-  const [adress, setAdress] = useState(prevUserData.adress);
-  const [birthDate, setBirthDate] = useState(prevUserData.birthDate);
-  const [firstname, setFirstname] = useState(prevUserData.firstname);
-  const [surname, setSurname] = useState(prevUserData.firstname);
-  const [middleName, setMiddleName] = useState(prevUserData.middleName);
-  const [email, setEmail] = useState(prevUserData.email);
+  const [userData, setUserData] = useState(prevUserData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userData = {
-      firstname,
-      surname,
-      middleName,
-      email,
-      adress,
-      birthDate,
-    };
-
     if (userDataValidator(userData)) {
       onSubmit(userData);
     }
@@ -67,12 +53,12 @@ function SignIn({ prevUserData, onSubmit }) {
       <div className={classes.paper}>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container justify="space-between" spacing={3}>
-            <NameField onChange={setFirstname} defaultValue={prevUserData.firstname} />
-            <MiddleNameField onChange={setMiddleName} defaultValue={prevUserData.middleName} />
-            <SurnameField onChange={setSurname} defaultValue={prevUserData.surname} />
-            <BirthdayField bindBirthDate={setBirthDate} />
-            <EmailField onChange={setEmail} defaultValue={prevUserData.email} />
-            <AdressBlock bindAdress={setAdress} defaultValue={prevUserData.adress} />
+            <NameField onChange={setUserData} defaultValue={prevUserData.firstname} />
+            <MiddleNameField onChange={setUserData} defaultValue={prevUserData.middleName} />
+            <SurnameField onChange={setUserData} defaultValue={prevUserData.surname} />
+            <BirthdayField onChange={setUserData} defaultValue={prevUserData.birthDate} />
+            <EmailField onChange={setUserData} defaultValue={prevUserData.email} />
+            <AdressBlock onChange={setUserData} defaultValue={prevUserData.adress} />
             <RoleField />
             <SubmitButton className={classes.submit} />
           </Grid>
@@ -109,8 +95,7 @@ SignIn.propTypes = {
 };
 
 export default connect(null, (/* dispatch */) => ({
-  onSubmit(data) {
-    console.log(data);
+  onSubmit() {
     // dispatch();
   },
 }))(SignIn);

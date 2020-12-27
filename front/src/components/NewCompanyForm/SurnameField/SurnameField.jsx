@@ -9,7 +9,7 @@ export const SurnameField = ({ onChange, defaultValue }) => {
   const { value: surname, bind: bindSurname } = useInput(defaultValue);
 
   useEffect(() => {
-    onChange(surname);
+    onChange((prev) => ({ ...prev, surname }));
   }, [surname]);
 
   return (
