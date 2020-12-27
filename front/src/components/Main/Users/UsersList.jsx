@@ -20,7 +20,7 @@ const columns = [
     disableClickEventBubbling: true,
     flex: 2,
     renderCell: (params) => (
-      <Link href={`/users/${params.row.id}`}>{params.value}</Link>
+      <Link component={NavLink} to={`/users/${params.row.id}`}>{params.value}</Link>
     ),
   },
   {
