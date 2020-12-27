@@ -6,6 +6,8 @@ import DatePicker from 'react-date-picker';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { dateValidator } from '../validators';
+
 const useStyle = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
@@ -14,12 +16,12 @@ const useStyle = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     marginRight: theme.spacing(2),
   },
-  wrapper: {
+  wrapper: (error) => ({
     border: 'hidden',
     '& > div': {
       padding: theme.spacing(0, 0, 0.5),
       border: 'none',
-      borderBottomColor: theme.palette.text.secondary,
+      borderBottomColor: error ? theme.palette.error.light : theme.palette.text.secondary,
       borderBottomWidth: 1,
       borderBottomStyle: 'solid',
     },
@@ -41,15 +43,20 @@ const useStyle = makeStyles((theme) => ({
       // zero before date < 10
       display: 'none',
     },
-  },
+  }),
 }));
 
 export const BirthdayField = ({ bindBirthDate }) => {
   const [birthDate, setBirthDate] = useState(new Date());
-  const classes = useStyle();
+  const [dateError, setDateError] = useState(false);
+  const classes = useStyle(dateError);
   const handleDateChange = (date) => {
-    setBirthDate(date);
-    bindBirthDate(date);
+    setDateError(!dateValidator(date));
+
+    if (dateValidator(date)) {
+      setBirthDate(date);
+      bindBirthDate(date);
+    }
   };
 
   return (

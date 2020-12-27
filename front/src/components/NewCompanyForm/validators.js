@@ -7,6 +7,8 @@ export const dateValidator = (date) => (
   && date.getDay()
   && date.getMonth()
   && date.getFullYear()
+  && date < new Date()
+  && (new Date().getFullYear() - date.getFullYear()) > 18
 );
 
 export const adressValidator = ({ city, street, house /* apartment */ }) => (
