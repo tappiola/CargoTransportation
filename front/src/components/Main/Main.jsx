@@ -1,19 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-// const Login = lazy(() => import("../Login/Login"));
+const NewCompanyForm = React.lazy(() => import('../NewCompanyForm/NewCompanyForm'));
 // const Home = lazy(() => import("../Home/Home"));
 const Content = () => <p>On main page</p>;
 
 function Main() {
   return (
     <main>
-      <Router>
-        <Switch>
-          {/* <Route path="/login" component={Login}/> */}
-          <Route exact path="/" component={Content} />
-        </Switch>
-      </Router>
+      <React.Suspense fallback={<p>loading</p>}>
+        <Router>
+          <Switch>
+            <Route path="/new-company" component={NewCompanyForm} />
+            <Route exact path="/" component={Content} />
+          </Switch>
+        </Router>
+      </React.Suspense>
     </main>
   );
 }

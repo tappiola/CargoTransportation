@@ -1,38 +1,22 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {
-  NameField,
-  SurnameField,
-  MiddleNameField,
-  BirthdayField,
-  SubmitButton,
-  EmailField,
-  AdressBlock,
-  RoleField,
-} from './Components';
+import { NameField } from './NameField/NameField';
+import { SurnameField } from './SurnameField/SurnameField';
+import { MiddleNameField } from './MiddleNameField/MiddleNameField';
+import { BirthdayField } from './BirthdayField/BirthdayField';
+import { SubmitButton } from './SubmitButton/SubmitButton';
+import { EmailField } from './EmailField/EmailField';
+import { AdressBlock } from './AdressBlock/AdressBlock';
+import { RoleField } from './RoleField/RoleField';
 
-// will be imported from /utils
 import { userDataValidator } from './validators';
-
-const useInput = (initialValue) => {
-  const [value, setValue] = useState(initialValue);
-
-  return {
-    value,
-    setValue,
-    bind: {
-      value,
-      onChange: (event) => {
-        setValue(event.target.value);
-      },
-    },
-  };
-};
+import { useInput } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,12 +40,12 @@ const useStyles = makeStyles((theme) => ({
 //
 function SignIn({ prevUserData = {}, onSubmit }) {
   const classes = useStyles();
-  const [adress, setAdress] = useState(prevUserData.adress || null);
-  const [birthDate, setBirthDate] = useState(prevUserData.birthDate || null);
-  const { value: firstname, bind: bindName } = useInput(prevUserData.firstname || '');
-  const { value: surname, bind: bindSurname } = useInput(prevUserData.surname || '');
-  const { value: middleName, bind: bindMiddleName } = useInput(prevUserData.middleName || '');
-  const { value: email, bind: bindEmail } = useInput(prevUserData.email || '');
+  const [adress, setAdress] = useState(prevUserData.adress);
+  const [birthDate, setBirthDate] = useState(prevUserData.birthDate);
+  const { value: firstname, bind: bindName } = useInput(prevUserData.firstname);
+  const { value: surname, bind: bindSurname } = useInput(prevUserData.surname);
+  const { value: middleName, bind: bindMiddleName } = useInput(prevUserData.middleName);
+  const { value: email, bind: bindEmail } = useInput(prevUserData.email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -98,6 +82,33 @@ function SignIn({ prevUserData = {}, onSubmit }) {
     </Container>
   );
 }
+
+SignIn.defaultProps = {
+  prevUserData: {
+    firstname: '',
+    surname: '',
+    middleName: '',
+    email: '',
+    birthDate: new Date(),
+    adress: {},
+  },
+};
+
+SignIn.propTypes = {
+  prevUserData: PropTypes.exact({
+    firstname: PropTypes.string,
+    surname: PropTypes.string,
+    middleName: PropTypes.string,
+    email: PropTypes.string,
+    birthDate: PropTypes.instanceOf(Date),
+    adress: PropTypes.exact({
+      city: PropTypes.string,
+      street: PropTypes.string,
+      house: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
+  }),
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default connect(null, (/* dispatch */) => ({
   onSubmit() {

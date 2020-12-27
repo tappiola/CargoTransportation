@@ -1,4 +1,4 @@
-export const textValidator = (str) => typeof str === 'string';
+export const textValidator = (str) => typeof str === 'string' && str.length > 2;
 
 export const emailValidator = () => true; // already exist
 
