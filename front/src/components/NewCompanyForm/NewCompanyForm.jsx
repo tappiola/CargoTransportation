@@ -16,7 +16,6 @@ import { AdressBlock } from './AdressBlock/AdressBlock';
 import { RoleField } from './RoleField/RoleField';
 
 import { userDataValidator } from './validators';
-import { useInput } from '../../utils';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //
-function SignIn({ prevUserData = {}, onSubmit }) {
+function SignIn({ prevUserData, onSubmit }) {
   const classes = useStyles();
   const [adress, setAdress] = useState(prevUserData.adress);
   const [birthDate, setBirthDate] = useState(prevUserData.birthDate);
-  const { value: firstname, bind: bindName } = useInput(prevUserData.firstname);
-  const { value: surname, bind: bindSurname } = useInput(prevUserData.surname);
-  const { value: middleName, bind: bindMiddleName } = useInput(prevUserData.middleName);
-  const { value: email, bind: bindEmail } = useInput(prevUserData.email);
+  const [firstname, setFirstname] = useState(prevUserData.firstname);
+  const [surname, setSurname] = useState(prevUserData.firstname);
+  const [middleName, setMiddleName] = useState(prevUserData.middleName);
+  const [email, setEmail] = useState(prevUserData.email);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,12 +67,12 @@ function SignIn({ prevUserData = {}, onSubmit }) {
       <div className={classes.paper}>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container justify="space-between" spacing={3}>
-            <NameField {...bindName} />
-            <MiddleNameField {...bindMiddleName} />
-            <SurnameField {...bindSurname} />
+            <NameField onChange={setFirstname} defaultValue={prevUserData.firstname} />
+            <MiddleNameField onChange={setMiddleName} defaultValue={prevUserData.middleName} />
+            <SurnameField onChange={setSurname} defaultValue={prevUserData.surname} />
             <BirthdayField bindBirthDate={setBirthDate} />
-            <EmailField {...bindEmail} />
-            <AdressBlock bindAdress={setAdress} />
+            <EmailField onChange={setEmail} defaultValue={prevUserData.email} />
+            <AdressBlock bindAdress={setAdress} defaultValue={prevUserData.adress} />
             <RoleField />
             <SubmitButton className={classes.submit} />
           </Grid>
@@ -101,17 +100,17 @@ SignIn.propTypes = {
     middleName: PropTypes.string,
     email: PropTypes.string,
     birthDate: PropTypes.instanceOf(Date),
-    adress: PropTypes.exact({
-      city: PropTypes.string,
-      street: PropTypes.string,
-      house: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
+    adress: PropTypes.objectOf(
+      PropTypes.string,
+      PropTypes.number,
+    ),
   }),
   onSubmit: PropTypes.func.isRequired,
 };
 
 export default connect(null, (/* dispatch */) => ({
-  onSubmit() {
+  onSubmit(data) {
+    console.log(data);
     // dispatch();
   },
 }))(SignIn);

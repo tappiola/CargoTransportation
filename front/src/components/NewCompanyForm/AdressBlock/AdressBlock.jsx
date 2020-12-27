@@ -7,11 +7,11 @@ import Grid from '@material-ui/core/Grid';
 import { useInput } from '../../../utils';
 import * as validators from '../validators';
 
-export const AdressBlock = ({ bindAdress }) => {
-  const { value: city, bind: bindCity } = useInput('');
-  const { value: street, bind: bindStreet } = useInput('');
-  const { value: house, bind: bindHouse } = useInput('');
-  const { value: apartment, bind: bindApartment } = useInput('');
+export const AdressBlock = ({ bindAdress, defaultValue }) => {
+  const { value: city, bind: bindCity } = useInput(defaultValue.city);
+  const { value: street, bind: bindStreet } = useInput(defaultValue.street);
+  const { value: house, bind: bindHouse } = useInput(defaultValue.house);
+  const { value: apartment, bind: bindApartment } = useInput(defaultValue.apartment || '');
   const [cityError, setCityError] = React.useState(false);
   const [streetError, setStreetError] = React.useState(false);
   const [houseError, setHouseError] = React.useState(false);
@@ -93,4 +93,10 @@ export const AdressBlock = ({ bindAdress }) => {
 
 AdressBlock.propTypes = {
   bindAdress: PropTypes.func.isRequired,
+  defaultValue: PropTypes.PropTypes.exact({
+    city: PropTypes.string,
+    street: PropTypes.string,
+    house: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    apartment: PropTypes.string,
+  }).isRequired,
 };
