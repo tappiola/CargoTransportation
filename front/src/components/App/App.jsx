@@ -12,6 +12,16 @@ const theme = createMuiTheme({
   palette: {
     // type: 'dark',
   },
+  overrides: {
+    MuiDataGrid: {
+      root: {
+        // Hide non-localizable text with number of selected rows
+        '&& .MuiDataGrid-selectedRowCount': {
+          color: 'transparent',
+        },
+      },
+    },
+  },
 }, ruRU);
 
 function App() {

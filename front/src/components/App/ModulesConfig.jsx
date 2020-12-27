@@ -3,7 +3,7 @@ import Clients from '../Main/Clients/Clients';
 import ConsignmentNotes from '../Main/ConsignmentNotes/ConsinmentNotes';
 import Mailings from '../Main/Mailings/Mailings';
 import Reports from '../Main/Reports/Reports';
-import Users from '../Main/Users/Users';
+import Users from '../Main/Users';
 import Warehouses from '../Main/Warehouses/Warehouses';
 import Waybills from '../Main/Waybills/Waybills';
 import { MODULES, ROLES } from '../../constants/permissions';
