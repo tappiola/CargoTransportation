@@ -6,13 +6,23 @@ import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 
-export const EmailField = (props) => (
+const FieldBase = ({
+  label, name, autoComplete, ...otherProps
+}) => (
   <TextField
     variant="outlined"
     margin="normal"
     required
     fullWidth
-    id="email"
+    label={label}
+    name={name}
+    autoComplete={autoComplete}
+    {...otherProps}
+  />
+);
+
+export const EmailField = (props) => (
+  <FieldBase
     label="Email"
     name="email"
     autoComplete="email"
@@ -22,15 +32,10 @@ export const EmailField = (props) => (
 );
 
 export const PasswordField = (props) => (
-  <TextField
-    variant="outlined"
-    margin="normal"
-    required
-    fullWidth
+  <FieldBase
     name="password"
     label="Пароль"
     type="password"
-    id="password"
     autoComplete="current-password"
     {...props}
   />
