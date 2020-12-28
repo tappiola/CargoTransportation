@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { DataGrid } from '@material-ui/data-grid';
 import { Link } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +11,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { usersGet, usersDelete } from '../../../redux/actions';
+import { CustomGrid } from '../SharedComponents/DataGrid';
 
 const columns = [
   {
@@ -79,7 +79,13 @@ const TableToolbar = ({ title, selection, deleteAction }) => {
               >
                 Новый пользователь
               </Button>
-              <Button color="secondary" disabled={selection.length === 0} onClick={deleteAction}>Удалить</Button>
+              <Button
+                color="secondary"
+                disabled={selection.length === 0}
+                onClick={deleteAction}
+              >
+                Удалить
+              </Button>
             </ButtonGroup>
           </Typography>
         </Grid>
@@ -118,21 +124,14 @@ function UsersList({
         selection={selection}
         deleteAction={() => deleteUsers(selection)}
       />
-      <div style={{ width: '100%' }}>
-        <DataGrid
-          loading={!usersLoadComplete}
-          rows={usersData}
-          columns={columns}
-          pageSize={10}
-          autoHeight
-          rowHeight={42}
-          checkboxSelection
-          rowsPerPageOptions={[10, 20]}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
-        />
-      </div>
+      <CustomGrid
+        rows={usersData}
+        columns={columns}
+        loading={!usersLoadComplete}
+        onSelectionChange={(newSelection) => {
+          setSelection(newSelection.rowIds);
+        }}
+      />
     </Container>
   );
 }
