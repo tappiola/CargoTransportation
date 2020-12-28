@@ -5,22 +5,13 @@ const prodConfig = {
    ssl              : true
 };
 const devConfig = {
-   connectionString : 'postgresql://postgres:admin@localhost:5432/cargo'
+   connectionString : process.env.DATABASE_URL_DEV
 };
 const pool = new Pool( process.env.NODE_ENV === 'production' ? prodConfig : devConfig );
 
 module.exports = pool;
 
-module.exports.connectDb = async () => {
-   try {
-      await pool.connect();
-      console.log( `DB connected` );
-   } catch (e) {
-      console.log( e.message );
-   }
-};
-
-module.exports.isTableExists = async ( tableName ) => {
+module.exports.checkIfTableExists = async ( tableName ) => {
    const $sql = `SELECT EXISTS(SELECT 1 FROM pg_tables WHERE tablename = '${tableName}')`;
    try {
       const check = await pool.query( $sql );
@@ -31,10 +22,7 @@ module.exports.isTableExists = async ( tableName ) => {
 };
 
 module.exports.createTable = async ( name, params ) => {
-   const $sql = `create table IF NOT EXISTS ${name}
-   (
-       ${params}
-   );`;
+   const $sql = `create table IF NOT EXISTS ${name} (${params});`;
    
    try {
       await pool.query( $sql );
