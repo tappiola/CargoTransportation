@@ -45,17 +45,17 @@ export function MenuItems() {
   const { pathname } = useLocation();
   return (
     <div>
-      {Object.entries(ALLOWED_MODULES)
-        .map(([module, { basePath }]) => {
-          const itemConfig = MENU_ITEMS_CONFIG[module];
+      {ALLOWED_MODULES
+        .map((module) => {
+          const itemConfig = MENU_ITEMS_CONFIG[module.module];
           const Icon = itemConfig.icon;
           return (
             <ListItem
-              selected={pathname.startsWith(basePath)}
-              key={basePath.slice(1)}
+              selected={pathname.startsWith(module.basePath)}
+              key={module.basePath.slice(1)}
               button
               component={NavLink}
-              to={basePath}
+              to={module.basePath}
             >
               <ListItemIcon>
                 <Icon />

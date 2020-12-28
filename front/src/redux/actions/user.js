@@ -1,8 +1,8 @@
 import * as actionTypes from './actionTypes';
 
-function createData(id, name, email, companyName, companyUnp) {
+function createData(id, name, email, companyName, companyAccountNumber) {
   return {
-    id, name, email, companyName, companyUnp,
+    id, name, email, companyName, companyAccountNumber,
   };
 }
 
@@ -26,19 +26,15 @@ export const setUsers = (usersData) => ({
   usersData,
 });
 
-export const deleteUsers = (ids) => ({
+export const filterDeletedUsers = (ids) => ({
   type: actionTypes.USERS_DELETE,
   ids,
 });
 
-export const usersGet = () => (dispatch) => setTimeout(
+export const getUsers = () => (dispatch) => setTimeout(
   () => Promise.resolve(FAKE_USERS)
     .then((usersData) => dispatch(setUsers(usersData))),
   1000,
 );
-// return usersGetApi()
-//     .then(data => data.json())
-// .then((usersData ) => dispatch(setUsers( usersData )));
 
-export const usersDelete = (ids) => (dispatch) => dispatch(deleteUsers(ids));
-// return usersGetApi().then(() => dispatch(deleteUsers( ids ));
+export const deleteUsers = (ids) => (dispatch) => dispatch(filterDeletedUsers(ids));

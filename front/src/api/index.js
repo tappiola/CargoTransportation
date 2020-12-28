@@ -1,2 +1,2 @@
 export { foo } from './someExampleAPI';
-export { usersGetApi } from './user';
+export { getUsersApi } from './user';

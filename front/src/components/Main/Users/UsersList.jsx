@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { Link } from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { usersGet, usersDelete } from '../../../redux/actions';
+import { getUsers, deleteUsers } from '../../../redux/actions';
 import { CustomGrid } from '../SharedComponents/DataGrid';
+import { GridToolbar } from '../SharedComponents/GridToolbar';
+import { DeleteButton, NavButton } from '../SharedComponents/Button';
+import { useContainerStyles } from '../SharedComponents/Shared.styles';
 
 const columns = [
   {
@@ -35,82 +31,16 @@ const columns = [
     flex: 2,
   },
   {
-    field: 'companyUnp',
+    field: 'companyAccountNumber',
     headerName: 'УНП',
     flex: 1,
   },
 ];
 
-// Table toolbar
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  title: {
-    flex: '1 1 100%',
-  },
-  button: {
-    whiteSpace: 'nowrap',
-  },
-}));
-
-const TableToolbar = ({ title, selection, deleteAction }) => {
-  const classes = useToolbarStyles();
-
-  return (
-    <Toolbar
-      className={classes.root}
-    >
-      <Grid container>
-        <Grid item xs={12} sm={6}>
-          <Typography className={classes.title} variant="h5" id="tableTitle" component="div" align="left">
-            {title}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography className={classes.title} id="tableButtons" component="div" align="right">
-            <ButtonGroup variant="contained">
-              <Button
-                className={classes.button}
-                color="primary"
-                component={NavLink}
-                to="/users/new"
-              >
-                Новый пользователь
-              </Button>
-              <Button
-                color="secondary"
-                disabled={selection.length === 0}
-                onClick={deleteAction}
-              >
-                Удалить
-              </Button>
-            </ButtonGroup>
-          </Typography>
-        </Grid>
-      </Grid>
-    </Toolbar>
-  );
-};
-
-TableToolbar.propTypes = {
-  title: PropTypes.string.isRequired,
-  selection: PropTypes.arrayOf(PropTypes.string).isRequired,
-  deleteAction: PropTypes.func.isRequired,
-};
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-}));
-
 function UsersList({
-  usersData, usersLoadComplete, initUsers, deleteUsers,
+  usersData, usersLoadComplete, initUsers, removeUsers,
 }) {
-  const classes = useStyles();
+  const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
 
   useEffect(() => {
@@ -119,11 +49,13 @@ function UsersList({
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <TableToolbar
-        title="Пользователи"
-        selection={selection}
-        deleteAction={() => deleteUsers(selection)}
-      />
+      <GridToolbar title="Грузоперевозки">
+        <NavButton color="primary" to="/users/new">Новый пользователь</NavButton>
+        <DeleteButton
+          isDisabled={selection.length === 0}
+          onButtonClick={() => removeUsers(selection)}
+        />
+      </GridToolbar>
       <CustomGrid
         rows={usersData}
         columns={columns}
@@ -143,8 +75,8 @@ const mapStateToProps = ({ user: { usersData, usersLoadComplete } }) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  initUsers: () => dispatch(usersGet()),
-  deleteUsers: (ids) => dispatch(usersDelete(ids)),
+  initUsers: () => dispatch(getUsers()),
+  removeUsers: (ids) => dispatch(deleteUsers(ids)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);

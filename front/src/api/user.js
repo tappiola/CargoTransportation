@@ -1,3 +1,3 @@
-const HOST = 'http://localhost:5000';
+import { BACKEND_HOST } from '../constants/environment';
 
-export const usersGetApi = async () => fetch(`${HOST}/users`);
+export const getUsersApi = async () => fetch(`${BACKEND_HOST}/users`);

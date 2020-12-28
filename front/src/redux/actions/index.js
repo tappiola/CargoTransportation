@@ -1,2 +1,2 @@
 export { someActionCreator } from './someActionCreator';
-export { usersGet, usersDelete } from './user';
+export { getUsers, deleteUsers } from './user';

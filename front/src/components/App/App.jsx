@@ -31,10 +31,9 @@ function App() {
       <Router>
         <MainMenu>
           <Switch>
-            {Object.entries(ALLOWED_MODULES)
-              .map(([, { basePath, component }]) => (
-                <Route key={basePath.slice(1)} path={basePath} component={component} />
-              ))}
+            {ALLOWED_MODULES.map((m) => (
+              <Route key={m.basePath.slice(1)} path={m.basePath} component={m.component} />
+            ))}
             <Route>У вас нет доступа к запрашиваемой странице</Route>
             # TODO: add autoredirect to first tab available to user after login
           </Switch>
