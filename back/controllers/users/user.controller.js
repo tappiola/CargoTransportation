@@ -1,31 +1,25 @@
 const jwt = require( 'jsonwebtoken' );
 const bcrypt = require( 'bcrypt' );
-const db = require( '../../database/db' );
+const { authSchema, registerSchema } = require( '../../middlewares/validation_schema' );
 //
-const dbTableName = 'users';
+const Users = require( '../../models/Users' );
 //
 exports.main = async ( req, res ) => {
-   const request = await db.query( `SELECT * FROM ${dbTableName}` );
-   const users = request.rows;
-   
-   res.send( users );
+   const users = await Users.findAll();
+   res.status( 200 ).json( users );
 };
 
 exports.register = async ( req, res, next ) => {
-   const { email, password } = req.body;
+   const result = await registerSchema.validateAsync( req.body );
    
-   const { rows } = await db.query( `SELECT * FROM ${dbTableName} WHERE email=$1`, [ email ] );
-   const user = rows[0];
-   
+   const user = await Users.findOne( { email : result.email } );
    if ( user ) {
       return res.status( 400 ).json( { error : { message : 'Email already in use!' } } );
    }
    
    try {
-      const data = req.body;
-      data.password = hashPassword( password );
-      
-      const newUser = await db.createItem( dbTableName, data );
+      result.password = await hashPassword( result.password );
+      const newUser = Users.create( result );
       const token = getSignedToken( newUser );
       
       res.status( 200 ).json( { token } );
@@ -36,19 +30,16 @@ exports.register = async ( req, res, next ) => {
 };
 
 exports.login = async ( req, res ) => {
-   const { email, password } = req.body;
+   const result = await authSchema.validateAsync( req.body );
    
-   const request = await db.query( `SELECT * FROM ${dbTableName}
-        WHERE email=$1`, [ email ] );
-   const user = request.rows[0];
-   
+   const user = await Users.findOne( { email : result.email } );
    if ( !user ) {
-      return res.status( 400 ).json( { error : { message : 'invalid email/password' } } );
+      return res.status( 401 ).json( { error : { message : 'invalid email/password' } } );
    }
-   const isValid = isPasswordValid( password, user.password );
    
+   const isValid = isPasswordValid( result.password, user.password );
    if ( !isValid ) {
-      return res.status( 400 ).json( { error : { message : 'invalid password' } } );
+      return res.status( 401 ).json( { error : { message : 'invalid password' } } );
    }
    
    const token = getSignedToken( user );
@@ -64,8 +55,8 @@ const getSignedToken = ( { id, email, firstname, lastname } ) => {
    }, process.env.jwtToken || 'secret', { expiresIn : '1h' } );
 };
 
-const hashPassword = value => {
-   const salt = bcrypt.genSalt( 10 );
+const hashPassword = async value => {
+   const salt = await bcrypt.genSalt( 10 );
    return bcrypt.hash( value, salt );
 };
 

@@ -12,6 +12,8 @@ app.use( morgan( process.env.NODE_ENV === 'production' ? 'tiny' : 'dev' ) );
 app.use( cors() );
 app.use( express.json() );
 app.get( '/favicon.ico', ( req, res ) => res.status( 204 ) );
+
+//Routes
 routes( app );
 
 if ( process.env.NODE_ENV === 'production' ) {
@@ -34,21 +36,17 @@ app.use( ( err, req, res ) => {
 } );
 //- Error handler
 
-//Database connection
+//Database connection and server start
 (async () => {
    try {
-      await db.connect();
-      console.log( `DB CONNECTED SUCCESSFULLY` );
-      
-      //JUST FOR NOW
-      const userController = require( './controllers/users/user.controller' );
-      await userController.checkDBTable();
+      await db.authenticate();
+      console.log( `Database connected successfully` );
       
       app.listen( PORT, () => {
          console.log( `Server has started on port ${PORT}` );
       } );
    } catch (e) {
-      console.log( 'DB CONNECTION FAILED' );
+      console.log( 'Database connected FAILED' );
       process.exit( 1 );
    }
 })();
