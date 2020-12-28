@@ -1,13 +1,6 @@
-const { Pool } = require( 'pg' );
-
-const prodConfig = {
-   connectionString : process.env.DATABASE_URL,
-   ssl              : true
-};
-const devConfig = {
-   connectionString : process.env.DATABASE_URL_DEV
-};
-const pool = new Pool( process.env.NODE_ENV === 'production' ? prodConfig : devConfig );
+const { Pool } = require( 'pg' ),
+   dbConfig = require('./db.config'),
+   pool = new Pool( dbConfig );
 
 module.exports = pool;
 
