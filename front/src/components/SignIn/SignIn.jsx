@@ -3,33 +3,13 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { useInput, validateEmail, validatePassword } from '../../utils';
 import { loginUser } from '../../redux/actions';
 import {
   EmailField, PasswordField, SubmitButton, Logo,
 } from './Components';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { useStyles } from './SignIn.styles';
 
 function SignIn(props) {
   const classes = useStyles();
