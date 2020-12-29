@@ -26,15 +26,15 @@ export const setUsers = (usersData) => ({
   usersData,
 });
 
-export const filterDeletedUsers = (ids) => ({
+export const handleDeleteUsers = (ids) => ({
   type: actionTypes.USERS_DELETE,
   ids,
 });
 
-export const getUsers = () => (dispatch) => setTimeout(
+export const dispatchGetUsers = () => (dispatch) => setTimeout(
   () => Promise.resolve(FAKE_USERS)
     .then((usersData) => dispatch(setUsers(usersData))),
   1000,
 );
 
-export const deleteUsers = (ids) => (dispatch) => dispatch(filterDeletedUsers(ids));
+export const dispatchDeleteUsers = (ids) => (dispatch) => dispatch(handleDeleteUsers(ids));

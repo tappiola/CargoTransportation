@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getUsers, deleteUsers } from '../../../redux/actions';
+import { dispatchGetUsers, dispatchDeleteUsers } from '../../../redux/actions';
 import { CustomGrid } from '../SharedComponents/DataGrid';
 import { GridToolbar } from '../SharedComponents/GridToolbar';
 import { DeleteButton, NavButton } from '../SharedComponents/Button';
@@ -75,8 +75,8 @@ const mapStateToProps = ({ user: { usersData, usersLoadComplete } }) => (
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  initUsers: () => dispatch(getUsers()),
-  removeUsers: (ids) => dispatch(deleteUsers(ids)),
+  initUsers: () => dispatch(dispatchGetUsers()),
+  removeUsers: (ids) => dispatch(dispatchDeleteUsers(ids)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
