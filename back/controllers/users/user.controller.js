@@ -1,7 +1,6 @@
-const jwt = require( 'jsonwebtoken' );
-const bcrypt = require( 'bcrypt' );
 const { authSchema, registerSchema } = require( '../../middlewares/validation_schema' );
 //
+const { hashPassword, isPasswordValid, getSignedToken } = require( './helpers' );
 const Users = require( '../../models/Users' );
 //
 exports.main = async ( req, res ) => {
@@ -44,51 +43,4 @@ exports.login = async ( req, res ) => {
    
    const token = getSignedToken( user );
    res.status( 200 ).json( { token } );
-};
-
-const getSignedToken = ( { id, email, firstname, lastname } ) => {
-   return jwt.sign( {
-      id        : id,
-      email     : email,
-      firstName : firstname,
-      lastName  : lastname
-   }, process.env.jwtToken || 'secret', { expiresIn : '1h' } );
-};
-
-const hashPassword = async value => {
-   const salt = await bcrypt.genSalt( 10 );
-   return bcrypt.hash( value, salt );
-};
-
-const isPasswordValid = ( value, password ) => {
-   try {
-      return bcrypt.compare( value, password );
-   } catch (error) {
-      throw new Error( error );
-   }
-};
-
-module.exports.checkDBTable = async () => {
-   const isExists = await db.checkIfTableExists( 'users' );
-   if ( !isExists ) {
-      try {
-         await db.query( `CREATE TABLE users
-                          (
-                              id        serial primary key,
-                              firstname VARCHAR(255) NOT NULL,
-                              surname   varchar(255),
-                              lastname  varchar(255) NOT NULL,
-                              login     varchar(50)  NOT NULL,
-                              email     varchar(50)  NOT NULL,
-                              password  varchar(255) NOT NULL,
-                              birthday  date,
-                              city      varchar(255),
-                              street    varchar(255),
-                              house     varchar(5),
-                              apartment varchar(5)
-                          )` );
-      } catch (e) {
-         console.log( e.message );
-      }
-   }
 };
