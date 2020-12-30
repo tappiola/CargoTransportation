@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router, Redirect, Route, Switch,
+} from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ruRU } from '@material-ui/core/locale';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
 import { someActionCreator } from 'redux/actions';
-import { pages } from 'pages';
+import { PROTECTED_ROUTES } from 'pages';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,11 +33,11 @@ function App() {
       <Router>
         <MainMenu>
           <Switch>
-            {pages.map((m) => (
+            {PROTECTED_ROUTES.map((m) => (
               <Route key={m.basePath.slice(1)} path={m.basePath} component={m.component} />
             ))}
+            {PROTECTED_ROUTES.length > 0 && <Route exact path="/"><Redirect to={PROTECTED_ROUTES[0].basePath} /></Route>}
             <Route>У вас нет доступа к запрашиваемой странице</Route>
-            # TODO: add autoredirect to first tab available to user after login
           </Switch>
         </MainMenu>
       </Router>

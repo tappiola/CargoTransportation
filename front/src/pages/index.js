@@ -4,11 +4,11 @@ import ConsignmentNotes from 'pages/ConsinmentNotes';
 import Mailings from 'pages/Mailings';
 import Reports from 'pages/Reports';
 import Users from 'pages/Users';
-import Warehouses from 'pages/Waterhouses';
+import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
 
-export const pages = [
+export const PROTECTED_ROUTES = [
   {
     module: MODULE_NAMES.ACTS,
     basePath: '/acts',
@@ -57,10 +57,12 @@ export const pages = [
     component: Waybills,
     roles: [ROLES.GLOBAL_ADMIN],
   },
-  //   {
-  //     module: MODULE_NAMES.SIGNIN,
-  //     basePath: '/signin',
-  //     component: SignIn,
-  //     roles: Object.values(ROLES),
-  //   },
 ];
+
+// const PUBLIC_ROUTES = [
+//     {
+//       module: MODULE_NAMES.SIGNIN,
+//       basePath: '/signin',
+//       component: SignIn,
+//     }
+//     ]
