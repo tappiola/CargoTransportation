@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
 
-import { useInput, validateEmail, validatePassword } from '../../utils';
-import { loginUser } from '../../redux/actions';
+import { useInput, validateEmail, validatePassword } from 'utils';
+import { loginUser } from 'redux/actions';
 import {
   EmailField, PasswordField, SubmitButton, Logo,
 } from './Components';
