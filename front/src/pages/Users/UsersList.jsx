@@ -3,11 +3,11 @@ import Container from '@material-ui/core/Container';
 import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { dispatchGetUsers, dispatchDeleteUsers } from '../../../redux/actions';
-import { CustomGrid } from '../SharedComponents/DataGrid';
-import { GridToolbar } from '../SharedComponents/GridToolbar';
-import { DeleteButton, NavButton } from '../SharedComponents/Button';
-import { useContainerStyles } from '../SharedComponents/Shared.styles';
+import { dispatchGetUsers, dispatchDeleteUsers } from '../../redux/actions';
+import { CustomGrid } from '../../components/DataGrid';
+import { GridToolbar } from '../../components/GridToolbar';
+import { DeleteButton, NavButton } from '../../components/Buttons';
+import { useContainerStyles } from './UserList.styles';
 
 const columns = [
   {

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import React from 'react';
-import { useButtonStyles } from './Shared.styles';
+import { useButtonStyles } from './Buttons.styles';
 
 export const NavButton = ({ children, to, ...props }) => {
   const classes = useButtonStyles();

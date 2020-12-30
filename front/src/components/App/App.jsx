@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ruRU } from '@material-ui/core/locale';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { someActionCreator } from '../../redux/actions';
-import MainMenu from '../MainMenu/MainMenu';
-import { ALLOWED_MODULES } from './ModulesConfig';
+import MainMenu from 'components/MainMenu';
+import { someActionCreator } from 'redux/actions';
+import { pages } from 'pages';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,7 +31,7 @@ function App() {
       <Router>
         <MainMenu>
           <Switch>
-            {ALLOWED_MODULES.map((m) => (
+            {pages.map((m) => (
               <Route key={m.basePath.slice(1)} path={m.basePath} component={m.component} />
             ))}
             <Route>У вас нет доступа к запрашиваемой странице</Route>

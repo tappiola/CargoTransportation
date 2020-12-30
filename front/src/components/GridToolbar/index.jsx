@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import React from 'react';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { useToolbarStyles } from './Shared.styles';
+import { useToolbarStyles } from './GridToolbar.styles';
 
 export function GridToolbar({ title, children }) {
   const classes = useToolbarStyles();

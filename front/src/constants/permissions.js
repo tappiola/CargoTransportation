@@ -1,4 +1,4 @@
-const MODULES = {
+const MODULE_NAMES = {
   CLIENTS: 'CLIENTS',
   ACTS: 'ACTS',
   USERS: 'USERS',
@@ -14,4 +14,4 @@ const ROLES = {
   ADMIN: 'ADMIN',
 };
 
-export { MODULES, ROLES };
+export { MODULE_NAMES, ROLES };

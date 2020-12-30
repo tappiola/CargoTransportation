@@ -11,32 +11,66 @@ import ReportIcon from '@material-ui/icons/Report';
 import EmailIcon from '@material-ui/icons/Email';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ALLOWED_MODULES } from '../App/ModulesConfig';
-import { MODULES } from '../../constants/permissions';
+import { MODULE_NAMES } from 'constants/permissions';
+
+const menuItems = [
+  {
+    module: MODULE_NAMES.ACTS,
+    basePath: '/acts',
+  },
+  {
+    module: MODULE_NAMES.CLIENTS,
+    basePath: '/clients',
+  },
+  {
+    module: MODULE_NAMES.CONSIGNMENT_NOTES,
+    basePath: '/consignment-notes',
+  },
+  {
+    module: MODULE_NAMES.MAILINGS,
+    basePath: '/mailings',
+  },
+  {
+    module: MODULE_NAMES.REPORTS,
+    basePath: '/reports',
+  },
+  {
+    module: MODULE_NAMES.USERS,
+    basePath: '/users',
+  },
+  {
+    module: MODULE_NAMES.WAREHOUSES,
+    basePath: '/warehouses',
+  },
+  {
+    module: MODULE_NAMES.WAYBILLS,
+    basePath: '/waybills',
+  },
+];
 
 const MENU_ITEMS_CONFIG = {
-  [MODULES.CLIENTS]: {
+  [MODULE_NAMES.CLIENTS]: {
     menuItemName: 'Клиенты', icon: PeopleIcon,
   },
-  [MODULES.ACTS]: {
+  [MODULE_NAMES.ACTS]: {
     menuItemName: 'Акты', icon: ReportIcon,
   },
-  [MODULES.USERS]: {
+  [MODULE_NAMES.USERS]: {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
-  [MODULES.WAREHOUSES]: {
+  [MODULE_NAMES.WAREHOUSES]: {
     menuItemName: 'Склады', icon: ShoppingCartIcon,
   },
-  [MODULES.WAYBILLS]: {
+  [MODULE_NAMES.WAYBILLS]: {
     menuItemName: 'Путевые листы', icon: LocalShippingIcon,
   },
-  [MODULES.CONSIGNMENT_NOTES]: {
+  [MODULE_NAMES.CONSIGNMENT_NOTES]: {
     menuItemName: 'ТТН', icon: AssignmentIcon,
   },
-  [MODULES.REPORTS]: {
+  [MODULE_NAMES.REPORTS]: {
     menuItemName: 'Отчеты', icon: BarChartIcon,
   },
-  [MODULES.MAILINGS]: {
+  [MODULE_NAMES.MAILINGS]: {
     menuItemName: 'Рассылки', icon: EmailIcon,
   },
 };
@@ -45,17 +79,17 @@ export function MenuItems() {
   const { pathname } = useLocation();
   return (
     <div>
-      {ALLOWED_MODULES
-        .map((module) => {
-          const itemConfig = MENU_ITEMS_CONFIG[module.module];
+      {menuItems
+        .map(({ module, basePath }) => {
+          const itemConfig = MENU_ITEMS_CONFIG[module];
           const Icon = itemConfig.icon;
           return (
             <ListItem
-              selected={pathname.startsWith(module.basePath)}
-              key={module.basePath.slice(1)}
+              selected={pathname.startsWith(basePath)}
+              key={basePath.slice(1)}
               button
               component={NavLink}
-              to={module.basePath}
+              to={basePath}
             >
               <ListItemIcon>
                 <Icon />
