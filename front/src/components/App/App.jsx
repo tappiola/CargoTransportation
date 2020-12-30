@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
 import { someActionCreator } from 'redux/actions';
 import { PROTECTED_ROUTES } from 'pages';
+import SignIn from '../SignIn/SignIn';
 
 const theme = createMuiTheme({
   palette: {
@@ -26,26 +27,45 @@ const theme = createMuiTheme({
   },
 }, ruRU);
 
-function App() {
+const ProtectedApp = () => (
+  <MainMenu>
+    <Switch>
+      {
+                PROTECTED_ROUTES.map((m) => (
+                  <Route key={m.basePath.slice(1)} path={m.basePath} component={m.component} />
+                ))
+            }
+      {PROTECTED_ROUTES.length > 0
+            && <Route exact path="/"><Redirect to={PROTECTED_ROUTES[0].basePath} /></Route>}
+      {PROTECTED_ROUTES.length > 0
+            && <Route exact path="/signin"><Redirect to={PROTECTED_ROUTES[0].basePath} /></Route>}
+      <Route>У вас нет доступа к запрашиваемой странице</Route>
+    </Switch>
+  </MainMenu>
+);
+
+function App({ isAuthorized }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <MainMenu>
-          <Switch>
-            {PROTECTED_ROUTES.map((m) => (
-              <Route key={m.basePath.slice(1)} path={m.basePath} component={m.component} />
-            ))}
-            {PROTECTED_ROUTES.length > 0 && <Route exact path="/"><Redirect to={PROTECTED_ROUTES[0].basePath} /></Route>}
-            <Route>У вас нет доступа к запрашиваемой странице</Route>
-          </Switch>
-        </MainMenu>
+        {isAuthorized ? <ProtectedApp />
+          : (
+            <>
+              <Route path="/signin" component={SignIn} />
+              <Redirect to="/signin" />
+            </>
+          )}
       </Router>
     </ThemeProvider>
   );
 }
 
-const mapState = (state) => ({ ...state });
+const mapState = ({ user: { authorization: { isSuccess } } }) => (
+  {
+    isAuthorized: isSuccess,
+  }
+);
 
 const mapDispatch = (dispatch) => ({
   onInit(data) {

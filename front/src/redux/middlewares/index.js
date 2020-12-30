@@ -1,5 +1,5 @@
-import { someMiddleware } from './someMiddleware';
 import thunk from 'redux-thunk';
+import { someMiddleware } from './someMiddleware';
 
 const middlewares = [
   someMiddleware,

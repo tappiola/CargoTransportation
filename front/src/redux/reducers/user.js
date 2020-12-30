@@ -1,23 +1,17 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  usersData: [],
-  usersLoadComplete: false,
+  authorization: {
+    isSuccess: true,
+  },
 };
 
 export function userReducer(state = initialState, action) {
   switch (action.type) {
-    case types.USERS_SET: {
+    case types.AUTHORIZATION_COMPLETED: {
       return {
         ...state,
-        usersData: action.usersData,
-        usersLoadComplete: true,
-      };
-    }
-    case types.USERS_DELETE: {
-      return {
-        ...state,
-        usersData: [...state.usersData.filter((u) => !action.ids.includes(String(u.id)))],
+        authorization: action.status,
       };
     }
 
