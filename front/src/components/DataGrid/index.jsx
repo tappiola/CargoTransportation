@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 
-export function CustomGrid({ rows, columns, ...otherProps }) {
+function CustomGrid({ rows, columns, ...otherProps }) {
   return (
     <div style={{ width: '100%' }}>
       <DataGrid
@@ -17,3 +17,5 @@ export function CustomGrid({ rows, columns, ...otherProps }) {
     </div>
   );
 }
+
+export default CustomGrid;
