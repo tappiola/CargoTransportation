@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import DatePicker from 'react-date-picker';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { dateValidator } from 'utils';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -21,7 +18,9 @@ const useStyle = makeStyles((theme) => ({
     '& > div': {
       padding: theme.spacing(0, 0, 0.5),
       border: 'none',
-      borderBottomColor: error ? theme.palette.error.main : theme.palette.text.secondary,
+      borderBottomColor: error
+        ? theme.palette.error.main
+        : theme.palette.text.secondary,
       borderBottomWidth: error ? 2 : 1,
       borderBottomStyle: 'solid',
     },
@@ -50,18 +49,8 @@ const useStyle = makeStyles((theme) => ({
   }),
 }));
 
-export const BirthdayField = ({ onChange, defaultValue }) => {
-  const [birthDate, setBirthDate] = useState(defaultValue);
-  const [dateError, setDateError] = useState(false);
-  const classes = useStyle(dateError);
-  const handleDateChange = (date) => {
-    setDateError(!dateValidator(date));
-
-    if (dateValidator(date)) {
-      onChange((prev) => ({ ...prev, birthDate: date }));
-      setBirthDate(date);
-    }
-  };
+export const BirthdayField = ({ inputRef }) => {
+  const classes = useStyle(false);
 
   return (
     <Grid item container alignItems="center" className={classes.root}>
@@ -76,15 +65,9 @@ export const BirthdayField = ({ onChange, defaultValue }) => {
         id="date-picker-dialog"
         label="Дата рождения"
         format="dd/MM/yyyy"
-        value={birthDate}
+        ref={inputRef}
         autoComplete="bday"
-        onChange={handleDateChange}
       />
     </Grid>
   );
-};
-
-BirthdayField.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  defaultValue: PropTypes.instanceOf(Date).isRequired,
 };

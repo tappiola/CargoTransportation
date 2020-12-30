@@ -7,7 +7,7 @@ import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
-import NewCompanyForm from './NewCompanyForm/NewCompanyForm';
+import NewCompanyForm from './NewCompanyForm';
 
 export const PROTECTED_ROUTES = [
   {

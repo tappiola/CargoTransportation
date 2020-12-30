@@ -53,7 +53,9 @@ function App({ isAuthorized }) {
         ) : (
           <>
             <Route path="/signin" component={SignIn} />
-            <Redirect to="/signin" />
+            <ProtectedApp />
+            <Redirect to="/new-company" />
+            {/* <Redirect to="/signin" /> */}
           </>
         )}
       </Router>

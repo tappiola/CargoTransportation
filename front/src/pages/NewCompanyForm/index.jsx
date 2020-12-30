@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -37,29 +38,48 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //
-function SignIn({ prevUserData, onSubmit }) {
+function SignIn({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
-  const [userData, setUserData] = useState(prevUserData);
+  const { register, handleSubmit, errors } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (userDataValidator(userData)) {
-      onSubmit(userData);
+  const onSubmit = (data) => {
+    console.log(data);
+    console.log(errors);
+    if (userDataValidator(data)) {
+      resolveSubmit(data);
     }
   };
 
   return (
     <Container maxWidth="sm">
       <div className={classes.paper}>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <Grid container justify="space-between" spacing={3}>
-            <NameField onChange={setUserData} defaultValue={prevUserData.firstname} />
-            <MiddleNameField onChange={setUserData} defaultValue={prevUserData.middleName} />
-            <SurnameField onChange={setUserData} defaultValue={prevUserData.surname} />
-            <BirthdayField onChange={setUserData} defaultValue={prevUserData.birthDate} />
-            <EmailField onChange={setUserData} defaultValue={prevUserData.email} />
-            <AdressBlock onChange={setUserData} defaultValue={prevUserData.adress} />
-            <RoleField />
+            <NameField
+              inputRef={register}
+              defaultValue={prevUserData.firstname}
+            />
+            <MiddleNameField
+              inputRef={register}
+              defaultValue={prevUserData.middleName}
+            />
+            <SurnameField
+              inputRef={register}
+              defaultValue={prevUserData.surname}
+            />
+            <BirthdayField
+              inputRef={register}
+              defaultValue={prevUserData.birthDate}
+            />
+            <EmailField
+              inputRef={register}
+              defaultValue={prevUserData.email}
+            />
+            <AdressBlock
+              inputRef={register}
+              defaultValue={prevUserData.adress}
+            />
+            <RoleField inputRef={register} />
             <SubmitButton className={classes.submit} />
           </Grid>
         </form>
@@ -86,16 +106,13 @@ SignIn.propTypes = {
     middleName: PropTypes.string,
     email: PropTypes.string,
     birthDate: PropTypes.instanceOf(Date),
-    adress: PropTypes.objectOf(
-      PropTypes.string,
-      PropTypes.number,
-    ),
+    adress: PropTypes.objectOf(PropTypes.string, PropTypes.number),
   }),
-  onSubmit: PropTypes.func.isRequired,
+  resolveSubmit: PropTypes.func.isRequired,
 };
 
 export default connect(null, (/* dispatch */) => ({
-  onSubmit() {
+  resolveSubmit() {
     // dispatch();
   },
 }))(SignIn);
