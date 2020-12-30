@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
-import { useInput } from '../../../utils';
-import { emailValidator } from '../validators';
+import { useInput, emailValidator } from 'utils';
 
 export const EmailField = ({ onChange, defaultValue }) => {
   const { value: email, bind: bindEmail } = useInput(defaultValue);

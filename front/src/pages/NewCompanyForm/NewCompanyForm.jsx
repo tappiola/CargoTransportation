@@ -6,16 +6,16 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { NameField } from './NameField/NameField';
-import { SurnameField } from './SurnameField/SurnameField';
-import { MiddleNameField } from './MiddleNameField/MiddleNameField';
-import { BirthdayField } from './BirthdayField/BirthdayField';
-import { SubmitButton } from './SubmitButton/SubmitButton';
-import { EmailField } from './EmailField/EmailField';
-import { AdressBlock } from './AdressBlock/AdressBlock';
-import { RoleField } from './RoleField/RoleField';
+import { NameField } from 'components/FormFields/NameField/NameField';
+import { SurnameField } from 'components/FormFields/SurnameField/SurnameField';
+import { MiddleNameField } from 'components/FormFields/MiddleNameField/MiddleNameField';
+import { BirthdayField } from 'components/FormFields/BirthdayField/BirthdayField';
+import { EmailField } from 'components/FormFields/EmailField/EmailField';
+import { AdressBlock } from 'components/FormFields/AdressBlock/AdressBlock';
+import { RoleField } from 'components/FormFields/RoleField/RoleField';
+import SubmitButton from 'components/Buttons/SubmitButton';
 
-import { userDataValidator } from './validators';
+import { userDataValidator } from 'utils';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

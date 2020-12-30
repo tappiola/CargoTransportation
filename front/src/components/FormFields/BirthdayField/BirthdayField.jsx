@@ -6,7 +6,7 @@ import DatePicker from 'react-date-picker';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { dateValidator } from '../validators';
+import { dateValidator } from 'utils';
 
 const useStyle = makeStyles((theme) => ({
   root: {

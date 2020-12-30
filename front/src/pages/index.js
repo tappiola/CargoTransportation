@@ -7,6 +7,7 @@ import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
+import NewCompanyForm from './NewCompanyForm/NewCompanyForm';
 
 export const PROTECTED_ROUTES = [
   {
@@ -56,5 +57,11 @@ export const PROTECTED_ROUTES = [
     basePath: '/waybills',
     component: Waybills,
     roles: [ROLES.GLOBAL_ADMIN],
+  },
+  {
+    module: 'NEW_COMPANY',
+    basePath: '/new-company',
+    component: NewCompanyForm,
+    roles: [ROLES.GLOBAL_ADMIN, ROLES.ADMIN],
   },
 ];
