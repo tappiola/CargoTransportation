@@ -14,30 +14,34 @@ import { PROTECTED_ROUTES } from 'pages';
 import SignIn from 'pages/SignIn';
 import { customTheme } from 'config';
 
-const ProtectedApp = () => (
-  <MainMenu>
-    <Switch>
-      {PROTECTED_ROUTES.map((m) => (
-        <Route
-          key={m.basePath.slice(1)}
-          path={m.basePath}
-          component={m.component}
-        />
-      ))}
-      {PROTECTED_ROUTES.length > 0 && (
-        <Route exact path="/">
-          <Redirect to={PROTECTED_ROUTES[0].basePath} />
-        </Route>
-      )}
-      {PROTECTED_ROUTES.length > 0 && (
-        <Route exact path="/signin">
-          <Redirect to={PROTECTED_ROUTES[0].basePath} />
-        </Route>
-      )}
-      <Route>У вас нет доступа к запрашиваемой странице</Route>
-    </Switch>
-  </MainMenu>
-);
+const ProtectedApp = () => {
+  const [protectedRoute] = PROTECTED_ROUTES;
+
+  return (
+    <MainMenu>
+      <Switch>
+        {PROTECTED_ROUTES.map(({ basePath, component }) => (
+          <Route
+            key={basePath.slice(1)}
+            path={basePath}
+            component={component}
+          />
+        ))}
+        {protectedRoute && (
+          <>
+            <Route exact path="/">
+              <Redirect to={protectedRoute.basePath} />
+            </Route>
+            <Route exact path="/signin">
+              <Redirect to={protectedRoute.basePath} />
+            </Route>
+          </>
+        )}
+        <Route>У вас нет доступа к запрашиваемой странице</Route>
+      </Switch>
+    </MainMenu>
+  );
+};
 
 function App({ isAuthorized }) {
   return (

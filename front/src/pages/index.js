@@ -58,11 +58,3 @@ export const PROTECTED_ROUTES = [
     roles: [ROLES.GLOBAL_ADMIN],
   },
 ];
-
-// const PUBLIC_ROUTES = [
-//     {
-//       module: MODULE_NAMES.SIGNIN,
-//       basePath: '/signin',
-//       component: SignIn,
-//     }
-//     ]
