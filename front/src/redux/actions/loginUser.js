@@ -1,4 +1,4 @@
-import { signIn } from '../../api';
+import { signIn } from 'api';
 import { authorizationCompleted } from './authorizationCompoleted';
 
 export const loginUser = (email, password, history) => (dispatch) => signIn(email, password).then(

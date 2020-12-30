@@ -13,5 +13,5 @@ export const customTheme = responsiveFontSizes(
         },
       },
     },
-  }),
+  }, ruRU),
 );
