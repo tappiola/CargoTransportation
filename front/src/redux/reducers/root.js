@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import { anotherReducer } from './another';
-import { userReducer } from './user';
+import { currentUserReducer } from './currentUser';
 import { usersReducer } from './users';
 
 export default combineReducers({
   another: anotherReducer,
-  user: userReducer,
+  currentUser: currentUserReducer,
   users: usersReducer,
 });

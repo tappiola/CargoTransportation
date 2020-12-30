@@ -61,7 +61,7 @@ function App({ isAuthorized }) {
   );
 }
 
-const mapState = ({ user: { authorization: { isSuccess } } }) => (
+const mapState = ({ currentUser: { authorization: { isSuccess } } }) => (
   {
     isAuthorized: isSuccess,
   }

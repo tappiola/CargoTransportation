@@ -6,7 +6,7 @@ const initialState = {
   },
 };
 
-export function userReducer(state = initialState, action) {
+export function currentUserReducer(state = initialState, action) {
   switch (action.type) {
     case types.AUTHORIZATION_COMPLETED: {
       return {
