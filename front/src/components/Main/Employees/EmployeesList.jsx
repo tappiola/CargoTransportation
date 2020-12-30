@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
+import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {NavLink, useRouteMatch} from 'react-router-dom';
 import { dispatchGetUsers, dispatchDeleteUsers } from '../../../redux/actions';
@@ -7,17 +8,42 @@ import { CustomGrid } from '../SharedComponents/DataGrid';
 import { GridToolbar } from '../SharedComponents/GridToolbar';
 import { DeleteButton, NavButton } from '../SharedComponents/Button';
 import { useContainerStyles } from '../SharedComponents/Shared.styles';
-import * as COLUMNS from '../SharedComponents/gridColumns';
 
 const columns = [
-  COLUMNS.FULLNAME,
-  COLUMNS.EMAIL,
-  COLUMNS.COMPANY,
-  COLUMNS.UNN,
-  COLUMNS.STATUS,
+  {
+    field: 'name',
+    headerName: 'ФИО',
+    disableClickEventBubbling: true,
+    flex: 2,
+    renderCell: (params) => (
+      <Link component={NavLink} to={`/users/${params.row.id}`}>{params.value}</Link>
+    ),
+  },
+  {
+    field: 'email',
+    headerName: 'Email',
+    flex: 2,
+    renderCell: (params) => <Link href={`mailto:${params.value}`} color="textPrimary">{params.value}</Link>,
+  },
+  {
+    field: 'unn',
+    headerName: 'Компания',
+    flex: 2,
+  },
+  {
+    field: 'companyAccountNumber',
+    headerName: 'УНП',
+    flex: 1,
+  },
+  {
+    field: 'isActive',
+    headerName: 'Статус',
+    flex: 1,
+    renderCell: (params) => params.value ? 'Активный' : 'Неактивный',
+  }
 ];
 
-function UsersList({
+function EmployeesList({
   usersData, usersLoadComplete, initUsers, removeUsers,
 }) {
   const classes = useContainerStyles();
@@ -30,8 +56,8 @@ function UsersList({
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <GridToolbar title="Пользователи">
-        <NavButton color="primary" to={`${path}/new`}>Новый пользователь</NavButton>
+      <GridToolbar title="Сотрудники">
+        <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
         <DeleteButton
           isDisabled={selection.length === 0}
           onButtonClick={() => removeUsers(selection)}
@@ -60,4 +86,4 @@ const mapDispatchToProps = (dispatch) => ({
   removeUsers: (ids) => dispatch(dispatchDeleteUsers(ids)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeesList);

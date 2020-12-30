@@ -24,6 +24,9 @@ const MENU_ITEMS_CONFIG = {
   [MODULES.USERS]: {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
+  [MODULES.EMPLOYEES]: {
+    menuItemName: 'Сотрудники', icon: AccountBoxIcon,
+  },
   [MODULES.WAREHOUSES]: {
     menuItemName: 'Склады', icon: ShoppingCartIcon,
   },

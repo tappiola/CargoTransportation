@@ -1,3 +1,7 @@
 export const SOME_ACTION_TYPE = 'SOME_ACTION_TYPE';
+
 export const USERS_SET = 'USERS_SET';
 export const USERS_DELETE = 'USERS_DELETE';
+
+export const EMPLOYEES_SET = 'EMPLOYEES_SET';
+export const EMPLOYEES_DELETE = 'EMPLOYEES_DELETE';

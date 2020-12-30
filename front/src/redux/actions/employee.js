@@ -1,12 +1,12 @@
 import * as actionTypes from './actionTypes';
 
-function createData(id, name, email, companyName, unn) {
+function createData(id, name, email, unn, companyAccountNumber, isActive) {
   return {
-    id, name, email, companyName, unn,
+    id, name, email, unn, companyAccountNumber, isActive
   };
 }
 
-const FAKE_USERS = [
+const FAKE_EMPLOYEES = [
   createData(1, 'Иванов Иван Иванович', 'i.ivanov@gmail.com', 'БелСпецТранспорт', 845785123, 1),
   createData(2, 'Сидоров Петр Валерьевич', 'sidorov@mail.ru', 'ТехСтройСервис', 454751578, 0),
   createData(3, 'Пупкин Василий Васильевич', 'vpupkin@mail.ru', 'ГосТрансАвто', 989898988, 1),
@@ -21,20 +21,20 @@ const FAKE_USERS = [
   createData(12, 'Зарубин Антон Викторович', 'zarubin@gmail.com', 'ЧТУП СтройЭкспортТранс', 878788889, 1),
 ];
 
-export const setUsers = (usersData) => ({
-  type: actionTypes.USERS_SET,
+export const setEmployees = (usersData) => ({
+  type: actionTypes.EMPLOYEES_SET,
   usersData,
 });
 
 export const handleDeleteUsers = (ids) => ({
-  type: actionTypes.USERS_DELETE,
+  type: actionTypes.EMPLOYEES_DELETE,
   ids,
 });
 
-export const dispatchGetUsers = () => (dispatch) => setTimeout(
-  () => Promise.resolve(FAKE_USERS)
-    .then((usersData) => dispatch(setUsers(usersData))),
+export const dispatchGetEmployees = () => (dispatch) => setTimeout(
+  () => Promise.resolve(FAKE_EMPLOYEES)
+    .then((data) => dispatch(setEmployees(data))),
   1000,
 );
 
-export const dispatchDeleteUsers = (ids) => (dispatch) => dispatch(handleDeleteUsers(ids));
+export const dispatchDeleteEmployees = (ids) => (dispatch) => dispatch(handleDeleteUsers(ids));
