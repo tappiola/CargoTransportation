@@ -5,7 +5,7 @@ import React from 'react';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { useToolbarStyles } from './GridToolbar.styles';
 
-export function GridToolbar({ title, children }) {
+function GridToolbar({ title, children }) {
   const classes = useToolbarStyles();
   return (
     <Toolbar className={classes.root}>
@@ -26,3 +26,5 @@ export function GridToolbar({ title, children }) {
     </Toolbar>
   );
 }
+
+export default GridToolbar;

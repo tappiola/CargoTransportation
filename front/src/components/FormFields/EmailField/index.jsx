@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseField from './BaseField';
+import BaseField from '../BaseField';
 
 const EmailField = (props) => (
   <BaseField

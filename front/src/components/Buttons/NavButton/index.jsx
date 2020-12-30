@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import React from 'react';
-import { useButtonStyles } from './Buttons.styles';
+import { useButtonStyles } from '../Buttons.styles';
 
-export const NavButton = ({ children, to, ...props }) => {
+const NavButton = ({ children, to, ...props }) => {
   const classes = useButtonStyles();
   return (
     <Button
@@ -18,13 +18,4 @@ export const NavButton = ({ children, to, ...props }) => {
   );
 };
 
-export const DeleteButton = ({ isDisabled, onButtonClick, ...props }) => (
-  <Button
-    color="secondary"
-    disabled={isDisabled}
-    onClick={onButtonClick}
-    {...props}
-  >
-    Удалить
-  </Button>
-);
+export default NavButton;
