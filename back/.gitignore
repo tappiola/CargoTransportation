@@ -1,5 +1,7 @@
 .idea
 node_modules
-.env
 package-lock.json
+.env
 .eslintrc.js
+.editorconfig
+logs

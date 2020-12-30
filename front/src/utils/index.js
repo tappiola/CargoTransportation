@@ -1,1 +1,0 @@
-export { someUtil } from './someUtil';

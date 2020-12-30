@@ -21,11 +21,13 @@
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
     "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-autofix": "^1.0.3",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
