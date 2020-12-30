@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
 import { someActionCreator } from 'redux/actions';
 import { PROTECTED_ROUTES } from 'pages';
-import SignIn from 'components/SignIn';
+import SignIn from 'pages/SignIn';
 import { customTheme } from 'config';
 
 const ProtectedApp = () => (

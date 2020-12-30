@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@material-ui/styles';
-import App from 'components/App/App';
+import App from 'App';
 import store from 'redux/store';
 import { customTheme } from 'config';
 
