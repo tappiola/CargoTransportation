@@ -9,8 +9,8 @@ exports.index = async ( req, res ) => {
 
 exports.register = async ( req, res, next ) => {
 	const { email, password } = req.body;
-	const user = await Users.findOne({ email });
-	
+	const user = await Users.findOne({ where : { email } });
+	console.log(email);
 	if ( user ) {
 		return res.status(400).json({ error : { message : 'Email already in use!' } });
 	}
