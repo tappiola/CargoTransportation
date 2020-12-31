@@ -1,8 +1,8 @@
 import * as actionTypes from './actionTypes';
 
-function createData(id, name, email, companyName, unn) {
+function createData(id, name, email, companyName, unn, isActive) {
   return {
-    id, name, email, companyName, unn,
+    id, name, email, companyName, unn, isActive,
   };
 }
 

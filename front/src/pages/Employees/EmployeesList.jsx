@@ -1,47 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
-import {NavLink, useRouteMatch} from 'react-router-dom';
-import { dispatchGetUsers, dispatchDeleteUsers } from '../../../redux/actions';
-import { CustomGrid } from '../SharedComponents/DataGrid';
-import { GridToolbar } from '../SharedComponents/GridToolbar';
-import { DeleteButton, NavButton } from '../SharedComponents/Button';
-import { useContainerStyles } from '../SharedComponents/Shared.styles';
-
-const columns = [
-  {
-    field: 'name',
-    headerName: 'ФИО',
-    disableClickEventBubbling: true,
-    flex: 2,
-    renderCell: (params) => (
-      <Link component={NavLink} to={`/users/${params.row.id}`}>{params.value}</Link>
-    ),
-  },
-  {
-    field: 'email',
-    headerName: 'Email',
-    flex: 2,
-    renderCell: (params) => <Link href={`mailto:${params.value}`} color="textPrimary">{params.value}</Link>,
-  },
-  {
-    field: 'unn',
-    headerName: 'Компания',
-    flex: 2,
-  },
-  {
-    field: 'companyAccountNumber',
-    headerName: 'УНП',
-    flex: 1,
-  },
-  {
-    field: 'isActive',
-    headerName: 'Статус',
-    flex: 1,
-    renderCell: (params) => params.value ? 'Активный' : 'Неактивный',
-  }
-];
+import { useRouteMatch } from 'react-router-dom';
+import CustomGrid from 'components/DataGrid';
+import GridToolbar from 'components/GridToolbar';
+import DeleteButton from 'components/Buttons/DeleteButton';
+import NavButton from 'components/Buttons/NavButton';
+import { dispatchGetUsers, dispatchDeleteUsers } from '../../redux/actions';
+import { useContainerStyles } from './EmployeesList.styles';
+import * as COLUMNS from '../../components/DataGrid/gridColumns';
 
 function EmployeesList({
   usersData, usersLoadComplete, initUsers, removeUsers,
@@ -49,6 +16,12 @@ function EmployeesList({
   const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
   const { path } = useRouteMatch();
+
+  const columns = [
+    COLUMNS.FULLNAME(path),
+    COLUMNS.EMAIL,
+    COLUMNS.STATUS,
+  ];
 
   useEffect(() => {
     initUsers();
@@ -75,7 +48,7 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ user: { usersData, usersLoadComplete } }) => (
+const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
   {
     usersData, usersLoadComplete,
   }

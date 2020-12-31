@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { connect } from 'react-redux';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 import { dispatchGetUsers, dispatchDeleteUsers } from 'redux/actions';
 import CustomGrid from 'components/DataGrid';
 import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import { useContainerStyles } from './UserList.styles';
-import * as COLUMNS from '../SharedComponents/gridColumns';
-
-const columns = [
-  COLUMNS.FULLNAME,
-  COLUMNS.EMAIL,
-  COLUMNS.COMPANY,
-  COLUMNS.UNN,
-  COLUMNS.STATUS,
-];
+import * as COLUMNS from '../../components/DataGrid/gridColumns';
 
 function UsersList({
   usersData, usersLoadComplete, initUsers, removeUsers,
@@ -24,6 +16,14 @@ function UsersList({
   const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
   const { path } = useRouteMatch();
+
+  const columns = [
+    COLUMNS.FULLNAME(path),
+    COLUMNS.EMAIL,
+    COLUMNS.COMPANY,
+    COLUMNS.UNN,
+    COLUMNS.STATUS,
+  ];
 
   useEffect(() => {
     initUsers();

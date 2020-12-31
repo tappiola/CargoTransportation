@@ -39,6 +39,10 @@ const menuItems = [
     basePath: '/users',
   },
   {
+    module: MODULE_NAMES.EMPLOYEES,
+    basePath: '/employees',
+  },
+  {
     module: MODULE_NAMES.WAREHOUSES,
     basePath: '/warehouses',
   },
@@ -58,10 +62,10 @@ const MENU_ITEMS_CONFIG = {
   [MODULE_NAMES.USERS]: {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
-  [MODULES.EMPLOYEES]: {
+  [MODULE_NAMES.EMPLOYEES]: {
     menuItemName: 'Сотрудники', icon: AccountBoxIcon,
   },
-  [MODULES.WAREHOUSES]: {
+  [MODULE_NAMES.WAREHOUSES]: {
     menuItemName: 'Склады', icon: ShoppingCartIcon,
   },
   [MODULE_NAMES.WAYBILLS]: {
