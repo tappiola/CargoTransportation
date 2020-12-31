@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import { dispatchGetUsers, dispatchDeleteUsers } from 'redux/actions';
@@ -9,33 +8,14 @@ import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import { useContainerStyles } from './UserList.styles';
+import * as COLUMNS from '../SharedComponents/gridColumns';
 
 const columns = [
-  {
-    field: 'name',
-    headerName: 'ФИО',
-    disableClickEventBubbling: true,
-    flex: 2,
-    renderCell: (params) => (
-      <Link component={NavLink} to={`/users/${params.row.id}`}>{params.value}</Link>
-    ),
-  },
-  {
-    field: 'email',
-    headerName: 'Email',
-    flex: 2,
-    renderCell: (params) => <Link href={`mailto:${params.value}`} color="textPrimary">{params.value}</Link>,
-  },
-  {
-    field: 'companyName',
-    headerName: 'Компания',
-    flex: 2,
-  },
-  {
-    field: 'companyAccountNumber',
-    headerName: 'УНП',
-    flex: 1,
-  },
+  COLUMNS.FULLNAME,
+  COLUMNS.EMAIL,
+  COLUMNS.COMPANY,
+  COLUMNS.UNN,
+  COLUMNS.STATUS,
 ];
 
 function UsersList({
@@ -51,7 +31,7 @@ function UsersList({
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <GridToolbar title="Грузоперевозки">
+      <GridToolbar title="Пользователи">
         <NavButton color="primary" to={`${path}/new`}>Новый пользователь</NavButton>
         <DeleteButton
           isDisabled={selection.length === 0}

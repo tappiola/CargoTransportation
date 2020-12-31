@@ -58,7 +58,10 @@ const MENU_ITEMS_CONFIG = {
   [MODULE_NAMES.USERS]: {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
-  [MODULE_NAMES.WAREHOUSES]: {
+  [MODULES.EMPLOYEES]: {
+    menuItemName: 'Сотрудники', icon: AccountBoxIcon,
+  },
+  [MODULES.WAREHOUSES]: {
     menuItemName: 'Склады', icon: ShoppingCartIcon,
   },
   [MODULE_NAMES.WAYBILLS]: {
