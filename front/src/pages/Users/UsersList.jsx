@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Link } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { dispatchGetUsers, dispatchDeleteUsers } from '../../../redux/actions';
-import { CustomGrid } from '../SharedComponents/DataGrid';
-import { GridToolbar } from '../SharedComponents/GridToolbar';
-import { DeleteButton, NavButton } from '../SharedComponents/Button';
-import { useContainerStyles } from '../SharedComponents/Shared.styles';
+import { NavLink, useRouteMatch } from 'react-router-dom';
+import { dispatchGetUsers, dispatchDeleteUsers } from 'redux/actions';
+import CustomGrid from 'components/DataGrid';
+import GridToolbar from 'components/GridToolbar';
+import DeleteButton from 'components/Buttons/DeleteButton';
+import NavButton from 'components/Buttons/NavButton';
+import { useContainerStyles } from './UserList.styles';
 
 const columns = [
   {
@@ -42,6 +43,7 @@ function UsersList({
 }) {
   const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
+  const { path } = useRouteMatch();
 
   useEffect(() => {
     initUsers();
@@ -50,7 +52,7 @@ function UsersList({
   return (
     <Container maxWidth="lg" className={classes.container}>
       <GridToolbar title="Грузоперевозки">
-        <NavButton color="primary" to="/users/new">Новый пользователь</NavButton>
+        <NavButton color="primary" to={`${path}/new`}>Новый пользователь</NavButton>
         <DeleteButton
           isDisabled={selection.length === 0}
           onButtonClick={() => removeUsers(selection)}
@@ -68,7 +70,7 @@ function UsersList({
   );
 }
 
-const mapStateToProps = ({ user: { usersData, usersLoadComplete } }) => (
+const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
   {
     usersData, usersLoadComplete,
   }

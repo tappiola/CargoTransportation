@@ -5,7 +5,7 @@ const initialState = {
   usersLoadComplete: false,
 };
 
-export function userReducer(state = initialState, action) {
+export function usersReducer(state = initialState, action) {
   switch (action.type) {
     case types.USERS_SET: {
       return {
