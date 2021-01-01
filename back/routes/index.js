@@ -1,6 +1,5 @@
-const userRouter = require('./users');
+const userRouter = require('../controllers/userСontroller');
 
 module.exports = app => {
-	//Users
 	app.use('/users', userRouter);
 };
