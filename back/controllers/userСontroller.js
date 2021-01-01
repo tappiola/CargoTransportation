@@ -41,7 +41,7 @@ router.post('/register', validate.register, async ( req, res, next ) => {
 			`
 		});
 		
-		mailer(mail).then(res => console.log('Email sent...', res)).catch(err => console.log(err.message));
+		mailer(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => console.log(err.message));
 		
 		res.status(200).json({ token });
 	} catch (e) {
