@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
-
+const { Router } = require('express');
+const router = Router();
 const { hashPassword, isPasswordValid, customPassword } = require('../utils/password.utils');
 const { getSignedToken } = require('../utils/token.utils');
 const Users = require('../models/Users');
+const validate = require('../middlewares/validate');
+const { mailer, mailOptions } = require('../utils/mail.utils');
 
 router.get('/', async ( req, res ) => {
 	const users = await Users.findAll({
@@ -27,6 +28,20 @@ router.post('/register', validate.register, async ( req, res, next ) => {
 		const password = customPassword();
 		const newUser = await Users.create({ email, password : await hashPassword(password) });
 		const token = getSignedToken(newUser);
+		
+		const mail = mailOptions({
+			to      : email,
+			subject : 'Nodemailer',
+			html    : `
+			<h3>Registration data:</h3>
+			<ul>
+				<li><b>Email: </b>${email}</li>
+				<li><b>Password: </b>${password}</li>
+			</ul>
+			`
+		});
+		
+		mailer(mail).then(res => console.log('Email sent...', res)).catch(err => console.log(err.message));
 		
 		res.status(200).json({ token });
 	} catch (e) {
