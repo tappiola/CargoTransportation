@@ -9,10 +9,12 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import { useContainerStyles } from './UserList.styles';
 import * as COLUMNS from '../../components/DataGrid/gridColumns';
+import { usersSelector } from '../../redux/selectors/users';
 
 function UsersList({
   usersData, usersLoadComplete, initUsers, removeUsers,
 }) {
+  console.log(usersData, usersLoadComplete);
   const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
   const { path } = useRouteMatch();
@@ -52,7 +54,8 @@ function UsersList({
 
 const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
   {
-    usersData, usersLoadComplete,
+    usersData: usersSelector(usersData),
+    usersLoadComplete,
   }
 );
 

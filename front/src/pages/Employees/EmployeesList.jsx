@@ -6,12 +6,12 @@ import CustomGrid from 'components/DataGrid';
 import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
-import { dispatchGetUsers, dispatchDeleteUsers } from '../../redux/actions';
+import { dispatchGetEmployees, dispatchDeleteEmployees } from '../../redux/actions';
 import { useContainerStyles } from './EmployeesList.styles';
 import * as COLUMNS from '../../components/DataGrid/gridColumns';
 
 function EmployeesList({
-  usersData, usersLoadComplete, initUsers, removeUsers,
+  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
 }) {
   const classes = useContainerStyles();
   const [selection, setSelection] = useState([]);
@@ -20,11 +20,13 @@ function EmployeesList({
   const columns = [
     COLUMNS.FULLNAME(path),
     COLUMNS.EMAIL,
+    COLUMNS.ROLE,
     COLUMNS.STATUS,
+
   ];
 
   useEffect(() => {
-    initUsers();
+    initEmployees();
   }, []);
 
   return (
@@ -33,13 +35,13 @@ function EmployeesList({
         <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
         <DeleteButton
           isDisabled={selection.length === 0}
-          onButtonClick={() => removeUsers(selection)}
+          onButtonClick={() => removeEmployees(selection)}
         />
       </GridToolbar>
       <CustomGrid
-        rows={usersData}
+        rows={employeesData}
         columns={columns}
-        loading={!usersLoadComplete}
+        loading={!employeesLoadComplete}
         onSelectionChange={(newSelection) => {
           setSelection(newSelection.rowIds);
         }}
@@ -48,15 +50,15 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
+const mapStateToProps = ({ employees: { employeesData, employeesLoadComplete } }) => (
   {
-    usersData, usersLoadComplete,
+    employeesData, employeesLoadComplete,
   }
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  initUsers: () => dispatch(dispatchGetUsers()),
-  removeUsers: (ids) => dispatch(dispatchDeleteUsers(ids)),
+  initEmployees: () => dispatch(dispatchGetEmployees()),
+  removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmployeesList);

@@ -1,9 +1,10 @@
 import { Link } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
+import { ROLE_NAMES } from '../../constants/permissions';
 
 export const FULLNAME = (path) => ({
-  field: 'name',
+  field: 'fullName',
   headerName: 'ФИО',
   disableClickEventBubbling: true,
   flex: 2,
@@ -20,7 +21,7 @@ export const EMAIL = {
 };
 
 export const COMPANY = {
-  field: 'companyName',
+  field: 'name',
   headerName: 'Компания',
   flex: 2,
 };
@@ -36,4 +37,11 @@ export const STATUS = {
   headerName: 'Статус',
   flex: 1,
   renderCell: (params) => (params.value ? 'Активный' : 'Неактивный'),
+};
+
+export const ROLE = {
+  field: 'roles',
+  headerName: 'Роль',
+  flex: 2,
+  renderCell: (params) => (params.value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ')),
 };

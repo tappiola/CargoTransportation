@@ -1,34 +1,22 @@
-const express = require( 'express' );
-const cors = require( 'cors' );
-const path = require( 'path' );
+require('dotenv').config();
+const express = require('express'),
+	path = require('path'),
+	serverConfig = require('./config/server.config'),
+	routes = require('./routes'),
+	errorHandler = require('./middlewares/errorHandler'),
+	serverStart = require('./config/server.start');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-app.use( cors() );
-app.use( express.json() );
+serverConfig(app);
+routes(app);
 
 if ( process.env.NODE_ENV === 'production' ) {
-   app.use( express.static( path.resolve( __dirname, 'front/build' ) ) );
+	app.use(express.static('../front/build'));
+
+	app.get('*', ( req, res ) => {
+		res.sendFile(path.resolve(__dirname, '../front/build', 'index.html'));
+	});
 }
 
-//+ Error handler
-app.use( ( req, res, next ) => {
-   const err = new Error( 'not found' );
-   err.status = 404;
-   next( err );
-} );
-
-app.use( ( err, req, res, next ) => {
-   const status = err.status || 500;
-   res.status( status ).json( { error : { message : err.message } } );
-} );
-//- Error handler
-
-app.get( '*', async ( req, res ) => {
-   res.send( 'ok' );
-} );
-
-app.listen( PORT, () => {
-   console.log( `Server has started on port ${PORT}` );
-} );
+errorHandler(app);
+serverStart(app);
