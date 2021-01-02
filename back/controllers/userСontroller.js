@@ -4,7 +4,8 @@ const { hashPassword, isPasswordValid, customPassword } = require('../utils/pass
 const { getSignedToken } = require('../utils/token.utils');
 const Users = require('../models/Users');
 const validate = require('../middlewares/validate');
-const { mailer, mailOptions } = require('../utils/mail.utils');
+const { mailer, mailOptions } = require('../utils/mail/mail.utils');
+const registerTemplate = require('../utils/mail/tmpl/register');
 
 router.get('/', async ( req, res ) => {
 	const users = await Users.findAll({
@@ -30,15 +31,9 @@ router.post('/register', validate.register, async ( req, res, next ) => {
 		const token = getSignedToken(newUser);
 		
 		const mail = mailOptions({
-			to      : email,
-			subject : 'Nodemailer',
-			html    : `
-			<h3>Registration data:</h3>
-			<ul>
-				<li><b>Email: </b>${email}</li>
-				<li><b>Password: </b>${password}</li>
-			</ul>
-			`
+			to      : process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
+			subject : 'Registration in "Transportation system"',
+			html    : registerTemplate(email, password)
 		});
 		
 		mailer(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => console.log(err.message));
