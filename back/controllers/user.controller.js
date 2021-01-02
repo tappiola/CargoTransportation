@@ -56,3 +56,14 @@ exports.login = async (req, res) => {
     const token = getSignedToken(user);
     res.status(200).json({token});
 };
+
+exports.delete = async(req, res) => {
+    const {ids} = req.query;
+
+    await User.destroy({
+        where: {
+            id: ids.split(',').map(id => +id),
+    }})
+
+    res.status(204).json({});
+};

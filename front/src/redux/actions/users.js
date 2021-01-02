@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { getUsers } from '../../api/user';
+import { deleteUsers, getUsers } from '../../api';
 
 export const setUsers = (usersData) => ({
   type: actionTypes.USERS_SET,
@@ -17,4 +17,7 @@ export const dispatchGetUsers = () => (dispatch) => {
     .then((data) => dispatch(setUsers(data)));
 };
 
-export const dispatchDeleteUsers = (ids) => (dispatch) => dispatch(handleDeleteUsers(ids));
+export const dispatchDeleteUsers = (ids) => (dispatch) => {
+  deleteUsers(ids)
+    .then(() => dispatch(handleDeleteUsers(ids)));
+};

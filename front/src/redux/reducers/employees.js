@@ -14,7 +14,7 @@ export function employeesReducer(state = initialState, action) {
         employeesLoadComplete: true,
       };
     }
-    case types.USERS_DELETE: {
+    case types.EMPLOYEES_DELETE: {
       return {
         ...state,
         employeesData: [...state.employeesData.filter((u) => !action.ids.includes(String(u.id)))],

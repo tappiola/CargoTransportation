@@ -21,3 +21,15 @@ exports.index = async (req, res) => {
     );
     res.status(200).json(users);
 };
+
+exports.delete = async(req, res) => {
+    const {ids} = req.query;
+    console.log(ids)
+
+    await User.destroy({
+        where: {
+            id: ids.split(',').map(id => +id),
+    }})
+
+    res.status(204).json({});
+};
