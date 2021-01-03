@@ -29,17 +29,11 @@ function SignIn({ prevUserData, resolveSubmit }) {
     roles,
   } = prevUserData;
   const {
-    register,
-    handleSubmit,
-    errors,
-    getValues,
+    register, handleSubmit, errors, watch,
   } = useForm();
-
+  const watchRoles = watch('roles');
   const handleSubmitMe = (data) => {
-    const isRoleChecked = Object.values(data.roles).some((checked) => checked);
-    if (isRoleChecked) {
-      resolveSubmit(data);
-    }
+    resolveSubmit(data);
   };
   return (
     <Container maxWidth="sm">
@@ -83,10 +77,8 @@ function SignIn({ prevUserData, resolveSubmit }) {
             <RoleField
               inputRef={register}
               defaultValue={roles}
-              error={
-                getValues().roles
-                && Object.values(getValues().roles).every((checked) => !checked)
-              }
+              error={errors.roles}
+              onChange={watchRoles}
             />
             <SubmitButton className={classes.submit} />
           </Grid>
