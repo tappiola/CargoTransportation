@@ -3,8 +3,8 @@ export { useInput } from './useInput';
 export {
   validateEmail,
   validatePassword,
-  userDataValidator,
-  dateValidator,
+  validateDate,
   emailValidator,
   textValidator,
+  emailRegExp,
 } from './validators';

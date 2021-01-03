@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { NameField } from 'components/FormFields/NameField/NameField';
 import { SurnameField } from 'components/FormFields/SurnameField/SurnameField';
@@ -16,70 +15,79 @@ import { AdressBlock } from 'components/FormFields/AdressBlock/AdressBlock';
 import { RoleField } from 'components/FormFields/RoleField/RoleField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
-import { userDataValidator } from 'utils';
+import { useStyles } from './NewCompanyForm.styles';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-//
 function SignIn({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    firstname,
+    middleName,
+    surname,
+    birthDate,
+    email,
+    adress,
+    roles,
+  } = prevUserData;
+  const {
+    register,
+    handleSubmit,
+    errors,
+    getValues,
+  } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    console.log(errors);
-    if (userDataValidator(data)) {
+  const handleSubmitMe = (data) => {
+    const isRoleChecked = Object.values(data.roles).some((checked) => checked);
+    if (isRoleChecked) {
       resolveSubmit(data);
     }
   };
-
   return (
     <Container maxWidth="sm">
       <div className={classes.paper}>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className={classes.form}
+          onSubmit={handleSubmit(handleSubmitMe)}
+          noValidate
+        >
           <Grid container justify="space-between" spacing={3}>
             <NameField
               inputRef={register}
-              defaultValue={prevUserData.firstname}
+              defaultValue={firstname}
+              error={errors.firstname}
             />
             <MiddleNameField
               inputRef={register}
-              defaultValue={prevUserData.middleName}
+              defaultValue={middleName}
+              error={errors.middleName}
             />
             <SurnameField
               inputRef={register}
-              defaultValue={prevUserData.surname}
-            />
-            <BirthdayField
-              inputRef={register}
-              defaultValue={prevUserData.birthDate}
+              defaultValue={surname}
+              error={errors.surname}
             />
             <EmailField
+              error={errors.email}
               inputRef={register}
-              defaultValue={prevUserData.email}
+              defaultValue={email}
             />
             <AdressBlock
               inputRef={register}
-              defaultValue={prevUserData.adress}
+              defaultValue={adress}
+              error={errors}
             />
-            <RoleField inputRef={register} />
+            <BirthdayField
+              inputRef={register}
+              defaultValue={birthDate}
+              error={errors}
+            />
+            <RoleField
+              inputRef={register}
+              defaultValue={roles}
+              error={
+                getValues().roles
+                && Object.values(getValues().roles).every((checked) => !checked)
+              }
+            />
             <SubmitButton className={classes.submit} />
           </Grid>
         </form>
@@ -94,8 +102,13 @@ SignIn.defaultProps = {
     surname: '',
     middleName: '',
     email: '',
+    roles: {},
     birthDate: new Date(),
-    adress: {},
+    adress: {
+      city: '',
+      street: '',
+      house: '',
+    },
   },
 };
 
@@ -105,6 +118,7 @@ SignIn.propTypes = {
     surname: PropTypes.string,
     middleName: PropTypes.string,
     email: PropTypes.string,
+    roles: PropTypes.object,
     birthDate: PropTypes.instanceOf(Date),
     adress: PropTypes.objectOf(PropTypes.string, PropTypes.number),
   }),
@@ -113,6 +127,7 @@ SignIn.propTypes = {
 
 export default connect(null, (/* dispatch */) => ({
   resolveSubmit() {
+    console.log('RESOLVE');
     // dispatch();
   },
 }))(SignIn);
