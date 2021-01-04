@@ -6,5 +6,6 @@ export {
   validateDate,
   emailValidator,
   textValidator,
+  getHelperText,
   emailRegExp,
 } from './validators';

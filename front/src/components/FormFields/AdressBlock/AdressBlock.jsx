@@ -3,29 +3,16 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
-const getHelperText = ({ type } = {}) => {
-  if (!type) {
-    return '';
-  }
-  switch (type) {
-    case 'required':
-      return 'Заполните это поле';
-    case 'minLength':
-    case 'maxLength':
-    case 'min':
-      return 'Некорректное значение';
-    default:
-      return 'Ошибка';
-  }
-};
+import { getHelperText } from 'utils';
 
 export const AdressBlock = ({ inputRef, defaultValue, error }) => {
   const { city, street, house } = error?.adress || {};
   return (
-    <Grid container item spacing={1}>
+    <Grid container spacing={1}>
       <Grid item xs={6} sm={4}>
         <TextField
           label="Город"
+          margin="normal"
           name="adress.city"
           error={!!city}
           defaultValue={defaultValue.city}
@@ -39,6 +26,7 @@ export const AdressBlock = ({ inputRef, defaultValue, error }) => {
       <Grid item xs={6} sm={4}>
         <TextField
           label="Улица"
+          margin="normal"
           name="adress.street"
           error={!!street}
           defaultValue={defaultValue.street}
@@ -51,6 +39,7 @@ export const AdressBlock = ({ inputRef, defaultValue, error }) => {
       <Grid item xs={6} sm={2}>
         <TextField
           label="Дом"
+          margin="normal"
           defaultValue={defaultValue.house}
           name="adress.house"
           autoComplete="address-level3"
@@ -66,6 +55,7 @@ export const AdressBlock = ({ inputRef, defaultValue, error }) => {
       </Grid>
       <Grid item xs={6} sm={2}>
         <TextField
+          margin="normal"
           name="adress.apartment"
           label="Квартира"
           autoComplete="address-level4"
