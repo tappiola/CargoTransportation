@@ -20,6 +20,15 @@ export function usersReducer(state = initialState, action) {
         usersData: [...state.usersData.filter((u) => !action.ids.includes(String(u.id)))],
       };
     }
+    case types.USERS_SET_USER_COMPLETE: {
+      return {
+        ...state,
+        usersSettingComplete: {
+          status: true,
+          isSuccess: action.isSuccess,
+        },
+      };
+    }
 
     default: {
       return state;

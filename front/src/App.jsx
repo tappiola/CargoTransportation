@@ -9,7 +9,6 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
-import { someActionCreator } from 'redux/actions';
 import { PROTECTED_ROUTES } from 'pages';
 import SignIn from 'pages/SignIn';
 import { customTheme } from 'config';
@@ -71,10 +70,4 @@ const mapState = ({
   isAuthorized: isSuccess,
 });
 
-const mapDispatch = (dispatch) => ({
-  onInit(data) {
-    dispatch(someActionCreator(data));
-  },
-});
-
-export default connect(mapState, mapDispatch)(App);
+export default connect(mapState, null)(App);

@@ -9,3 +9,4 @@ export {
   getHelperText,
   emailRegExp,
 } from './validators';
+export { getAuthToken } from './getAuthToken';

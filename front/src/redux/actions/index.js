@@ -1,3 +1,2 @@
-export { someActionCreator } from './someActionCreator';
-export { dispatchGetUsers, dispatchDeleteUsers } from './users';
+export { dispatchGetUsers, dispatchDeleteUsers, dispatchSetUser } from './users';
 export { loginUser } from './loginUser';

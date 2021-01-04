@@ -16,11 +16,13 @@ import RoleField from 'components/FormFields/RoleField';
 import PasswordField from 'components/FormFields/PasswordField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
+import { dispatchSetUser } from 'redux/actions/users';
 import { useStyles } from './NewCompanyForm.styles';
 
 function NewCompanyFrom({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
   const {
+    id: _id,
     firstname,
     middleName,
     surname,
@@ -34,7 +36,7 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
   const { register, handleSubmit, errors, watch } = useForm();
   const watchRoles = watch('roles');
   const handleSubmitMe = (data) => {
-    resolveSubmit(data);
+    resolveSubmit({ ...data, id: _id });
   };
   return (
     <Container maxWidth="sm">
@@ -96,6 +98,7 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
 
 NewCompanyFrom.defaultProps = {
   prevUserData: {
+    id: '0234123',
     firstname: '',
     surname: '',
     middleName: '',
@@ -113,6 +116,7 @@ NewCompanyFrom.defaultProps = {
 
 NewCompanyFrom.propTypes = {
   prevUserData: PropTypes.exact({
+    id: PropTypes.string,
     firstname: PropTypes.string,
     surname: PropTypes.string,
     middleName: PropTypes.string,
@@ -125,9 +129,8 @@ NewCompanyFrom.propTypes = {
   resolveSubmit: PropTypes.func.isRequired,
 };
 
-export default connect(null, (/* dispatch */) => ({
+export default connect(null, (dispatch) => ({
   resolveSubmit(data) {
-    console.log('RESOLVE', data);
-    // dispatch();
+    dispatch(dispatchSetUser(data));
   },
 }))(NewCompanyFrom);
