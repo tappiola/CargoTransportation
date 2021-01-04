@@ -10,7 +10,7 @@ const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_U
 oAuth2Client.setCredentials({ refresh_token : REFRESH_TOKEN });
 const MAIN_ACCOUNT = process.env.GMAIL_USER;
 
-async function sendMail( mailOptions ) {
+async function sendEmail( mailOptions ) {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
     
@@ -45,4 +45,4 @@ module.exports.setMailOptions = ( { to, subject, text, html } ) => {
   };
 };
 
-module.exports.mailer = sendMail;
+module.exports.sendEmail = sendEmail;

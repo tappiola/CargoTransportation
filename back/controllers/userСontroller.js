@@ -4,7 +4,7 @@ const { createRandomPassword } = require('../utils/password.utils');
 const { getSignedToken } = require('../utils/token.utils');
 const Users = require('../models/Users');
 const validate = require('../middlewares/validate');
-const { mailer, setMailOptions } = require('../utils/mail/mail.utils');
+const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 
 router.get('/', async ( req, res ) => {
@@ -36,7 +36,7 @@ router.post('/register', validate.register, async ( req, res, next ) => {
       html    : registerTemplate(email, password)
     });
     
-    mailer(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => console.log(err.message));
+    sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => console.log(err.message));
     
     res.status(200).json({ token });
   } catch (e) {
