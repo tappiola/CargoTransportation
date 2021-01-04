@@ -43,7 +43,7 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
         onSubmit={handleSubmit(handleSubmitMe)}
         noValidate
       >
-        <Grid container spacing={5}>
+        <Grid container direction="column">
           <NameField
             inputRef={register}
             defaultValue={firstname}

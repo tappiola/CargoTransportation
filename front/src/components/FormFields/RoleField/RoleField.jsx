@@ -7,7 +7,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-import { ROLE_NAMES } from 'constants/permissions';
+import { ROLE_NAMES, ROLES } from 'constants/permissions';
 
 const validateRoles = (rolesState) => rolesState
   && Object.values(rolesState).some((checked) => checked);
@@ -18,21 +18,23 @@ export const RoleField = ({
   <FormControl error={!!error}>
     <FormLabel component="legend">Роли:</FormLabel>
     <FormGroup row>
-      {Object.entries(ROLE_NAMES).map(([value, label]) => (
-        <FormControlLabel
-          key={value}
-          control={(
-            <Checkbox
-              inputRef={inputRef({
-                validate: () => validateRoles(roles),
-              })}
-              checked={defaultValue[value]}
-              name={`roles.${value}`}
-            />
-          )}
-          label={label}
-        />
-      ))}
+      {Object.entries(ROLE_NAMES)
+        .filter(([roleName]) => roleName !== ROLES.GLOBAL_ADMIN)
+        .map(([value, label]) => (
+          <FormControlLabel
+            key={value}
+            control={(
+              <Checkbox
+                inputRef={inputRef({
+                  validate: () => validateRoles(roles),
+                })}
+                checked={defaultValue[value]}
+                name={`roles.${value}`}
+              />
+            )}
+            label={label}
+          />
+        ))}
     </FormGroup>
     <FormHelperText>{error && 'Выбирите хотя бы одну роль'}</FormHelperText>
   </FormControl>
