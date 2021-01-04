@@ -5,7 +5,9 @@ import NewCompanyForm from 'components/NewCompanyForm';
 
 function User({ data }) {
   const { id } = useParams();
-  const { name: fullname, email } = data.find(({ id: _id }) => _id.toString() === id);
+  const {
+    name: fullname, email, adress, roles, birthDate,
+  } = data.find(({ id: _id }) => _id.toString() === id);
   const [firstname, surname, middleName] = fullname.split(' ');
   return (
     <NewCompanyForm
@@ -14,14 +16,10 @@ function User({ data }) {
         email,
         surname,
         middleName,
-        adress: {
-          city: 'San Francisco',
-          street: 'DaVinchi',
-          house: '42',
-        },
+        adress,
         password: '',
-        roles: {},
-        birthDate: new Date(),
+        roles,
+        birthDate,
       }}
     />
   );

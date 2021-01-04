@@ -8,6 +8,13 @@ function createData(id, name, email, companyName, companyAccountNumber) {
     email,
     companyName,
     companyAccountNumber,
+    adress: {
+      city: 'Minsk',
+      street: 'Gorodeckaya',
+      house: '32a',
+    },
+    roles: { admin: true },
+    birthDate: new Date(1993, 5, 8),
   };
 }
 
