@@ -52,9 +52,7 @@ function App({ isAuthorized }) {
         ) : (
           <>
             <Route path="/signin" component={SignIn} />
-            <ProtectedApp />
-            <Redirect to="/new-company" />
-            {/* <Redirect to="/signin" /> */}
+            <Redirect to="/signin" />
           </>
         )}
       </Router>
@@ -70,4 +68,6 @@ const mapState = ({
   isAuthorized: isSuccess,
 });
 
-export default connect(mapState, null)(App);
+const mapDispatch = null;
+
+export default connect(mapState, mapDispatch)(App);

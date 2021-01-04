@@ -12,7 +12,7 @@ export const PasswordField = ({
     error={!!error}
     autoComplete="current-password"
     helperText={getHelperText(error)}
-    inputRef={inputRef({
+    inputRef={inputRef && inputRef({
       required: true,
       minLength: 8,
       maxLength: 15,
