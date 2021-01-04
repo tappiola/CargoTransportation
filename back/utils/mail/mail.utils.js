@@ -35,7 +35,7 @@ async function sendMail( mailOptions ) {
   }
 }
 
-module.exports.mailOptions = ( { to, subject, text, html } ) => {
+module.exports.setMailOptions = ( { to, subject, text, html } ) => {
   return {
     from    : 'ООО ”Транспортные системы” <MAIN_ACCOUNT>',
     to,

@@ -4,7 +4,7 @@ const { createRandomPassword } = require('../utils/password.utils');
 const { getSignedToken } = require('../utils/token.utils');
 const Users = require('../models/Users');
 const validate = require('../middlewares/validate');
-const { mailer, mailOptions } = require('../utils/mail/mail.utils');
+const { mailer, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 
 router.get('/', async ( req, res ) => {
@@ -30,7 +30,7 @@ router.post('/register', validate.register, async ( req, res, next ) => {
     const newUser = await Users.create({ email, password });
     const token = getSignedToken(newUser);
     
-    const mail = mailOptions({
+    const mail = setMailOptions({
       to      : process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
       subject : 'Registration in "Transportation system"',
       html    : registerTemplate(email, password)
