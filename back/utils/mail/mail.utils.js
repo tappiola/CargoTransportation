@@ -35,13 +35,16 @@ async function sendEmail( mailOptions ) {
   }
 }
 
-module.exports.setMailOptions = ( { to, subject, text, html } ) => {
-  return {
+module.exports.setMailOptions = ( params ) => {
+  const sendMailConfig = {
     from    : 'ООО ”Транспортные системы” <MAIN_ACCOUNT>',
-    to,
-    subject : subject || 'No Subject',
-    text    : text || '',
-    html    : html || ''
+    subject : 'No Subject',
+    html    : ''
+  };
+  
+  return {
+    ...sendMailConfig,
+    ...params
   };
 };
 

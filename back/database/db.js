@@ -1,7 +1,6 @@
 const dbConfig = require('../config/db.config');
 const { Sequelize } = require('sequelize');
 
-const db = new Sequelize(dbConfig.connectionString);
-db.sync({ alter : true });
+const db = new Sequelize(dbConfig);
 
-module.exports = new Sequelize(dbConfig.connectionString);
+module.exports = db;

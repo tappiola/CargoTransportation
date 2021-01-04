@@ -5,6 +5,7 @@ const db = require('../database/db'),
 module.exports = async ( app ) => {
   try {
     await db.authenticate();
+    await db.sync({ alter : true });
     Logger.info('Database connected successfully');
     
     app.listen(PORT, () => {
