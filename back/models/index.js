@@ -14,13 +14,13 @@ const RolePermission = db.define('role_permission', {});
 Endpoint.belongsToMany(Role, { through: RolePermission });
 Role.belongsToMany(Endpoint, { through: RolePermission });
 
-db.sync({ alter : true }).then((r) => {
-    console.log('DB sync completed');
+db.sync({ alter: true }).then((r) => {
+  console.log('DB sync completed');
 });
 
 module.exports = {
-    User,
-    Company,
-    Role,
-    Endpoint,
+  User,
+  Company,
+  Role,
+  Endpoint,
 };
