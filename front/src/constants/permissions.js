@@ -10,8 +10,16 @@ const MODULE_NAMES = {
 };
 
 const ROLES = {
-  GLOBAL_ADMIN: 'GLOBAL_ADMIN',
-  ADMIN: 'ADMIN',
+  GLOBAL_ADMIN: 'global_admin',
+  ADMIN: 'admin',
+  DRIVER: 'driver',
+  MANAGER: 'manager',
+};
+const ROLE_NAMES = {
+  [ROLES.DRIVER]: 'Водитель',
+  [ROLES.ADMIN]: ' Администратор',
+  [ROLES.MANAGER]: 'Менеджер',
+  [ROLES.GLOBAL_ADMIN]: 'Системный администратор',
 };
 
-export { MODULE_NAMES, ROLES };
+export { MODULE_NAMES, ROLES, ROLE_NAMES };

@@ -7,29 +7,24 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 
-const roles = [
-  { value: 'admin', label: 'Администратор' },
-  { value: 'dispatcher', label: 'Диспетчер' },
-  { value: 'companyOwner', label: 'Владелец компании' },
-  { value: 'driver', label: 'Водитель' },
-];
+import { ROLE_NAMES } from 'constants/permissions';
 
 const validateRoles = (rolesState) => rolesState
   && Object.values(rolesState).some((checked) => checked);
 
 export const RoleField = ({
-  inputRef, defaultValue, error, onChange,
+  inputRef, defaultValue, error, roles,
 }) => (
   <FormControl error={!!error}>
     <FormLabel component="legend">Роли:</FormLabel>
     <FormGroup row>
-      {roles.map(({ value, label }) => (
+      {Object.entries(ROLE_NAMES).map(([value, label]) => (
         <FormControlLabel
           key={value}
           control={(
             <Checkbox
               inputRef={inputRef({
-                validate: () => validateRoles(onChange),
+                validate: () => validateRoles(roles),
               })}
               checked={defaultValue[value]}
               name={`roles.${value}`}

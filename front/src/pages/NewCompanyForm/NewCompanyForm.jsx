@@ -85,7 +85,7 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
             inputRef={register}
             defaultValue={roles}
             error={errors.roles}
-            onChange={watchRoles}
+            roles={watchRoles}
           />
           <SubmitButton className={classes.submit} />
         </Grid>
