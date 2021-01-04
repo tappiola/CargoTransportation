@@ -1,3 +1,4 @@
+const Logger = require('../config/logger');
 const {Router} = require('express');
 const router = Router();
 const {createRandomPassword} = require('../utils/password.utils');
@@ -36,7 +37,7 @@ router.post('/register', validate.register, async (req, res, next) => {
       html: registerTemplate(email, password)
     });
     
-    sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => console.log(err.message));
+    sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => Logger.error(err.message));
     
     res.status(200).json({token});
   } catch (e) {
