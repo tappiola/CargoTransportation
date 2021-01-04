@@ -3,11 +3,11 @@ import BaseField from '../BaseField';
 
 const EmailField = (props) => (
   <BaseField
+    {...props}
     label="Email"
     name="email"
     autoComplete="email"
     autoFocus
-    {...props}
   />
 );
 

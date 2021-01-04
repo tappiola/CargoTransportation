@@ -1,1 +1,1 @@
-export { customTheme } from './material-theme';
+export { getCustomTheme } from './material-theme';

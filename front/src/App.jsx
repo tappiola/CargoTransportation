@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -12,9 +12,11 @@ import MainMenu from 'components/MainMenu';
 import { someActionCreator } from 'redux/actions';
 import { PROTECTED_ROUTES } from 'pages';
 import SignIn from 'pages/SignIn';
-import { customTheme } from 'config';
+import { getCustomTheme } from 'config';
+import Settings from './pages/Settings';
+import { THEME } from './constants/themes';
 
-const ProtectedApp = () => {
+const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
 
   return (
@@ -27,6 +29,9 @@ const ProtectedApp = () => {
             component={component}
           />
         ))}
+        <Route path="/settings">
+          <Settings theme={theme} onThemeChange={setTheme} />
+        </Route>
         {protectedRoute && (
           <>
             <Route exact path="/">
@@ -44,12 +49,18 @@ const ProtectedApp = () => {
 };
 
 function App({ isAuthorized }) {
+  const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
+
+  useEffect(() => {
+    localStorage.setItem('cargoTheme', theme);
+  }, [theme]);
+
   return (
-    <ThemeProvider theme={customTheme}>
+    <ThemeProvider theme={getCustomTheme(theme)}>
       <CssBaseline />
       <Router>
         {isAuthorized ? (
-          <ProtectedApp />
+          <ProtectedApp theme={theme} setTheme={setTheme} />
         ) : (
           <>
             <Route path="/signin" component={SignIn} />

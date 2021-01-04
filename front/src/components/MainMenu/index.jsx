@@ -11,6 +11,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { MenuItems } from './MenuItems';
 import { useMenuStyles } from './MainMenu.styles';
 
@@ -40,7 +41,7 @@ export default function MainMenu({ children }) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Грузоперевозки
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" component={Link} to="/settings">
             <SettingsIcon />
           </IconButton>
           <IconButton color="inherit">

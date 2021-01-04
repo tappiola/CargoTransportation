@@ -10,13 +10,13 @@ function GridToolbar({ title, children }) {
   return (
     <Toolbar className={classes.root}>
       <Grid container>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs>
           <Typography className={classes.title} variant="h5" id="tableTitle" component="div" align="left">
             {title}
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography className={classes.title} id="tableButtons" component="div" align="right">
+        <Grid item sm>
+          <Typography noWrap className={classes.title} id="tableButtons" component="div" align="right">
             <ButtonGroup variant="contained">
               {children}
             </ButtonGroup>
