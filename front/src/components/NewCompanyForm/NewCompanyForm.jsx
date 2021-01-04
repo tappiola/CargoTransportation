@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 
@@ -21,8 +22,8 @@ import { useStyles } from './NewCompanyForm.styles';
 
 function NewCompanyFrom({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
+  const { id: _id } = useParams();
   const {
-    id: _id,
     firstname,
     middleName,
     surname,
@@ -98,7 +99,6 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
 
 NewCompanyFrom.defaultProps = {
   prevUserData: {
-    id: '0234123',
     firstname: '',
     surname: '',
     middleName: '',
@@ -116,7 +116,6 @@ NewCompanyFrom.defaultProps = {
 
 NewCompanyFrom.propTypes = {
   prevUserData: PropTypes.exact({
-    id: PropTypes.string,
     firstname: PropTypes.string,
     surname: PropTypes.string,
     middleName: PropTypes.string,
@@ -129,8 +128,11 @@ NewCompanyFrom.propTypes = {
   resolveSubmit: PropTypes.func.isRequired,
 };
 
-export default connect(null, (dispatch) => ({
-  resolveSubmit(data) {
-    dispatch(dispatchSetUser(data));
-  },
-}))(NewCompanyFrom);
+export default connect(
+  null,
+  (dispatch) => ({
+    resolveSubmit(data) {
+      dispatch(dispatchSetUser(data));
+    },
+  }),
+)(NewCompanyFrom);

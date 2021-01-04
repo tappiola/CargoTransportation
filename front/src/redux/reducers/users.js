@@ -3,6 +3,21 @@ import * as types from '../actions/actionTypes';
 const initialState = {
   usersData: [],
   usersLoadComplete: false,
+  userToUpdate: {
+    id: 'ID0239483',
+    firstname: 'John',
+    surname: 'Smith',
+    middleName: 'Mario',
+    email: '',
+    password: '',
+    roles: {},
+    birthDate: new Date(),
+    adress: {
+      city: '',
+      street: '',
+      house: '',
+    },
+  },
 };
 
 export function usersReducer(state = initialState, action) {
