@@ -11,38 +11,38 @@ oAuth2Client.setCredentials({ refresh_token : REFRESH_TOKEN });
 const MAIN_ACCOUNT = process.env.GMAIL_USER;
 
 async function sendMail( mailOptions ) {
-	try {
-		const accessToken = await oAuth2Client.getAccessToken();
-		
-		const transport = nodemailer.createTransport({
-			service : 'gmail',
-			auth    : {
-				type         : 'OAuth2',
-				user         : MAIN_ACCOUNT,
-				clientId     : CLIENT_ID,
-				clientSecret : CLIENT_SECRET,
-				refreshToken : REFRESH_TOKEN,
-				accessToken
-			},
-			tls     : {
-				rejectUnauthorized : process.env.NODE_ENV === 'production'
-			}
-		});
-		
-		return await transport.sendMail(mailOptions);
-	} catch (e) {
-		return e;
-	}
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    
+    const transport = nodemailer.createTransport({
+      service : 'gmail',
+      auth    : {
+        type         : 'OAuth2',
+        user         : MAIN_ACCOUNT,
+        clientId     : CLIENT_ID,
+        clientSecret : CLIENT_SECRET,
+        refreshToken : REFRESH_TOKEN,
+        accessToken
+      },
+      tls     : {
+        rejectUnauthorized : process.env.NODE_ENV === 'production'
+      }
+    });
+    
+    return await transport.sendMail(mailOptions);
+  } catch (e) {
+    return e;
+  }
 }
 
 module.exports.mailOptions = ( { to, subject, text, html } ) => {
-	return {
-		from    : 'ООО ”Транспортные системы” <MAIN_ACCOUNT>',
-		to,
-		subject : subject || 'No Subject',
-		text    : text || '',
-		html    : html || ''
-	};
+  return {
+    from    : 'ООО ”Транспортные системы” <MAIN_ACCOUNT>',
+    to,
+    subject : subject || 'No Subject',
+    text    : text || '',
+    html    : html || ''
+  };
 };
 
 module.exports.mailer = sendMail;
