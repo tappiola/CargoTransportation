@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const { DataTypes } = require('sequelize');
 const db = require('../database/db');
 
@@ -16,13 +17,13 @@ const Users = db.define('users', {
 		type : DataTypes.STRING,
 		min  : 3
 	},
-	surName     : {
+	middleName  : {
 		type : DataTypes.STRING
 	},
 	fullName    : {
 		type : DataTypes.VIRTUAL,
 		get() {
-			return `${this.lastName} ${this.firstName} ${this.surName}`;
+			return `${this.lastName} ${this.firstName} ${this.middleName}`;
 		}
 	},
 	login       : {
@@ -60,7 +61,22 @@ const Users = db.define('users', {
 		get() {
 			return `${this.city}, ${this.street}, ${this.house}-${this.apartment}`;
 		}
+	},
+	status      : {
+		type         : DataTypes.ENUM,
+		values       : [ 'registered', 'active', 'disabled' ],
+		allowNull    : false,
+		defaultValue : 'registered'
 	}
 });
+
+Users.beforeCreate(( user, options ) => {
+	const salt = bcrypt.genSaltSync(10);
+	user.password = bcrypt.hashSync(user.password, salt);
+});
+
+Users.prototype.isValidPassword = password => {
+	return bcrypt.compareSync(password, this.password);
+};
 
 module.exports = Users;
