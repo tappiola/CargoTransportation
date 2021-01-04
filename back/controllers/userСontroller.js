@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { hashPassword, isPasswordValid, customPassword } = require('../utils/password.utils');
+const { customPassword } = require('../utils/password.utils');
 const { getSignedToken } = require('../utils/token.utils');
 const Users = require('../models/Users');
 const validate = require('../middlewares/validate');
@@ -27,7 +27,7 @@ router.post('/register', validate.register, async ( req, res, next ) => {
 	
 	try {
 		const password = customPassword();
-		const newUser = await Users.create({ email, password : await hashPassword(password) });
+		const newUser = await Users.create({ email, password });
 		const token = getSignedToken(newUser);
 		
 		const mail = mailOptions({
@@ -53,7 +53,7 @@ router.post('/login', validate.login, async ( req, res ) => {
 		return res.status(401).json({ error : { message : 'invalid email/password' } });
 	}
 	
-	const isValid = isPasswordValid(password, user.password);
+	const isValid = user.isValidPassword(password);
 	if ( !isValid ) {
 		return res.status(401).json({ error : { message : 'invalid password' } });
 	}
