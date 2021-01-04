@@ -5,22 +5,18 @@ import NewCompanyForm from 'components/NewCompanyForm';
 
 function User({ data }) {
   const { id } = useParams();
-  const {
-    name: fullname, email, adress, roles, birthDate,
-  } = data.find(({ id: _id }) => _id.toString() === id);
-  const [firstname, surname, middleName] = fullname.split(' ');
+  let prevUserData;
+  if (id) {
+    const currentUser = data.find(({ id: _id }) => _id.toString() === id);
+    const [firstname, surname, middleName] = currentUser.name.split(' ');
+    prevUserData = {
+      ...currentUser, firstname, surname, middleName,
+    };
+  }
+
   return (
     <NewCompanyForm
-      prevUserData={{
-        firstname,
-        email,
-        surname,
-        middleName,
-        adress,
-        password: '',
-        roles,
-        birthDate,
-      }}
+      prevUserData={prevUserData}
     />
   );
 }
