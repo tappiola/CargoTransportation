@@ -14,16 +14,6 @@ export const fetchAPI = async (url, data, method = 'POST') => {
           return response.json().catch((error) => Promise.reject(new Error(`Invalid JSON: ${error.message}`)));
         }
 
-        if (contentType.includes('text/html')) {
-          return response
-            .text()
-            .then((html) => ({
-              page_type: 'generic',
-              html,
-            }))
-            .catch((error) => Promise.reject(new Error(`HTML error: ${error.message}`)));
-        }
-
         return Promise.reject(
           new Error(`Invalid content type: ${contentType}`),
         );
@@ -34,10 +24,7 @@ export const fetchAPI = async (url, data, method = 'POST') => {
       }
 
       return response.json().then((res) => {
-        // if the response is ok but the server rejected the request,
-        // e.g. because of a wrong password, we want to display the reason
-        // the information is contained in the json()
-        // there may be more than one error
+        // if the response is ok but the server rejected the request
         const errors = [];
         Object.keys(res).forEach((key) => {
           errors.push(`${key}: ${res[key]}`);
