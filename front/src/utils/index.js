@@ -4,9 +4,7 @@ export {
   validateEmail,
   validatePassword,
   validateDate,
-  emailValidator,
-  textValidator,
-  getHelperText,
   emailRegExp,
 } from './validators';
 export { getAuthToken } from './getAuthToken';
+export { getHelperText } from './getHelperText';
