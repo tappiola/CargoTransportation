@@ -90,7 +90,7 @@ function UserForm({ prevUserData, resolveSubmit }) {
             error={errors.roles}
             roles={watchRoles}
           />
-          <SubmitButton className={classes.submit} />
+          <SubmitButton className={classes.submit}>Готово</SubmitButton>
         </Grid>
       </form>
     </Container>

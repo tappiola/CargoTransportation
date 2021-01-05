@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-const SubmitButton = (props) => (
+const SubmitButton = ({ children, ...props }) => (
   <Button
     type="submit"
     fullWidth
@@ -10,7 +10,7 @@ const SubmitButton = (props) => (
     color="primary"
     {...props}
   >
-    Вход
+    {children || 'Вход'}
   </Button>
 );
 
