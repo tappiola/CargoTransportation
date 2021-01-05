@@ -48,44 +48,44 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
       >
         <Grid container direction="column">
           <NameField
-            inputRef={register}
+            register={register}
             defaultValue={firstname}
             error={errors.firstname}
           />
           <MiddleNameField
-            inputRef={register}
+            register={register}
             defaultValue={middleName}
             error={errors.middleName}
           />
           <SurnameField
-            inputRef={register}
+            register={register}
             defaultValue={surname}
             error={errors.surname}
           />
           <EmailField
             error={errors.email}
-            inputRef={register}
+            register={register}
             defaultValue={email}
           />
           <PasswordField
             variant="standard"
-            inputRef={register}
+            register={register}
             fullWidth
             error={errors.password}
             defaultValue={password}
           />
           <AdressBlock
-            inputRef={register}
+            register={register}
             defaultValue={adress}
             error={errors}
           />
           <BirthdayField
-            inputRef={register}
+            register={register}
             defaultValue={birthDate}
             error={errors}
           />
           <RoleField
-            inputRef={register}
+            register={register}
             defaultValue={roles}
             error={errors.roles}
             roles={watchRoles}

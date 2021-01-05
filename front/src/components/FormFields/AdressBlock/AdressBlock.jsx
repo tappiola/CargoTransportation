@@ -14,21 +14,21 @@ export const AdressBlock = ({ register, defaultValue, error }) => {
         <CityField
           error={city}
           defaultValue={defaultValue.city}
-          ref={register({ required: true, minLength: 2 })}
+          register={register({ required: true, minLength: 2 })}
         />
       </Grid>
       <Grid item xs={6} sm={4}>
         <StreetField
           error={street}
           defaultValue={defaultValue.street}
-          ref={register({ required: true, minLength: 2 })}
+          register={register({ required: true, minLength: 2 })}
         />
       </Grid>
       <Grid item xs={6} sm={2}>
         <HouseField
           defaultValue={defaultValue.house}
           error={!!house}
-          ref={register({
+          register={register({
             required: true,
             pattern: /^\d{1,3}[а-яa-z]{0,1}$/,
           })}
@@ -37,7 +37,7 @@ export const AdressBlock = ({ register, defaultValue, error }) => {
       <Grid item xs={6} sm={2}>
         <ApartmentField
           defaultValue={defaultValue.apartment}
-          ref={register}
+          register={register}
           fullWidth
         />
       </Grid>

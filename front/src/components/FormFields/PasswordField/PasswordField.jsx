@@ -3,7 +3,7 @@ import { validatePassword, getHelperText } from 'utils';
 import BaseField from '../BaseField';
 
 export const PasswordField = ({
-  inputRef, defaultValue, error, ...props
+  register, defaultValue, error, ...props
 }) => (
   <BaseField
     name="password"
@@ -12,7 +12,7 @@ export const PasswordField = ({
     error={!!error}
     autoComplete="current-password"
     helperText={getHelperText(error)}
-    inputRef={inputRef && inputRef({
+    inputRef={register && register({
       required: true,
       minLength: 8,
       maxLength: 15,

@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { getHelperText } from 'utils';
 
-function CityField({ error, defaultValue, ref }) {
+function CityField({ error, defaultValue, register }) {
   return (
     <TextField
       label="Город"
@@ -14,7 +14,7 @@ function CityField({ error, defaultValue, ref }) {
       defaultValue={defaultValue}
       fullWidth
       required
-      inputRef={ref}
+      inputRef={register}
       helperText={getHelperText(error)}
       autoComplete="address-level2"
     />

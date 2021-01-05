@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { getHelperText } from 'utils';
 
-function StreetField({ error, defaultValue, ref }) {
+function StreetField({ error, defaultValue, register }) {
   return (
     <TextField
       label="Улица"
@@ -14,7 +14,7 @@ function StreetField({ error, defaultValue, ref }) {
       defaultValue={defaultValue}
       fullWidth
       required
-      inputRef={ref}
+      inputRef={register}
       helperText={getHelperText(error)}
     />
   );

@@ -2,7 +2,7 @@ import React from 'react';
 
 import TextField from '@material-ui/core/TextField';
 
-function ApartmentField({ defaultValue, ref }) {
+function ApartmentField({ defaultValue, register }) {
   return (
     <TextField
       margin="normal"
@@ -10,7 +10,7 @@ function ApartmentField({ defaultValue, ref }) {
       label="Квартира"
       defaultValue={defaultValue}
       autoComplete="address-level4"
-      inputRef={ref}
+      inputRef={register}
       fullWidth
     />
   );

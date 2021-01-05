@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { getHelperText } from 'utils';
 
-export const NameField = ({ inputRef, defaultValue, error }) => (
+export const NameField = ({ register, defaultValue, error }) => (
   <TextField
     label="Имя"
     autoComplete="given-name"
@@ -15,6 +15,6 @@ export const NameField = ({ inputRef, defaultValue, error }) => (
     defaultValue={defaultValue}
     required
     helperText={getHelperText(error)}
-    inputRef={inputRef({ required: true, minLength: 3, maxLength: 15 })}
+    inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
   />
 );

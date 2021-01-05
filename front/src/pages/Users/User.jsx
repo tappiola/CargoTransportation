@@ -7,17 +7,18 @@ function User({ data }) {
   const { id } = useParams();
   let prevUserData;
   if (id) {
+    // temporary solution
     const currentUser = data.find(({ id: _id }) => _id.toString() === id);
     const [firstname, surname, middleName] = currentUser.name.split(' ');
+    // eslint-disable-next-line object-curly-newline
+    const { email, roles, adress, birthDate } = currentUser;
     prevUserData = {
-      ...currentUser, firstname, surname, middleName,
+      email, roles, adress, birthDate, firstname, surname, middleName,
     };
   }
 
   return (
-    <NewCompanyForm
-      prevUserData={prevUserData}
-    />
+    <NewCompanyForm prevUserData={prevUserData} />
   );
 }
 

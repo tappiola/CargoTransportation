@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 
 import { getHelperText } from 'utils';
 
-export const MiddleNameField = ({ inputRef, defaultValue, error }) => (
+export const MiddleNameField = ({ register, defaultValue, error }) => (
   <TextField
     label="Отчество"
     name="middleName"
@@ -13,6 +13,6 @@ export const MiddleNameField = ({ inputRef, defaultValue, error }) => (
     error={!!error}
     defaultValue={defaultValue}
     helperText={getHelperText(error)}
-    inputRef={inputRef({ minLength: 3, maxLength: 15 })}
+    inputRef={register({ minLength: 3, maxLength: 15 })}
   />
 );

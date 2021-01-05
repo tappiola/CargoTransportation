@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import { validateEmail } from 'utils';
 
 export const EmailField = ({
-  inputRef, defaultValue, error, ...props
+  register, defaultValue, error, ...props
 }) => (
   <TextField
     fullWidth
@@ -15,7 +15,7 @@ export const EmailField = ({
     defaultValue={defaultValue}
     helperText={error && 'Заполните это поле'}
     required
-    inputRef={inputRef && inputRef({ required: true, validate: validateEmail })}
+    inputRef={register && register({ required: true, validate: validateEmail })}
     {...props}
   />
 );

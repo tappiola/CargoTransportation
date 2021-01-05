@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { getHelperText } from 'utils';
 
-function HouseField({ error, defaultValue, ref }) {
+function HouseField({ error, defaultValue, register }) {
   return (
     <TextField
       label="Дом"
@@ -13,7 +13,7 @@ function HouseField({ error, defaultValue, ref }) {
       defaultValue={defaultValue}
       fullWidth
       required
-      inputRef={ref}
+      inputRef={register}
       helperText={getHelperText(error)}
       autoComplete="address-level3"
     />

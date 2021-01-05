@@ -6,7 +6,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import { validateDate } from 'utils';
 
-export const BirthdayField = ({ inputRef, defaultValue, error }) => (
+export const BirthdayField = ({ register, defaultValue, error }) => (
   <FormControl error={!!error.birthdate} margin="normal">
     <InputLabel htmlFor="birthdate-input">Дата рождения *</InputLabel>
     <Input
@@ -14,7 +14,7 @@ export const BirthdayField = ({ inputRef, defaultValue, error }) => (
       name="birthdate"
       type="date"
       defaultValue={defaultValue.toISOString().substring(0, 10)}
-      inputRef={inputRef({
+      inputRef={register({
         valueAsDate: true,
         validate: (date) => validateDate(date),
         required: true,
