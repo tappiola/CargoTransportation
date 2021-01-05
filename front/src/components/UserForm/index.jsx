@@ -12,38 +12,30 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 
 import EmailField from 'components/FormFields/EmailField';
-import AddressBlock from 'components/FormFields/AddressBlock';
-import RoleField from 'components/FormFields/RoleField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
 import { getHelperText, validateDate, validatePassword } from 'utils';
 import { dispatchSetUser } from 'redux/actions/users';
+
+import RoleField from './RoleField';
+import AddressBlock from './AddressField';
 import { useStyles } from './Userform.styels';
 
 function UserForm({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
   const { id: _id } = useParams();
   const {
-    firstname,
-    middleName,
-    surname,
-    birthDate,
-    email,
-    password,
-    adress,
-    roles,
+    firstname, middleName, surname, birthDate, email, password, adress, roles,
   } = prevUserData;
   // eslint-disable-next-line object-curly-newline
   const { register, handleSubmit, errors, watch } = useForm();
   const watchRoles = watch('roles');
-  const handleSubmitMe = (data) => {
-    resolveSubmit({ ...data, id: _id });
-  };
+
   return (
     <Container maxWidth="sm">
       <form
         className={classes.form}
-        onSubmit={handleSubmit(handleSubmitMe)}
+        onSubmit={handleSubmit((data) => resolveSubmit({ ...data, id: _id }))}
         noValidate
       >
         <Grid container direction="column">

@@ -2,7 +2,7 @@ import React from 'react';
 import { validatePassword, getHelperText } from 'utils';
 import TextField from '@material-ui/core/TextField';
 
-export const PasswordField = ({
+const PasswordField = ({
   register, defaultValue, error, ...props
 }) => (
   <TextField
@@ -22,3 +22,5 @@ export const PasswordField = ({
     {...props}
   />
 );
+
+export default PasswordField;

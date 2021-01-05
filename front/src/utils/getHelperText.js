@@ -1,4 +1,4 @@
-export const getHelperText = ({ type } = {}) => {
+export const getHelperText = ({ type, ref } = {}) => {
   if (!type) {
     return '';
   }
@@ -6,11 +6,11 @@ export const getHelperText = ({ type } = {}) => {
     case 'required':
       return 'Заполните это поле';
     case 'minLength':
-      return 'Слишком коротко';
+      return 'длина меньше минимальной';
     case 'maxLength':
-      return 'Слишком длинно';
-    case 'min':
-      return 'Некорректное значение';
+      return 'длина больше максимальной';
+    case 'validate':
+      return ref.type === 'password' ? 'Пароль должен содержать минимум 1 заглавную и строчную буквы и 1 цифру' : 'Некорректное значение';
     default:
       return 'Ошибка';
   }

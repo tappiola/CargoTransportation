@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 
 import { getHelperText } from 'utils';
 
-export const AddressBlock = ({ inputRef, defaultValue, error }) => {
+export const AddressField = ({ inputRef, defaultValue, error }) => {
   const { city, street, house } = error?.adress || {};
   return (
     <Grid container spacing={1}>
@@ -67,4 +67,4 @@ export const AddressBlock = ({ inputRef, defaultValue, error }) => {
   );
 };
 
-export default AddressBlock;
+export default AddressField;

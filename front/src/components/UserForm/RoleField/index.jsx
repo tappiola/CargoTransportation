@@ -12,7 +12,7 @@ import { ROLE_NAMES, ROLES } from 'constants/permissions';
 const validateRoles = (rolesState) => rolesState
   && Object.values(rolesState).some((checked) => checked);
 
-export const RoleField = ({
+const RoleField = ({
   register, defaultValue, error, roles,
 }) => (
   <FormControl error={!!error}>
@@ -39,3 +39,5 @@ export const RoleField = ({
     <FormHelperText>{error && 'Выберите хотя бы одну роль'}</FormHelperText>
   </FormControl>
 );
+
+export default RoleField;
