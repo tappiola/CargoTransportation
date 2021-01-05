@@ -24,4 +24,3 @@ yarn-error.log*
 
 # linter
 .eslintcache
-.eslintrc.js
