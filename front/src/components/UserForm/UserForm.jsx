@@ -1,22 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 
+import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
-import NameField from 'components/FormFields/NameField';
-import SurnameField from 'components/FormFields/SurnameField';
-import MiddleNameField from 'components/FormFields/MiddleNameField';
-import BirthdayField from 'components/FormFields/BirthdayField';
 import EmailField from 'components/FormFields/EmailField';
-import AdressBlock from 'components/FormFields/AdressBlock';
+import AddressBlock from 'components/FormFields/AddressBlock';
 import RoleField from 'components/FormFields/RoleField';
-import PasswordField from 'components/FormFields/PasswordField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
+import { getHelperText, validateDate, validatePassword } from 'utils';
 import { dispatchSetUser } from 'redux/actions/users';
 import { useStyles } from './Userform.styels';
 
@@ -47,43 +47,84 @@ function UserForm({ prevUserData, resolveSubmit }) {
         noValidate
       >
         <Grid container direction="column">
-          <NameField
-            register={register}
+          <TextField
+            name="firstname"
+            label="Имя"
+            margin="normal"
+            autoComplete="given-name"
+            error={!!errors.firstname}
             defaultValue={firstname}
-            error={errors.firstname}
+            helperText={getHelperText(errors.firstname)}
+            inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
+            fullWidth
           />
-          <MiddleNameField
-            register={register}
-            defaultValue={middleName}
+          <TextField
+            name="middleName"
+            label="Отчество"
+            margin="normal"
+            autoComplete="additional-name"
             error={errors.middleName}
+            defaultValue={middleName}
+            helperText={getHelperText(errors.middleName)}
+            inputRef={register({ minLength: 3, maxLength: 15 })}
+            fullWidth
           />
-          <SurnameField
-            register={register}
+          <TextField
+            name="surname"
+            label="Фамилия"
+            margin="normal"
+            autoComplete="family-name"
+            error={!!errors.surname}
             defaultValue={surname}
-            error={errors.surname}
+            helperText={getHelperText(errors.surname)}
+            inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
+            fullWidth
           />
           <EmailField
             error={errors.email}
             register={register}
             defaultValue={email}
           />
-          <PasswordField
-            variant="standard"
-            register={register}
-            fullWidth
-            error={errors.password}
+          <TextField
+            name="password"
+            label="Пароль"
+            type="password"
+            margin="normal"
+            autoComplete="current-password"
+            error={!!errors.password}
             defaultValue={password}
+            helperText={getHelperText(errors.password)}
+            inputRef={
+              register({
+                required: true,
+                minLength: 8,
+                maxLength: 15,
+                validate: validatePassword,
+              })
+            }
           />
-          <AdressBlock
-            register={register}
+          <AddressBlock
+            inputRef={register}
             defaultValue={adress}
             error={errors}
           />
-          <BirthdayField
-            register={register}
-            defaultValue={birthDate}
-            error={errors}
-          />
+          <FormControl error={!!errors.birthdate} margin="normal">
+            <InputLabel htmlFor="birthdate-input">Дата рождения *</InputLabel>
+            <Input
+              id="birthdate-input"
+              name="birthdate"
+              type="date"
+              defaultValue={birthDate.toISOString().substring(0, 10)}
+              inputRef={register({
+                valueAsDate: true,
+                validate: (date) => validateDate(date),
+                required: true,
+              })}
+            />
+            <FormHelperText>
+              {errors.birthdate && 'Некорректная дата'}
+            </FormHelperText>
+          </FormControl>
           <RoleField
             register={register}
             defaultValue={roles}
@@ -97,42 +138,8 @@ function UserForm({ prevUserData, resolveSubmit }) {
   );
 }
 
-UserForm.defaultProps = {
-  prevUserData: {
-    firstname: '',
-    surname: '',
-    middleName: '',
-    email: '',
-    password: '',
-    roles: {},
-    birthDate: new Date(),
-    adress: {
-      city: '',
-      street: '',
-      house: '',
-    },
+export default connect(null, (dispatch) => ({
+  resolveSubmit(data) {
+    dispatch(dispatchSetUser(data));
   },
-};
-
-UserForm.propTypes = {
-  prevUserData: PropTypes.exact({
-    firstname: PropTypes.string,
-    surname: PropTypes.string,
-    middleName: PropTypes.string,
-    email: PropTypes.string,
-    password: PropTypes.string,
-    roles: PropTypes.object,
-    birthDate: PropTypes.instanceOf(Date),
-    adress: PropTypes.objectOf(PropTypes.string, PropTypes.number),
-  }),
-  resolveSubmit: PropTypes.func.isRequired,
-};
-
-export default connect(
-  null,
-  (dispatch) => ({
-    resolveSubmit(data) {
-      dispatch(dispatchSetUser(data));
-    },
-  }),
-)(UserForm);
+}))(UserForm);

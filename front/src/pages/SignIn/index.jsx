@@ -40,7 +40,7 @@ function SignIn(props) {
         <Logo className={classes.avatar} />
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <EmailField error={emailError} variant="outlined" {...bindEmail} />
-          <PasswordField error={passwordError} {...bindPassword} />
+          <PasswordField error={passwordError} variant="outlined" {...bindPassword} />
           <SubmitButton className={classes.submit} />
         </form>
       </div>

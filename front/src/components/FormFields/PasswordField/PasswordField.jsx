@@ -1,14 +1,15 @@
 import React from 'react';
 import { validatePassword, getHelperText } from 'utils';
-import BaseField from '../BaseField';
+import TextField from '@material-ui/core/TextField';
 
 export const PasswordField = ({
   register, defaultValue, error, ...props
 }) => (
-  <BaseField
+  <TextField
     name="password"
     label="Пароль"
     type="password"
+    fullWidth
     error={!!error}
     autoComplete="current-password"
     helperText={getHelperText(error)}

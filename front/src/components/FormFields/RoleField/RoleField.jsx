@@ -36,6 +36,6 @@ export const RoleField = ({
           />
         ))}
     </FormGroup>
-    <FormHelperText>{error && 'Выбирите хотя бы одну роль'}</FormHelperText>
+    <FormHelperText>{error && 'Выберите хотя бы одну роль'}</FormHelperText>
   </FormControl>
 );
