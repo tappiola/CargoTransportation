@@ -18,9 +18,9 @@ import PasswordField from 'components/FormFields/PasswordField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
 import { dispatchSetUser } from 'redux/actions/users';
-import { useStyles } from './NewCompanyForm.styles';
+import { useStyles } from './Userform.styels';
 
-function NewCompanyFrom({ prevUserData, resolveSubmit }) {
+function UserForm({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
   const { id: _id } = useParams();
   const {
@@ -97,7 +97,7 @@ function NewCompanyFrom({ prevUserData, resolveSubmit }) {
   );
 }
 
-NewCompanyFrom.defaultProps = {
+UserForm.defaultProps = {
   prevUserData: {
     firstname: '',
     surname: '',
@@ -114,7 +114,7 @@ NewCompanyFrom.defaultProps = {
   },
 };
 
-NewCompanyFrom.propTypes = {
+UserForm.propTypes = {
   prevUserData: PropTypes.exact({
     firstname: PropTypes.string,
     surname: PropTypes.string,
@@ -135,4 +135,4 @@ export default connect(
       dispatch(dispatchSetUser(data));
     },
   }),
-)(NewCompanyFrom);
+)(UserForm);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import NewCompanyForm from 'components/NewCompanyForm';
+import UserForm from 'components/UserForm';
 
 function User({ data }) {
   const { id } = useParams();
@@ -18,7 +18,7 @@ function User({ data }) {
   }
 
   return (
-    <NewCompanyForm prevUserData={prevUserData} />
+    <UserForm prevUserData={prevUserData} />
   );
 }
 
