@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
@@ -14,23 +15,24 @@ import InputLabel from '@material-ui/core/InputLabel';
 import EmailField from 'components/FormFields/EmailField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
-import {
-  getHelperText, validateDate, validatePassword, validateEmail,
-} from 'utils';
 import { dispatchSetUser } from 'redux/actions/users';
 
 import RoleField from './RoleField';
 import AddressBlock from './AddressField';
-import { useStyles } from './Userform.styels';
+import { useStyles } from './Userform.styles';
+import { schema } from './userSchema';
 
 function UserForm({ prevUserData, resolveSubmit }) {
+  const { birthDate, adress, roles } = prevUserData;
+
   const classes = useStyles();
   const { id: _id } = useParams();
-  const {
-    firstName, middleName, lastName, birthDate, email, password, adress, roles,
-  } = prevUserData;
   // eslint-disable-next-line object-curly-newline
-  const { register, handleSubmit, errors, watch } = useForm();
+  const { register, handleSubmit, errors, watch } = useForm({
+    defaultValues: prevUserData,
+    resolver: yupResolver(schema),
+    reValidateMode: 'onSubmit',
+  });
   const watchRoles = watch('roles');
 
   return (
@@ -39,8 +41,7 @@ function UserForm({ prevUserData, resolveSubmit }) {
         noValidate
         className={classes.form}
         onSubmit={handleSubmit(({ roles: rolesAsObject, ...data }) => {
-          const rolesAsArray = Object
-            .entries(roles)
+          const rolesAsArray = Object.entries(roles)
             // eslint-disable-next-line no-unused-vars
             .filter(([role, isChecked]) => isChecked)
             .map(([role]) => role);
@@ -53,10 +54,9 @@ function UserForm({ prevUserData, resolveSubmit }) {
             label="Имя"
             margin="normal"
             autoComplete="given-name"
+            inputRef={register}
             error={!!errors.firstName}
-            defaultValue={firstName}
-            helperText={getHelperText(errors.firstName)}
-            inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
+            helperText={errors?.firstName?.message}
             fullWidth
           />
           <TextField
@@ -64,45 +64,31 @@ function UserForm({ prevUserData, resolveSubmit }) {
             label="Отчество"
             margin="normal"
             autoComplete="additional-name"
+            inputRef={register}
             error={errors.middleName}
-            defaultValue={middleName}
-            helperText={getHelperText(errors.middleName)}
-            inputRef={register({ minLength: 3, maxLength: 15 })}
+            helperText={errors?.middleName?.message}
             fullWidth
           />
           <TextField
             name="lastName"
             label="Фамилия"
             margin="normal"
+            inputRef={register}
             autoComplete="family-name"
             error={!!errors.lastName}
-            defaultValue={lastName}
-            helperText={getHelperText(errors.lastName)}
-            inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
+            helperText={errors?.lastName?.message}
             fullWidth
           />
-          <EmailField
-            error={errors.email}
-            register={register({ required: true, validate: validateEmail })}
-            defaultValue={email}
-          />
+          <EmailField error={errors.email} inputRef={register} />
           <TextField
             name="password"
             label="Пароль"
             type="password"
             margin="normal"
             autoComplete="current-password"
+            inputRef={register}
             error={!!errors.password}
-            defaultValue={password}
-            helperText={getHelperText(errors.password)}
-            inputRef={
-              register({
-                required: true,
-                minLength: 8,
-                maxLength: 15,
-                validate: validatePassword,
-              })
-            }
+            helperText={errors?.password?.message}
           />
           <AddressBlock
             inputRef={register}
@@ -116,19 +102,11 @@ function UserForm({ prevUserData, resolveSubmit }) {
               name="birthdate"
               type="date"
               defaultValue={birthDate.toISOString().substring(0, 10)}
-              inputRef={register({
-                valueAsDate: true,
-                validate: (date) => validateDate(date),
-                required: true,
-              })}
             />
-            <FormHelperText>
-              {errors.birthdate && 'Некорректная дата'}
-            </FormHelperText>
+            <FormHelperText>{errors?.birthdate?.message}</FormHelperText>
           </FormControl>
           <RoleField
             register={register}
-            defaultValue={roles}
             error={errors.roles}
             roles={watchRoles}
           />

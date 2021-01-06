@@ -13,7 +13,7 @@ const validateRoles = (rolesState) => rolesState
   && Object.values(rolesState).some((checked) => checked);
 
 const RoleField = ({
-  register, defaultValue, error, roles,
+  register, error, roles,
 }) => (
   <FormControl error={!!error}>
     <FormLabel component="legend">Роли:</FormLabel>
@@ -28,7 +28,6 @@ const RoleField = ({
                 inputRef={register({
                   validate: () => validateRoles(roles),
                 })}
-                checked={defaultValue[value]}
                 name={`roles.${value}`}
               />
             )}
