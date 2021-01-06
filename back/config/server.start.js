@@ -1,18 +1,17 @@
-const db = require('../database/db');
-
-const PORT = process.env.PORT || 5000;
-const logger = require('./logger');
+const db = require('../database/db'),
+  PORT = process.env.PORT || 5000,
+  Logger = require('../config/logger');
 
 module.exports = async (app) => {
   try {
     await db.authenticate();
-    logger.info('Database connected successfully');
-
+    Logger.info('Database connected successfully');
+    
     app.listen(PORT, () => {
-      logger.info(`Server has started on port ${PORT}`);
+      Logger.info(`Server has started on port ${PORT}`);
     });
   } catch (e) {
-    logger.error('Database connection FAILED');
+    Logger.error('Database connection FAILED');
     process.exit(1);
   }
 };

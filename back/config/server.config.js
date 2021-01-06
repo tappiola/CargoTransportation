@@ -1,8 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
+const express = require('express'),
+  cors = require('cors'),
+  morgan = require('morgan');
 
-module.exports = (app) => {
+module.exports = app => {
   app.use(morgan(process.env.NODE_ENV === 'production' ? 'tiny' : 'dev'));
   app.use(cors());
   app.use(express.json());
