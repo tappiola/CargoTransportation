@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../database/db');
+const bcrypt = require('bcrypt');
 
 const User = db.define('user', {
   id: {
@@ -66,7 +67,17 @@ const User = db.define('user', {
   },
   isActive: {
     type: DataTypes.BOOLEAN,
+    allowNull: false,
   },
 });
+
+User.beforeCreate((user) => {
+  const salt = bcrypt.genSaltSync(10);
+  user.password = bcrypt.hashSync(user.password, salt);
+});
+
+User.prototype.isValidPassword = (password, hash) => {
+  return bcrypt.compareSync(password, hash);
+};
 
 module.exports = User;

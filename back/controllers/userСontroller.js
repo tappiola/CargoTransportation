@@ -2,7 +2,9 @@ const Logger = require('../config/logger');
 const {Router} = require('express');
 const {createRandomPassword} = require('../utils/password.utils');
 const {getSignedToken} = require('../utils/token.utils');
-const Users = require('../models/Users');
+const User = require('../models/User');
+const Role = require('../models/Role');
+const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
@@ -11,7 +13,7 @@ const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
   const {email} = req.body;
-  const user = await Users.findOne({where: {email}});
+  const user = await User.findOne({where: {email}});
   
   if (user) {
     return res.status(400).json({error: {message: 'Email already in use!'}});
@@ -19,7 +21,7 @@ router.post('/register', validate.register, async (req, res, next) => {
   
   try {
     const password = createRandomPassword();
-    const newUser = await Users.create({email, password});
+    const newUser = await User.create({email, password});
     const token = getSignedToken(newUser);
     
     const mail = setMailOptions({
@@ -77,7 +79,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const user = await Users.findByPk(req.params.id);
+  const user = await User.findByPk(req.params.id);
   res.status(200).json(user);
 });
 
