@@ -11,7 +11,7 @@ function createData(id, name, email, companyName, companyAccountNumber) {
     city: 'Minsk',
     street: 'Gorodeckaya',
     house: '32a',
-    roles: { admin: true },
+    roles: { admin: true, manager: true },
     birthDate: new Date(1993, 5, 8),
   };
 }
