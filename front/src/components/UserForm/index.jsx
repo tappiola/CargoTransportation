@@ -12,7 +12,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 
-import EmailField from 'components/FormFields/EmailField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
 import { dispatchSetUser } from 'redux/actions/users';
@@ -79,7 +78,17 @@ function UserForm({ prevUserData, resolveSubmit }) {
             helperText={errors?.lastName?.message}
             fullWidth
           />
-          <EmailField error={errors.email} inputRef={register} />
+          <TextField
+            fullWidth
+            label="Email"
+            name="email"
+            margin="normal"
+            error={!!errors?.email}
+            autoComplete="email"
+            helperText={errors?.email?.message}
+            required
+            inputRef={register}
+          />
           <TextField
             name="password"
             label="Пароль"
@@ -119,6 +128,7 @@ function UserForm({ prevUserData, resolveSubmit }) {
 
 export default connect(null, (dispatch) => ({
   resolveSubmit(data) {
+    console.log(data);
     dispatch(dispatchSetUser(data));
   },
 }))(UserForm);

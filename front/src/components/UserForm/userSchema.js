@@ -1,31 +1,35 @@
+/* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
 
-const MESSAGES = {
-  minLength: (len) => `Минимальная длина: ${len} символа(ов)`,
-  maxLength: (len) => `Максимальная длина: ${len} символа(ов)`,
-  required: 'Заполните поле',
-};
+yup.setLocale({
+  mixed: {
+    required: 'Обязательное поле',
+  },
+  string: {
+    email: 'Некорректный email',
+    min: 'Минимальная длина: ${min} символов',
+    max: 'Максимальная длина: ${max} символов',
+  },
+});
 
 export const schema = yup.object().shape({
-  firstName: yup.string().required(MESSAGES.required),
-  middleName: yup
-    .string()
-    .min(4, MESSAGES.minLength(4))
-    .required(MESSAGES.required),
-  lastName: yup.string().required(MESSAGES.required),
-  email: yup.string().required(MESSAGES.required),
+  firstName: yup.string().required().min(4).max(50),
+  middleName: yup.string().min(4).max(50),
+  lastName: yup.string().required().min(4).max(50),
+  email: yup.string().required().email(),
   password: yup
     .string()
-    .min(8, MESSAGES.minLength(8))
-    .max(15, MESSAGES.maxLength(15))
-    .required(MESSAGES.required),
+    .required()
+    .min(8)
+    .max(15)
+    .matches(/[a-zA-Z0-9]/, 'Пароль должен содержать только латинские буквы и цифры'),
   // eslint-disable-next-line react/forbid-prop-types
   address: yup.object().shape({
-    city: yup.string().required(MESSAGES.required),
-    street: yup.string().required(MESSAGES.required),
-    house: yup.string().required(MESSAGES.required),
-    apartment: yup.number(),
+    city: yup.string().required(),
+    street: yup.string().required(),
+    house: yup.string().required(),
+    apartment: yup.string(),
   }),
-  birthdate: yup.date(),
-  roles: yup.object().required(MESSAGES.required),
+  birthdate: yup.date().max(new Date()),
+  roles: yup.object().required(),
 });
