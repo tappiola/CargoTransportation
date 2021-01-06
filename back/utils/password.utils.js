@@ -7,8 +7,10 @@ module.exports.createRandomPassword = () => {
   
   let password = '';
   const randomLength = Math.floor(Math.random() * (maxLength - minLength)) + minLength;
+  
   while (!passwordRegExp.test(password)) {
     password = generatePassword(randomLength, false, /[\w\d\?\-]/);
   }
+  
   return password;
 };
