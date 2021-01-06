@@ -54,7 +54,7 @@ router.post('/login', validate.login, async (req, res) => {
     return res.status(401).json({error: {message: 'invalid email/password'}});
   }
   
-  const isValid = user.isValidPassword(password);
+  const isValid = user.isValidPassword(password, user.password);
   if (!isValid) {
     return res.status(401).json({error: {message: 'invalid password'}});
   }

@@ -75,8 +75,8 @@ Users.beforeCreate((user, options) => {
   user.password = bcrypt.hashSync(user.password, salt);
 });
 
-Users.prototype.isValidPassword = password => {
-  return bcrypt.compareSync(password, this.password);
+Users.prototype.isValidPassword = (password, hash) => {
+  return bcrypt.compareSync(password, hash);
 };
 
 module.exports = Users;
