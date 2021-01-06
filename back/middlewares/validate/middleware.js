@@ -8,8 +8,9 @@ module.exports = (schema) => {
       const message = details.map(i => i.message).join(',');
 
       console.log('error', message);
-      res.status(422).json({ error: message });
-      next();
+      return res.status(422).json({ error: message });
     }
+
+    next();
   };
 };
