@@ -10,6 +10,9 @@ yup.setLocale({
     min: 'Минимальная длина: ${min} символов',
     max: 'Максимальная длина: ${max} символов',
   },
+  date: {
+    max: 'Некорректная дата',
+  },
 });
 
 export const schema = yup.object().shape({
@@ -22,14 +25,17 @@ export const schema = yup.object().shape({
     .required()
     .min(8)
     .max(15)
-    .matches(/[a-zA-Z0-9]/, 'Пароль должен содержать только латинские буквы и цифры'),
-  // eslint-disable-next-line react/forbid-prop-types
-  address: yup.object().shape({
-    city: yup.string().required(),
-    street: yup.string().required(),
-    house: yup.string().required(),
-    apartment: yup.string(),
-  }),
+    .matches(
+      /[a-zA-Z0-9]/,
+      'Пароль должен содержать только латинские буквы и цифры',
+    ),
+  city: yup.string().required(),
+  street: yup.string().required(),
+  house: yup.string().required(),
+  apartment: yup.string(),
   birthdate: yup.date().max(new Date()),
-  roles: yup.object().required(),
+  roles: yup
+    .object()
+    .test((obj) => Object.values(obj).some((isChecked) => isChecked))
+    .required(),
 });

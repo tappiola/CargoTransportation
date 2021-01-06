@@ -11,9 +11,9 @@ function User({ data }) {
     const currentUser = data.find(({ id: _id }) => _id.toString() === id);
     const [firstName, lastName, middleName] = currentUser.name.split(' ');
     // eslint-disable-next-line object-curly-newline
-    const { email, roles, adress, birthDate } = currentUser;
+    const { email, roles, city, street, house, birthDate } = currentUser;
     prevUserData = {
-      email, roles, adress, birthDate, firstName, lastName, middleName,
+      email, roles, city, street, house, birthDate, firstName, lastName, middleName,
     };
   }
 
