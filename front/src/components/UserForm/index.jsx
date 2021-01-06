@@ -14,7 +14,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import EmailField from 'components/FormFields/EmailField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
-import { getHelperText, validateDate, validatePassword } from 'utils';
+import {
+  getHelperText, validateDate, validatePassword, validateEmail,
+} from 'utils';
 import { dispatchSetUser } from 'redux/actions/users';
 
 import RoleField from './RoleField';
@@ -25,7 +27,7 @@ function UserForm({ prevUserData, resolveSubmit }) {
   const classes = useStyles();
   const { id: _id } = useParams();
   const {
-    firstname, middleName, surname, birthDate, email, password, adress, roles,
+    firstName, middleName, lastName, birthDate, email, password, adress, roles,
   } = prevUserData;
   // eslint-disable-next-line object-curly-newline
   const { register, handleSubmit, errors, watch } = useForm();
@@ -34,19 +36,26 @@ function UserForm({ prevUserData, resolveSubmit }) {
   return (
     <Container maxWidth="sm">
       <form
-        className={classes.form}
-        onSubmit={handleSubmit((data) => resolveSubmit({ ...data, id: _id }))}
         noValidate
+        className={classes.form}
+        onSubmit={handleSubmit(({ roles: rolesAsObject, ...data }) => {
+          const rolesAsArray = Object
+            .entries(roles)
+            // eslint-disable-next-line no-unused-vars
+            .filter(([role, isChecked]) => isChecked)
+            .map(([role]) => role);
+          resolveSubmit({ ...data, roles: rolesAsArray, id: _id });
+        })}
       >
         <Grid container direction="column">
           <TextField
-            name="firstname"
+            name="firstName"
             label="Имя"
             margin="normal"
             autoComplete="given-name"
-            error={!!errors.firstname}
-            defaultValue={firstname}
-            helperText={getHelperText(errors.firstname)}
+            error={!!errors.firstName}
+            defaultValue={firstName}
+            helperText={getHelperText(errors.firstName)}
             inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
             fullWidth
           />
@@ -62,19 +71,19 @@ function UserForm({ prevUserData, resolveSubmit }) {
             fullWidth
           />
           <TextField
-            name="surname"
+            name="lastName"
             label="Фамилия"
             margin="normal"
             autoComplete="family-name"
-            error={!!errors.surname}
-            defaultValue={surname}
-            helperText={getHelperText(errors.surname)}
+            error={!!errors.lastName}
+            defaultValue={lastName}
+            helperText={getHelperText(errors.lastName)}
             inputRef={register({ required: true, minLength: 3, maxLength: 15 })}
             fullWidth
           />
           <EmailField
             error={errors.email}
-            register={register}
+            register={register({ required: true, validate: validateEmail })}
             defaultValue={email}
           />
           <TextField
