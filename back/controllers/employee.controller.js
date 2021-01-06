@@ -23,7 +23,6 @@ exports.index = async (req, res) => {
 
 exports.delete = async (req, res) => {
   const { ids } = req.query;
-  console.log(ids);
 
   await User.destroy({
     where: {
