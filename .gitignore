@@ -1,2 +1,4 @@
-# misc
 .idea
+node_modules
+.env
+.editorconfig
