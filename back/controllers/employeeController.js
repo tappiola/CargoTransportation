@@ -1,6 +1,9 @@
 const { User, Role, Company } = require('../models');
+const {Router} = require('express');
 
-exports.index = async (req, res) => {
+const router = Router();
+
+router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
   const users = await User.findAll({
@@ -19,9 +22,9 @@ exports.index = async (req, res) => {
     ],
   });
   res.status(200).json(users);
-};
+});
 
-exports.delete = async (req, res) => {
+router.delete('/', async (req, res) => {
   const { ids } = req.query;
 
   await User.destroy({
@@ -31,4 +34,6 @@ exports.delete = async (req, res) => {
   });
 
   res.status(204).json({});
-};
+});
+
+module.exports = router;

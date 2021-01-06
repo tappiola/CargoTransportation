@@ -1,6 +1,5 @@
 const Logger = require('../config/logger');
 const {Router} = require('express');
-const router = Router();
 const {createRandomPassword} = require('../utils/password.utils');
 const {getSignedToken} = require('../utils/token.utils');
 const Users = require('../models/Users');
@@ -8,15 +7,7 @@ const validate = require('../middlewares/validate');
 const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 
-router.get('/', async (req, res) => {
-  const users = await Users.findAll({
-    order: [
-      ['id', 'DESC'],
-      ['lastName', 'ASC']
-    ]
-  });
-  res.status(200).json(users);
-});
+const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
   const {email} = req.body;
@@ -63,9 +54,43 @@ router.post('/login', validate.login, async (req, res) => {
   res.status(200).json({token});
 });
 
+router.get('/', async (req, res) => {
+  const users = await User.findAll({
+    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
+    include: [
+      {
+        model: Role,
+        attributes: [],
+        where: { role: 'admin' },
+      },
+      {
+        model: Company,
+        attributes: ['name', 'unn'],
+      },
+    ],
+        order: [
+      ['id', 'DESC'],
+      ['lastName', 'ASC']
+    ]
+  });
+  res.status(200).json(users);
+});
+
 router.get('/:id', async (req, res) => {
   const user = await Users.findByPk(req.params.id);
   res.status(200).json(user);
+});
+
+router.delete('/', async (req, res) => {
+  const {ids} = req.query;
+
+  await User.destroy({
+    where: {
+      id: ids.split(',').map((id) => +id),
+    },
+  });
+
+  res.status(204).json({});
 });
 
 module.exports = router;

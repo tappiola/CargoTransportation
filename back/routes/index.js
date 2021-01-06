@@ -1,5 +1,5 @@
-const userRouter = require('./users');
-const employeeRouter = require('./employees');
+const userRouter = require('../controllers/userСontroller');
+const employeeRouter = require('../controllers/employeeController');
 
 module.exports = (app) => {
   app.use('/users', userRouter);
