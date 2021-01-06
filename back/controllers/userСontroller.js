@@ -59,7 +59,8 @@ router.post('/login', validate.login, async (req, res) => {
     return res.status(401).json({error: {message: 'invalid password'}});
   }
   
-  const token = getSignedToken(user);
+  req.session.user = user.dataValues;
+  const token = getSignedToken(user.dataValues);
   res.status(200).json({token});
 });
 
