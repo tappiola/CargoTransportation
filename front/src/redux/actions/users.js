@@ -1,5 +1,5 @@
+import { deleteUsers, getUsers } from 'api';
 import * as actionTypes from './actionTypes';
-import { deleteUsers, getUsers } from '../../api';
 
 export const setUsers = (usersData) => ({
   type: actionTypes.USERS_SET,

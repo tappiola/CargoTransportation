@@ -5,9 +5,9 @@ import CustomGrid from 'components/DataGrid';
 import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
-import { dispatchGetEmployees, dispatchDeleteEmployees } from '../../redux/actions';
-import * as COLUMNS from '../../components/DataGrid/gridColumns';
-import PaddedContainer from '../../components/PaddedContainer';
+import { dispatchGetEmployees, dispatchDeleteEmployees } from 'redux/actions';
+import * as COLUMNS from 'components/DataGrid/gridColumns';
+import PaddedContainer from 'components/PaddedContainer';
 
 function EmployeesList({
   employeesData, employeesLoadComplete, initEmployees, removeEmployees,

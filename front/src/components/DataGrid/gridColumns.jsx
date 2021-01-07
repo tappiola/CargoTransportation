@@ -1,7 +1,7 @@
 import { Link } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import React from 'react';
-import { ROLE_NAMES } from '../../constants/permissions';
+import { ROLE_NAMES } from 'constants/permissions';
 
 export const FULLNAME = (path) => ({
   field: 'fullName',

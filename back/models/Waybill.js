@@ -41,7 +41,7 @@ const Waybill = db.define('waybill', {
   fullAddress: {
     type: DataTypes.VIRTUAL,
     get() {
-      return `${this.country}, г. ${this.city}, ул. ${this.street}, ${this.house}`;
+      return `${this.country}, ${this.city}, ${this.street} ${this.house}`;
     },
   },
 });

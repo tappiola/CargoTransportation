@@ -62,7 +62,7 @@ const User = db.define('user', {
   fullAddress: {
     type: DataTypes.VIRTUAL,
     get() {
-      return `${this.country}, г. ${this.city}, ул. ${this.street}, ${this.house}-${this.apartment}`;
+      return `${this.country}, ${this.city}, ${this.street} ${this.house}-${this.apartment}`;
     },
   },
   isActive: {
