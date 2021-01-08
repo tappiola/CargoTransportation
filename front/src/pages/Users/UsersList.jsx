@@ -50,8 +50,8 @@ function UsersList({
         />
       </PaddedContainer>
       <ConfirmDialog
-        title="Удаление пользователя"
-        description="Вы уверены, что хотите удалить пользователя?"
+        title="Удаление пользователей"
+        description="Вы уверены, что хотите удалить выбранных пользователей?"
         isOpen={isConfirmDialogOpen}
         onPopupClose={() => setIsConfirmDialogOpen(false)}
         onActionConfirm={() => {

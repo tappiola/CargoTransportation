@@ -2,6 +2,7 @@ import * as COLUMNS from '../../components/DataGrid/gridColumns';
 import { connect } from 'react-redux';
 import { dispatchDeleteClients, dispatchGetClients } from '../../redux/actions';
 import { useRouteMatch } from 'react-router-dom';
+import ConfirmDialog from '../../components/ConfirmDialog';
 import CustomGrid from 'components/DataGrid';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import GridToolbar from 'components/GridToolbar';
@@ -13,6 +14,7 @@ function ClientsList({
   clientsData, clientsLoadComplete, initClients, removeClients,
 }) {
   const [selection, setSelection] = useState([]);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const { path } = useRouteMatch();
 
   const columns = [
@@ -27,23 +29,35 @@ function ClientsList({
   }, []);
 
   return (
-    <PaddedContainer>
-      <GridToolbar title="Клиенты">
-        <NavButton color="primary" to={`${path}/new`}>Добавить клиента</NavButton>
-        <DeleteButton
-          isDisabled={selection.length === 0}
-          onButtonClick={() => removeClients(selection)}
+    <>
+      <PaddedContainer>
+        <GridToolbar title="Клиенты">
+          <NavButton color="primary" to={`${path}/new`}>Добавить клиента</NavButton>
+          <DeleteButton
+            isDisabled={selection.length === 0}
+            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
+          />
+        </GridToolbar>
+        <CustomGrid
+          rows={clientsData}
+          columns={columns}
+          loading={!clientsLoadComplete}
+          onSelectionChange={(newSelection) => {
+            setSelection(newSelection.rowIds);
+          }}
         />
-      </GridToolbar>
-      <CustomGrid
-        rows={clientsData}
-        columns={columns}
-        loading={!clientsLoadComplete}
-        onSelectionChange={(newSelection) => {
-          setSelection(newSelection.rowIds);
+      </PaddedContainer>
+      <ConfirmDialog
+        title="Удаление клиентов"
+        description="Вы уверены, что хотите удалить выбранных клиентов?"
+        isOpen={isConfirmDialogOpen}
+        onPopupClose={() => setIsConfirmDialogOpen(false)}
+        onActionConfirm={() => {
+          setIsConfirmDialogOpen(false);
+          removeClients(selection);
         }}
       />
-    </PaddedContainer>
+    </>
   );
 }
 
