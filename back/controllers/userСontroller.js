@@ -2,11 +2,11 @@ const Logger = require('../config/logger');
 const {Router} = require('express');
 const router = Router();
 const {createRandomPassword} = require('../utils/password.utils');
-const {getSignedToken} = require('../utils/token.utils');
 const Users = require('../models/Users');
 const validate = require('../middlewares/validate');
 const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
+const passport = require('passport');
 
 router.get('/', async (req, res) => {
   const users = await Users.findAll({
@@ -29,7 +29,7 @@ router.post('/register', validate.register, async (req, res, next) => {
   try {
     const password = createRandomPassword();
     const newUser = await Users.create({email, password});
-    const token = getSignedToken(newUser);
+    const token = newUser.generateJWT();
     
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
@@ -46,27 +46,37 @@ router.post('/register', validate.register, async (req, res, next) => {
   }
 });
 
-router.post('/login', validate.login, async (req, res) => {
-  const {email, password} = req.body;
-  const user = await Users.findOne({where: {email}});
-  
-  if (!user) {
-    return res.status(401).json({error: {message: 'invalid email/password'}});
-  }
-  
-  const isValid = user.isValidPassword(password, user.password);
-  if (!isValid) {
-    return res.status(401).json({error: {message: 'invalid password'}});
-  }
-  
-  req.session.user = user.dataValues;
-  const token = getSignedToken(user.dataValues);
-  res.status(200).json({token});
+router.post('/login', async (req, res, next) => {
+  passport.authenticate('local', (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({message: 'invalid email/password'});
+    }
+    
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(401).json(err);
+      }
+      const token = user.generateJWT();
+      res.status(200).json({token});
+    });
+  })(req, res, next);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/edit/:id', async (req, res) => {
   const user = await Users.findByPk(req.params.id);
   res.status(200).json(user);
+});
+
+router.delete('/delete/:id', async (req, res) => {
+  await Users.destroy({where: {id: req.params.id}});
+  res.status(200).send('ok');
+});
+
+router.get('/logout', (req, res) => {
+  req.logout();
 });
 
 module.exports = router;
