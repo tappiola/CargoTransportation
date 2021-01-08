@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import React, { useState } from 'react';
 
 import Container from '@material-ui/core/Container';
 
-import Logo from 'components/Logo';
 import EmailField from 'components/FormFields/EmailField';
+import Logo from 'components/Logo';
 import PasswordField from 'components/FormFields/PasswordField';
 import SubmitButton from 'components/Buttons/SubmitButton';
 
-import { useInput, validateEmail, validatePassword } from 'utils';
 import { loginUser } from 'redux/actions';
+import { useInput, validateEmail, validatePassword } from 'utils';
 import { useStyles } from './SignIn.styles';
 
 function SignIn(props) {

@@ -1,7 +1,7 @@
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import React from 'react';
-import EmployeesList from './EmployeesList';
 import Employee from './Employee';
+import EmployeesList from './EmployeesList';
+import React from 'react';
 
 export default function Employees() {
   const { path } = useRouteMatch();

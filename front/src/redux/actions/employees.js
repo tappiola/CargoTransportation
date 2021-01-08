@@ -1,5 +1,5 @@
-import { deleteEmployees, getEmployees } from 'api';
 import * as actionTypes from './actionTypes';
+import { deleteEmployees, getEmployees } from 'api';
 
 export const setEmployees = (employeesData) => ({
   type: actionTypes.EMPLOYEES_SET,

@@ -1,7 +1,7 @@
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import React from 'react';
-import UsersList from './UsersList';
 import User from './User';
+import UsersList from './UsersList';
 
 export default function Users() {
   const { path } = useRouteMatch();

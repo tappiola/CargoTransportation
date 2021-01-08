@@ -1,5 +1,5 @@
-import { signIn } from 'api';
 import { authorizationCompleted } from './authorizationCompoleted';
+import { signIn } from 'api';
 
 export const loginUser = (email, password) => (dispatch) => signIn(email, password).then(
   ({ token }) => {

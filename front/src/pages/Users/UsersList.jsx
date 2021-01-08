@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
-import { dispatchGetUsers, dispatchDeleteUsers } from 'redux/actions';
-import CustomGrid from 'components/DataGrid';
-import GridToolbar from 'components/GridToolbar';
-import DeleteButton from 'components/Buttons/DeleteButton';
-import NavButton from 'components/Buttons/NavButton';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
+import { connect } from 'react-redux';
+import { dispatchDeleteUsers, dispatchGetUsers } from 'redux/actions';
+import { useRouteMatch } from 'react-router-dom';
 import { usersSelector } from 'redux/selectors/users';
 import ConfirmDialog from 'components/ConfirmDialog';
+import CustomGrid from 'components/DataGrid';
+import DeleteButton from 'components/Buttons/DeleteButton';
+import GridToolbar from 'components/GridToolbar';
+import NavButton from 'components/Buttons/NavButton';
 import PaddedContainer from 'components/PaddedContainer';
+import React, { useEffect, useState } from 'react';
 
 function UsersList({
   usersData, usersLoadComplete, initUsers, removeUsers,

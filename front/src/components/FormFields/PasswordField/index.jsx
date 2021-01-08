@@ -1,5 +1,5 @@
-import React from 'react';
 import BaseField from '../BaseField';
+import React from 'react';
 
 const PasswordField = (props) => (
   <BaseField

@@ -1,17 +1,17 @@
-import React from 'react';
+import { MODULE_NAMES } from 'constants/permissions';
+import { NavLink, useLocation } from 'react-router-dom';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import EmailIcon from '@material-ui/icons/Email';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import PeopleIcon from '@material-ui/icons/People';
+import React from 'react';
 import ReportIcon from '@material-ui/icons/Report';
-import EmailIcon from '@material-ui/icons/Email';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import { NavLink, useLocation } from 'react-router-dom';
-import { MODULE_NAMES } from 'constants/permissions';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const menuItems = [
   {

@@ -1,16 +1,16 @@
-import * as COLUMNS from 'components/DataGrid/gridColumns';
+import * as COLUMNS from '../../components/DataGrid/gridColumns';
 import { connect } from 'react-redux';
-import { dispatchDeleteEmployees, dispatchGetEmployees } from 'redux/actions';
+import { dispatchDeleteClients, dispatchGetClients } from '../../redux/actions';
 import { useRouteMatch } from 'react-router-dom';
 import CustomGrid from 'components/DataGrid';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import GridToolbar from 'components/GridToolbar';
 import NavButton from 'components/Buttons/NavButton';
-import PaddedContainer from 'components/PaddedContainer';
+import PaddedContainer from '../../components/PaddedContainer';
 import React, { useEffect, useState } from 'react';
 
-function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
+function ClientsList({
+  clientsData, clientsLoadComplete, initClients, removeClients,
 }) {
   const [selection, setSelection] = useState([]);
   const { path } = useRouteMatch();
@@ -18,28 +18,27 @@ function EmployeesList({
   const columns = [
     COLUMNS.FULLNAME(path),
     COLUMNS.EMAIL,
-    COLUMNS.ROLE,
+    COLUMNS.COMPANY_NAME,
     COLUMNS.STATUS,
-
   ];
 
   useEffect(() => {
-    initEmployees();
+    initClients();
   }, []);
 
   return (
     <PaddedContainer>
-      <GridToolbar title="Сотрудники">
-        <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
+      <GridToolbar title="Клиенты">
+        <NavButton color="primary" to={`${path}/new`}>Добавить клиента</NavButton>
         <DeleteButton
           isDisabled={selection.length === 0}
-          onButtonClick={() => removeEmployees(selection)}
+          onButtonClick={() => removeClients(selection)}
         />
       </GridToolbar>
       <CustomGrid
-        rows={employeesData}
+        rows={clientsData}
         columns={columns}
-        loading={!employeesLoadComplete}
+        loading={!clientsLoadComplete}
         onSelectionChange={(newSelection) => {
           setSelection(newSelection.rowIds);
         }}
@@ -48,15 +47,15 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ employees: { employeesData, employeesLoadComplete } }) => (
+const mapStateToProps = ({ clients: { clientsData, clientsLoadComplete } }) => (
   {
-    employeesData, employeesLoadComplete,
+    clientsData, clientsLoadComplete,
   }
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: () => dispatch(dispatchGetEmployees()),
-  removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
+  initClients: () => dispatch(dispatchGetClients()),
+  removeClients: (ids) => dispatch(dispatchDeleteClients(ids)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeesList);
+export default connect(mapStateToProps, mapDispatchToProps)(ClientsList);

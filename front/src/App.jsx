@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { PROTECTED_ROUTES } from 'pages';
 import {
-  BrowserRouter as Router,
   Redirect,
   Route,
+  BrowserRouter as Router,
   Switch,
 } from 'react-router-dom';
+import { THEME } from './constants/themes';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { getCustomTheme } from 'config';
+import { someActionCreator } from 'redux/actions';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
-import { someActionCreator } from 'redux/actions';
-import { PROTECTED_ROUTES } from 'pages';
-import SignIn from 'pages/SignIn';
-import { getCustomTheme } from 'config';
+import React, { useEffect, useState } from 'react';
 import Settings from './pages/Settings';
-import { THEME } from './constants/themes';
+import SignIn from './pages/SignIn';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;

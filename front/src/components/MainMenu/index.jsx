@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SettingsIcon from '@material-ui/icons/Settings';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { MenuItems } from './MenuItems';
 import { useMenuStyles } from './MainMenu.styles';
+import AppBar from '@material-ui/core/AppBar';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import SettingsIcon from '@material-ui/icons/Settings';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 
 export default function MainMenu({ children }) {
   const classes = useMenuStyles();

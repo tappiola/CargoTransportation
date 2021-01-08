@@ -17,6 +17,7 @@ module.exports = {
   },
   plugins: [
     'react',
+    'sort-imports-es6-autofix',
   ],
   rules: {
     'import/prefer-default-export': 'off',
@@ -24,5 +25,11 @@ module.exports = {
     'react/prop-types': 0,
     'react/jsx-props-no-spreading': 'off',
     'import/no-unresolved': 'off',
+    'import/order': 'off',
+    'sort-imports-es6-autofix/sort-imports-es6': [2, {
+      ignoreCase: false,
+      ignoreMemberSort: false,
+      memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+    }],
   },
 };
