@@ -1,38 +1,38 @@
+const { Router } = require('express');
 const Logger = require('../config/logger');
-const {Router} = require('express');
-const {createRandomPassword} = require('../utils/password.utils');
-const {getSignedToken} = require('../utils/token.utils');
+const { createRandomPassword } = require('../utils/password.utils');
+const { getSignedToken } = require('../utils/token.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
-const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
+const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {email} = req.body;
-  const user = await User.findOne({where: {email}});
-  
+  const { email } = req.body;
+  const user = await User.findOne({ where: { email } });
+
   if (user) {
-    return res.status(400).json({error: {message: 'Email already in use!'}});
+    return res.status(400).json({ error: { message: 'Email already in use!' } });
   }
-  
+
   try {
     const password = createRandomPassword();
-    const newUser = await User.create({email, password});
+    const newUser = await User.create({ email, password });
     const token = getSignedToken(newUser);
-    
+
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
-      html: registerTemplate(email, password)
+      html: registerTemplate(email, password),
     });
-    
-    sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => Logger.error(err.message));
-    
-    res.status(200).json({token});
+
+    sendEmail(mail).then((res) => console.log('Email sent...', res.messageId)).catch((err) => Logger.error(err.message));
+
+    res.status(200).json({ token });
   } catch (e) {
     e.status = 400;
     next(e);
@@ -40,20 +40,20 @@ router.post('/register', validate.register, async (req, res, next) => {
 });
 
 router.post('/login', validate.login, async (req, res) => {
-  const {email, password} = req.body;
-  const user = await Users.findOne({where: {email}});
-  
+  const { email, password } = req.body;
+  const user = await Users.findOne({ where: { email } });
+
   if (!user) {
-    return res.status(401).json({error: {message: 'invalid email/password'}});
+    return res.status(401).json({ error: { message: 'invalid email/password' } });
   }
-  
+
   const isValid = user.isValidPassword(password, user.password);
   if (!isValid) {
-    return res.status(401).json({error: {message: 'invalid password'}});
+    return res.status(401).json({ error: { message: 'invalid password' } });
   }
-  
+
   const token = getSignedToken(user);
-  res.status(200).json({token});
+  res.status(200).json({ token });
 });
 
 router.get('/', async (req, res) => {
@@ -70,10 +70,10 @@ router.get('/', async (req, res) => {
         attributes: ['name', 'unn'],
       },
     ],
-        order: [
+    order: [
       ['id', 'DESC'],
-      ['lastName', 'ASC']
-    ]
+      ['lastName', 'ASC'],
+    ],
   });
   res.status(200).json(users);
 });
@@ -84,7 +84,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const {ids} = req.query;
+  const { ids } = req.query;
 
   await User.destroy({
     where: {

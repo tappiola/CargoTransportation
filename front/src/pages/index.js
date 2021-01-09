@@ -1,7 +1,7 @@
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
 import Acts from 'pages/Acts';
 import Clients from 'pages/Clients';
-import ConsignmentNotes from 'pages/ConsinmentNotes';
+import ConsignmentNotes from 'pages/ConsignmentNotes';
 import Employees from './Employees';
 import Mailings from 'pages/Mailings';
 import Reports from 'pages/Reports';

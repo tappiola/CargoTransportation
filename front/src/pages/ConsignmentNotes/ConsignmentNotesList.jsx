@@ -1,6 +1,6 @@
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import { connect } from 'react-redux';
-import { dispatchDeleteEmployees, dispatchGetEmployees } from 'redux/actions';
+import { dispatchDeleteConsignmentNotes, dispatchGetConsignmentNotes } from 'redux/actions';
 import { useRouteMatch } from 'react-router-dom';
 import ConfirmDialog from 'components/ConfirmDialog';
 import CustomGrid from 'components/DataGrid';
@@ -10,66 +10,74 @@ import NavButton from 'components/Buttons/NavButton';
 import PaddedContainer from 'components/PaddedContainer';
 import React, { useEffect, useState } from 'react';
 
-function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
+function ConsignmentNotesList({
+  consignmentNotesData, consignmentNotesLoadComplete, initConsignmentNotes, removeConsignmentNotes,
 }) {
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const { path } = useRouteMatch();
 
   const columns = [
-    COLUMNS.FULLNAME(path),
-    COLUMNS.EMAIL,
-    COLUMNS.ROLE,
-    COLUMNS.STATUS,
+    COLUMNS.TNN_NUMBER(path),
+    COLUMNS.TTN_CLIENT,
+    COLUMNS.TTN_ADDRESS,
+    COLUMNS.TTN_MANAGER,
+    COLUMNS.TTN_DRIVER,
+    COLUMNS.TTN_STATUS,
   ];
 
   useEffect(() => {
-    initEmployees();
+    initConsignmentNotes();
   }, []);
 
   return (
     <>
       <PaddedContainer>
-        <GridToolbar title="Сотрудники">
-          <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
+        <GridToolbar title="ТТН">
+          <NavButton color="primary" to={`${path}/new`}>Добавить ТТН</NavButton>
           <DeleteButton
             isDisabled={selection.length === 0}
             onButtonClick={() => { setIsConfirmDialogOpen(true); }}
           />
         </GridToolbar>
         <CustomGrid
-          rows={employeesData}
+          rows={consignmentNotesData}
           columns={columns}
-          loading={!employeesLoadComplete}
+          loading={!consignmentNotesLoadComplete}
           onSelectionChange={(newSelection) => {
             setSelection(newSelection.rowIds);
           }}
         />
       </PaddedContainer>
       <ConfirmDialog
-        title="Удаление сотрудников"
-        description="Вы уверены, что хотите удалить выбранных сотрудников?"
+        title="Удаление ТТН"
+        description="Вы уверены, что хотите удалить выбранные ТТН?"
         isOpen={isConfirmDialogOpen}
         onPopupClose={() => setIsConfirmDialogOpen(false)}
         onActionConfirm={() => {
           setIsConfirmDialogOpen(false);
-          removeEmployees(selection);
+          removeConsignmentNotes(selection);
         }}
       />
     </>
   );
 }
 
-const mapStateToProps = ({ employees: { employeesData, employeesLoadComplete } }) => (
+const mapStateToProps = (
   {
-    employeesData, employeesLoadComplete,
+    consignmentNotes: {
+      consignmentNotesData, consignmentNotesLoadComplete,
+    },
+  },
+) => (
+  {
+    consignmentNotesData, consignmentNotesLoadComplete,
   }
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: () => dispatch(dispatchGetEmployees()),
-  removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
+  initConsignmentNotes: () => dispatch(dispatchGetConsignmentNotes()),
+  removeConsignmentNotes: (ids) => dispatch(dispatchDeleteConsignmentNotes(ids)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeesList);
+export default connect(mapStateToProps, mapDispatchToProps)(ConsignmentNotesList);

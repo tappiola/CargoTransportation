@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { deleteClients, getClients } from '../../api';
+import { deleteClients, getClients } from 'api';
 
 export const setClients = (clientsData) => ({
   type: actionTypes.CLIENTS_SET,

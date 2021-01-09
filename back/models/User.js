@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
-const db = require('../database/db');
 const bcrypt = require('bcrypt');
+const db = require('../database/db');
 
 const User = db.define('user', {
   id: {
@@ -24,6 +24,12 @@ const User = db.define('user', {
     type: DataTypes.VIRTUAL,
     get() {
       return `${this.lastName} ${this.firstName} ${this.middleName}`;
+    },
+  },
+  shortFullName: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      return `${this.lastName} ${this.firstName[0]}. ${this.middleName[0]}.`;
     },
   },
   login: {
@@ -76,8 +82,6 @@ User.beforeCreate((user) => {
   user.password = bcrypt.hashSync(user.password, salt);
 });
 
-User.prototype.isValidPassword = (password, hash) => {
-  return bcrypt.compareSync(password, hash);
-};
+User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
 module.exports = User;

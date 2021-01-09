@@ -1,13 +1,13 @@
-import * as COLUMNS from '../../components/DataGrid/gridColumns';
+import * as COLUMNS from 'components/DataGrid/gridColumns';
 import { connect } from 'react-redux';
-import { dispatchDeleteClients, dispatchGetClients } from '../../redux/actions';
+import { dispatchDeleteClients, dispatchGetClients } from 'redux/actions';
 import { useRouteMatch } from 'react-router-dom';
-import ConfirmDialog from '../../components/ConfirmDialog';
+import ConfirmDialog from 'components/ConfirmDialog';
 import CustomGrid from 'components/DataGrid';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import GridToolbar from 'components/GridToolbar';
 import NavButton from 'components/Buttons/NavButton';
-import PaddedContainer from '../../components/PaddedContainer';
+import PaddedContainer from 'components/PaddedContainer';
 import React, { useEffect, useState } from 'react';
 
 function ClientsList({

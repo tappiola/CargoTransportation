@@ -1,4 +1,4 @@
-import { THEME } from '../../constants/themes';
+import { THEME } from 'constants/themes';
 import Grid from '@material-ui/core/Grid';
 import PaddedContainer from 'components/PaddedContainer';
 import React from 'react';
