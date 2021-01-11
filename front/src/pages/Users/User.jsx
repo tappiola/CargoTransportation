@@ -17,7 +17,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
-import { userResolver as resolver } from 'utils';
+import { userResolver as resolver } from './userResolver';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
@@ -31,6 +31,9 @@ const preNormalize = (data, id) => {
   return {
     roles: [],
     ...currentUser,
+    country: currentUser.country || 'Беларусь',
+    password: '',
+    birthday: '1111-11-11',
   };
 };
 
@@ -54,24 +57,28 @@ function User({ data, sendFormData }) {
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />
             <BaseField name="email" label="email" />
-            <BaseField name="password" label="Пароль" type="password" />
 
-            <Grid container spacing={1}>
-              <Grid item sm={4}>
+            {id && <BaseField name="password" label="Пароль" type="password" />}
+
+            <Grid container spacing={1} justify="space-between">
+              <Grid item xs={12} sm={6}>
+                <BaseField name="country" label="Страна" />
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <BaseField name="city" label="Город" />
               </Grid>
-              <Grid item sm={4}>
+              <Grid item xs={12} sm={6}>
                 <BaseField name="street" label="Улица" />
               </Grid>
-              <Grid item sm={2}>
+              <Grid item xs={12} sm={2}>
                 <BaseField name="house" label="Дом" />
               </Grid>
-              <Grid item sm={2}>
+              <Grid item xs={12} sm={2}>
                 <BaseField name="apartment" label="Квартира" />
               </Grid>
             </Grid>
 
-            <BaseField name="birthday" type="date" label="Дата рождения" />
+            <BaseField name="birthday" type="date" label="Дата рождения" InputLabelProps={{ shrink: true }} />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>

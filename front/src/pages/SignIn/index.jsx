@@ -6,11 +6,11 @@ import Container from '@material-ui/core/Container';
 import Logo from 'components/Logo';
 import BaseField from 'components/ControlledField';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import { loginResolver as resolver } from 'utils';
 import { loginUser } from 'redux/actions';
 
 import { useForm, FormProvider } from 'react-hook-form';
 import { useStyles } from './SignIn.styles';
+import { loginResolver as resolver } from './loginResolver';
 
 function SignIn() {
   const classes = useStyles();

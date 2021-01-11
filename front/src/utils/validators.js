@@ -1,6 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 yup.setLocale({
   mixed: {
@@ -16,43 +15,4 @@ yup.setLocale({
   },
 });
 
-const userSchema = yup.object().shape({
-  firstName: yup.string().required().min(4).max(50),
-  middleName: yup.string().min(4).max(50),
-  lastName: yup.string().required().min(4).max(50),
-  email: yup.string().required().email(),
-  password: yup
-    .string()
-    .required()
-    .min(8)
-    .max(15)
-    .matches(
-      /[a-zA-Z0-9]/,
-      'Пароль должен содержать только латинские буквы и цифры',
-    ),
-  city: yup.string().required(),
-  street: yup.string().required(),
-  house: yup.string().required(),
-  apartment: yup.string(),
-  birthdate: yup.date().max(new Date()),
-  roles: yup
-    .object()
-    .test((obj) => Object.values(obj).some((isChecked) => isChecked))
-    .required(),
-});
-
-const loginSchema = yup.object().shape({
-  email: yup.string().required().email(),
-  password: yup
-    .string()
-    .required()
-    .min(8)
-    .max(15)
-    .matches(
-      /[a-zA-Z0-9]/,
-      'Пароль должен содержать только латинские буквы и цифры',
-    ),
-});
-
-export const loginResolver = yupResolver(loginSchema);
-export const userResolver = yupResolver(userSchema);
+export { yup };
