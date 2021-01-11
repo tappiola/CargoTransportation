@@ -8,9 +8,15 @@ const initialState = {
 export function usersReducer(state = initialState, action) {
   switch (action.type) {
     case types.USERS_SET: {
+      const usersData = action.usersData.map(({ company, ...others }) => ({
+        ...others,
+        companyName: company?.name,
+        companyAccountNumber: company?.unn,
+      }));
+
       return {
         ...state,
-        usersData: action.usersData,
+        usersData,
         usersLoadComplete: true,
       };
     }

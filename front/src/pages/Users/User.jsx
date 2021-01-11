@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { dispatchSetUser } from 'redux/actions/users';
+import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
 
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -27,13 +27,10 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 const preNormalize = (data, id) => {
   if (!id) return undefined;
   const currentUser = data.find(({ id: _id }) => _id.toString() === id);
-  const [firstName, lastName, middleName] = currentUser.name.split(' ');
+  if (!currentUser) { return undefined; }
   return {
+    roles: [],
     ...currentUser,
-    firstName,
-    lastName,
-    middleName,
-    birthDate: currentUser.birthDate.toISOString().slice(0, 10),
   };
 };
 
@@ -46,30 +43,35 @@ function User({ data, sendFormData }) {
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
-        <form noValidate onSubmit={handleSubmit(sendFormData)}>
+        <form
+          noValidate
+          onSubmit={handleSubmit((formData) => {
+            sendFormData(id, formData);
+          })}
+        >
           <Grid container direction="column">
+            <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />
-            <BaseField name="lastName" label="Фамилия" />
             <BaseField name="email" label="email" />
             <BaseField name="password" label="Пароль" type="password" />
 
             <Grid container spacing={1}>
-              <Grid item xs={6} sm={4}>
+              <Grid item sm={4}>
                 <BaseField name="city" label="Город" />
               </Grid>
-              <Grid item xs={6} sm={4}>
+              <Grid item sm={4}>
                 <BaseField name="street" label="Улица" />
               </Grid>
-              <Grid item xs={6} sm={2}>
+              <Grid item sm={2}>
                 <BaseField name="house" label="Дом" />
               </Grid>
-              <Grid item xs={6} sm={2}>
+              <Grid item sm={2}>
                 <BaseField name="apartment" label="Квартира" />
               </Grid>
             </Grid>
 
-            <BaseField name="birthDate" type="date" label="Дата рождения" />
+            <BaseField name="birthday" type="date" label="Дата рождения" />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>
@@ -112,6 +114,8 @@ const normalize = ({ roles: asObj, ...data }, id) => ({
 export default connect(
   ({ users }) => ({ data: users.usersData }),
   (dispatch) => ({
-    sendFormData: (data) => dispatch(dispatchSetUser(normalize(data))),
+    sendFormData: (id, data) => (id
+      ? dispatch(dispatchUpdateUser(normalize({ ...data }, id)))
+      : dispatch(dispatchSetUser(normalize(data)))),
   }),
 )(User);

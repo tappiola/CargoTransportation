@@ -1,8 +1,9 @@
 import { getAuthToken } from 'utils';
 
-export const fetchAPI = async (url, data, method = 'POST') => {
+export const fetchAPI = async (url, data, method = 'GET') => {
   const headers = {
     Authorization: `Token ${getAuthToken()}`,
+    'Content-Type': 'application/json',
   };
 
   return fetch(url, { headers, method, body: data })
