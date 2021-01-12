@@ -6,7 +6,6 @@ const userSchema = yup.object().shape({
   middleName: yup.string().min(4).max(50),
   lastName: yup.string().required().min(4).max(50),
   email: yup.string().required().email(),
-  password: yup.string().notRequired().default(''),
   country: yup.string().required(),
   city: yup.string().required(),
   street: yup.string().required(),

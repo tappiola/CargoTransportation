@@ -32,7 +32,6 @@ const preNormalize = (data, id) => {
     roles: [],
     ...currentUser,
     country: currentUser.country || 'Беларусь',
-    password: '',
     birthday: '1111-11-11',
   };
 };

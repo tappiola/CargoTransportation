@@ -12,7 +12,9 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email } = req.body;
+  const {
+    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
+  } = req.body;
   const user = await User.findOne({ where: { email } });
 
   if (user) {
@@ -21,7 +23,20 @@ router.post('/register', validate.register, async (req, res, next) => {
 
   try {
     const password = createRandomPassword();
-    const newUser = await User.create({ email, password, isActive: true });
+    const newUser = await User.create({
+      email,
+      password,
+      firstName,
+      lastName,
+      middleName,
+      birthday,
+      country,
+      city,
+      street,
+      house,
+      apartment,
+      isActive: true,
+    });
     const token = newUser.generateJWT();
 
     const mail = setMailOptions({
@@ -83,7 +98,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const user = await User.findByPk(req.params.id);
+  const user = await User.get(req.params.id);
   res.status(200).json(user);
 });
 
@@ -92,7 +107,7 @@ router.delete('/', async (req, res) => {
 
   await User.destroy({
     where: {
-      id: ids.split(',').map((id) => +id),
+      id: ids.split(',').map((id) => Number(id)),
     },
   });
 
