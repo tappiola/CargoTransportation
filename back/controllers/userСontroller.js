@@ -12,8 +12,8 @@ router.get('/', async (req, res) => {
   const users = await Users.findAll({
     order: [
       ['id', 'DESC'],
-      ['lastName', 'ASC']
-    ]
+      ['lastName', 'ASC'],
+    ],
   });
   res.status(200).json(users);
 });
@@ -34,7 +34,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
-      html: registerTemplate(email, password)
+      html: registerTemplate(email, password),
     });
     
     sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => Logger.error(err.message));
@@ -65,12 +65,12 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/edit/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const user = await Users.findByPk(req.params.id);
   res.status(200).json(user);
 });
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   await Users.destroy({where: {id: req.params.id}});
   res.status(200).send('ok');
 });
