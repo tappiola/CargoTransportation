@@ -1,3 +1,4 @@
+import { deleteUsers, getUsers } from 'api';
 import * as api from 'api';
 import * as actionTypes from './actionTypes';
 
@@ -12,9 +13,8 @@ export const handleDeleteUsers = (ids) => ({
 });
 
 export const dispatchGetUsers = () => (dispatch) => {
-  api
-    .getAllUsers()
-    .then((usersData) => dispatch(setUsers(usersData)));
+  getUsers()
+    .then((data) => dispatch(setUsers(data)));
 };
 
 export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
@@ -40,4 +40,7 @@ export const dispatchUpdateUser = ({ id, ...data }) => () => {
   api.updateUser(data, id);
 };
 
-export const dispatchDeleteUsers = (ids) => (dispatch) => dispatch(handleDeleteUsers(ids));
+export const dispatchDeleteUsers = (ids) => (dispatch) => {
+  deleteUsers(ids)
+    .then(() => dispatch(handleDeleteUsers(ids)));
+};

@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 const ControlledField = ({ name, type, ...props }) => {
   const { control, errors } = useFormContext();
-  
+
   return (
     <Controller
       as={TextField}

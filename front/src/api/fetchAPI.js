@@ -1,12 +1,13 @@
 import { getAuthToken } from 'utils';
+import { BACKEND_HOST } from 'constants/environment';
 
-export const fetchAPI = async (url, data, method = 'GET') => {
+export const fetchAPI = async (uri, data, method = 'GET') => {
   const headers = {
     Authorization: `Token ${getAuthToken()}`,
     'Content-Type': 'application/json',
   };
 
-  return fetch(url, { headers, method, body: data })
+  return fetch(BACKEND_HOST + uri, { headers, method, body: data })
     .then((response) => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';
@@ -21,7 +22,7 @@ export const fetchAPI = async (url, data, method = 'GET') => {
       }
 
       if (response.status === 404) {
-        return Promise.reject(new Error(`Page not found: ${url}`));
+        return Promise.reject(new Error(`Page not found: ${uri}`));
       }
 
       return response.json().then((res) => {
@@ -29,7 +30,7 @@ export const fetchAPI = async (url, data, method = 'GET') => {
         Object.keys(res).forEach((key) => {
           errors.push(`${key}: ${res[key]}`);
         });
-        
+
         return Promise.reject(new Error(errors));
       });
     })

@@ -1,96 +1,95 @@
 const bcrypt = require('bcrypt');
-const {DataTypes} = require('sequelize');
-const db = require('../database/db');
+const { DataTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const db = require('../database/db');
 
-const Users = db.define('users', {
+const User = db.define('user', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
-    allowNull: false
+    allowNull: false,
   },
   firstName: {
     type: DataTypes.STRING,
-    min: 3
+    min: 3,
   },
   lastName: {
     type: DataTypes.STRING,
-    min: 3
+    min: 3,
   },
   middleName: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   fullName: {
     type: DataTypes.VIRTUAL,
     get() {
       return `${this.lastName} ${this.firstName} ${this.middleName}`;
-    }
+    },
   },
   login: {
     type: DataTypes.STRING,
-    unique: true
+    unique: true,
   },
   email: {
     type: DataTypes.STRING,
     unique: true,
     validate: {
-      isEmail: true
-    }
+      isEmail: true,
+    },
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   birthday: {
-    type: DataTypes.DATE
+    type: DataTypes.DATEONLY,
+  },
+  country: {
+    type: DataTypes.STRING,
   },
   city: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   street: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   house: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   apartment: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   fullAddress: {
     type: DataTypes.VIRTUAL,
     get() {
-      return `${this.city}, ${this.street}, ${this.house}-${this.apartment}`;
-    }
+      return `${this.country}, ${this.city}, ${this.street} ${this.house}-${this.apartment}`;
+    },
   },
-  status: {
-    type: DataTypes.ENUM,
-    values: ['registered', 'active', 'disabled'],
+  isActive: {
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: 'registered'
-  }
+  },
 });
 
-Users.beforeCreate((user, options) => {
+User.beforeCreate((user) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(user.password, salt);
   user.password = hashedPassword;
 });
 
-Users.prototype.isValidPassword = (password, hash) => {
-  return bcrypt.compareSync(password, hash);
-};
+User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-Users.prototype.generateJWT = function() {
+User.prototype.generateJWT = function () {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
-  
+
   return jwt.sign({
     email: this.email,
     id: this.id,
-    exp: parseInt(expirationDate.getTime() / 1000, 10)
+    exp: parseInt(expirationDate.getTime() / 1000, 10),
   }, process.env.jwtToken || 'secret');
 };
 
-module.exports = Users;
+module.exports = User;

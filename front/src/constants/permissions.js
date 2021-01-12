@@ -7,8 +7,10 @@ const MODULE_NAMES = {
   WAYBILLS: 'WAYBILLS',
   REPORTS: 'REPORTS',
   MAILINGS: 'MAILINGS',
+  EMPLOYEES: 'EMPLOYEES',
 };
 
+// object values should correspond to role names in DB, table 'role'
 const ROLES = {
   GLOBAL_ADMIN: 'global_admin',
   ADMIN: 'admin',

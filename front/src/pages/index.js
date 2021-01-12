@@ -7,6 +7,7 @@ import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
+import Employees from './Employees';
 
 export const PROTECTED_ROUTES = [
   {
@@ -43,6 +44,12 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.USERS,
     basePath: '/users',
     component: Users,
+    roles: [ROLES.GLOBAL_ADMIN],
+  },
+  {
+    module: MODULE_NAMES.EMPLOYEES,
+    basePath: '/employees',
+    component: Employees,
     roles: [ROLES.GLOBAL_ADMIN],
   },
   {

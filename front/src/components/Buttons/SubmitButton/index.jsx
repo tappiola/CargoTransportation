@@ -4,11 +4,11 @@ import Button from '@material-ui/core/Button';
 
 const SubmitButton = ({ children, ...props }) => (
   <Button
+    {...props}
     type="submit"
     fullWidth
     variant="contained"
     color="primary"
-    {...props}
   >
     {children || 'Вход'}
   </Button>
