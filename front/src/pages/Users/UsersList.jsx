@@ -12,7 +12,7 @@ import { useContainerStyles } from './UserList.styles';
 
 const columns = [
   {
-    field: 'name',
+    field: 'fullName',
     headerName: 'ФИО',
     disableClickEventBubbling: true,
     flex: 2,
