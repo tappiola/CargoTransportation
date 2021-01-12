@@ -1,6 +1,6 @@
 import { deleteUsers, getUsers } from 'api';
+import * as api from 'api';
 import * as actionTypes from './actionTypes';
-import * as api from 'api'
 
 export const setUsers = (usersData) => ({
   type: actionTypes.USERS_SET,
@@ -14,7 +14,6 @@ export const handleDeleteUsers = (ids) => ({
 
 export const dispatchGetUsers = () => (dispatch) => {
   getUsers()
-    .then((data) => data.json())
     .then((data) => dispatch(setUsers(data)));
 };
 

@@ -10,7 +10,6 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import { usersSelector } from 'redux/selectors/users';
 import ConfirmDialog from 'components/ConfirmDialog';
 import PaddedContainer from 'components/PaddedContainer';
-import { useContainerStyles } from './UserList.styles';
 
 function UsersList({
   usersData, usersLoadComplete, initUsers, removeUsers,

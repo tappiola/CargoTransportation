@@ -1,6 +1,7 @@
+const bcrypt = require('bcrypt');
 const { DataTypes } = require('sequelize');
-const db = require('../database/db');
 const jwt = require('jsonwebtoken');
+const db = require('../database/db');
 
 const User = db.define('user', {
   id: {
@@ -77,11 +78,9 @@ User.beforeCreate((user) => {
   user.password = hashedPassword;
 });
 
-User.prototype.isValidPassword = (password, hash) => {
-  return bcrypt.compareSync(password, hash);
-};
+User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-Users.prototype.generateJWT = function() {
+User.prototype.generateJWT = function () {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
@@ -89,7 +88,7 @@ Users.prototype.generateJWT = function() {
   return jwt.sign({
     email: this.email,
     id: this.id,
-    exp: parseInt(expirationDate.getTime() / 1000, 10)
+    exp: parseInt(expirationDate.getTime() / 1000, 10),
   }, process.env.jwtToken || 'secret');
 };
 

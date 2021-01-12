@@ -14,7 +14,6 @@ export const handleDeleteEmployees = (ids) => ({
 export const dispatchGetEmployees = () => (dispatch) => {
   // TODO: get companyId from user profile
   getEmployees(1)
-    .then((data) => data.json())
     .then((data) => dispatch(setEmployees(data)));
 };
 
