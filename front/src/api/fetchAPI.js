@@ -25,11 +25,11 @@ export const fetchAPI = async (url, data, method = 'GET') => {
       }
 
       return response.json().then((res) => {
-        // if the response is ok but the server rejected the request
         const errors = [];
         Object.keys(res).forEach((key) => {
           errors.push(`${key}: ${res[key]}`);
         });
+        
         return Promise.reject(new Error(errors));
       });
     })
