@@ -7,7 +7,7 @@ const loginSchema = Joi.object({
 
 const registerSchema = Joi.object({
   email: Joi.string().email().required(),
-  apartment: Joi.string(),
+  apartment: Joi.string().allow(null, ''),
   birthday: Joi.string().required(),
   city: Joi.string().required(),
   country: Joi.string().required(),
