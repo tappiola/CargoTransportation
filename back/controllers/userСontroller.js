@@ -24,13 +24,13 @@ router.post('/register', validate.register, async (req, res, next) => {
     const newUser = await User.create({ email, password, isActive: true });
     const token = newUser.generateJWT();
 
-    // const mail = setMailOptions({
-    //   to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
-    //   subject: 'Registration in "Transportation system"',
-    //   html: registerTemplate(email, password),
-    // });
+    const mail = setMailOptions({
+      to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
+      subject: 'Registration in "Transportation system"',
+      html: registerTemplate(email, password),
+    });
 
-    // sendEmail(mail).then((res) => console.log('Email sent...', res.messageId)).catch((err) => Logger.error(err.message));
+    sendEmail(mail).then((res) => console.log('Email sent...', res.messageId)).catch((err) => Logger.error(err.message));
 
     res.status(200).json({ token });
   } catch (e) {
