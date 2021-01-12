@@ -1,6 +1,7 @@
 const Logger = require('../config/logger');
 const {Router} = require('express');
 const {createRandomPassword} = require('../utils/password.utils');
+const Users = require('../models/Users');
 const {getSignedToken} = require('../utils/token.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
@@ -8,6 +9,7 @@ const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
+const passport = require('passport');
 
 const router = Router();
 
@@ -22,12 +24,12 @@ router.post('/register', validate.register, async (req, res, next) => {
   try {
     const password = createRandomPassword();
     const newUser = await User.create({email, password});
-    const token = getSignedToken(newUser);
+    const token = newUser.generateJWT();
     
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
-      html: registerTemplate(email, password)
+      html: registerTemplate(email, password),
     });
     
     sendEmail(mail).then(res => console.log('Email sent...', res.messageId)).catch(err => Logger.error(err.message));
@@ -39,21 +41,25 @@ router.post('/register', validate.register, async (req, res, next) => {
   }
 });
 
-router.post('/login', validate.login, async (req, res) => {
-  const {email, password} = req.body;
-  const user = await Users.findOne({where: {email}});
-  
-  if (!user) {
-    return res.status(401).json({error: {message: 'invalid email/password'}});
-  }
-  
-  const isValid = user.isValidPassword(password, user.password);
-  if (!isValid) {
-    return res.status(401).json({error: {message: 'invalid password'}});
-  }
-  
-  const token = getSignedToken(user);
-  res.status(200).json({token});
+router.post('/login', async (req, res, next) => {
+  passport.authenticate('local', (err, user) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return res.status(401).json({message: 'invalid email/password'});
+    }
+
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(401).json(err);
+      }
+
+      const token = user.generateJWT();
+      res.status(200).json({token});
+    });
+  })(req, res, next);
 });
 
 router.get('/', async (req, res) => {
@@ -93,6 +99,11 @@ router.delete('/', async (req, res) => {
   });
 
   res.status(204).json({});
+});
+
+router.get('/logout', (req, res) => {
+  req.logout();
+res.status(204).json({});
 });
 
 module.exports = router;

@@ -6,5 +6,8 @@ module.exports = new Sequelize(
     define: {
       timestamps: false,
     },
+        logging: false,
   },
 );
+
+module.exports = db;

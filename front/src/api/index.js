@@ -1,3 +1,4 @@
-export { signIn } from './signIn';
-export { getUsers, deleteUsers } from './users';
-export { getEmployees, deleteEmployees } from './employees';
+export { fetchAPI } from './fetchAPI';
+export {
+  setUser, updateUser, getAllUsers, signIn,
+} from './users';

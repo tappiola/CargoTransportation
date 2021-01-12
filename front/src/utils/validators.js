@@ -1,6 +1,18 @@
-const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/;
-const emailRegExp = /\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}/;
+/* eslint-disable no-template-curly-in-string */
+import * as yup from 'yup';
 
-export const validatePassword = (password) => passwordRegExp.test(password);
+yup.setLocale({
+  mixed: {
+    required: 'Обязательное поле',
+  },
+  string: {
+    email: 'Некорректный email',
+    min: 'Минимальная длина: ${min} символов',
+    max: 'Максимальная длина: ${max} символов',
+  },
+  date: {
+    max: 'Некорректная дата',
+  },
+});
 
-export const validateEmail = (email) => emailRegExp.test(email);
+export { yup };
