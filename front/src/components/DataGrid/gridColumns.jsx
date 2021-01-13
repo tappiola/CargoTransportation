@@ -6,7 +6,6 @@ import React from 'react';
 
 const valueOrBlank = (params) => params.value || '-';
 
-
 export const FULLNAME = (path) => ({
   field: 'fullName',
   headerName: 'ФИО',

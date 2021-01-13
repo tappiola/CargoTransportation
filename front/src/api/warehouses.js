@@ -1,7 +1,7 @@
-import { BACKEND_HOST } from 'constants/environment';
+import { fetchAPI } from './fetchAPI';
 
-export const getWarehouses = async (companyId) => fetch(`${BACKEND_HOST}/warehouses?companyId=${companyId}`);
+const BASE_URI = '/warehouses';
 
-export const deleteWarehouses = async (ids) => fetch(`${BACKEND_HOST}/warehouses?ids=${ids.join(',')}`, {
-  method: 'DELETE',
-});
+export const getWarehouses = async (companyId) => fetchAPI(`${BASE_URI}?companyId=${companyId}`);
+
+export const deleteWarehouses = async (ids) => fetchAPI(`${BASE_URI}?ids=${ids.join(',')}`, null, 'DELETE');

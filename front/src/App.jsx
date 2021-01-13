@@ -9,7 +9,6 @@ import { THEME } from './constants/themes';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { getCustomTheme } from 'config';
-import { someActionCreator } from 'redux/actions';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
 import React, { useEffect, useState } from 'react';

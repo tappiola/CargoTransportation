@@ -8,8 +8,6 @@ import Reports from 'pages/Reports';
 import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
-import { MODULE_NAMES, ROLES } from 'constants/permissions';
-import Employees from './Employees';
 
 export const PROTECTED_ROUTES = [
   {

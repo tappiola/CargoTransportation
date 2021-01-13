@@ -5,7 +5,7 @@ const warehouseRouter = require('../controllers/warehouseController');
 const consignmentNoteRouter = require('../controllers/consignmentNoteController');
 const waybillRouter = require('../controllers/waybillController');
 
-module.exports = app => {
+module.exports = (app) => {
   app.use('/users', userRouter);
   app.use('/employees', employeeRouter);
   app.use('/clients', clientRouter);

@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { deleteConsignmentNotes, getConsignmentNotes } from 'api';
+import * as api from 'api';
 
 export const setConsignmentNotes = (consignmentNotesData) => ({
   type: actionTypes.CONSIGNMENT_NOTES_SET,
@@ -13,12 +13,10 @@ export const handleDeleteConsignmentNotes = (ids) => ({
 
 export const dispatchGetConsignmentNotes = () => (dispatch) => {
   // TODO: get companyId from token/cookie/session_data
-  getConsignmentNotes(1)
-    .then((data) => data.json())
-    .then((data) => dispatch(setConsignmentNotes(data)));
+  api.getConsignmentNotes(1).then((data) => dispatch(setConsignmentNotes(data)));
 };
 
 export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => {
-  deleteConsignmentNotes(ids)
+  api.deleteConsignmentNotes(ids)
     .then(() => dispatch(handleDeleteConsignmentNotes(ids)));
 };

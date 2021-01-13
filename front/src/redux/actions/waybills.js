@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { deleteWaybills, getWaybills } from 'api';
+import * as api from 'api';
 
 export const setWaybills = (waybillsData) => ({
   type: actionTypes.WAYBILLS_SET,
@@ -13,12 +13,10 @@ export const handleDeleteWaybills = (ids) => ({
 
 export const dispatchGetWaybills = () => (dispatch) => {
   // TODO: get companyId from token/cookie/session_data
-  getWaybills(1)
-    .then((data) => data.json())
-    .then((data) => dispatch(setWaybills(data)));
+  api.getWaybills(1).then((data) => dispatch(setWaybills(data)));
 };
 
 export const dispatchDeleteWaybills = (ids) => (dispatch) => {
-  deleteWaybills(ids)
+  api.deleteWaybills(ids)
     .then(() => dispatch(handleDeleteWaybills(ids)));
 };

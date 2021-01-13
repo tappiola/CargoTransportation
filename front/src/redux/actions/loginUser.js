@@ -1,7 +1,7 @@
+import * as api from 'api';
 import { authorizationCompleted } from './authorizationCompleted';
-import { signIn } from 'api';
 
-export const loginUser = (email, password) => (dispatch) => signIn(email, password).then(
+export const loginUser = (email, password) => (dispatch) => api.signIn(email, password).then(
   ({ token }) => {
     if (token) {
       localStorage.setItem('token', token);

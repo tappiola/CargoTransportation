@@ -1,8 +1,5 @@
-import { deleteUsers, getUsers } from 'api';
-import * as api from 'api';
 import * as actionTypes from './actionTypes';
-
-import { deleteUsers, getUsers } from 'api';
+import * as api from 'api';
 
 export const setUsers = (usersData) => ({
   type: actionTypes.USERS_SET,
@@ -15,8 +12,7 @@ export const handleDeleteUsers = (ids) => ({
 });
 
 export const dispatchGetUsers = () => (dispatch) => {
-  getUsers()
-    .then((data) => dispatch(setUsers(data)));
+  api.getUsers().then((data) => dispatch(setUsers(data)));
 };
 
 export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
@@ -43,6 +39,5 @@ export const dispatchUpdateUser = ({ id, ...data }) => () => {
 };
 
 export const dispatchDeleteUsers = (ids) => (dispatch) => {
-  deleteUsers(ids)
-    .then(() => dispatch(handleDeleteUsers(ids)));
+  api.deleteUsers(ids).then(() => dispatch(handleDeleteUsers(ids)));
 };

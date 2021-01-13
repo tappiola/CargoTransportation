@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { deleteWarehouses, getWarehouses } from '../../api';
+import * as api from 'api';
 
 export const setWarehouses = (warehousesData) => ({
   type: actionTypes.WAREHOUSES_SET,
@@ -13,12 +13,10 @@ export const handleDeleteWarehouses = (ids) => ({
 
 export const dispatchGetWarehouses = () => (dispatch) => {
   // TODO: get companyId from user profile
-  getWarehouses(1)
-    .then((data) => data.json())
-    .then((data) => dispatch(setWarehouses(data)));
+  api.getWarehouses(1).then((data) => dispatch(setWarehouses(data)));
 };
 
 export const dispatchDeleteWarehouses = (ids) => (dispatch) => {
-  deleteWarehouses(ids)
+  api.deleteWarehouses(ids)
     .then(() => dispatch(handleDeleteWarehouses(ids)));
 };

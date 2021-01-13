@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { deleteClients, getClients } from 'api';
+import * as api from 'api';
 
 export const setClients = (clientsData) => ({
   type: actionTypes.CLIENTS_SET,
@@ -13,12 +13,11 @@ export const handleDeleteClients = (ids) => ({
 
 export const dispatchGetClients = () => (dispatch) => {
   // TODO: get companyId from user profile
-  getClients(1)
-    .then((data) => data.json())
+  api.getClients(1)
     .then((data) => dispatch(setClients(data)));
 };
 
 export const dispatchDeleteClients = (ids) => (dispatch) => {
-  deleteClients(ids)
+  api.deleteClients(ids)
     .then(() => dispatch(handleDeleteClients(ids)));
 };

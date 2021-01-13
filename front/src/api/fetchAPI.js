@@ -1,5 +1,5 @@
-import { getAuthToken } from 'utils';
 import { BACKEND_HOST } from 'constants/environment';
+import { getAuthToken } from 'utils';
 
 export const fetchAPI = async (uri, data, method = 'GET') => {
   const headers = {

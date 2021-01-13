@@ -1,11 +1,4 @@
 const { Router } = require('express');
-const Logger = require('../config/logger');
-const { createRandomPassword } = require('../utils/password.utils');
-const { getSignedToken } = require('../utils/token.utils');
-const User = require('../models/User');
-const Role = require('../models/Role');
-const Company = require('../models/Company');
-const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
 const { createRandomPassword } = require('../utils/password.utils');

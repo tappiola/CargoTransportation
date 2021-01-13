@@ -1,24 +1,17 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
-import { connect } from 'react-redux';
-import React, { useState } from 'react';
+import React from 'react';
 
 import Container from '@material-ui/core/Container';
 
-import Logo from 'components/Logo';
+import { loginUser } from 'redux/actions';
 import BaseField from 'components/ControlledField';
-import EmailField from 'components/FormFields/EmailField';
 import Logo from 'components/Logo';
-import PasswordField from 'components/FormFields/PasswordField';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import { loginUser } from 'redux/actions';
 
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { loginUser } from 'redux/actions';
-import { useInput, validateEmail, validatePassword } from 'utils';
-import { useStyles } from './SignIn.styles';
 import { loginResolver as resolver } from './loginResolver';
+import { useStyles } from './SignIn.styles';
 
 function SignIn() {
   const classes = useStyles();
