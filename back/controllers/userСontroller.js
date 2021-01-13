@@ -12,9 +12,7 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {
-    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
-  } = req.body;
+  const { email, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
 
   if (user) {
@@ -24,17 +22,9 @@ router.post('/register', validate.register, async (req, res, next) => {
   try {
     const password = createRandomPassword();
     const newUser = await User.create({
+      ...userData,
       email,
       password,
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      country,
-      city,
-      street,
-      house,
-      apartment,
       isActive: true,
     });
     const token = newUser.generateJWT();
@@ -77,7 +67,6 @@ router.post('/login', async (req, res, next) => {
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
-    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
     include: [
       {
         model: Role,
@@ -89,6 +78,9 @@ router.get('/', async (req, res) => {
         attributes: ['name', 'unn'],
       },
     ],
+    attributes:{
+      exclude: ['password'],
+    },
     order: [
       ['id', 'DESC'],
       ['lastName', 'ASC'],
@@ -112,6 +104,18 @@ router.delete('/', async (req, res) => {
   });
 
   res.status(204).json({});
+});
+
+router.put('/:id', validate.register, async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (!user) {
+    res.status(400).json({ error: { message: 'user not found'}})
+  }
+  await user.update({
+    ...req.body,
+    password: user.password,
+  });
+  res.status(200).json(user);
 });
 
 router.get('/logout', (req, res) => {

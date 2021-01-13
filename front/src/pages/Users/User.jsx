@@ -27,12 +27,14 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 const preNormalize = (data, id) => {
   if (!id) return undefined;
   const currentUser = data.find(({ id: _id }) => _id.toString() === id);
-  if (!currentUser) { return undefined; }
+  if (!currentUser) {
+    return undefined;
+  }
   return {
     roles: [],
+    birthday: '1993-07-06',
     ...currentUser,
     country: currentUser.country || 'Беларусь',
-    birthday: '1111-11-11',
   };
 };
 
@@ -77,7 +79,12 @@ function User({ data, sendFormData }) {
               </Grid>
             </Grid>
 
-            <BaseField name="birthday" type="date" label="Дата рождения" InputLabelProps={{ shrink: true }} />
+            <BaseField
+              name="birthday"
+              type="date"
+              label="Дата рождения"
+              InputLabelProps={{ shrink: true }}
+            />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>
@@ -120,8 +127,9 @@ const normalize = ({ roles: asObj, ...data }, id) => ({
 export default connect(
   ({ users }) => ({ data: users.usersData }),
   (dispatch) => ({
-    sendFormData: (id, data) => (id
-      ? dispatch(dispatchUpdateUser(normalize({ ...data }, id)))
-      : dispatch(dispatchSetUser(normalize(data)))),
+    sendFormData: (id, data) => (
+      id
+        ? dispatch(dispatchUpdateUser(normalize({ ...data }, id)))
+        : dispatch(dispatchSetUser(normalize(data)))),
   }),
 )(User);
