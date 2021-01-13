@@ -1,8 +1,9 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
+  companyId: 1,
   authorization: {
-    isSuccess: false,
+    isSuccess: true,
   },
 };
 

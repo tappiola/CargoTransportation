@@ -10,7 +10,7 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import PaddedContainer from 'components/PaddedContainer';
 
 function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
+  employeesData, employeesLoadComplete, initEmployees, removeEmployees, companyId,
 }) {
   const [selection, setSelection] = useState([]);
   const { path } = useRouteMatch();
@@ -24,7 +24,7 @@ function EmployeesList({
   ];
 
   useEffect(() => {
-    initEmployees();
+    initEmployees(companyId);
   }, []);
 
   return (
@@ -48,14 +48,16 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ employees: { employeesData, employeesLoadComplete } }) => (
-  {
-    employeesData, employeesLoadComplete,
-  }
-);
+const mapStateToProps = ({ employees, currentUser }) => {
+  const { employeesData, employeesLoadComplete } = employees;
+  const { companyId } = currentUser;
+  return {
+    employeesData, employeesLoadComplete, companyId,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: () => dispatch(dispatchGetEmployees()),
+  initEmployees: (id) => dispatch(dispatchGetEmployees(id)),
   removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
 });
 
