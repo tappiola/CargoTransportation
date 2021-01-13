@@ -7,7 +7,7 @@ export const loginUser = (email, password) => (dispatch) => api.signIn(email, pa
       localStorage.setItem('token', token);
     }
 
-    dispatch(authorizationCompleted({ isSuccess: false }));
+    dispatch(authorizationCompleted({ isSuccess: true }));
   },
   (/* err */) => {
     dispatch(authorizationCompleted({ isFailed: true }));
