@@ -33,7 +33,7 @@ function WaybillsList({
   return (
     <>
       <PaddedContainer>
-        <GridToolbar title="Склады">
+        <GridToolbar title="Путевые листы">
           <NavButton color="primary" to={`${path}/new`}>Добавить путевой лист</NavButton>
           <DeleteButton
             isDisabled={selection.length === 0}
