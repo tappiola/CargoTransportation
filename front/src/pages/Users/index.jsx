@@ -9,7 +9,7 @@ export default function Users() {
   return (
     <Switch>
       <Route path={`${path}/:id(\\d+)`} component={User} />
-      <Route path={`${path}/new`}>Страница добавления пользователя </Route>
+      <Route path={`${path}/new`} component={User} />
       <Route exact path={path} component={UsersList} />
       <Route>Страница не найдена</Route>
     </Switch>

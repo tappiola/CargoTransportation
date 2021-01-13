@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-const SubmitButton = (props) => (
+const SubmitButton = ({ children, ...props }) => (
   <Button
     {...props}
     type="submit"
@@ -10,7 +10,7 @@ const SubmitButton = (props) => (
     variant="contained"
     color="primary"
   >
-    Вход
+    {children || 'Вход'}
   </Button>
 );
 

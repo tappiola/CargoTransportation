@@ -80,10 +80,6 @@ const mapState = ({
   isAuthorized: isSuccess,
 });
 
-const mapDispatch = (dispatch) => ({
-  onInit(data) {
-    dispatch(someActionCreator(data));
-  },
-});
+const mapDispatch = null;
 
 export default connect(mapState, mapDispatch)(App);

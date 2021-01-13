@@ -5,6 +5,13 @@ const { getSignedToken } = require('../utils/token.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
+const { Router } = require('express');
+const passport = require('passport');
+const Logger = require('../config/logger');
+const { createRandomPassword } = require('../utils/password.utils');
+const User = require('../models/User');
+const Role = require('../models/Role');
+const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
@@ -12,7 +19,9 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email } = req.body;
+  const {
+    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
+  } = req.body;
   const user = await User.findOne({ where: { email } });
 
   if (user) {
@@ -21,8 +30,21 @@ router.post('/register', validate.register, async (req, res, next) => {
 
   try {
     const password = createRandomPassword();
-    const newUser = await User.create({ email, password });
-    const token = getSignedToken(newUser);
+    const newUser = await User.create({
+      email,
+      password,
+      firstName,
+      lastName,
+      middleName,
+      birthday,
+      country,
+      city,
+      street,
+      house,
+      apartment,
+      isActive: true,
+    });
+    const token = newUser.generateJWT();
 
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
@@ -39,21 +61,47 @@ router.post('/register', validate.register, async (req, res, next) => {
   }
 });
 
-router.post('/login', validate.login, async (req, res) => {
-  const { email, password } = req.body;
-  const user = await Users.findOne({ where: { email } });
+router.post('/login', async (req, res, next) => {
+  passport.authenticate('local', (err, user) => {
+    if (err) {
+      return next(err);
+    }
 
-  if (!user) {
-    return res.status(401).json({ error: { message: 'invalid email/password' } });
-  }
+    if (!user) {
+      return res.status(401).json({ message: 'invalid email/password' });
+    }
 
-  const isValid = user.isValidPassword(password, user.password);
-  if (!isValid) {
-    return res.status(401).json({ error: { message: 'invalid password' } });
-  }
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(401).json(err);
+      }
 
-  const token = getSignedToken(user);
-  res.status(200).json({ token });
+      const token = user.generateJWT();
+      res.status(200).json({ token });
+    });
+  })(req, res, next);
+});
+
+router.get('/', async (req, res) => {
+  const users = await User.findAll({
+    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
+    include: [
+      {
+        model: Role,
+        attributes: [],
+        where: { role: 'admin' },
+      },
+      {
+        model: Company,
+        attributes: ['name', 'unn'],
+      },
+    ],
+    order: [
+      ['id', 'DESC'],
+      ['lastName', 'ASC'],
+    ],
+  });
+  res.status(200).json(users);
 });
 
 router.get('/', async (req, res) => {
@@ -88,10 +136,15 @@ router.delete('/', async (req, res) => {
 
   await User.destroy({
     where: {
-      id: ids.split(',').map((id) => +id),
+      id: ids.split(',').map((id) => Number(id)),
     },
   });
 
+  res.status(204).json({});
+});
+
+router.get('/logout', (req, res) => {
+  req.logout();
   res.status(204).json({});
 });
 
