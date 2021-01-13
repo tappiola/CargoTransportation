@@ -1,8 +1,9 @@
+import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
 
 const initialState = {
   authorization: {
-    isSuccess: false,
+    isSuccess: !!getAuthToken(),
   },
 };
 
