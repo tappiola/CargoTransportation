@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword } = require('../utils/password.utils');
+const { createRandomPassword, isValidPassword } = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
@@ -93,6 +93,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const user = await User.get(req.params.id);
+  
   res.status(200).json(user);
 });
 
@@ -100,8 +101,7 @@ router.delete('/', async (req, res) => {
   const { ids } = req.query;
 
   await User.destroy({
-    where: {
-      id: ids.split(',').map((id) => Number(id)),
+    where: { id: ids.split(',').map((id) => Number(id)),
     },
   });
 
@@ -114,22 +114,17 @@ router.get('/logout', (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-  const { password, roles: rolesArray, ...userData } = req.body;
+  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role: rolesArray } });
-  
-  const newPassword =  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/.test(password) && password;
+  const password =  isValidPassword(newPassword) ? newPassword : user.password;
   
   if (!user) {
     return res.status(400).json({ error: { message: 'user not found' } });
   }
-  if (roles) {
-    user.setRoles(roles);
-  }
-  await user.update({
-    ...userData,
-    password: newPassword || user.password,
-  });
+
+  if (roles) { await user.setRoles(roles); }
+  await user.update({ ...userData, password });
   
   res.status(200).json(user);
 });
