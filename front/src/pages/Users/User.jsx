@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
 
 import { useForm, FormProvider } from 'react-hook-form';
@@ -23,22 +23,25 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-// temporary solution
-const preNormalize = (data, id) => {
-  if (!id) return undefined;
-  const currentUser = data.find(({ id: _id }) => _id.toString() === id);
-  if (!currentUser) { return undefined; }
-  return {
-    roles: [],
-    ...currentUser,
-    country: currentUser.country || 'Беларусь',
-    birthday: '1111-11-11',
-  };
+const selector = (id) => ({ users }) => {
+  const user = users.usersData.find(({ id: _id }) => _id.toString() === id);
+  const roles = user.roles && user.roles.map(({ role }) => role);
+  console.log(user);
+  return user && { ...user, roles };
 };
 
-function User({ data, sendFormData }) {
+const normalize = ({ roles: asObj, ...data }, id) => ({
+  ...data,
+  id,
+  roles: Object.entries(asObj)
+    .filter(([, checked]) => checked)
+    .map(([role]) => role),
+});
+
+function User() {
   const { id } = useParams();
-  const defaultValues = preNormalize(data, id);
+  const defaultValues = useSelector(selector(id));
+  const dispatch = useDispatch();
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
@@ -47,9 +50,11 @@ function User({ data, sendFormData }) {
       <FormProvider {...methods}>
         <form
           noValidate
-          onSubmit={handleSubmit((formData) => {
-            sendFormData(id, formData);
-          })}
+          onSubmit={handleSubmit((formData) => (
+            id
+              ? dispatch(dispatchUpdateUser(normalize({ ...formData }, id)))
+              : dispatch(dispatchSetUser(normalize(formData)))
+          ))}
         >
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
@@ -89,7 +94,7 @@ function User({ data, sendFormData }) {
                       <Checkbox
                         inputRef={register}
                         name={`roles.${name}`}
-                        defaultChecked={defaultValues?.roles[name]}
+                        defaultChecked={defaultValues?.roles?.includes(name)}
                       />
                     )}
                     label={label}
@@ -109,19 +114,4 @@ function User({ data, sendFormData }) {
   );
 }
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
-  ...data,
-  id,
-  roles: Object.entries(asObj)
-    .filter(([, checked]) => checked)
-    .map(([role]) => role),
-});
-
-export default connect(
-  ({ users }) => ({ data: users.usersData }),
-  (dispatch) => ({
-    sendFormData: (id, data) => (id
-      ? dispatch(dispatchUpdateUser(normalize({ ...data }, id)))
-      : dispatch(dispatchSetUser(normalize(data)))),
-  }),
-)(User);
+export default User;

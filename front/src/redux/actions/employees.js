@@ -23,8 +23,8 @@ export const dispatchDeleteEmployees = (ids) => (dispatch) => {
     .then(() => dispatch(handleDeleteEmployees(ids)));
 };
 
-export const dispatchSetEmployee = ({ id, ...data }) => () => {
-  setEmployee({ id, data });
+export const dispatchSetEmployee = ({ companyId, ...data }) => () => {
+  setEmployee({ companyId, data });
 };
 
 export const dispatchUpdateEmployee = ({ id, ...data }) => () => {

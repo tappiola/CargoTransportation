@@ -17,7 +17,7 @@ import { useMenuStyles } from './MainMenu.styles';
 
 export default function MainMenu({ children }) {
   const classes = useMenuStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };

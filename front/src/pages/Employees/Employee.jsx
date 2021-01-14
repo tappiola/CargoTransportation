@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   dispatchSetEmployee,
   dispatchUpdateEmployee,
@@ -26,44 +26,51 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-// temporary solution
-const preNormalize = (data, id) => {
-  if (!id) return undefined;
-  const currentEmployeer = data.find(({ id: _id }) => _id.toString() === id);
-  if (!currentEmployeer) {
-    return undefined;
-  }
+const selector = (employeeId) => ({ currentUser, employees }) => {
+  const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
+  const roles = employee && employee.roles.map(({ role }) => role);
   return {
-    roles: [],
-    birthday: '1993-07-05',
-    ...currentEmployeer,
-    country: currentEmployeer.country || 'Беларусь',
+    companyId: currentUser.companyId,
+    defaultValues: employeeId && { ...employee, roles },
   };
 };
 
-function Employee({ data, sendFormData }) {
-  const { id } = useParams();
-  const defaultValues = preNormalize(data, id);
+const normalize = ({ roles: asObj, isActive, ...data }, id) => ({
+  ...data,
+  id,
+  roles: Object.entries(asObj)
+    .filter(([, checked]) => checked)
+    .map(([role]) => role),
+  isActive: !!isActive[0],
+});
+
+function Employee() {
+  const dispatch = useDispatch();
+  const { id: employeeId } = useParams();
+  const { companyId, defaultValues } = useSelector(selector(employeeId));
+  console.log(defaultValues, ' ');
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
-  console.log(data);
+
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
         <form
           noValidate
-          onSubmit={handleSubmit((formData) => {
-            sendFormData(id, formData);
-          })}
+          onSubmit={handleSubmit((formData) => (
+            employeeId
+              ? dispatch(dispatchUpdateEmployee(normalize({ ...formData }, employeeId)))
+              : dispatch(dispatchSetEmployee({ ...normalize(formData), companyId }))
+          ))}
         >
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />
-            <BaseField name="login" label="логин" />
+            {/* <BaseField name="login" label="логин" /> */}
             <BaseField name="email" label="email" />
 
-            {id && <BaseField name="password" label="Пароль" type="password" />}
+            {employeeId && <BaseField name="password" label="Пароль" type="password" />}
 
             <Grid container spacing={1} justify="space-between">
               <Grid item xs={12} sm={6}>
@@ -100,7 +107,7 @@ function Employee({ data, sendFormData }) {
                       <Checkbox
                         inputRef={register}
                         name={`roles.${name}`}
-                        defaultChecked={defaultValues?.roles[name]}
+                        defaultChecked={defaultValues?.roles?.includes(name)}
                       />
                     )}
                     label={label}
@@ -132,19 +139,4 @@ function Employee({ data, sendFormData }) {
   );
 }
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
-  ...data,
-  id,
-  roles: Object.entries(asObj)
-    .filter(([, checked]) => checked)
-    .map(([role]) => role),
-});
-
-export default connect(
-  ({ employees }) => ({ data: employees.employeesData }),
-  (dispatch) => ({
-    sendFormData: (id, data) => (id
-      ? dispatch(dispatchUpdateEmployee(normalize({ ...data }, id)))
-      : dispatch(dispatchSetEmployee(normalize(data)))),
-  }),
-)(Employee);
+export default Employee;

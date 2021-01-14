@@ -21,13 +21,13 @@ export const EMAIL = {
 };
 
 export const COMPANY = {
-  field: 'name',
+  field: 'companyName',
   headerName: 'Компания',
   flex: 2,
 };
 
 export const UNN = {
-  field: 'unn',
+  field: 'companyAccountNamber',
   headerName: 'УНП',
   flex: 1,
 };

@@ -12,6 +12,10 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';
 
+        if (response.redirected) {
+          return Promise.resolve({ redirected: true });
+        }
+
         if (contentType.includes('application/json')) {
           return response.json().catch((error) => Promise.reject(new Error(`Invalid JSON: ${error.message}`)));
         }

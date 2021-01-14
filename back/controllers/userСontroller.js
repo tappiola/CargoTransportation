@@ -12,9 +12,7 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {
-    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
-  } = req.body;
+  const { email, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
 
   if (user) {
@@ -25,16 +23,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     const password = createRandomPassword();
     const newUser = await User.create({
       email,
-      password,
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      country,
-      city,
-      street,
-      house,
-      apartment,
+      ...userData,
       isActive: true,
     });
     const token = newUser.generateJWT();
@@ -77,12 +66,12 @@ router.post('/login', async (req, res, next) => {
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
-    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
+    attributes: {
+      exclude: ['password'],
+    },
     include: [
       {
         model: Role,
-        attributes: [],
-        where: { role: 'admin' },
       },
       {
         model: Company,
@@ -111,12 +100,33 @@ router.delete('/', async (req, res) => {
     },
   });
 
-  res.status(204).json({});
+  res.status(204).json(null);
 });
 
 router.get('/logout', (req, res) => {
   req.logout();
   res.status(204).json({});
+});
+
+router.put('/:id', async (req, res) => {
+  const { password, roles: rolesArray, ...userData } = req.body;
+  const user = await User.findByPk(req.params.id);
+  const roles = await Role.findAll({ where: { role: rolesArray } });
+  
+  const newPassword =  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/.test(password) && password;
+  
+  if (!user) {
+    return res.status(400).json({ error: { message: 'user not found' } });
+  }
+  if (roles) {
+    user.setRoles(roles);
+  }
+  await user.update({
+    ...userData,
+    password: newPassword || user.password,
+  });
+  
+  res.status(200).json(user);
 });
 
 module.exports = router;
