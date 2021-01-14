@@ -29,14 +29,7 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
         return Promise.reject(new Error(`Page not found: ${uri}`));
       }
 
-      return response.json().then((res) => {
-        const errors = [];
-        Object.keys(res).forEach((key) => {
-          errors.push(`${key}: ${res[key]}`);
-        });
-
-        return Promise.reject(new Error(errors));
-      });
+      return response.json().then((res) => Promise.reject(res));
     })
-    .catch((error) => Promise.reject(new Error(error.message)));
+    .catch((error) => Promise.reject(error));
 };

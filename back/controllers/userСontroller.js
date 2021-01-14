@@ -8,7 +8,7 @@ const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-
+const { isAuth } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
@@ -68,7 +68,7 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', isAuth, async (req, res) => {
   const users = await User.findAll({
     attributes: {
       exclude: ['password'],
@@ -91,7 +91,7 @@ router.get('/', async (req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuth, async (req, res) => {
   const user = await User.get(req.params.id);
   
   res.status(200).json(user);
@@ -113,7 +113,7 @@ router.get('/logout', (req, res) => {
   res.status(204).json({});
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', isAuth, async (req, res) => {
   const { password: newPassword, roles: rolesArray, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role: rolesArray } });

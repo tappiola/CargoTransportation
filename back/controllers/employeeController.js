@@ -13,8 +13,6 @@ router.get('/', async (req, res) => {
     include: [
       {
         model: Role,
-        attributes: ['role'],
-        through: { attributes: [] },
       },
       {
         model: Company,
