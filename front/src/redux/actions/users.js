@@ -5,7 +5,7 @@ import * as actionTypes from './actionTypes';
 
 const redirectionHandler = (dispatch) => ({ error }) => {
   if (error.message === 'Forbidden') {
-    dispatch(authorizationCompleted({ isSuccess: false }));
+    dispatch(authorizationCompleted(false));
   }
 };
 

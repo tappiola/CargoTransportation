@@ -8,7 +8,7 @@ export const authorizationCompleted = (isAuthorized) => ({
 
 export const dispatchLogoutUser = () => (dispatch) => {
   dispatch({ type: actionTypes.CURRENT_USER_LOGOUT });
-  logoutUser().catch(console.error);
+  logoutUser();
 };
 
 export const loginUser = (email, password) => (dispatch) => signIn(email, password)
