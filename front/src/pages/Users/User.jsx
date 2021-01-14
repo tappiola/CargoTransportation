@@ -27,12 +27,9 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 const preNormalize = (data, id) => {
   if (!id) return undefined;
   const currentUser = data.find(({ id: _id }) => _id.toString() === id);
-  if (!currentUser) {
-    return undefined;
-  }
+
   return {
     roles: [],
-    birthday: '1993-07-06',
     ...currentUser,
     country: currentUser.country || 'Беларусь',
   };

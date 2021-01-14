@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword } = require('../utils/password.utils');
+const { createRandomPassword, passwordRegExp } = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
@@ -106,15 +106,19 @@ router.delete('/', async (req, res) => {
   res.status(204).json({});
 });
 
-router.put('/:id', validate.register, async (req, res) => {
+router.put('/:id', async (req, res) => {
+  const { password, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
+  const newPassword = passwordRegExp.test(password) && password;
+  
   if (!user) {
-    res.status(400).json({ error: { message: 'user not found'}})
+    return res.status(400).json({ error: { message: 'user not found' } });
   }
   await user.update({
-    ...req.body,
-    password: user.password,
+    ...userData,
+    password: newPassword || user.password,
   });
+  
   res.status(200).json(user);
 });
 
