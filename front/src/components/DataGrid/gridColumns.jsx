@@ -27,7 +27,7 @@ export const COMPANY = {
 };
 
 export const UNN = {
-  field: 'companyAccountNamber',
+  field: 'companyAccountNumber',
   headerName: 'УНП',
   flex: 1,
 };

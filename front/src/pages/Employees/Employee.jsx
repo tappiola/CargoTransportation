@@ -5,7 +5,6 @@ import {
   dispatchSetEmployee,
   dispatchUpdateEmployee,
 } from 'redux/actions/employees';
-
 import { useForm, FormProvider } from 'react-hook-form';
 
 import Container from '@material-ui/core/Container';
@@ -29,26 +28,25 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 const selector = (employeeId) => ({ currentUser, employees }) => {
   const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
   const roles = employee && employee.roles.map(({ role }) => role);
+
   return {
     companyId: currentUser.companyId,
     defaultValues: employeeId && { ...employee, roles },
   };
 };
 
-const normalize = ({ roles: asObj, isActive, ...data }, id) => ({
+const normalize = ({ roles: asObj, ...data }, id) => ({
   ...data,
   id,
   roles: Object.entries(asObj)
     .filter(([, checked]) => checked)
     .map(([role]) => role),
-  isActive: !!isActive[0],
 });
 
 function Employee() {
   const dispatch = useDispatch();
   const { id: employeeId } = useParams();
   const { companyId, defaultValues } = useSelector(selector(employeeId));
-  console.log(defaultValues, ' ');
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
@@ -114,6 +112,12 @@ function Employee() {
                   />
                 ))}
               </FormGroup>
+              <FormHelperText>
+                {errors.roles && 'Выберите хотя бы одну роль'}
+              </FormHelperText>
+            </FormControl>
+
+            <FormControl margin="normal">
               <FormLabel>Статус: </FormLabel>
               <FormGroup>
                 <FormControlLabel
@@ -123,12 +127,10 @@ function Employee() {
                       name="isActive"
                       defaultChecked={defaultValues?.isActive}
                     />
-                  )}
+                    )}
+                  label="Активен"
                 />
               </FormGroup>
-              <FormHelperText>
-                {errors.roles && 'Выберите хотя бы одну роль'}
-              </FormHelperText>
             </FormControl>
 
             <SubmitButton>Готово</SubmitButton>

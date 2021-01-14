@@ -3,7 +3,7 @@ import { BACKEND_HOST } from 'constants/environment';
 
 export const fetchAPI = async (uri, data, method = 'GET') => {
   const headers = {
-    Authorization: `Token ${getAuthToken()}`,
+    Authorization: `Bearer ${getAuthToken()}`,
     'Content-Type': 'application/json',
   };
 

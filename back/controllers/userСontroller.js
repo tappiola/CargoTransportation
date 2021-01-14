@@ -12,8 +12,9 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email, ...userData } = req.body;
+  const { email, companyId, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
+  const company = await Company.findByPk(companyId);
 
   if (user) {
     return res.status(400).json({ error: { message: 'Email already in use!' } });
@@ -26,6 +27,9 @@ router.post('/register', validate.register, async (req, res, next) => {
       ...userData,
       isActive: true,
     });
+    if (company) {
+      await newUser.setCompany(company);
+    }
     const token = newUser.generateJWT();
 
     const mail = setMailOptions({
@@ -72,6 +76,7 @@ router.get('/', async (req, res) => {
     include: [
       {
         model: Role,
+        where: { role: 'admin' }
       },
       {
         model: Company,
