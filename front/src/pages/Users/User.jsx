@@ -126,7 +126,7 @@ export default connect(
   (dispatch) => ({
     sendFormData: (id, data) => (
       id
-        ? dispatch(dispatchUpdateUser(normalize({ ...data }, id)))
+        ? dispatch(dispatchUpdateUser(normalize(data, id)))
         : dispatch(dispatchSetUser(normalize(data)))),
   }),
 )(User);
