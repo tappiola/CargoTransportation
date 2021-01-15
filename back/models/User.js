@@ -75,7 +75,6 @@ const User = db.define('user', {
 
 User.beforeUpdate((user, { password }) => {
   if (isValidPassword(password)) {
-    console.log(password);
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
     user.password = hashedPassword;
