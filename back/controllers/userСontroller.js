@@ -70,7 +70,7 @@ router.post('/login', async (req, res, next) => {
       }
 
       const token = user.generateJWT();
-      const { roles } = await User.findOne({
+      const { roles, company } = await User.findOne({
         where: {
           id: user.id
         },
@@ -79,11 +79,15 @@ router.post('/login', async (req, res, next) => {
           {
             model: Role,
             attributes: ['role'],
+          },
+          {
+            model: Company,
+            attributes: ['id'],
           }
         ]
       });
 
-      res.status(200).json({ token, roles });
+      res.status(200).json({ token, roles, companyId: company && company.id });
     });
   })(req, res, next);
 });

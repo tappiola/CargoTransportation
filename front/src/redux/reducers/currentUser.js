@@ -3,8 +3,8 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   roles: [],
-  companyId: 1, // temporary
-  isAuthorized: !!getAuthToken() || true,
+  isAuthorized: !!getAuthToken(),
+  companyId: null,
 };
 
 export function currentUserReducer(state = initialState, action) {
@@ -14,11 +14,11 @@ export function currentUserReducer(state = initialState, action) {
         ...state,
         isAuthorized: action.isAuthorized,
         roles: action.roles,
+        companyId: action.companyId,
       };
     }
 
     case types.CURRENT_USER_LOGOUT: {
-      localStorage.removeItem('token');
       return {
         ...initialState,
         isAuthorized: false,

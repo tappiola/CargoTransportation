@@ -47,7 +47,7 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.USERS,
     basePath: '/users',
     component: Users,
-    roles: [GLOBAL_ADMIN, ADMIN],
+    roles: [GLOBAL_ADMIN],
   },
   {
     module: MODULE_NAMES.EMPLOYEES,
