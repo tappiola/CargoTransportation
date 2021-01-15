@@ -27,6 +27,7 @@ router.post('/register', validate.register, async (req, res, next) => {
       ...userData,
       isActive: true,
     });
+
     if (company) {
       await newUser.setCompany(company);
     }
@@ -123,7 +124,9 @@ router.put('/:id', isAuth, async (req, res) => {
     return res.status(400).json({ error: { message: 'user not found' } });
   }
 
-  if (roles) { await user.setRoles(roles); }
+  if (roles) {
+    await user.setRoles(roles); 
+  }
   await user.update({ ...userData, password });
   
   res.status(200).json(user);

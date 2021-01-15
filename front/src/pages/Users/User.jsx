@@ -52,7 +52,7 @@ function User() {
           noValidate
           onSubmit={handleSubmit((formData) => (
             id
-              ? dispatch(dispatchUpdateUser(normalize({ ...formData }, id)))
+              ? dispatch(dispatchUpdateUser(normalize(formData, id)))
               : dispatch(dispatchSetUser(normalize(formData)))
           ))}
         >
