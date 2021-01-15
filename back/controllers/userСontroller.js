@@ -51,7 +51,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ message: 'invalid email/password' });
+      return res.status(401).json({ error: {message: 'invalid email/password' }});
     }
 
     req.login(user, (err) => {
