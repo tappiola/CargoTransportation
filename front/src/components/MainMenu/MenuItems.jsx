@@ -82,11 +82,12 @@ const MENU_ITEMS_CONFIG = {
   },
 };
 
-export function MenuItems() {
+export function MenuItems({ modules }) {
   const { pathname } = useLocation();
   return (
     <div>
       {menuItems
+        .filter(({ module }) => modules.includes(module))
         .map(({ module, basePath }) => {
           const itemConfig = MENU_ITEMS_CONFIG[module];
           const Icon = itemConfig.icon;

@@ -19,7 +19,7 @@ import { dispatchLogoutUser } from 'redux/actions';
 import { MenuItems } from './MenuItems';
 import { useMenuStyles } from './MainMenu.styles';
 
-export default function MainMenu({ children }) {
+export default function MainMenu({ children, modules }) {
   const dispatch = useDispatch();
   const classes = useMenuStyles();
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ export default function MainMenu({ children }) {
           </IconButton>
         </div>
         <Divider />
-        <MenuItems />
+        <MenuItems modules={modules} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

@@ -9,59 +9,62 @@ import Waybills from 'pages/Waybills';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
 import Employees from './Employees';
 
+// eslint-disable-next-line object-curly-newline
+const { GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER } = ROLES;
+
 export const PROTECTED_ROUTES = [
   {
     module: MODULE_NAMES.ACTS,
     basePath: '/acts',
     component: Acts,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, MANAGER, DRIVER],
   },
   {
     module: MODULE_NAMES.CLIENTS,
     basePath: '/clients',
     component: Clients,
-    roles: [ROLES.ADMIN],
+    roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,
     basePath: '/consignment-notes',
     component: ConsignmentNotes,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, MANAGER, DISPATCHER, ADMIN],
   },
   {
     module: MODULE_NAMES.MAILINGS,
     basePath: '/mailings',
     component: Mailings,
-    roles: [ROLES.GLOBAL_ADMIN, ROLES.ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN],
   },
   {
     module: MODULE_NAMES.REPORTS,
     basePath: '/reports',
     component: Reports,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, MANAGER],
   },
   {
     module: MODULE_NAMES.USERS,
     basePath: '/users',
     component: Users,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN],
   },
   {
     module: MODULE_NAMES.EMPLOYEES,
     basePath: '/employees',
     component: Employees,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN], // GLOBAL_ADMIN - temporary
   },
   {
     module: MODULE_NAMES.WAREHOUSES,
     basePath: '/warehouses',
     component: Warehouses,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN, DISPATCHER, MANAGER],
   },
   {
     module: MODULE_NAMES.WAYBILLS,
     basePath: '/waybills',
     component: Waybills,
-    roles: [ROLES.GLOBAL_ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN, DRIVER, MANAGER],
   },
 ];

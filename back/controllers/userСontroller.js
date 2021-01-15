@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword, isValidPassword } = require('../utils/password.utils');
+const { createRandomPassword } = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
@@ -11,25 +11,31 @@ const registerTemplate = require('../utils/mail/tmpl/register');
 const { isAuth } = require('../middlewares/auth');
 const router = Router();
 
-router.post('/register', validate.register, async (req, res, next) => {
-  const { email, companyId, ...userData } = req.body;
+router.post('/register', async (req, res, next) => {
+  const { email, roles: role, companyId, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
   const company = await Company.findByPk(companyId);
-
+  const roles = await Role.findAll({ where: { role } });
+  
   if (user) {
     return res.status(400).json({ error: { message: 'Email already in use!' } });
   }
-
+  
   try {
     const password = createRandomPassword();
     const newUser = await User.create({
       email,
       ...userData,
+      password,
       isActive: true,
     });
-
+    
     if (company) {
       await newUser.setCompany(company);
+    }
+
+    if (roles) {
+      await newUser.setRoles(roles); 
     }
     const token = newUser.generateJWT();
 
@@ -58,18 +64,31 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'invalid email/password' });
     }
 
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return res.status(401).json(err);
       }
 
       const token = user.generateJWT();
-      res.status(200).json({ token });
+      const { roles } = await User.findOne({
+        where: {
+          id: user.id
+        },
+        attributes: [],
+        include: [
+          {
+            model: Role,
+            attributes: ['role'],
+          }
+        ]
+      });
+
+      res.status(200).json({ token, roles });
     });
   })(req, res, next);
 });
 
-router.get('/', isAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   const users = await User.findAll({
     attributes: {
       exclude: ['password'],
@@ -77,7 +96,6 @@ router.get('/', isAuth, async (req, res) => {
     include: [
       {
         model: Role,
-        where: { role: 'admin' }
       },
       {
         model: Company,
@@ -93,7 +111,7 @@ router.get('/', isAuth, async (req, res) => {
 });
 
 router.get('/:id', isAuth, async (req, res) => {
-  const user = await User.get(req.params.id);
+  const user = await User.findByPk(req.params.id);
   
   res.status(200).json(user);
 });
@@ -114,12 +132,11 @@ router.get('/logout', (req, res) => {
   res.status(204).json({});
 });
 
-router.put('/:id', isAuth, async (req, res) => {
-  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
+router.put('/:id', async (req, res) => {
+  const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
-  const roles = await Role.findAll({ where: { role: rolesArray } });
-  const password =  isValidPassword(newPassword) ? newPassword : user.password;
-  
+  const roles = await Role.findAll({ where: { role } });
+
   if (!user) {
     return res.status(400).json({ error: { message: 'user not found' } });
   }
@@ -127,7 +144,7 @@ router.put('/:id', isAuth, async (req, res) => {
   if (roles) {
     await user.setRoles(roles); 
   }
-  await user.update({ ...userData, password });
+  await user.update(userData, { password });
   
   res.status(200).json(user);
 });

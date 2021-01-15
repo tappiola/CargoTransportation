@@ -27,7 +27,7 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 
 const selector = (employeeId) => ({ currentUser, employees }) => {
   const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
-  const roles = employee && employee.roles.map(({ role }) => role);
+  const roles = employee?.roles && employee.roles.map(({ role }) => role);
 
   return {
     companyId: currentUser.companyId,

@@ -2,8 +2,9 @@ import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
 
 const initialState = {
+  roles: [],
   companyId: 1, // temporary
-  isAuthorized: !!getAuthToken(),
+  isAuthorized: !!getAuthToken() || true,
 };
 
 export function currentUserReducer(state = initialState, action) {
@@ -12,6 +13,7 @@ export function currentUserReducer(state = initialState, action) {
       return {
         ...state,
         isAuthorized: action.isAuthorized,
+        roles: action.roles,
       };
     }
 
