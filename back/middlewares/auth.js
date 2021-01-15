@@ -1,16 +1,34 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const Role = require('../models/Role');
 
-module.exports.isAuth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split('Bearer ')[1];
+const verifyUser = (req, res, next, roles) => {
+  const { authorization } = req.headers;
+  const token = authorization && authorization.split('Bearer ')[1];
+  
   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.jwtToken, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: { message: "Forbidden" } });
-    }
+  jwt.verify(token, process.env.jwtToken, async (err, user) => {
+    const hasPermission = !err && !!(await User.findOne({
+      where: { id: user.id },
+      include: { 
+        model: Role, 
+        where: roles.length ? { role: roles } : {}
+      },
+    }));
 
-    req.user = user;
-    next();
+    if (hasPermission) {
+      req.user = user;
+      next();
+    } else {
+      return res.status(403).json({ error: { message: 'Forbidden' } });
+    }
   });
 };
+
+const isAuthAs = (...roles) => (req, res, next) =>
+  Promise
+    .resolve(verifyUser(req, res, next, roles))
+    .catch(next);
+
+module.exports = { isAuthAs };

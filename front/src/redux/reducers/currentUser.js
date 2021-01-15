@@ -2,9 +2,7 @@ import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  roles: [],
   isAuthorized: !!getAuthToken(),
-  companyId: null,
 };
 
 export function currentUserReducer(state = initialState, action) {
