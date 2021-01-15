@@ -22,11 +22,11 @@ module.exports = (passport) => {
 
   passport.deserializeUser((id, done) => {
     User.findByPk(id).then(user => {
-      if (user) {
-        done(null, user.get());
-      } else {
-        done(user.errors, null);
+      if (!user) {
+        done(user.errors, null)
       }
+  
+      done(null, user.get());
     });
   });
 };
