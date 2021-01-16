@@ -1,3 +1,5 @@
+import Employees from './Employees';
+import { MODULE_NAMES, ROLES } from 'constants/permissions';
 import Acts from 'pages/Acts';
 import Clients from 'pages/Clients';
 import ConsignmentNotes from 'pages/ConsinmentNotes';
@@ -6,8 +8,6 @@ import Reports from 'pages/Reports';
 import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
-import { MODULE_NAMES, ROLES } from 'constants/permissions';
-import Employees from './Employees';
 
 // eslint-disable-next-line object-curly-newline
 const { GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER } = ROLES;
