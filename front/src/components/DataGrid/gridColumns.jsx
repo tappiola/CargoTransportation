@@ -34,7 +34,7 @@ export const EMAIL = {
 };
 
 export const COMPANY = {
-  field: 'name',
+  field: 'companyName',
   headerName: 'Компания',
   flex: 2,
   renderCell: valueOrBlank,
@@ -55,7 +55,7 @@ export const COMPANY_NAME = {
 };
 
 export const UNN = {
-  field: 'unn',
+  field: 'companyAccountNumber',
   headerName: 'УНП',
   flex: 1,
   renderCell: valueOrBlank,

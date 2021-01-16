@@ -1,29 +1,31 @@
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { MenuItems } from './MenuItems';
-import { useMenuStyles } from './MainMenu.styles';
-import AppBar from '@material-ui/core/AppBar';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Divider from '@material-ui/core/Divider';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+
 import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SettingsIcon from '@material-ui/icons/Settings';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
+
+import { dispatchLogoutUser } from 'redux/actions';
+import { MenuItems } from './MenuItems';
+import { useMenuStyles } from './MainMenu.styles';
 
 export default function MainMenu({ children }) {
+  const dispatch = useDispatch();
   const classes = useMenuStyles();
-  const [open, setOpen] = useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const [open, setOpen] = useState(false);
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
+  const logout = () => dispatch(dispatchLogoutUser());
 
   return (
     <div className={classes.root}>
@@ -44,7 +46,7 @@ export default function MainMenu({ children }) {
           <IconButton color="inherit" component={Link} to="/settings">
             <SettingsIcon />
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={logout}>
             <ExitToAppIcon />
           </IconButton>
         </Toolbar>

@@ -11,7 +11,7 @@ import PaddedContainer from 'components/PaddedContainer';
 import React, { useEffect, useState } from 'react';
 
 function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
+  employeesData, employeesLoadComplete, initEmployees, removeEmployees, companyId,
 }) {
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -25,7 +25,7 @@ function EmployeesList({
   ];
 
   useEffect(() => {
-    initEmployees();
+    initEmployees(companyId);
   }, []);
 
   return (
@@ -61,14 +61,16 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ employees: { employeesData, employeesLoadComplete } }) => (
-  {
-    employeesData, employeesLoadComplete,
-  }
-);
+const mapStateToProps = ({ employees, currentUser }) => {
+  const { employeesData, employeesLoadComplete } = employees;
+  const { companyId } = currentUser;
+  return {
+    employeesData, employeesLoadComplete, companyId,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: () => dispatch(dispatchGetEmployees()),
+  initEmployees: (id) => dispatch(dispatchGetEmployees(id)),
   removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
 });
 

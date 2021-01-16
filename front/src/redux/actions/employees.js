@@ -1,5 +1,7 @@
+import {
+  deleteEmployees, getEmployees, setEmployee, updateEmployee,
+} from 'api';
 import * as actionTypes from './actionTypes';
-import * as api from 'api';
 
 export const setEmployees = (employeesData) => ({
   type: actionTypes.EMPLOYEES_SET,
@@ -11,13 +13,20 @@ export const handleDeleteEmployees = (ids) => ({
   ids,
 });
 
-export const dispatchGetEmployees = () => (dispatch) => {
-  // TODO: get companyId from user profile
-  api.getEmployees(1)
+export const dispatchGetEmployees = (companyId) => (dispatch) => {
+  getEmployees(companyId)
     .then((data) => dispatch(setEmployees(data)));
 };
 
 export const dispatchDeleteEmployees = (ids) => (dispatch) => {
-  api.deleteEmployees(ids)
+  deleteEmployees(ids)
     .then(() => dispatch(handleDeleteEmployees(ids)));
+};
+
+export const dispatchSetEmployee = ({ companyId, ...data }) => () => {
+  setEmployee({ companyId, data });
+};
+
+export const dispatchUpdateEmployee = ({ id, ...data }) => () => {
+  updateEmployee(data, id);
 };

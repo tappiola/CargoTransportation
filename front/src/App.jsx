@@ -1,19 +1,19 @@
-import { PROTECTED_ROUTES } from 'pages';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
+  BrowserRouter as Router,
   Redirect,
   Route,
-  BrowserRouter as Router,
   Switch,
 } from 'react-router-dom';
-import { THEME } from './constants/themes';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { getCustomTheme } from 'config';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MainMenu from 'components/MainMenu';
-import React, { useEffect, useState } from 'react';
+import { PROTECTED_ROUTES } from 'pages';
+import SignIn from 'pages/SignIn';
+import { getCustomTheme } from 'config';
 import Settings from './pages/Settings';
-import SignIn from './pages/SignIn';
+import { THEME } from './constants/themes';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
@@ -47,7 +47,8 @@ const ProtectedApp = ({ theme, setTheme }) => {
   );
 };
 
-function App({ isAuthorized }) {
+function App() {
+  const { isAuthorized } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -71,14 +72,4 @@ function App({ isAuthorized }) {
   );
 }
 
-const mapState = ({
-  currentUser: {
-    authorization: { isSuccess },
-  },
-}) => ({
-  isAuthorized: isSuccess,
-});
-
-const mapDispatch = null;
-
-export default connect(mapState, mapDispatch)(App);
+export default App;
