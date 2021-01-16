@@ -6,14 +6,16 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+
 import MainMenu from 'components/MainMenu';
-import { PROTECTED_ROUTES } from 'pages';
-import SignIn from 'pages/SignIn';
-import Settings from 'pages/Settings';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
+import { PROTECTED_ROUTES } from 'pages';
+import Settings from 'pages/Settings';
+import SignIn from 'pages/SignIn';
 
 const ProtectedApp = ({ userRoles, theme, setTheme }) => {
   const routes = PROTECTED_ROUTES

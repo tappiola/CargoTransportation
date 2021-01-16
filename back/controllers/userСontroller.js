@@ -29,7 +29,7 @@ router.post('/register', validate.register, async (req, res, next) => {
       ...userData,
       isActive: true,
     });
-    
+
     if (company) {
       await newUser.setCompany(company);
     }

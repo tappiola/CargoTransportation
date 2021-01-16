@@ -1,5 +1,6 @@
-import { yup } from 'utils';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import { yup } from 'utils';
 
 const userSchema = yup.object().shape({
   firstName: yup.string().required().min(4).max(50),

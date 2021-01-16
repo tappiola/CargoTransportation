@@ -1,5 +1,5 @@
-import { signIn, logoutUser } from 'api';
 import * as actionTypes from './actionTypes';
+import { signIn, logoutUser } from 'api';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,

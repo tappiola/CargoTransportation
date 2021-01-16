@@ -1,6 +1,8 @@
-import { Link } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+
+import { Link } from '@material-ui/core';
+
 import { ROLE_NAMES } from 'constants/permissions';
 
 export const FULLNAME = (path) => ({
@@ -9,7 +11,9 @@ export const FULLNAME = (path) => ({
   disableClickEventBubbling: true,
   flex: 2,
   renderCell: (params) => (
-    <Link component={NavLink} to={`${path}/${params.row.id}`}>{params.value}</Link>
+    <Link component={NavLink} to={`${path}/${params.row.id}`}>
+      {params.value}
+    </Link>
   ),
 });
 
@@ -17,7 +21,11 @@ export const EMAIL = {
   field: 'email',
   headerName: 'Email',
   flex: 2,
-  renderCell: (params) => <Link href={`mailto:${params.value}`} color="textPrimary">{params.value}</Link>,
+  renderCell: (params) => (
+    <Link href={`mailto:${params.value}`} color="textPrimary">
+      {params.value}
+    </Link>
+  ),
 };
 
 export const COMPANY = {
@@ -43,5 +51,5 @@ export const ROLE = {
   field: 'roles',
   headerName: 'Роль',
   flex: 2,
-  renderCell: (params) => (params.value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ')),
+  renderCell: (params) => params.value.map((r) => ROLE_NAMES[r.role] || r.role).join(', '),
 };

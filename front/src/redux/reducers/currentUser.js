@@ -1,5 +1,5 @@
-import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
+import { getAuthToken } from 'utils';
 
 const initialState = {
   isAuthorized: !!getAuthToken(),
