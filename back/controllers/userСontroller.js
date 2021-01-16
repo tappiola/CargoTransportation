@@ -16,7 +16,7 @@ router.post('/register', validate.register, async (req, res, next) => {
   const user = await User.findOne({ where: { email } });
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.sendError(401, 'Email already in use!');
   }
 
   try {
@@ -51,12 +51,12 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ error: {message: 'invalid email/password' }});
+      return res.sendError(401, 'invalid email/password');
     }
 
     req.login(user, (err) => {
       if (err) {
-        return res.status(401).json(err);
+        return res.sendError(401, err.message);
       }
 
       const token = user.generateJWT();
@@ -112,7 +112,7 @@ router.put('/:id', async (req, res) => {
   const newPassword = passwordRegExp.test(password) && password;
   
   if (!user) {
-    return res.status(400).json({ error: { message: 'user not found' } });
+    return res.sendError(400, 'user not found');
   }
   await user.update({
     ...userData,
