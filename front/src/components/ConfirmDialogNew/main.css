@@ -1,0 +1,36 @@
+.backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1400;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.confirmDialog {
+    position: absolute;
+    padding: 0 24px;
+    z-index: 1401;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius:  4px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.confirmDialog__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.0075em;
+}
+
+.confirmDialog__buttons {
+    padding: 8px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.confirmDialog__description {
+    padding: 10px 0;
+}

@@ -14,6 +14,7 @@ import SignIn from 'pages/SignIn';
 import { getCustomTheme } from 'config';
 import Settings from './pages/Settings';
 import { THEME } from './constants/themes';
+import { ToastQueueProvider } from './components/Notification';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
@@ -56,17 +57,19 @@ function App({ isAuthorized }) {
 
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
-      <CssBaseline />
-      <Router>
-        {isAuthorized ? (
-          <ProtectedApp theme={theme} setTheme={setTheme} />
-        ) : (
-          <>
-            <Route path="/signin" component={SignIn} />
-            <Redirect to="/signin" />
-          </>
-        )}
-      </Router>
+      <ToastQueueProvider>
+        <CssBaseline />
+        <Router>
+          {isAuthorized ? (
+            <ProtectedApp theme={theme} setTheme={setTheme} />
+          ) : (
+            <>
+              <Route path="/signin" component={SignIn} />
+              <Redirect to="/signin" />
+            </>
+          )}
+        </Router>
+      </ToastQueueProvider>
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
+import ConfirmDialog from 'components/ConfirmDialogNew';
 import CustomGrid from 'components/DataGrid';
 import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';
@@ -13,6 +14,7 @@ function EmployeesList({
   employeesData, employeesLoadComplete, initEmployees, removeEmployees,
 }) {
   const [selection, setSelection] = useState([]);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const { path } = useRouteMatch();
 
   const columns = [
@@ -28,23 +30,37 @@ function EmployeesList({
   }, []);
 
   return (
-    <PaddedContainer>
-      <GridToolbar title="Сотрудники">
-        <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
-        <DeleteButton
-          isDisabled={selection.length === 0}
-          onButtonClick={() => removeEmployees(selection)}
+    <>
+      <PaddedContainer>
+        <GridToolbar title="Сотрудники">
+          <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
+          <DeleteButton
+            isDisabled={selection.length === 0}
+            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
+          />
+        </GridToolbar>
+        <CustomGrid
+          rows={employeesData}
+          columns={columns}
+          loading={!employeesLoadComplete}
+          onSelectionChange={(newSelection) => {
+            setSelection(newSelection.rowIds);
+          }}
         />
-      </GridToolbar>
-      <CustomGrid
-        rows={employeesData}
-        columns={columns}
-        loading={!employeesLoadComplete}
-        onSelectionChange={(newSelection) => {
-          setSelection(newSelection.rowIds);
+      </PaddedContainer>
+      {isConfirmDialogOpen && (
+      <ConfirmDialog
+        title="Удаление сотрудников"
+        description="Вы уверены, что хотите удалить выбранных сотрудников?"
+        isOpen={isConfirmDialogOpen}
+        onPopupClose={() => setIsConfirmDialogOpen(false)}
+        onActionConfirm={() => {
+          setIsConfirmDialogOpen(false);
+          removeEmployees(selection);
         }}
       />
-    </PaddedContainer>
+      )}
+    </>
   );
 }
 

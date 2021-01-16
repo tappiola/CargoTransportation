@@ -2,7 +2,7 @@ import * as types from '../actions/actionTypes';
 
 const initialState = {
   authorization: {
-    isSuccess: false,
+    isSuccess: true,
   },
 };
 
