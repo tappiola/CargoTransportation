@@ -3,7 +3,7 @@ import { authorizationCompleted } from 'redux/actions';
 import * as api from 'api';
 import * as actionTypes from './actionTypes';
 
-const redirectionHandler = (dispatch) => ({ error }) => {
+const redirectionHandler = (dispatch) => (error) => {
   if (error.message === 'Forbidden') {
     dispatch(authorizationCompleted(false));
   }

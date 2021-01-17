@@ -1,5 +1,6 @@
 import { signIn, logoutUser } from 'api';
 import * as actionTypes from './actionTypes';
+import { enqueueToast } from './notifications';
 
 export const authorizationCompleted = (isAuthorized) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
@@ -12,7 +13,20 @@ export const dispatchLogoutUser = () => (dispatch) => {
 };
 
 export const loginUser = (email, password) => (dispatch) => signIn(email, password)
-  .then(({ token }) => {
+  .then((token) => {
     dispatch(authorizationCompleted(!!token));
     localStorage.setItem('token', token);
+
+    dispatch(enqueueToast({
+      message: 'Вход в систему выполнен успешно',
+      type: 'success',
+    }));
+  },
+  (err) => {
+    dispatch(authorizationCompleted(false));
+
+    dispatch(enqueueToast({
+      message: err.message || 'Произошла ошибка',
+      type: 'error',
+    }));
   });

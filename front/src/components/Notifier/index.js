@@ -5,6 +5,7 @@ import { processToast } from '../../redux/actions';
 
 function Notifier({ notifications, onToastProcess }) {
   const { addToast } = useContext(ToastQueueContext);
+
   useEffect(() => {
     if (notifications.length > 0) {
       const { message, type, duration } = notifications[0];
