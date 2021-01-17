@@ -13,8 +13,8 @@ function MyApp() {
         vertical: 'top',
         horizontal: 'right',
       },
-      transitionDuration: { exit: 20000, enter: 20000 },
-      autoHideDuration: 10000000,
+      transitionDuration: { exit: 2000, enter: 2000 },
+      autoHideDuration: 55000,
     });
   };
 
@@ -33,14 +33,20 @@ function MyApp() {
       <Button onClick={handleClick}>Show snackbar</Button>
       <Button onClick={handleClickVariant('success')}>Show success snackbar</Button>
       <div className="Example">
-        <button onClick={() => addToast('info', 'info message')}>
+        <button onClick={() => addToast('default message')}>
+          Add default toast
+        </button>
+        <button onClick={() => addToast('info message', 'info')}>
           Add info toast
         </button>
-        <button onClick={() => addToast('error', 'error message')}>
+        <button onClick={() => addToast('error message', 'error')}>
           Add error toast
         </button>
-        <button onClick={() => addToast('success', 'success message')}>
+        <button onClick={() => addToast('success message', 'success')}>
           Add success toast
+        </button>
+        <button onClick={() => addToast('warning message', 'warning')}>
+          Add warning toast
         </button>
       </div>
     </>
