@@ -8,21 +8,21 @@ export default function StyleGuide() {
 
   return (
     <>
-        <Button onClick={() => addToast('Изменения сохранены')}>
-          Add default toast
-        </Button>
-        <Button onClick={() => addToast('ТТН №5698538 была переведена в статус "Обработана" ', 'info')}>
-          Add info toast
-        </Button>
-        <Button onClick={() => addToast('Произошла ошибка при попытке получить список пользователей', 'error', 5000)}>
-          Add error toast
-        </Button>
-        <Button onClick={() => addToast('Вы успешно вошли в систему', 'success')}>
-          Add success toast
-        </Button>
-        <Button onClick={() => addToast('Пользователь с данным логином не найден', 'warning')}>
-          Add warning toast
-        </Button>
+      <Button onClick={() => addToast('Изменения сохранены')}>
+        Add default toast
+      </Button>
+      <Button onClick={() => addToast('ТТН №5698538 была переведена в статус "Обработана" ', 'info')}>
+        Add info toast
+      </Button>
+      <Button onClick={() => addToast('Произошла ошибка при попытке получить список пользователей', 'error', 5000)}>
+        Add error toast
+      </Button>
+      <Button onClick={() => addToast('Вы успешно вошли в систему', 'success')}>
+        Add success toast
+      </Button>
+      <Button onClick={() => addToast('Пользователь с данным логином не найден', 'warning')}>
+        Add warning toast
+      </Button>
     </>
   );
 }

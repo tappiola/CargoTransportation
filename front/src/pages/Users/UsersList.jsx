@@ -8,7 +8,7 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import { usersSelector } from 'redux/selectors/users';
-import ConfirmDialog from 'components/ConfirmDialog';
+import { ConfirmDialog } from '@tappiola/material-ui-externals/dist';
 import PaddedContainer from 'components/PaddedContainer';
 
 function UsersList({
@@ -49,16 +49,17 @@ function UsersList({
           }}
         />
       </PaddedContainer>
+      {isConfirmDialogOpen && (
       <ConfirmDialog
         title="Удаление пользователя"
         description="Вы уверены, что хотите удалить пользователя?"
-        isOpen={isConfirmDialogOpen}
         onPopupClose={() => setIsConfirmDialogOpen(false)}
         onActionConfirm={() => {
           setIsConfirmDialogOpen(false);
           removeUsers(selection);
         }}
       />
+      )}
     </>
   );
 }

@@ -16,7 +16,7 @@ import { ToastQueueProvider } from '@tappiola/material-ui-externals/dist';
 import Settings from './pages/Settings';
 import { THEME } from './constants/themes';
 // import { ToastQueueProvider } from './components/Notification';
-import StyleGuide from "./pages/StyleGuide";
+import StyleGuide from './pages/StyleGuide';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
@@ -34,7 +34,7 @@ const ProtectedApp = ({ theme, setTheme }) => {
         <Route path="/settings">
           <Settings theme={theme} onThemeChange={setTheme} />
         </Route>
-        {process.env.NODE_ENV === 'development' && <Route exact path="/styleguide" component={StyleGuide}/>}
+        {process.env.NODE_ENV === 'development' && <Route exact path="/styleguide" component={StyleGuide} />}
         {protectedRoute && (
           <>
             <Route exact path="/">
@@ -57,7 +57,6 @@ function App({ isAuthorized }) {
   useEffect(() => {
     localStorage.setItem('cargoTheme', theme);
   }, [theme]);
-
 
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
