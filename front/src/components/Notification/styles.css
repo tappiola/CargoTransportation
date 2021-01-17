@@ -4,21 +4,25 @@
     right: 20px;
     z-index: 1500;
     height: min-content;
+    width: auto;
 }
 
 .toast {
     position: relative;
-    padding: 14px 16px;
     font-size: 0.875rem;
     color: #ffffff;
     background-color: #313131;
     border-radius: 4px;
     line-height: 1.43;
     margin: 6px 0;
-    width: 288px;
+    padding: 14px 28px 14px 16px;
+}
+
+.toast__label {
     display: flex;
     align-items: center;
 }
+
 .toast__dark{
     background-color: #fafafa;
     color: rgba(0,0,0, 0.87);
@@ -29,23 +33,45 @@
     color: #ffffff;
 }
 
+.toast__info {
+    background-color: #2196f3;
+    color: #ffffff;
+}
+
+.toast__warning {
+    background-color: #ff9800;
+    color: #ffffff;
+}
+
+.toast__error {
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
 .toast__close-btn {
     position: absolute;
     width: 16px;
-    right: 10px;
-    top: 10px;
-    fill: #b3b3b3;
+    right: 8px;
+    top: 8px;
+    fill: #5b5b5b;
+}
+
+.toast__close-btn:hover {
+    fill: #fafafa;
+}
+
+.toast__close-btn__dark {
+    fill: #5c5c5c !important;
+}
+
+.toast__close-btn__dark:hover {
+    fill: #2b2b2b !important;
 }
 
 .toast_icon {
     width: 20px;
     fill: #ffffff;
     margin-right: 5px;
-    /*padding-top: 6px;*/
-}
-
-.toast__close-btn:hover {
-    fill: white;
 }
 
 .toast-enter {

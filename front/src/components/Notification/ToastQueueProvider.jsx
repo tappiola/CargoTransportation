@@ -1,7 +1,6 @@
 import { createPortal } from 'react-dom';
 import React, { useState } from 'react';
 import './styles.css';
-import { useTheme } from '@material-ui/core/styles';
 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ToastItem from './ToastItem';
@@ -9,15 +8,14 @@ import ToastItem from './ToastItem';
 export const ToastQueueContext = React.createContext();
 const { Provider } = ToastQueueContext;
 
-const DEFAULT_DURATION = 10000;
+const DEFAULT_DURATION = 3000;
 
-function ToastQueueProvider({ children }) {
+function ToastQueueProvider({ children, theme }) {
   const [toasts, setToasts] = useState([]);
-  const { palette } = useTheme();
 
   const addToast = (message, type = 'default', duration = DEFAULT_DURATION) => {
     const toast = {
-      id: Date.now(), message, type, palette: palette.type, duration,
+      id: Date.now(), message, type, palette: theme?.palette?.type || 'light', duration,
     };
     setToasts((currentToasts) => [toast, ...currentToasts]);
   };
@@ -36,7 +34,7 @@ function ToastQueueProvider({ children }) {
             {toasts.map((toast) => (
               <CSSTransition
                 key={toast.id}
-                timeout={toast.duration}
+                timeout={500}
                 unmountOnExit
                 classNames="toast"
               >
