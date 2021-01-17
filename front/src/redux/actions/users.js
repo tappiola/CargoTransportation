@@ -1,7 +1,8 @@
-import { deleteUsers, getUsers } from 'api';
-import { authorizationCompleted } from 'redux/actions';
 import * as actionTypes from './actionTypes';
-import * as api from 'api';
+import {
+  deleteUsers, getUsers, setUser, updateUser,
+} from 'api';
+import { authorizationCompleted } from 'redux/actions';
 
 const redirectionHandler = (dispatch) => ({ error }) => {
   if (error.message === 'Forbidden') {
@@ -28,8 +29,7 @@ export const dispatchGetUsers = () => (dispatch) => {
 };
 
 export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
-  api
-    .setUser({ id, data })
+  setUser({ id, data })
     .then(
       () => dispatch({
         type: actionTypes.USERS_SET_USER_COMPLETE,
@@ -40,7 +40,7 @@ export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
 };
 
 export const dispatchUpdateUser = ({ id, ...data }) => () => {
-  api.updateUser(data, id);
+  updateUser(data, id);
 };
 
 export const dispatchDeleteUsers = (ids) => (dispatch) => {

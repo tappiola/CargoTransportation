@@ -9,6 +9,7 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { isAuth } = require('../middlewares/auth');
+
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
@@ -77,7 +78,7 @@ router.get('/', isAuth, async (req, res) => {
     include: [
       {
         model: Role,
-        where: { role: 'admin' }
+        where: { role: 'admin' },
       },
       {
         model: Company,
@@ -99,14 +100,13 @@ router.get('/:id', isAuth, async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await User.destroy({
-    where: { id: ids.split(',').map((id) => Number(id)),
-    },
+    where: { id: ids.map((id) => Number(id)) },
   });
 
-  res.status(204).json(null);
+  res.status(204).json({});
 });
 
 router.get('/logout', (req, res) => {
@@ -118,7 +118,7 @@ router.put('/:id', isAuth, async (req, res) => {
   const { password: newPassword, roles: rolesArray, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role: rolesArray } });
-  const password =  isValidPassword(newPassword) ? newPassword : user.password;
+  const password = isValidPassword(newPassword) ? newPassword : user.password;
 
   if (!user) {
     return res.status(400).json({ error: { message: 'user not found' } });

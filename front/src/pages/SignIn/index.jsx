@@ -1,17 +1,15 @@
-import { useDispatch } from 'react-redux';
 import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import Container from '@material-ui/core/Container';
 
-import { loginUser } from 'redux/actions';
-import BaseField from 'components/ControlledField';
-import Logo from 'components/Logo';
-import SubmitButton from 'components/Buttons/SubmitButton';
-
-import { FormProvider, useForm } from 'react-hook-form';
-
 import { loginResolver as resolver } from './loginResolver';
 import { useStyles } from './SignIn.styles';
+import SubmitButton from 'components/Buttons/SubmitButton';
+import BaseField from 'components/ControlledField';
+import Logo from 'components/Logo';
+import { loginUser } from 'redux/actions';
 
 function SignIn() {
   const classes = useStyles();

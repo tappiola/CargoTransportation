@@ -17,6 +17,7 @@ const ROLES = {
   DRIVER: 'driver',
   MANAGER: 'manager',
 };
+
 const ROLE_NAMES = {
   [ROLES.DRIVER]: 'Водитель',
   [ROLES.ADMIN]: ' Администратор',

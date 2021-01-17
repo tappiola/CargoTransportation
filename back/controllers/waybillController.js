@@ -12,9 +12,9 @@ router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
   const clients = await Waybill.findAll({
-    attributes: [
-      'id', 'departedAt', 'expectedArrivalAt', 'fullAddress', 'country', 'city', 'street', 'house',
-    ],
+    attributes: {
+      exclude: ['waybillStatusId', 'consignmentNoteId'],
+    },
     where: { linkedCompanyId: companyId },
     include: [
       {
@@ -37,11 +37,11 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await Waybill.destroy({
     where: {
-      id: ids.split(',').map((id) => +id),
+      id: ids.map((id) => Number(id)),
     },
   });
 

@@ -1,7 +1,8 @@
+import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+
 import ConsignmentNote from './ConsignmentNote';
 import ConsignmentNotesList from './ConsignmentNotesList';
-import React from 'react';
 
 export default function Warehouses() {
   const { path } = useRouteMatch();

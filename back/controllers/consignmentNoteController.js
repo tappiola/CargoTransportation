@@ -53,11 +53,11 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await ConsignmentNote.destroy({
     where: {
-      id: ids.split(',').map((id) => +id),
+      id: ids.map((id) => Number(id)),
     },
   });
 

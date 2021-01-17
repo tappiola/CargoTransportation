@@ -1,5 +1,5 @@
+const { Router } = require('express');
 const { Client } = require('../models');
-const {Router} = require('express');
 
 const router = Router();
 
@@ -13,11 +13,11 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await Client.destroy({
     where: {
-      id: ids.split(',').map((id) => +id),
+      id: ids.map((id) => Number(id)),
     },
   });
 

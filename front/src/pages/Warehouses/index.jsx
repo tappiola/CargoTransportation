@@ -1,5 +1,6 @@
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import React from 'react';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+
 import Warehouse from './Warehouse';
 import WarehousesList from './WarehousesList';
 

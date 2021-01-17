@@ -1,5 +1,5 @@
+const { Router } = require('express');
 const { User, Role, Company } = require('../models');
-const {Router} = require('express');
 
 const router = Router();
 
@@ -25,12 +25,17 @@ router.get('/', async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
-  res.redirect(`../users?ids=${ids}`);
+  const ids = req.body;
+
+  await User.destroy({
+    where: { id: ids.map((id) => Number(id)) },
+  });
+
+  res.status(204).json({});
 });
 
-router.post('/register', async (req, res, next) => {
-  res.redirect('../users/register')
+router.post('/register', async (req, res) => {
+  res.redirect('../users/register');
 });
 
 router.put('/:id', async (req, res) => {

@@ -1,5 +1,6 @@
-import { yup } from 'utils';
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import { yup } from 'utils';
 
 const loginSchema = yup.object().shape({
   email: yup.string().required().email(),

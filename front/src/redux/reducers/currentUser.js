@@ -1,5 +1,5 @@
-import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
+import { getAuthToken } from 'utils';
 
 const initialState = {
   companyId: 1, // temporary
