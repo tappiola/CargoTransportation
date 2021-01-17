@@ -1,22 +1,40 @@
 import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
-// import { ToastQueueContext } from 'components/Notification';
-import { ToastQueueContext } from '@tappiola/material-ui-externals/dist';
+import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
-export default function StyleGuide() {
+import { enqueueToast } from 'redux/actions';
+import { connect } from 'react-redux';
+
+function StyleGuide({ onToastEnqueue }) {
   const { addToast } = useContext(ToastQueueContext);
 
   return (
     <>
-      <Button onClick={() => addToast('Изменения сохранены')}>
+      {/* Examples how to dispatch an action that will trigger the notification */}
+      <Button onClick={() => onToastEnqueue({
+        message: 'Изменения сохранены',
+      })}
+      >
         Add default toast
       </Button>
-      <Button onClick={() => addToast('ТТН №5698538 была переведена в статус "Обработана" ', 'info')}>
+      <Button onClick={() => onToastEnqueue({
+        message: 'ТТН №5698538 была переведена в статус "Обработана" ',
+        type: 'info',
+      })}
+      >
         Add info toast
       </Button>
-      <Button onClick={() => addToast('Произошла ошибка при попытке получить список пользователей', 'error', 5000)}>
+      <Button onClick={() => onToastEnqueue(
+        {
+          message: 'Произошла ошибка при попытке получить список пользователей',
+          type: 'error',
+          duration: 5000,
+        },
+      )}
+      >
         Add error toast
       </Button>
+      {/* Examples how to trigger notification from React component directly. */}
       <Button onClick={() => addToast('Вы успешно вошли в систему', 'success')}>
         Add success toast
       </Button>
@@ -26,3 +44,12 @@ export default function StyleGuide() {
     </>
   );
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  onToastEnqueue: (toastData) => dispatch(enqueueToast(toastData)),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(StyleGuide);

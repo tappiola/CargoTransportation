@@ -12,11 +12,11 @@ import MainMenu from 'components/MainMenu';
 import { PROTECTED_ROUTES } from 'pages';
 import SignIn from 'pages/SignIn';
 import { getCustomTheme } from 'config';
-import { ToastQueueProvider } from '@tappiola/material-ui-externals/dist';
+import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 import Settings from './pages/Settings';
 import { THEME } from './constants/themes';
-// import { ToastQueueProvider } from './components/Notification';
 import StyleGuide from './pages/StyleGuide';
+import MyNotifier from './components/Notifier';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
@@ -62,6 +62,7 @@ function App({ isAuthorized }) {
     <ThemeProvider theme={getCustomTheme(theme)}>
       <ToastQueueProvider theme={getCustomTheme(theme)}>
         <CssBaseline />
+        <MyNotifier />
         <Router>
           {isAuthorized ? (
             <ProtectedApp theme={theme} setTheme={setTheme} />
@@ -71,7 +72,6 @@ function App({ isAuthorized }) {
               <Redirect to="/signin" />
             </>
           )}
-
         </Router>
       </ToastQueueProvider>
     </ThemeProvider>

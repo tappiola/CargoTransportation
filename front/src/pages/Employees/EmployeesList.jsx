@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import { ConfirmDialog } from '@tappiola/material-ui-externals/dist';
+import { ConfirmDialog } from '@tappiola/material-ui-externals';
 import CustomGrid from 'components/DataGrid';
 import GridToolbar from 'components/GridToolbar';
 import DeleteButton from 'components/Buttons/DeleteButton';

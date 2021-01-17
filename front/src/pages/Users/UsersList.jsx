@@ -8,7 +8,7 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import { usersSelector } from 'redux/selectors/users';
-import { ConfirmDialog } from '@tappiola/material-ui-externals/dist';
+import { ConfirmDialog } from '@tappiola/material-ui-externals';
 import PaddedContainer from 'components/PaddedContainer';
 
 function UsersList({
