@@ -7,12 +7,12 @@ router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
   const users = await User.findAll({
-    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
+    attributes: {
+      exclude: ['password'],
+    },
     include: [
       {
         model: Role,
-        attributes: ['role'],
-        through: { attributes: [] },
       },
       {
         model: Company,
@@ -27,14 +27,16 @@ router.get('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
   const { ids } = req.query;
+  res.redirect(`../users?ids=${ids}`);
+});
 
-  await User.destroy({
-    where: {
-      id: ids.split(',').map((id) => +id),
-    },
-  });
+router.post('/register', async (req, res, next) => {
+  res.redirect('../users/register')
+});
 
-  res.status(204).json({});
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  res.redirect(`../users/${id}`);
 });
 
 module.exports = router;

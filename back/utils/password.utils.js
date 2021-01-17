@@ -1,6 +1,10 @@
 const generatePassword = require('password-generator');
 
-module.exports.createRandomPassword = () => {
+const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/;
+
+const isValidPassword = (password) => password.length < 15 && passwordRegExp.test(password);
+
+const createRandomPassword = () => {
   const maxLength = 15;
   const minLength = 8;
   const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/;
@@ -14,3 +18,5 @@ module.exports.createRandomPassword = () => {
 
   return password;
 };
+
+module.exports = { createRandomPassword, isValidPassword };

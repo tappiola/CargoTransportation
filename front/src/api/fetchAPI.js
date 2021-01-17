@@ -3,7 +3,7 @@ import { BACKEND_HOST } from 'constants/environment';
 
 export const fetchAPI = async (uri, data, method = 'GET') => {
   const headers = {
-    Authorization: `Token ${getAuthToken()}`,
+    Authorization: `Bearer ${getAuthToken()}`,
     'Content-Type': 'application/json',
   };
 
@@ -11,6 +11,10 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
     .then((response) => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';
+
+        if (response.redirected) {
+          return Promise.resolve({ redirected: true });
+        }
 
         if (contentType.includes('application/json')) {
           return response.json().catch((error) => Promise.reject(new Error(`Invalid JSON: ${error.message}`)));
@@ -31,8 +35,8 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
 
       return response.json().then((res) => {
         const errors = Object.keys(res).map((key) => res[key]);
-        return Promise.reject(new Error(errors.join(',')));
+        return Promise.reject(new Error(errors.join(', ')));
       });
     })
-    .catch((error) => Promise.reject(new Error(error.message)));
+    .catch((error) => Promise.reject(error));
 };

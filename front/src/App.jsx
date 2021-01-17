@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -51,7 +51,8 @@ const ProtectedApp = ({ theme, setTheme }) => {
   );
 };
 
-function App({ isAuthorized }) {
+function App() {
+  const { isAuthorized } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -78,14 +79,4 @@ function App({ isAuthorized }) {
   );
 }
 
-const mapState = ({
-  currentUser: {
-    authorization: { isSuccess },
-  },
-}) => ({
-  isAuthorized: isSuccess,
-});
-
-const mapDispatch = null;
-
-export default connect(mapState, mapDispatch)(App);
+export default App;

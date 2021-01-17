@@ -1,21 +1,20 @@
 const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword } = require('../utils/password.utils');
+const { createRandomPassword, isValidPassword } = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-
+const { isAuth } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {
-    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
-  } = req.body;
+  const { email, companyId, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
+  const company = await Company.findByPk(companyId);
 
   if (user) {
     return res.status(400).json({ error: { message: 'Email already in use!' } });
@@ -25,18 +24,13 @@ router.post('/register', validate.register, async (req, res, next) => {
     const password = createRandomPassword();
     const newUser = await User.create({
       email,
-      password,
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      country,
-      city,
-      street,
-      house,
-      apartment,
+      ...userData,
       isActive: true,
     });
+
+    if (company) {
+      await newUser.setCompany(company);
+    }
     const token = newUser.generateJWT();
 
     const mail = setMailOptions({
@@ -75,14 +69,15 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', isAuth, async (req, res) => {
   const users = await User.findAll({
-    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
+    attributes: {
+      exclude: ['password'],
+    },
     include: [
       {
         model: Role,
-        attributes: [],
-        where: { role: 'admin' },
+        where: { role: 'admin' }
       },
       {
         model: Company,
@@ -97,8 +92,9 @@ router.get('/', async (req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuth, async (req, res) => {
   const user = await User.get(req.params.id);
+  
   res.status(200).json(user);
 });
 
@@ -106,17 +102,34 @@ router.delete('/', async (req, res) => {
   const { ids } = req.query;
 
   await User.destroy({
-    where: {
-      id: ids.split(',').map((id) => Number(id)),
+    where: { id: ids.split(',').map((id) => Number(id)),
     },
   });
 
-  res.status(204).json({});
+  res.status(204).json(null);
 });
 
 router.get('/logout', (req, res) => {
   req.logout();
   res.status(204).json({});
+});
+
+router.put('/:id', isAuth, async (req, res) => {
+  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
+  const user = await User.findByPk(req.params.id);
+  const roles = await Role.findAll({ where: { role: rolesArray } });
+  const password =  isValidPassword(newPassword) ? newPassword : user.password;
+  
+  if (!user) {
+    return res.status(400).json({ error: { message: 'user not found' } });
+  }
+
+  if (roles) {
+    await user.setRoles(roles); 
+  }
+  await user.update({ ...userData, password });
+  
+  res.status(200).json(user);
 });
 
 module.exports = router;
