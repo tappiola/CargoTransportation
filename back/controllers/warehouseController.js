@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
   const clients = await Warehouse.findAll({
     where: { linkedCompanyId: companyId },
   });
+
   res.status(200).json(clients);
 });
 

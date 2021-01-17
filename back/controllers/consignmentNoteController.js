@@ -49,6 +49,7 @@ router.get('/', async (req, res) => {
         attributes: ['number'],
       }],
   });
+
   res.status(200).json(clients);
 });
 
