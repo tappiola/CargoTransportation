@@ -4,12 +4,10 @@ const express = require('express'),
   serverConfig = require('./back/config/server.config'),
   routes = require('./back/routes'),
   errorHandler = require('./back/middlewares/errorHandler'),
-  serverStart = require('./back/config/server.start'),
-  errorsMiddleware = require('./back/middlewares/errors/errorResponseMiddleware');
+  serverStart = require('./back/config/server.start');
 
 const app = express();
 serverConfig(app);
-errorsMiddleware(app); //Should be before routes!
 routes(app);
 
 if (process.env.NODE_ENV === 'production') {

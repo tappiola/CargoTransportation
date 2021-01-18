@@ -72,15 +72,11 @@ const User = db.define('user', {
   },
 });
 
-const hashPassword = (user) => {
+User.beforeCreate((user) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(user.password, salt);
   user.password = hashedPassword;
-}
-
-User.beforeCreate(hashPassword);
-
-User.beforeUpdate(hashPassword);
+});
 
 User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
