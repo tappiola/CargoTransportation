@@ -1,38 +1,32 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
-
 import { useForm, FormProvider } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
 
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
+import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
 import { userResolver as resolver } from './userResolver';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-// temporary solution
-const preNormalize = (data, id) => {
-  if (!id) return undefined;
-  const currentUser = data.find(({ id: _id }) => _id.toString() === id);
+const selector = (id) => ({ users }) => {
+  const user = users.usersData.find(({ id: _id }) => _id.toString() === id);
+  const roles = user.roles && user.roles.map(({ role }) => role);
 
-  return {
-    roles: [],
-    ...currentUser,
-    country: currentUser.country || 'Беларусь',
-  };
+  return user && { ...user, roles };
 };
 
 const normalize = ({ roles: asObj, ...data }, id) => ({
@@ -87,12 +81,7 @@ function User() {
               </Grid>
             </Grid>
 
-            <BaseField
-              name="birthday"
-              type="date"
-              label="Дата рождения"
-              InputLabelProps={{ shrink: true }}
-            />
+            <BaseField name="birthday" type="date" label="Дата рождения" InputLabelProps={{ shrink: true }} />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>
@@ -124,20 +113,4 @@ function User() {
   );
 }
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
-  ...data,
-  id,
-  roles: Object.entries(asObj)
-    .filter(([, checked]) => checked)
-    .map(([role]) => role),
-});
-
-export default connect(
-  ({ users }) => ({ data: users.usersData }),
-  (dispatch) => ({
-    sendFormData: (id, data) => (
-      id
-        ? dispatch(dispatchUpdateUser(normalize(data, id)))
-        : dispatch(dispatchSetUser(normalize(data)))),
-  }),
-)(User);
+export default User;
