@@ -6,25 +6,31 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+
 import MainMenu from 'components/MainMenu';
+import { getCustomTheme } from 'config';
+import { THEME } from 'constants/themes';
 import { PROTECTED_ROUTES } from 'pages';
+import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
 import { getCustomTheme } from 'config';
 import { ToastQueueProvider } from '@tappiola/material-ui-externals';
-import Settings from './pages/Settings';
-import { THEME } from './constants/themes';
 import StyleGuide from './pages/StyleGuide';
 import Notifier from './components/Notifier';
 
-const ProtectedApp = ({ theme, setTheme }) => {
-  const [protectedRoute] = PROTECTED_ROUTES;
+const ProtectedApp = ({ userRoles, theme, setTheme }) => {
+  const routes = PROTECTED_ROUTES
+    .filter(({ roles: routeRoles }) => routeRoles.some((role) => userRoles.includes(role)));
+  const modules = routes.map(({ module }) => module);
+  const [protectedRoute] = routes;
 
   return (
-    <MainMenu>
+    <MainMenu modules={modules}>
       <Switch>
-        {PROTECTED_ROUTES.map(({ basePath, component }) => (
+        {routes.map(({ basePath, component }) => (
           <Route
             key={basePath.slice(1)}
             path={basePath}
@@ -52,7 +58,7 @@ const ProtectedApp = ({ theme, setTheme }) => {
 };
 
 function App() {
-  const { isAuthorized } = useSelector(({ currentUser }) => currentUser);
+  const { isAuthorized, roles } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -62,11 +68,11 @@ function App() {
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
       <ToastQueueProvider theme={getCustomTheme(theme)}>
-        <CssBaseline />
-        <Notifier />
+      <CssBaseline />
+      <Notifier />
         <Router>
           {isAuthorized ? (
-            <ProtectedApp theme={theme} setTheme={setTheme} />
+            <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />
           ) : (
             <>
               <Route path="/signin" component={SignIn} />

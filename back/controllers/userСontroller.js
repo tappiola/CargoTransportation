@@ -1,20 +1,21 @@
 const { Router } = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword, isValidPassword } = require('../utils/password.utils');
+const { createRandomPassword } = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-const { isAuth } = require('../middlewares/auth');
+const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email, companyId, ...userData } = req.body;
+  const { email, roles: role, companyId, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
   const company = await Company.findByPk(companyId);
+  const roles = await Role.findAll({ where: { role } });
 
   if (user) {
     return res.status(400).json({ error: { message: 'Email already in use!' } });
@@ -24,6 +25,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     const password = createRandomPassword();
     const newUser = await User.create({
       email,
+      password,
       ...userData,
       isActive: true,
     });
@@ -31,8 +33,11 @@ router.post('/register', validate.register, async (req, res, next) => {
     if (company) {
       await newUser.setCompany(company);
     }
-    const token = newUser.generateJWT();
 
+    if (roles) {
+      await newUser.setRoles(roles);
+    }
+    const token = newUser.generateJWT();
     const mail = setMailOptions({
       to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
@@ -58,18 +63,35 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return res.status(401).json(err);
       }
 
       const token = user.generateJWT();
-      res.status(200).json({ token });
+      const { roles, company } = await User.findOne({
+        where: {
+          id: user.id
+        },
+        attributes: [],
+        include: [
+          {
+            model: Role,
+            attributes: ['role'],
+          },
+          {
+            model: Company,
+            attributes: ['id'],
+          }
+        ]
+      });
+
+      res.status(200).json({ token, roles, companyId: company && company.id });
     });
   })(req, res, next);
 });
 
-router.get('/', isAuth, async (req, res) => {
+router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
   const users = await User.findAll({
     attributes: {
       exclude: ['password'],
@@ -77,7 +99,7 @@ router.get('/', isAuth, async (req, res) => {
     include: [
       {
         model: Role,
-        where: { role: 'admin' }
+        where: { role: 'admin' },
       },
       {
         model: Company,
@@ -92,43 +114,42 @@ router.get('/', isAuth, async (req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', isAuth, async (req, res) => {
-  const user = await User.get(req.params.id);
+router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
+  const user = await User.findByPk(req.params.id);
   
   res.status(200).json(user);
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await User.destroy({
-    where: { id: ids.split(',').map((id) => Number(id)),
-    },
+    where: { id: ids.map((id) => Number(id)) },
   });
 
-  res.status(204).json(null);
+  res.status(204).end();
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', authorize(), (req, res) => {
   req.logout();
-  res.status(204).json({});
+  res.status(204).end();
 });
 
-router.put('/:id', isAuth, async (req, res) => {
-  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
+router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
+  const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
-  const roles = await Role.findAll({ where: { role: rolesArray } });
-  const password =  isValidPassword(newPassword) ? newPassword : user.password;
-  
+  const roles = await Role.findAll({ where: { role } });
+
   if (!user) {
     return res.status(400).json({ error: { message: 'user not found' } });
   }
 
   if (roles) {
-    await user.setRoles(roles); 
+    await user.setRoles(roles);
   }
-  await user.update({ ...userData, password });
-  
+
+  await user.update(userData, { password });
+
   res.status(200).json(user);
 });
 

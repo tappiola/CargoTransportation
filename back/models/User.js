@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
-const { DataTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const { DataTypes } = require('sequelize');
 const db = require('../database/db');
+const { isValidPassword } = require('../utils/password.utils');
 
 const User = db.define('user', {
   id: {
@@ -25,6 +26,12 @@ const User = db.define('user', {
     type: DataTypes.VIRTUAL,
     get() {
       return `${this.lastName} ${this.firstName} ${this.middleName}`;
+    },
+  },
+  shortFullName: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      return `${this.lastName} ${this.firstName[0]}. ${this.middleName[0]}.`;
     },
   },
   login: {
@@ -72,10 +79,21 @@ const User = db.define('user', {
   },
 });
 
-User.beforeCreate((user) => {
+const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(user.password, salt);
-  user.password = hashedPassword;
+  return bcrypt.hashSync(password, salt);
+};
+
+User.beforeUpdate((user, { password }) => {
+  // TODO: Not sure that we need this, user is registered and usable even without these lines
+  // TODO: method beforeCreate() should be enough, as we don't need to update password during each update
+  if (password && isValidPassword(password)) {
+    user.password = hashPassword(password);
+  }
+});
+
+User.beforeCreate((user) => {
+  user.password = hashPassword(user.password);
 });
 
 User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
