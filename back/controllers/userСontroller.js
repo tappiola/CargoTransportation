@@ -1,42 +1,36 @@
-const { Router } = require('express');
+const {Router} = require('express');
 const passport = require('passport');
 const Logger = require('../config/logger');
-const { createRandomPassword } = require('../utils/password.utils');
+const {createRandomPassword, passwordRegExp} = require('../utils/password.utils');
 const User = require('../models/User');
 const Role = require('../models/Role');
 const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
-const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
+const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-
+const { isAuth } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {
-    email, firstName, lastName, middleName, birthday, country, city, street, house, apartment,
-  } = req.body;
-  const user = await User.findOne({ where: { email } });
+  const {email, ...userData} = req.body;
+  const user = await User.findOne({where: {email}});
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.sendError(401, 'Email already in use!');
   }
 
   try {
     const password = createRandomPassword();
     const newUser = await User.create({
+      ...userData,
       email,
       password,
-      firstName,
-      lastName,
-      middleName,
-      birthday,
-      country,
-      city,
-      street,
-      house,
-      apartment,
       isActive: true,
     });
+
+    if (company) {
+      await newUser.setCompany(company);
+    }
     const token = newUser.generateJWT();
 
     const mail = setMailOptions({
@@ -47,7 +41,7 @@ router.post('/register', validate.register, async (req, res, next) => {
 
     sendEmail(mail).then((res) => console.log('Email sent...', res.messageId)).catch((err) => Logger.error(err.message));
 
-    res.status(200).json({ token });
+    res.status(200).json({token});
   } catch (e) {
     e.status = 400;
     next(e);
@@ -61,34 +55,36 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ message: 'invalid email/password' });
+      return res.sendError(401, 'Email или пароль введены неверно');
     }
 
     req.login(user, (err) => {
       if (err) {
-        return res.status(401).json(err);
+        return res.sendError(401, err.message);
       }
 
       const token = user.generateJWT();
-      res.status(200).json({ token });
+      res.status(200).json({token});
     });
   })(req, res, next);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', isAuth, async (req, res) => {
   const users = await User.findAll({
-    attributes: ['id', 'fullName', 'lastName', 'firstName', 'middleName', 'email', 'isActive'],
     include: [
       {
         model: Role,
         attributes: [],
-        where: { role: 'admin' },
+        where: {role: 'admin'},
       },
       {
         model: Company,
         attributes: ['name', 'unn'],
       },
     ],
+    attributes: {
+      exclude: ['password'],
+    },
     order: [
       ['id', 'DESC'],
       ['lastName', 'ASC'],
@@ -97,26 +93,61 @@ router.get('/', async (req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.status(204).json({});
+});
+
+router.get('/:id', isAuth, async (req, res) => {
   const user = await User.get(req.params.id);
+  
   res.status(200).json(user);
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const {ids} = req.query;
 
   await User.destroy({
-    where: {
-      id: ids.split(',').map((id) => Number(id)),
+    where: { id: ids.split(',').map((id) => Number(id)),
     },
   });
 
-  res.status(204).json({});
+  res.status(204).json(null);
 });
 
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.status(204).json({});
+router.put('/:id', async (req, res) => {
+  const {password, ...userData} = req.body;
+  const user = await User.findByPk(req.params.id);
+  const newPassword = passwordRegExp.test(password) && password;
+
+  if (!user) {
+    return res.sendError(400, 'Пользователь не найден');
+  }
+
+  await user.update({
+    ...userData,
+    password: newPassword || user.password,
+  });
+
+  res.status(200).json(user);
+});
+
+router.put('/:id', isAuth, async (req, res) => {
+  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
+  const user = await User.findByPk(req.params.id);
+  const roles = await Role.findAll({ where: { role: rolesArray } });
+  const password =  isValidPassword(newPassword) ? newPassword : user.password;
+  
+  if (!user) {
+    return res.status(400).json({ error: { message: 'user not found' } });
+  }
+
+  if (roles) {
+    await user.setRoles(roles); 
+  }
+  await user.update({ ...userData, password });
+  
+  res.status(200).json(user);
 });
 
 module.exports = router;

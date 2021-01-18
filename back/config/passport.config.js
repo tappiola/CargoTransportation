@@ -7,7 +7,10 @@ module.exports = (passport) => {
       User.findOne({ where: { email } })
         .then((user) => {
           if (!user || !user.isValidPassword(password, user.password)) {
-            return done(null, false, { errors: { 'email or password': 'is invalid' } });
+            return done(null, false, { error: { message:'Email или пароль введены неверно' } });
+          }
+          if (!user.isActive) {
+            return done(null, false, { error: { message:'Ваша учетная запись не активирована. Обратитесь к администратору.' } });
           }
 
           return done(null, user);
@@ -21,8 +24,12 @@ module.exports = (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    User.get(id, (err, user) => {
-      done(err, user);
+    User.findByPk(id).then(user => {
+      if (!user) {
+        done(user.error, null)
+      }
+
+      done(null, user.get());
     });
   });
 };
