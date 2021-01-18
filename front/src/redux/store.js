@@ -5,10 +5,13 @@ import rootReduser from './reducers/root';
 import { createStore, applyMiddleware } from 'redux';
 import { throttle } from 'utils';
 
-const loadState = () => {
+export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
-    return serializedState && JSON.parse(serializedState);
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
   } catch (err) {
     return undefined;
   }
