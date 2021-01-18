@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true cd front && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
