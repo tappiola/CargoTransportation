@@ -9,17 +9,16 @@ import {
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 
+import Notifier from './components/Notifier';
+import StyleGuide from './pages/StyleGuide';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
-import { getCustomTheme } from 'config';
-import { ToastQueueProvider } from '@tappiola/material-ui-externals';
-import StyleGuide from './pages/StyleGuide';
-import Notifier from './components/Notifier';
 
 const ProtectedApp = ({ userRoles, theme, setTheme }) => {
   const routes = PROTECTED_ROUTES
@@ -68,8 +67,8 @@ function App() {
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
       <ToastQueueProvider theme={getCustomTheme(theme)}>
-      <CssBaseline />
-      <Notifier />
+        <CssBaseline />
+        <Notifier />
         <Router>
           {isAuthorized ? (
             <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />

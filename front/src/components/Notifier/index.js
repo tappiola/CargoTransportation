@@ -1,6 +1,8 @@
 import { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
+
 import { processToast } from '../../redux/actions';
 
 function Notifier() {

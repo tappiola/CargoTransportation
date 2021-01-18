@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
+
 import Button from '@material-ui/core/Button';
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
 import { enqueueToast } from 'redux/actions';
-import { useDispatch } from 'react-redux';
 
 function StyleGuide() {
   const dispatch = useDispatch();
