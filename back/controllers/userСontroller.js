@@ -60,7 +60,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ message: 'invalid email/password' });
+      return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
     req.login(user, async (err) => {

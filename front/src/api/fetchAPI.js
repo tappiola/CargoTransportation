@@ -35,7 +35,11 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
         return Promise.reject(new Error(`Page not found: ${uri}`));
       }
 
-      return response.json().then((res) => Promise.reject(res));
+      return response.json().then((res) => {
+        const errors = Object.keys(res).map((key) => res[key]);
+
+        return Promise.reject(new Error(errors.join(', ')));
+      });
     })
     .catch((error) => Promise.reject(error));
 };

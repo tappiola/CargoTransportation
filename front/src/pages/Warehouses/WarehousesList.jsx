@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
+import { ConfirmDialog } from '@tappiola/material-ui-externals';
+
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
-import ConfirmDialog from 'components/ConfirmDialog';
 import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
@@ -48,16 +49,17 @@ function WarehousesList({
           }}
         />
       </PaddedContainer>
-      <ConfirmDialog
-        title="Удаление складов"
-        description="Вы уверены, что хотите удалить выбранные склады?"
-        isOpen={isConfirmDialogOpen}
-        onPopupClose={() => setIsConfirmDialogOpen(false)}
-        onActionConfirm={() => {
-          setIsConfirmDialogOpen(false);
-          removeWarehouses(selection);
-        }}
-      />
+      {isConfirmDialogOpen && (
+        <ConfirmDialog
+          title="Удаление складов"
+          description="Вы уверены, что хотите удалить выбранные склады?"
+          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onActionConfirm={() => {
+            setIsConfirmDialogOpen(false);
+            removeWarehouses(selection);
+          }}
+        />
+      )}
     </>
   );
 }
