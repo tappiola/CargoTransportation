@@ -3,8 +3,6 @@ const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/;
 
 module.exports.passwordRegExp = passwordRegExp;
 module.exports.createRandomPassword = () => {
-
-const createRandomPassword = () => {
   const maxLength = 15;
   const minLength = 8;
 
@@ -18,4 +16,3 @@ const createRandomPassword = () => {
   return password;
 };
 
-module.exports = { createRandomPassword, isValidPassword };
