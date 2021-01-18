@@ -24,7 +24,7 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.CLIENTS,
     basePath: '/clients',
     component: Clients,
-    roles: [ADMIN],
+    roles: [GLOBAL_ADMIN, ADMIN],
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,

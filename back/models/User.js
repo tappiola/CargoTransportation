@@ -81,12 +81,13 @@ const User = db.define('user', {
 
 const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(password, salt);
-  return hashedPassword;
+  return bcrypt.hashSync(password, salt);
 };
 
 User.beforeUpdate((user, { password }) => {
-  if (isValidPassword(password)) {
+  // TODO: Not sure that we need this, user is registered and usable even without these lines
+  // TODO: method beforeCreate() should be enough, as we don't need to update password during each update
+  if (password && isValidPassword(password)) {
     user.password = hashPassword(password);
   }
 });
