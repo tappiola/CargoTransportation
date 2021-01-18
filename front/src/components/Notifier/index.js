@@ -1,25 +1,32 @@
 import { useContext, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
-import { processToast } from '../../redux/actions';
+import {loginUser, processToast} from '../../redux/actions';
 
-function Notifier({ notifications, onToastProcess }) {
+function Notifier({ onToastProcess }) {
+  const { notificationsQueue } = useSelector(({ notifications }) => notifications);
+const dispatch = useDispatch();
+const sendFormData = ({ email, password }) => dispatch(loginUser(email, password));
+const onToastProcess = (dispatch) => ({ onToastProcess: () => dispatch(processToast()) });
+
+
   const { addToast } = useContext(ToastQueueContext);
 
   useEffect(() => {
-    if (notifications.length > 0) {
-      const { message, type, duration } = notifications[0];
+    if (notificationsQueue.length > 0) {
+      const { message, type, duration } = notificationsQueue[0];
+
       addToast(message, type, duration);
       onToastProcess();
     }
-  }, [notifications]);
+  }, [notificationsQueue]);
 
   return null;
 }
 
-const mapStateToProps = ({ notifications: { notifications } }) => ({
-  notifications,
-});
+// const mapStateToProps = ({ notifications: { notifications } }) => ({
+//   notifications,
+// });
 
 const mapDispatchToProps = (dispatch) => ({ onToastProcess: () => dispatch(processToast()) });
 

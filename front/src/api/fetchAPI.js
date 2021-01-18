@@ -35,6 +35,7 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
 
       return response.json().then((res) => {
         const errors = Object.keys(res).map((key) => res[key]);
+
         return Promise.reject(new Error(errors.join(', ')));
       });
     })
