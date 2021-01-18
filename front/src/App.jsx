@@ -9,7 +9,11 @@ import {
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 
+import Notifier from './components/Notifier';
+import StyleGuide from './pages/StyleGuide';
+import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
@@ -36,6 +40,9 @@ const ProtectedApp = ({ userRoles, theme, setTheme }) => {
         <Route path="/settings">
           <Settings theme={theme} onThemeChange={setTheme} />
         </Route>
+        {isDevelopment() && (
+          <Route exact path="/styleguide" component={StyleGuide} />
+        )}
         {protectedRoute && (
           <>
             <Route exact path="/">
@@ -62,17 +69,20 @@ function App() {
 
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
-      <CssBaseline />
-      <Router>
-        {isAuthorized ? (
-          <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />
-        ) : (
-          <>
-            <Route path="/signin" component={SignIn} />
-            <Redirect to="/signin" />
-          </>
-        )}
-      </Router>
+      <ToastQueueProvider theme={getCustomTheme(theme)}>
+        <CssBaseline />
+        <Notifier />
+        <Router>
+          {isAuthorized ? (
+            <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />
+          ) : (
+            <>
+              <Route path="/signin" component={SignIn} />
+              <Redirect to="/signin" />
+            </>
+          )}
+        </Router>
+      </ToastQueueProvider>
     </ThemeProvider>
   );
 }

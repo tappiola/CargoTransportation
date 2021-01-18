@@ -36,7 +36,7 @@ router.delete('/', authorize('admin'), async (req, res) => {
 });
 
 router.post('/register', authorize('admin'), async (req, res) => {
-  res.redirect('../users/register');
+  res.redirect(307, '../users/register');
 });
 
 router.put('/:id', authorize('admin'), async (req, res) => {

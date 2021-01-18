@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
+import { ConfirmDialog } from '@tappiola/material-ui-externals';
+
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
-import ConfirmDialog from 'components/ConfirmDialog';
 import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
@@ -48,16 +49,17 @@ function ClientsList({
           }}
         />
       </PaddedContainer>
-      <ConfirmDialog
-        title="Удаление клиентов"
-        description="Вы уверены, что хотите удалить выбранных клиентов?"
-        isOpen={isConfirmDialogOpen}
-        onPopupClose={() => setIsConfirmDialogOpen(false)}
-        onActionConfirm={() => {
-          setIsConfirmDialogOpen(false);
-          removeClients(selection);
-        }}
-      />
+      {isConfirmDialogOpen && (
+        <ConfirmDialog
+          title="Удаление клиентов"
+          description="Вы уверены, что хотите удалить выбранных клиентов?"
+          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onActionConfirm={() => {
+            setIsConfirmDialogOpen(false);
+            removeClients(selection);
+          }}
+        />
+      )}
     </>
   );
 }
