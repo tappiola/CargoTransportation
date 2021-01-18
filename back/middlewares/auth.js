@@ -19,12 +19,12 @@ const verifyUser = (req, res, next, roles) => {
       },
     }));
 
-    if (hasPermission) {
-      req.user = user;
-      next();
-    } else {
+    if (!hasPermission) {
       return res.status(403).json({ error: { message: 'Forbidden' } });
-    }
+    } 
+
+    req.user = user;
+    next();
   });
 };
 
