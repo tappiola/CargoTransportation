@@ -2,8 +2,9 @@ import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  companyId: 1, // temporary
-  isAuthorized: !!getAuthToken(),
+  authorization: {
+    isSuccess: !!getAuthToken(),
+  },
 };
 
 export function currentUserReducer(state = initialState, action) {

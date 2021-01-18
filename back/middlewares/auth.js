@@ -7,7 +7,7 @@ module.exports.isAuth = (req, res, next) => {
 
   jwt.verify(token, process.env.jwtToken, (err, user) => {
     if (err) {
-      return res.status(403).json({ error: { message: "Forbidden" } });
+      return res.sendError(403, err.message);
     }
 
     req.user = user;

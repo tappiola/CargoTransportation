@@ -23,11 +23,16 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-const selector = (id) => ({ users }) => {
-  const user = users.usersData.find(({ id: _id }) => _id.toString() === id);
-  const roles = user.roles && user.roles.map(({ role }) => role);
+// temporary solution
+const preNormalize = (data, id) => {
+  if (!id) return undefined;
+  const currentUser = data.find(({ id: _id }) => _id.toString() === id);
 
-  return user && { ...user, roles };
+  return {
+    roles: [],
+    ...currentUser,
+    country: currentUser.country || 'Беларусь',
+  };
 };
 
 const normalize = ({ roles: asObj, ...data }, id) => ({
@@ -82,7 +87,12 @@ function User() {
               </Grid>
             </Grid>
 
-            <BaseField name="birthday" type="date" label="Дата рождения" InputLabelProps={{ shrink: true }} />
+            <BaseField
+              name="birthday"
+              type="date"
+              label="Дата рождения"
+              InputLabelProps={{ shrink: true }}
+            />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>
@@ -114,4 +124,20 @@ function User() {
   );
 }
 
-export default User;
+const normalize = ({ roles: asObj, ...data }, id) => ({
+  ...data,
+  id,
+  roles: Object.entries(asObj)
+    .filter(([, checked]) => checked)
+    .map(([role]) => role),
+});
+
+export default connect(
+  ({ users }) => ({ data: users.usersData }),
+  (dispatch) => ({
+    sendFormData: (id, data) => (
+      id
+        ? dispatch(dispatchUpdateUser(normalize(data, id)))
+        : dispatch(dispatchSetUser(normalize(data)))),
+  }),
+)(User);
