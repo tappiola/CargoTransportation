@@ -9,8 +9,9 @@ import Users from 'pages/Users';
 import Warehouses from 'pages/Warehouses';
 import Waybills from 'pages/Waybills';
 
-// eslint-disable-next-line object-curly-newline
-const { GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER } = ROLES;
+const {
+  GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER,
+} = ROLES;
 
 export const PROTECTED_ROUTES = [
   {

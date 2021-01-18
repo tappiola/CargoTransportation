@@ -5,24 +5,21 @@ import rootReduser from './reducers/root';
 import { createStore, applyMiddleware } from 'redux';
 import { throttle } from 'utils';
 
-export const loadState = () => {
+const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
+    return serializedState && JSON.parse(serializedState);
   } catch (err) {
     return undefined;
   }
 };
 
-export const saveState = (state) => {
+const saveState = (state) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);
   } catch {
-    // ignore write errors
+    // TODO: add nofication
   }
 };
 

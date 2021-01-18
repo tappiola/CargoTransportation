@@ -99,7 +99,7 @@ router.get('/', isAuthAs('global_admin', 'admin'), async (req, res) => {
     include: [
       {
         model: Role,
-        where: { role: 'admin'},
+        where: { role: 'admin' },
       },
       {
         model: Company,
@@ -131,7 +131,7 @@ router.delete('/', async (req, res) => {
   res.status(204).json(null);
 });
 
-router.get('/logout', isAuthAs(),(req, res) => {
+router.get('/logout', isAuthAs(), (req, res) => {
   req.logout();
   res.status(204).json({});
 });
@@ -148,6 +148,7 @@ router.put('/:id', isAuthAs('global_admin', 'admin'),async (req, res) => {
   if (roles) {
     await user.setRoles(roles); 
   }
+
   await user.update(userData, { password });
   
   res.status(200).json(user);
