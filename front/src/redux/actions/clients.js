@@ -1,0 +1,23 @@
+import * as actionTypes from './actionTypes';
+import * as api from 'api';
+
+export const setClients = (clientsData) => ({
+  type: actionTypes.CLIENTS_SET,
+  clientsData,
+});
+
+export const handleDeleteClients = (ids) => ({
+  type: actionTypes.CLIENTS_DELETE,
+  ids,
+});
+
+export const dispatchGetClients = () => (dispatch) => {
+  // TODO: get companyId from user profile
+  api.getClients(1)
+    .then((data) => dispatch(setClients(data)));
+};
+
+export const dispatchDeleteClients = (ids) => (dispatch) => {
+  api.deleteClients(ids)
+    .then(() => dispatch(handleDeleteClients(ids)));
+};

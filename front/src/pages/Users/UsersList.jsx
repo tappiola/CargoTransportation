@@ -9,7 +9,7 @@ import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
-import { dispatchGetUsers, dispatchDeleteUsers } from 'redux/actions';
+import { dispatchDeleteUsers, dispatchGetUsers } from 'redux/actions';
 import { usersSelector } from 'redux/selectors/users';
 
 function UsersList({
@@ -51,8 +51,8 @@ function UsersList({
         />
       </PaddedContainer>
       <ConfirmDialog
-        title="Удаление пользователя"
-        description="Вы уверены, что хотите удалить пользователя?"
+        title="Удаление пользователей"
+        description="Вы уверены, что хотите удалить выбранных пользователей?"
         isOpen={isConfirmDialogOpen}
         onPopupClose={() => setIsConfirmDialogOpen(false)}
         onActionConfirm={() => {

@@ -1,8 +1,8 @@
 import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import Container from '@material-ui/core/Container';
-import { useForm, FormProvider } from 'react-hook-form';
 
 import { loginResolver as resolver } from './loginResolver';
 import { useStyles } from './SignIn.styles';

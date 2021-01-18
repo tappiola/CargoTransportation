@@ -33,6 +33,7 @@ ConsignmentNote.belongsTo(ConsignmentNoteStatus);
 ConsignmentNote.belongsTo(Client);
 ConsignmentNote.belongsTo(Warehouse);
 ConsignmentNote.belongsTo(Vehicle);
+ConsignmentNote.belongsTo(Company, { as: 'linkedCompany' });
 ConsignmentNote.belongsTo(User, { as: 'driver' });
 ConsignmentNote.belongsTo(User, { as: 'createdBy' });
 ConsignmentNote.belongsTo(User, { as: 'assignedTo' });
@@ -43,6 +44,7 @@ Good.belongsTo(ConsignmentNote);
 
 Waybill.belongsTo(WaybillStatus);
 Waybill.belongsTo(ConsignmentNote);
+Waybill.belongsTo(Company, { as: 'linkedCompany' });
 
 ControlPoint.belongsTo(ControlPointStatus);
 ControlPoint.belongsTo(Waybill);
@@ -52,7 +54,7 @@ LossReport.belongsTo(User, { as: 'responsible' });
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
-db.sync({ alter: true }).then(() => {
+db.sync({ alter: true, logging: false }).then(() => {
   console.log('DB sync completed');
 });
 
@@ -68,4 +70,7 @@ module.exports = {
   Good,
   Waybill,
   LossReport,
+  ConsignmentNote,
+  ConsignmentNoteStatus,
+  WaybillStatus,
 };

@@ -1,8 +1,8 @@
+import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import middlewares from './middlewares';
 import rootReduser from './reducers/root';
-import { createStore, applyMiddleware } from 'redux';
 import { throttle } from 'utils';
 
 export const loadState = () => {

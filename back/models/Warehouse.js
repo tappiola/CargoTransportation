@@ -39,6 +39,8 @@ const Warehouse = db.define('warehouse', {
   },
   isTrusted: {
     type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
   },
 });
 

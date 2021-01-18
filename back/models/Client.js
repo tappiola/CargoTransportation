@@ -25,6 +25,12 @@ const Client = db.define('client', {
       return `${this.lastName} ${this.firstName} ${this.middleName}`;
     },
   },
+  shortFullName: {
+    type: DataTypes.VIRTUAL,
+    get() {
+      return `${this.lastName} ${this.firstName[0]}. ${this.middleName[0]}.`;
+    },
+  },
   companyName: {
     type: DataTypes.STRING,
     unique: true,

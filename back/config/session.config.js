@@ -1,6 +1,7 @@
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const passport = require('passport');
+const configurePassport = require('./passport.config');
 
 module.exports = (app) => {
   app.use(cookieParser(process.env.SESSIONSDB_SECRET));
@@ -15,7 +16,7 @@ module.exports = (app) => {
     },
   }));
 
-  require('./passport.config')(passport);
+  configurePassport(passport);
   app.use(passport.initialize());
   app.use(passport.session());
 };
