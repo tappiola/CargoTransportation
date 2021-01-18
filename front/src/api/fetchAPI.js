@@ -19,7 +19,7 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
         }
 
         if (response.status === 204) {
-          return Promise.resolve('');
+          return Promise.resolve();
         }
 
         if (contentType.includes('application/json')) {

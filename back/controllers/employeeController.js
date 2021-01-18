@@ -32,7 +32,7 @@ router.delete('/', async (req, res) => {
     where: { id: ids.map((id) => Number(id)) },
   });
 
-  res.status(204).json({});
+  res.status(204).end();
 });
 
 router.post('/register', async (req, res) => {

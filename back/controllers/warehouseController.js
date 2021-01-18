@@ -22,7 +22,7 @@ router.delete('/', async (req, res) => {
     },
   });
 
-  res.status(204).json({});
+  res.status(204).end();
 });
 
 module.exports = router;

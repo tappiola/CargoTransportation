@@ -106,12 +106,12 @@ router.delete('/', async (req, res) => {
     where: { id: ids.map((id) => Number(id)) },
   });
 
-  res.status(204).json({});
+  res.status(204).end();
 });
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.status(204).json({});
+  res.status(204).end();
 });
 
 router.put('/:id', isAuth, async (req, res) => {
@@ -127,6 +127,7 @@ router.put('/:id', isAuth, async (req, res) => {
   if (roles) {
     await user.setRoles(roles);
   }
+
   await user.update({ ...userData, password });
 
   res.status(200).json(user);
