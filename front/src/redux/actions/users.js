@@ -1,10 +1,10 @@
-import { deleteUsers, getUsers } from 'api';
-import { authorizationCompleted } from 'redux/actions';
-import * as api from 'api';
 import * as actionTypes from './actionTypes';
+import { deleteUsers, getUsers } from 'api';
+import * as api from 'api';
+import { authorizationCompleted } from 'redux/actions';
 
 const redirectionHandler = (dispatch) => ({ error }) => {
-  if (error.message === 'Forbidden') {
+  if (error?.message === 'Forbidden') {
     dispatch(authorizationCompleted(false));
   }
 };
@@ -19,15 +19,15 @@ export const handleDeleteUsers = (ids) => ({
   ids,
 });
 
-export const dispatchGetUsers = () => (dispatch) => {
+export const dispatchGetUsers = () => (dispatch) => (
   getUsers()
     .then(
       (data) => dispatch(setUsers(data)),
       redirectionHandler(dispatch),
-    );
-};
+    )
+);
 
-export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
+export const dispatchSetUser = ({ id, ...data }) => (dispatch) => (
   api
     .setUser({ id, data })
     .then(
@@ -36,14 +36,14 @@ export const dispatchSetUser = ({ id, ...data }) => (dispatch) => {
         isSuccess: true,
       }),
       redirectionHandler(dispatch),
-    );
-};
+    )
+);
 
-export const dispatchUpdateUser = ({ id, ...data }) => () => {
-  api.updateUser(data, id);
-};
+export const dispatchUpdateUser = ({ id, ...data }) => () => (
+  api.updateUser(data, id)
+);
 
-export const dispatchDeleteUsers = (ids) => (dispatch) => {
+export const dispatchDeleteUsers = (ids) => (dispatch) => (
   deleteUsers(ids)
-    .then(() => dispatch(handleDeleteUsers(ids)));
-};
+    .then(() => dispatch(handleDeleteUsers(ids)))
+);

@@ -3,11 +3,8 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
-  // "parser": "@typescript-eslint/parser",
+  extends: ['plugin:react/recommended', 'airbnb'],
+  // 'parser': '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -15,14 +12,43 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react', 'import'],
   rules: {
     'import/prefer-default-export': 'off',
     'linebreak-style': 0,
     'react/prop-types': 0,
     'react/jsx-props-no-spreading': 'off',
     'import/no-unresolved': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          ['internal', 'parent', 'sibling', 'index'],
+        ],
+        pathGroups: [
+          {
+            pattern: 'react+(|-redux|-router-dom|-dom)',
+            group: 'external',
+            position: 'before',
+          },
+          {
+            pattern: '+(api|components|config|constants|pages|redux|utils)',
+            group: 'internal',
+          },
+          {
+            pattern: '+(api|components|config|constants|pages|redux|utils)/**',
+            group: 'internal',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['react'],
+        'newlines-between': 'always',
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
   },
 };

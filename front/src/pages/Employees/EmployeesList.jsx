@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import CustomGrid from 'components/DataGrid';
-import GridToolbar from 'components/GridToolbar';
+
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
-import { dispatchGetEmployees, dispatchDeleteEmployees } from 'redux/actions';
+import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
+import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
+import { dispatchGetEmployees, dispatchDeleteEmployees } from 'redux/actions';
 
 function EmployeesList({
   employeesData, employeesLoadComplete, initEmployees, removeEmployees, companyId,
