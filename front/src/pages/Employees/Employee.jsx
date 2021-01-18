@@ -5,21 +5,22 @@ import { useParams } from 'react-router-dom';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
-import Grid from '@material-ui/core/Grid';
 
-import { employeeResolver as resolver } from './employeeResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
+import { employeeResolver as resolver } from './employeeResolver';
 import {
   dispatchSetEmployee,
   dispatchUpdateEmployee,
 } from 'redux/actions/employees';
+import { usePending } from 'utils';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
@@ -27,7 +28,7 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
 
 const selector = (employeeId) => ({ currentUser, employees }) => {
   const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
-  const roles = employee && employee.roles.map(({ role }) => role);
+  const roles = employee?.roles && employee.roles.map(({ role }) => role);
 
   return {
     companyId: currentUser.companyId,
@@ -50,16 +51,20 @@ function Employee() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
+  const sendFormData = (id, formData) => dispatch(
+    id
+      ? dispatchUpdateEmployee(normalize(formData, id))
+      : dispatchSetEmployee({ ...normalize(formData), companyId }),
+  );
+
+  const { bindPending, handler } = usePending(sendFormData.bind(null, employeeId));
+
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
         <form
           noValidate
-          onSubmit={handleSubmit((formData) => (
-            employeeId
-              ? dispatch(dispatchUpdateEmployee(normalize({ ...formData }, employeeId)))
-              : dispatch(dispatchSetEmployee({ ...normalize(formData), companyId }))
-          ))}
+          onSubmit={handleSubmit(handler)}
         >
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
@@ -133,7 +138,7 @@ function Employee() {
               </FormGroup>
             </FormControl>
 
-            <SubmitButton>Готово</SubmitButton>
+            <SubmitButton {...bindPending}>Готово</SubmitButton>
           </Grid>
         </form>
       </FormProvider>

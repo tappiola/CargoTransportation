@@ -9,11 +9,11 @@ import { warehousesReducer } from './warehouses';
 import { waybillsReducer } from './waybills';
 
 export default combineReducers({
+  clients: clientsReducer,
+  consignmentNotes: consignmentNotesReducer,
   currentUser: currentUserReducer,
   employees: employeesReducer,
   users: usersReducer,
-  clients: clientsReducer,
   warehouses: warehousesReducer,
-  consignmentNotes: consignmentNotesReducer,
   waybills: waybillsReducer,
 });

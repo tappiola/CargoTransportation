@@ -17,13 +17,16 @@ import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
 
-const ProtectedApp = ({ theme, setTheme }) => {
-  const [protectedRoute] = PROTECTED_ROUTES;
+const ProtectedApp = ({ userRoles, theme, setTheme }) => {
+  const routes = PROTECTED_ROUTES
+    .filter(({ roles: routeRoles }) => routeRoles.some((role) => userRoles.includes(role)));
+  const modules = routes.map(({ module }) => module);
+  const [protectedRoute] = routes;
 
   return (
-    <MainMenu>
+    <MainMenu modules={modules}>
       <Switch>
-        {PROTECTED_ROUTES.map(({ basePath, component }) => (
+        {routes.map(({ basePath, component }) => (
           <Route
             key={basePath.slice(1)}
             path={basePath}
@@ -50,7 +53,7 @@ const ProtectedApp = ({ theme, setTheme }) => {
 };
 
 function App() {
-  const { isAuthorized } = useSelector(({ currentUser }) => currentUser);
+  const { isAuthorized, roles } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ function App() {
       <CssBaseline />
       <Router>
         {isAuthorized ? (
-          <ProtectedApp theme={theme} setTheme={setTheme} />
+          <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />
         ) : (
           <>
             <Route path="/signin" component={SignIn} />

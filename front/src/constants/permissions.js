@@ -16,6 +16,7 @@ const ROLES = {
   ADMIN: 'admin',
   DRIVER: 'driver',
   MANAGER: 'manager',
+  DISPATCHER: 'dispatcher',
 };
 
 const ROLE_NAMES = {
@@ -23,6 +24,7 @@ const ROLE_NAMES = {
   [ROLES.ADMIN]: ' Администратор',
   [ROLES.MANAGER]: 'Менеджер',
   [ROLES.GLOBAL_ADMIN]: 'Системный администратор',
+  [ROLES.DISPATCHER]: 'Диспетчер',
 };
 
 export { MODULE_NAMES, ROLES, ROLE_NAMES };

@@ -10,6 +10,7 @@ import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import Logo from 'components/Logo';
 import { loginUser } from 'redux/actions';
+import { usePending } from 'utils';
 
 function SignIn() {
   const classes = useStyles();
@@ -17,6 +18,7 @@ function SignIn() {
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
   const sendFormData = ({ email, password }) => dispatch(loginUser(email, password));
+  const { bindPending, handler } = usePending(sendFormData);
 
   return (
     <Container maxWidth="xs">
@@ -24,13 +26,13 @@ function SignIn() {
         <Logo className={classes.avatar} />
         <FormProvider {...methods}>
           <form
-            onSubmit={handleSubmit(sendFormData)}
+            onSubmit={handleSubmit(handler)}
             className={classes.form}
             noValidate
           >
             <BaseField name="email" label="email" />
             <BaseField name="password" label="Пароль" type="password" />
-            <SubmitButton className={classes.submit} />
+            <SubmitButton className={classes.submit} {...bindPending} />
           </form>
         </FormProvider>
       </div>

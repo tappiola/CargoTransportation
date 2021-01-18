@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
-import * as api from 'api';
+import {
+  deleteEmployees, getEmployees, setEmployee, updateEmployee,
+} from 'api';
 
 export const setEmployees = (employeesData) => ({
   type: actionTypes.EMPLOYEES_SET,
@@ -12,21 +14,19 @@ export const handleDeleteEmployees = (ids) => ({
 });
 
 export const dispatchGetEmployees = (companyId) => (dispatch) => {
-  api
-    .getEmployees(companyId)
+  getEmployees(companyId)
     .then((data) => dispatch(setEmployees(data)));
 };
 
 export const dispatchDeleteEmployees = (ids) => (dispatch) => {
-  api
-    .deleteEmployees(ids)
+  deleteEmployees(ids)
     .then(() => dispatch(handleDeleteEmployees(ids)));
 };
 
 export const dispatchSetEmployee = ({ companyId, ...data }) => () => {
-  api.setEmployee({ companyId, data });
+  setEmployee({ companyId, data });
 };
 
 export const dispatchUpdateEmployee = ({ id, ...data }) => () => {
-  api.updateEmployee(data, id);
+  updateEmployee(data, id);
 };

@@ -19,6 +19,7 @@ const registerSchema = Joi.object({
   password: Joi.string(),
   street: Joi.string().required(),
   isActive: Joi.bool().allow(null, ''),
+  companyId: Joi.number().allow(null, ''),
 });
 
 module.exports = { loginSchema, registerSchema };
