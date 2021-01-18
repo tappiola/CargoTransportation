@@ -8,7 +8,7 @@ const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-const { isAuthAs } = require('../middlewares/auth');
+const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
@@ -91,7 +91,7 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/', isAuthAs('global_admin', 'admin'), async (req, res) => {
+router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
   const users = await User.findAll({
     attributes: {
       exclude: ['password'],
@@ -114,7 +114,7 @@ router.get('/', isAuthAs('global_admin', 'admin'), async (req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', isAuthAs('global_admin', 'admin'), async (req, res) => {
+router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
   const user = await User.findByPk(req.params.id);
   
   res.status(200).json(user);
@@ -131,12 +131,12 @@ router.delete('/', async (req, res) => {
   res.status(204).json(null);
 });
 
-router.get('/logout', isAuthAs(), (req, res) => {
+router.get('/logout', authorize(), (req, res) => {
   req.logout();
   res.status(204).json({});
 });
 
-router.put('/:id', isAuthAs('global_admin', 'admin'),async (req, res) => {
+router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
   const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role } });
