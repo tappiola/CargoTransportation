@@ -124,14 +124,6 @@ function User() {
   );
 }
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
-  ...data,
-  id,
-  roles: Object.entries(asObj)
-    .filter(([, checked]) => checked)
-    .map(([role]) => role),
-});
-
 export default connect(
   ({ users }) => ({ data: users.usersData }),
   (dispatch) => ({
