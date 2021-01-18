@@ -3,9 +3,11 @@ import Button from '@material-ui/core/Button';
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
 import { enqueueToast } from 'redux/actions';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-function StyleGuide({ onToastEnqueue }) {
+function StyleGuide() {
+  const dispatch = useDispatch();
+  const onToastEnqueue = (toastData) => dispatch(enqueueToast(toastData));
   const { addToast } = useContext(ToastQueueContext);
 
   return (
@@ -45,11 +47,4 @@ function StyleGuide({ onToastEnqueue }) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  onToastEnqueue: (toastData) => dispatch(enqueueToast(toastData)),
-});
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(StyleGuide);
+export default StyleGuide;

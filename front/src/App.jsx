@@ -16,7 +16,7 @@ import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 import Settings from './pages/Settings';
 import { THEME } from './constants/themes';
 import StyleGuide from './pages/StyleGuide';
-import MyNotifier from './components/Notifier';
+import Notifier from './components/Notifier';
 
 const ProtectedApp = ({ theme, setTheme }) => {
   const [protectedRoute] = PROTECTED_ROUTES;
@@ -63,7 +63,7 @@ function App() {
     <ThemeProvider theme={getCustomTheme(theme)}>
       <ToastQueueProvider theme={getCustomTheme(theme)}>
         <CssBaseline />
-        <MyNotifier />
+        <Notifier />
         <Router>
           {isAuthorized ? (
             <ProtectedApp theme={theme} setTheme={setTheme} />
