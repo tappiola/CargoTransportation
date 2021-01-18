@@ -51,7 +51,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.sendError(401, 'invalid email/password');
+      return res.sendError(401, 'Email или пароль введены неверно');
     }
 
     req.login(user, (err) => {
@@ -117,8 +117,9 @@ router.put('/:id', async (req, res) => {
   const newPassword = passwordRegExp.test(password) && password;
 
   if (!user) {
-    return res.sendError(400, 'user not found');
+    return res.sendError(400, 'Пользователь не найден');
   }
+
   await user.update({
     ...userData,
     password: newPassword || user.password,

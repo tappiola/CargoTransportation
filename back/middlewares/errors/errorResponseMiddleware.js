@@ -3,6 +3,7 @@ module.exports = app => {
     res.sendError = (code, text) => {
       return res.status(code).json({error: {message: text}});
     };
+
     next();
   });
 };
