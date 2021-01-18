@@ -1,9 +1,11 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Switch from '@material-ui/core/Switch';
+
 import Grid from '@material-ui/core/Grid';
-import PaddedContainer from 'components/PaddedContainer';
+import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
+
 import { THEME } from '../../constants/themes';
+import PaddedContainer from 'components/PaddedContainer';
 
 export default function Settings({ theme, onThemeChange }) {
   return (

@@ -1,5 +1,5 @@
-import { getAuthToken } from 'utils';
 import { BACKEND_HOST } from 'constants/environment';
+import { getAuthToken } from 'utils';
 
 export const fetchAPI = async (uri, data, method = 'GET') => {
   const headers = {
@@ -7,7 +7,7 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
     'Content-Type': 'application/json',
   };
 
-  return fetch(BACKEND_HOST + uri, { headers, method, body: data })
+  return fetch(`${BACKEND_HOST}/api${uri}`, { headers, method, body: data })
     .then((response) => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';

@@ -7,7 +7,6 @@ const isValidPassword = (password) => password.length < 15 && passwordRegExp.tes
 const createRandomPassword = () => {
   const maxLength = 15;
   const minLength = 8;
-  const passwordRegExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}/;
 
   let password = '';
   const randomLength = Math.floor(Math.random() * (maxLength - minLength)) + minLength;

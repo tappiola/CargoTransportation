@@ -2,15 +2,15 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import Container from '@material-ui/core/Container';
-
-import Logo from 'components/Logo';
-import BaseField from 'components/ControlledField';
-import SubmitButton from 'components/Buttons/SubmitButton';
-import { loginUser } from 'redux/actions';
-
 import { useForm, FormProvider } from 'react-hook-form';
-import { useStyles } from './SignIn.styles';
+
 import { loginResolver as resolver } from './loginResolver';
+import { useStyles } from './SignIn.styles';
+import SubmitButton from 'components/Buttons/SubmitButton';
+import BaseField from 'components/ControlledField';
+import Logo from 'components/Logo';
+import { loginUser } from 'redux/actions';
+import { usePending } from 'utils';
 
 function SignIn() {
   const classes = useStyles();
@@ -18,6 +18,7 @@ function SignIn() {
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
   const sendFormData = ({ email, password }) => dispatch(loginUser(email, password));
+  const { bindPending, handler } = usePending(sendFormData);
 
   return (
     <Container maxWidth="xs">
@@ -25,13 +26,13 @@ function SignIn() {
         <Logo className={classes.avatar} />
         <FormProvider {...methods}>
           <form
-            onSubmit={handleSubmit(sendFormData)}
+            onSubmit={handleSubmit(handler)}
             className={classes.form}
             noValidate
           >
             <BaseField name="email" label="email" />
             <BaseField name="password" label="Пароль" type="password" />
-            <SubmitButton className={classes.submit} />
+            <SubmitButton className={classes.submit} {...bindPending} />
           </form>
         </FormProvider>
       </div>

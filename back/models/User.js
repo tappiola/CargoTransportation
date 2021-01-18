@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { DataTypes } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const db = require('../database/db');
+const { isValidPassword } = require('../utils/password.utils');
 
 const User = db.define('user', {
   id: {
@@ -72,10 +73,20 @@ const User = db.define('user', {
   },
 });
 
-User.beforeCreate((user) => {
+const hashPassword = (password) => {
   const salt = bcrypt.genSaltSync(10);
-  const hashedPassword = bcrypt.hashSync(user.password, salt);
-  user.password = hashedPassword;
+  const hashedPassword = bcrypt.hashSync(password, salt);
+  return hashedPassword;
+};
+
+User.beforeUpdate((user, { password }) => {
+  if (isValidPassword(password)) {
+    user.password = hashPassword(password);
+  }
+});
+
+User.beforeCreate((user) => {
+  user.password = hashPassword(user.password);
 });
 
 User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);

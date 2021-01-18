@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import AppBar from '@material-ui/core/AppBar';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import SettingsIcon from '@material-ui/icons/Settings';
-
-import { dispatchLogoutUser } from 'redux/actions';
-import { MenuItems } from './MenuItems';
 import { useMenuStyles } from './MainMenu.styles';
+import { MenuItems } from './MenuItems';
+import { dispatchLogoutUser } from 'redux/actions';
 
-export default function MainMenu({ children }) {
+export default function MainMenu({ children, modules }) {
   const dispatch = useDispatch();
   const classes = useMenuStyles();
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ export default function MainMenu({ children }) {
           </IconButton>
         </div>
         <Divider />
-        <MenuItems />
+        <MenuItems modules={modules} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
