@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import { deleteUsers, getUsers } from 'api';
 import * as api from 'api';
 import { authorizationCompleted } from 'redux/actions';
 
@@ -20,7 +19,8 @@ export const handleDeleteUsers = (ids) => ({
 });
 
 export const dispatchGetUsers = () => (dispatch) => (
-  getUsers()
+  api
+    .getUsers()
     .then(
       (data) => dispatch(setUsers(data)),
       redirectionHandler(dispatch),
@@ -44,6 +44,7 @@ export const dispatchUpdateUser = ({ id, ...data }) => () => (
 );
 
 export const dispatchDeleteUsers = (ids) => (dispatch) => (
-  deleteUsers(ids)
+  api
+    .deleteUsers(ids)
     .then(() => dispatch(handleDeleteUsers(ids)))
 );

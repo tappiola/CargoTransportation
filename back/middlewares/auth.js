@@ -14,16 +14,16 @@ const verifyUser = async (req, res, next, roles) => {
     const user = jwt.verify(token, process.env.jwtToken);
     const hasPermission = await User.findOne({
       where: { id: user.id },
-      include: { 
-        model: Role, 
+      include: {
+        model: Role,
         where: roles.length ? { role: roles } : {}
       },
     });
-   
+
     if (!hasPermission) {
       throw new Error('Forbidden');
-    } 
-    
+    }
+
     req.user = user;
     next();
   } catch(err) {

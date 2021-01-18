@@ -8,11 +8,10 @@ const ConsignmentNoteStatus = db.define('consignment_note_status', {
     primaryKey: true,
     allowNull: false,
   },
-  statusName: {
+  status: {
     type: DataTypes.STRING,
     unique: true,
   },
-
 });
 
 const ConsignmentNote = db.define('consignment_note', {

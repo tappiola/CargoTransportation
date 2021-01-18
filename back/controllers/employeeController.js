@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { User, Role, Company } = require('../models');
-const { authorize } = require('../middlewares/auth'); 
+const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.get('/', authorize('admin'), async (req, res) => {
@@ -26,8 +26,13 @@ router.get('/', authorize('admin'), async (req, res) => {
 });
 
 router.delete('/', authorize('admin'), async (req, res) => {
-  const { ids } = req.query;
-  res.redirect(`../users?ids=${ids}`);
+  const ids = req.body;
+
+  await User.destroy({
+    where: { id: ids.map((id) => Number(id)) },
+  });
+
+  res.status(204).end();
 });
 
 router.post('/register', authorize('admin'), async (req, res) => {
