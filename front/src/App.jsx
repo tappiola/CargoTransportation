@@ -13,6 +13,7 @@ import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 
 import Notifier from './components/Notifier';
 import StyleGuide from './pages/StyleGuide';
+import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
@@ -39,7 +40,9 @@ const ProtectedApp = ({ userRoles, theme, setTheme }) => {
         <Route path="/settings">
           <Settings theme={theme} onThemeChange={setTheme} />
         </Route>
-        {process.env.NODE_ENV === 'development' && <Route exact path="/styleguide" component={StyleGuide} />}
+        {isDevelopment() && (
+          <Route exact path="/styleguide" component={StyleGuide} />
+        )}
         {protectedRoute && (
           <>
             <Route exact path="/">
