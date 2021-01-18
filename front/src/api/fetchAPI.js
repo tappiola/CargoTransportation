@@ -26,10 +26,6 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
           return response.json().catch((error) => Promise.reject(new Error(`Invalid JSON: ${error.message}`)));
         }
 
-        if (response.status === 204) {
-          return Promise.resolve();
-        }
-
         return Promise.reject(
           new Error(`Invalid content type: ${contentType}`),
         );
