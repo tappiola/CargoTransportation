@@ -1,8 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  dispatchSetEmployee,
+  dispatchUpdateEmployee,
+} from 'redux/actions/employees';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import Container from '@material-ui/core/Container';
@@ -17,21 +19,19 @@ import FormLabel from '@material-ui/core/FormLabel';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
-import { userResolver as resolver } from './userResolver';
+import { employeeResolver as resolver } from './employeeResolver';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-// temporary solution
-const preNormalize = (data, id) => {
-  if (!id) return undefined;
-  const currentUser = data.find(({ id: _id }) => _id.toString() === id);
+const selector = (employeeId) => ({ currentUser, employees }) => {
+  const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
+  const roles = employee && employee.roles.map(({ role }) => role);
 
   return {
-    roles: [],
-    ...currentUser,
-    country: currentUser.country || 'Беларусь',
+    companyId: currentUser.companyId,
+    defaultValues: employeeId && { ...employee, roles },
   };
 };
 
@@ -43,10 +43,10 @@ const normalize = ({ roles: asObj, ...data }, id) => ({
     .map(([role]) => role),
 });
 
-function User() {
-  const { id } = useParams();
-  const defaultValues = useSelector(selector(id));
+function Employee() {
   const dispatch = useDispatch();
+  const { id: employeeId } = useParams();
+  const { companyId, defaultValues } = useSelector(selector(employeeId));
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
@@ -56,18 +56,19 @@ function User() {
         <form
           noValidate
           onSubmit={handleSubmit((formData) => (
-            id
-              ? dispatch(dispatchUpdateUser(normalize(formData, id)))
-              : dispatch(dispatchSetUser(normalize(formData)))
+            employeeId
+              ? dispatch(dispatchUpdateEmployee(normalize({ ...formData }, employeeId)))
+              : dispatch(dispatchSetEmployee({ ...normalize(formData), companyId }))
           ))}
         >
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />
+            {/* <BaseField name="login" label="логин" /> */}
             <BaseField name="email" label="email" />
 
-            {id && <BaseField name="password" label="Пароль" type="password" />}
+            {employeeId && <BaseField name="password" label="Пароль" type="password" />}
 
             <Grid container spacing={1} justify="space-between">
               <Grid item xs={12} sm={6}>
@@ -116,6 +117,22 @@ function User() {
               </FormHelperText>
             </FormControl>
 
+            <FormControl margin="normal">
+              <FormLabel>Статус: </FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={(
+                    <Checkbox
+                      inputRef={register}
+                      name="isActive"
+                      defaultChecked={defaultValues?.isActive}
+                    />
+                    )}
+                  label="Активен"
+                />
+              </FormGroup>
+            </FormControl>
+
             <SubmitButton>Готово</SubmitButton>
           </Grid>
         </form>
@@ -124,20 +141,4 @@ function User() {
   );
 }
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
-  ...data,
-  id,
-  roles: Object.entries(asObj)
-    .filter(([, checked]) => checked)
-    .map(([role]) => role),
-});
-
-export default connect(
-  ({ users }) => ({ data: users.usersData }),
-  (dispatch) => ({
-    sendFormData: (id, data) => (
-      id
-        ? dispatch(dispatchUpdateUser(normalize(data, id)))
-        : dispatch(dispatchSetUser(normalize(data)))),
-  }),
-)(User);
+export default Employee;

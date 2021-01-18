@@ -9,7 +9,7 @@ export default function Employees() {
   return (
     <Switch>
       <Route path={`${path}/:id(\\d+)`} component={Employee} />
-      <Route path={`${path}/new`}>Страница добавления сотрудника </Route>
+      <Route path={`${path}/new`} component={Employee} />
       <Route exact path={path} component={EmployeesList} />
       <Route>Страница не найдена</Route>
     </Switch>

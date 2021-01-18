@@ -12,7 +12,15 @@ export function currentUserReducer(state = initialState, action) {
     case types.AUTHORIZATION_COMPLETED: {
       return {
         ...state,
-        authorization: action.status,
+        isAuthorized: action.isAuthorized,
+      };
+    }
+
+    case types.CURRENT_USER_LOGOUT: {
+      localStorage.removeItem('token');
+      return {
+        ...initialState,
+        isAuthorized: false,
       };
     }
 

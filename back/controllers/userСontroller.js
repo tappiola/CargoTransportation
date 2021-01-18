@@ -8,7 +8,7 @@ const Company = require('../models/Company');
 const validate = require('../middlewares/validate');
 const {sendEmail, setMailOptions} = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
-
+const { isAuth } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
@@ -27,6 +27,10 @@ router.post('/register', validate.register, async (req, res, next) => {
       password,
       isActive: true,
     });
+
+    if (company) {
+      await newUser.setCompany(company);
+    }
     const token = newUser.generateJWT();
 
     const mail = setMailOptions({
@@ -65,7 +69,7 @@ router.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', isAuth, async (req, res) => {
   const users = await User.findAll({
     include: [
       {
@@ -94,8 +98,9 @@ router.get('/logout', (req, res) => {
   res.status(204).json({});
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', isAuth, async (req, res) => {
   const user = await User.get(req.params.id);
+  
   res.status(200).json(user);
 });
 
@@ -103,12 +108,11 @@ router.delete('/', async (req, res) => {
   const {ids} = req.query;
 
   await User.destroy({
-    where: {
-      id: ids.split(',').map((id) => Number(id)),
+    where: { id: ids.split(',').map((id) => Number(id)),
     },
   });
 
-  res.status(204).json({});
+  res.status(204).json(null);
 });
 
 router.put('/:id', async (req, res) => {
@@ -125,6 +129,24 @@ router.put('/:id', async (req, res) => {
     password: newPassword || user.password,
   });
 
+  res.status(200).json(user);
+});
+
+router.put('/:id', isAuth, async (req, res) => {
+  const { password: newPassword, roles: rolesArray, ...userData } = req.body;
+  const user = await User.findByPk(req.params.id);
+  const roles = await Role.findAll({ where: { role: rolesArray } });
+  const password =  isValidPassword(newPassword) ? newPassword : user.password;
+  
+  if (!user) {
+    return res.status(400).json({ error: { message: 'user not found' } });
+  }
+
+  if (roles) {
+    await user.setRoles(roles); 
+  }
+  await user.update({ ...userData, password });
+  
   res.status(200).json(user);
 });
 
