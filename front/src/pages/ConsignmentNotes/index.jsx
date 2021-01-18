@@ -4,7 +4,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import ConsignmentNote from './ConsignmentNote';
 import ConsignmentNotesList from './ConsignmentNotesList';
 
-export default function Warehouses() {
+export default function ConsignmentNotes() {
   const { path } = useRouteMatch();
 
   return (
