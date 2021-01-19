@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front && npm install && npm run build",
+    "lint": "npx eslint back --ext .js --fix"
   },
   "keywords": [],
   "author": "",

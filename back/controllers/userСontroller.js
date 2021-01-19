@@ -35,7 +35,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     }
 
     if (roles) {
-      await newUser.setRoles(roles); 
+      await newUser.setRoles(roles);
     }
     const token = newUser.generateJWT();
     const mail = setMailOptions({
@@ -60,7 +60,7 @@ router.post('/login', async (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ message: 'invalid email/password' });
+      return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
     req.login(user, async (err) => {
@@ -121,19 +121,18 @@ router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
 });
 
 router.delete('/', async (req, res) => {
-  const { ids } = req.query;
+  const ids = req.body;
 
   await User.destroy({
-    where: { id: ids.split(',').map((id) => Number(id)),
-    },
+    where: { id: ids.map((id) => Number(id)) },
   });
 
-  res.status(204).json(null);
+  res.status(204).end();
 });
 
 router.get('/logout', authorize(), (req, res) => {
   req.logout();
-  res.status(204).json({});
+  res.status(204).end();
 });
 
 router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
@@ -146,11 +145,11 @@ router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
   }
 
   if (roles) {
-    await user.setRoles(roles); 
+    await user.setRoles(roles);
   }
 
   await user.update(userData, { password });
-  
+
   res.status(200).json(user);
 });
 

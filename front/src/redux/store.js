@@ -1,17 +1,21 @@
+import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import middlewares from './middlewares';
 import rootReduser from './reducers/root';
-import { createStore, applyMiddleware } from 'redux';
 import { throttle } from 'utils';
 
 export const loadState = () => {
   try {
+<<<<<<< HEAD
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
       return undefined;
     }
     return JSON.parse(serializedState);
+=======
+    return JSON.parse(localStorage.getItem('state')) || undefined;
+>>>>>>> 4e84014ed8f471dd7cee7f0b6d8e0a76abf40d71
   } catch (err) {
     return undefined;
   }

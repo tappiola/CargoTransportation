@@ -7,13 +7,19 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
     'Content-Type': 'application/json',
   };
 
-  return fetch(BACKEND_HOST + uri, { headers, method, body: data })
+  const requestBody = data != null ? JSON.stringify(data) : null;
+
+  return fetch(BACKEND_HOST + uri, { headers, method, body: requestBody })
     .then((response) => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';
 
         if (response.redirected) {
           return Promise.resolve({ redirected: true });
+        }
+
+        if (response.status === 204) {
+          return Promise.resolve();
         }
 
         if (contentType.includes('application/json')) {
@@ -29,7 +35,11 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
         return Promise.reject(new Error(`Page not found: ${uri}`));
       }
 
-      return response.json().then((res) => Promise.reject(res));
+      return response.json().then((res) => {
+        const errors = Object.keys(res).map((key) => res[key]);
+
+        return Promise.reject(new Error(errors.join(', ')));
+      });
     })
     .catch((error) => Promise.reject(error));
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -10,7 +11,6 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
-import { useForm, FormProvider } from 'react-hook-form';
 
 import { employeeResolver as resolver } from './employeeResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
