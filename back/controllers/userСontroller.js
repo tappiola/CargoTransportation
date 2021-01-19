@@ -115,8 +115,24 @@ router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
 });
 
 router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  
+  const {id} = req.params;
+
+  const user = await User.findOne({
+    where: { id },
+    include: [
+      {
+        model: Role,
+      },
+      {
+        model: Company,
+        attributes: ['name', 'unn'],
+      },
+    ],
+    attributes: {
+      exclude: ['password'],
+    },
+  });
+
   res.status(200).json(user);
 });
 
