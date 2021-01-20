@@ -1,4 +1,4 @@
-import { fetchAPI } from './fetchAPI';
+import { fetchAPI } from 'api/fetchAPI';
 
 const BASE_URI = '/employees';
 

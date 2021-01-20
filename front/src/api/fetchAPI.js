@@ -9,7 +9,7 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
 
   const requestBody = data != null ? JSON.stringify(data) : null;
 
-  return fetch(BACKEND_HOST + uri, { headers, method, body: requestBody })
+  return fetch(`${BACKEND_HOST}/api${uri}`, { headers, method, body: requestBody })
     .then((response) => {
       if (response.ok) {
         const contentType = response.headers.get('Content-Type') || '';
