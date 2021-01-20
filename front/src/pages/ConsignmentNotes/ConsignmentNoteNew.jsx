@@ -23,9 +23,11 @@ import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/EditOutlined";
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import DoneIcon from "@material-ui/icons/DoneAllTwoTone";
 import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import Input from "@material-ui/core/Input";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -127,6 +129,10 @@ const [rows, setRows] = React.useState([
       });
     });
   };
+
+  const onDelete = (rowId) => {
+    setRows(rows => [...rows.filter(r => r.id !== rowId)]);
+  }
 
   const onChange = (e, row) => {
     if (!previous[row.id]) {
@@ -254,26 +260,42 @@ const [rows, setRows] = React.useState([
               <TableCell className={classes.selectTableCell}>
                 {row.isEditMode ? (
                   <>
+                    <Tooltip title="Сохранить">
                     <IconButton
                       aria-label="done"
                       onClick={() => onToggleEditMode(row.id)}
                     >
                       <DoneIcon />
                     </IconButton>
+                    </Tooltip>
+                      <Tooltip title="Отменить">
                     <IconButton
                       aria-label="revert"
                       onClick={() => onRevert(row.id)}
                     >
                       <RevertIcon />
                     </IconButton>
+                      </Tooltip>
                   </>
                 ) : (
+                  <>
+                    <Tooltip title="Редактировать">
                   <IconButton
                     aria-label="delete"
                     onClick={() => onToggleEditMode(row.id)}
                   >
                     <EditIcon />
                   </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Удалить">
+                    <IconButton
+                    aria-label="delete"
+                    onClick={() => onDelete(row.id)}
+                  >
+                    <DeleteForeverOutlinedIcon />
+                  </IconButton>
+                    </Tooltip>
+                  </>
                 )}
               </TableCell>
               <CustomTableCell {...{ row, name: "name", onChange }} />
