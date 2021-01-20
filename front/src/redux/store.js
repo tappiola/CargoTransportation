@@ -5,7 +5,7 @@ import middlewares from './middlewares';
 import rootReduser from './reducers/root';
 import { throttle } from 'utils';
 
-const loadState = () => {
+export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {

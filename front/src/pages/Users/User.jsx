@@ -83,7 +83,12 @@ function User() {
               </Grid>
             </Grid>
 
-            <BaseField name="birthday" type="date" label="Дата рождения" InputLabelProps={{ shrink: true }} />
+            <BaseField
+              name="birthday"
+              type="date"
+              label="Дата рождения"
+              InputLabelProps={{ shrink: true }}
+            />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>
