@@ -5,7 +5,7 @@ import middlewares from './middlewares';
 import rootReduser from './reducers/root';
 import { throttle } from 'utils';
 
-const loadState = () => {
+export const loadState = () => {
   try {
     return JSON.parse(localStorage.getItem('state')) || undefined;
   } catch (err) {

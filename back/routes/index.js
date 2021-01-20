@@ -6,10 +6,10 @@ const consignmentNoteRouter = require('../controllers/consignmentNoteController'
 const waybillRouter = require('../controllers/waybillController');
 
 module.exports = (app) => {
-  app.use('/users', userRouter);
-  app.use('/employees', employeeRouter);
-  app.use('/clients', clientRouter);
-  app.use('/warehouses', warehouseRouter);
-  app.use('/consignment-notes', consignmentNoteRouter);
-  app.use('/waybills', waybillRouter);
+  app.use('/api/users', userRouter);
+  app.use('/api/employees', employeeRouter);
+  app.use('/api/clients', clientRouter);
+  app.use('/api/warehouses', warehouseRouter);
+  app.use('/api/consignment-notes', consignmentNoteRouter);
+  app.use('/api/waybills', waybillRouter);
 };

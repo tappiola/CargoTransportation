@@ -43,7 +43,7 @@ function EmployeesList({
         <CustomGrid
           rows={employeesData}
           columns={columns}
-          loading={!employeesLoadComplete}
+          loading={companyId && !employeesLoadComplete}
           onSelectionChange={(newSelection) => {
             setSelection(newSelection.rowIds);
           }}
@@ -75,7 +75,7 @@ const mapStateToProps = ({ employees, currentUser }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: (id) => dispatch(dispatchGetEmployees(id)),
+  initEmployees: (id) => id && dispatch(dispatchGetEmployees(id)),
   removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
 });
 
