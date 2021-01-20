@@ -53,7 +53,7 @@ export const ADDRESS = {
 };
 
 export const COMPANY_NAME = {
-  field: 'company_name',
+  field: 'companyName',
   headerName: 'Компания',
   flex: 3,
   renderCell: valueOrBlank,
