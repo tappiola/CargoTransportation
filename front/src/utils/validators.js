@@ -4,6 +4,7 @@ import * as yup from 'yup';
 yup.setLocale({
   mixed: {
     required: 'Обязательное поле',
+    // notType: 'Неверный формат'
   },
   string: {
     email: 'Некорректный email',
@@ -13,6 +14,11 @@ yup.setLocale({
   date: {
     max: 'Некорректная дата',
   },
+  object: {
+    string: {
+      required: 'Обязательное поле',
+    }
+  }
 });
 
 export { yup };

@@ -5,4 +5,5 @@ export { getEmployees, deleteEmployees, setEmployee, updateEmployee } from './em
 export { getClients, deleteClients } from './clients';
 export { getWarehouses, deleteWarehouses } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
-export { getConsignmentNotes, deleteConsignmentNotes } from './consignmentNotes';
+export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
+export {getDocuments} from './documents';

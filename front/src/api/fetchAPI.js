@@ -41,5 +41,6 @@ export const fetchAPI = async (uri, data, method = 'GET') => {
         return Promise.reject(new Error(errors.join(', ')));
       });
     })
-    .catch((error) => Promise.reject(error));
+    .catch((error) => {
+      Promise.reject(error)});
 };

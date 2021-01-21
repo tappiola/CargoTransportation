@@ -7,6 +7,7 @@ const {
   Warehouse,
   ConsignmentNoteStatus,
 } = require('../models');
+const validate = require('../middlewares/validate');
 
 const router = Router();
 
@@ -65,4 +66,10 @@ router.delete('/', async (req, res) => {
   res.status(204).end();
 });
 
+router.post('/create', validate.consignmentNote, async (req, res, next) => {
+  await ConsignmentNote.create(req.body);
+  res.status(200).end();
+});
+
 module.exports = router;
+
