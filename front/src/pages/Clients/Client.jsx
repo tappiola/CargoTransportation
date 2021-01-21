@@ -14,28 +14,28 @@ import Grid from '@material-ui/core/Grid';
 import { clientResolver as resolver } from './clientResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
-import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
+import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions/clients';
 import { usePending } from 'utils';
 
-const selector = (id) => ({ clients }) => {
+const selector = (id) => ({ clients, currentUser: { companyId } }) => {
   const client = clients.clientsData.find(
     ({ id: _id }) => _id.toString() === id,
   );
 
-  return client;
+  return { ...client, companyId };
 };
 
 function User() {
   const { id } = useParams();
-  const defaultValues = useSelector(selector(id));
+  const { companyId, ...defaultValues } = useSelector(selector(id));
   const dispatch = useDispatch();
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
   const sendFormData = (clientId, formData) => dispatch(
-    clientId
-      ? dispatchUpdateUser(formData, clientId)
-      : dispatchSetUser(formData),
+    id
+      ? dispatchUpdateClient({ ...formData, clientId, companyId })
+      : dispatchSetClient({ ...formData, clientId }),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, id));

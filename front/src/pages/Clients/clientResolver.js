@@ -9,10 +9,10 @@ const clientSchema = yup.object().shape({
   companyName: yup.string(),
   email: yup.string().required().email(),
   birthday: yup.date().max(new Date()),
-  country: yup.string(),
-  city: yup.string(),
-  street: yup.string(),
-  house: yup.string(),
+  country: yup.string().nullable(),
+  city: yup.string().nullable(),
+  street: yup.string().nullable(),
+  house: yup.string().nullable(),
   isActive: yup.bool(),
 });
 

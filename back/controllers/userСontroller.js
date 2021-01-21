@@ -151,7 +151,7 @@ router.get('/logout', authorize(), (req, res) => {
   res.status(204).end();
 });
 
-router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
+router.put('/:id', authorize('global_admin', 'admin'), async (req, res) => {
   const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role } });
