@@ -1,10 +1,8 @@
-import { getAuthToken } from 'utils';
 import * as types from '../actions/actionTypes';
+import { getAuthToken } from 'utils';
 
 const initialState = {
-  authorization: {
-    isSuccess: !!getAuthToken(),
-  },
+  isAuthorized: !!getAuthToken(),
 };
 
 export function currentUserReducer(state = initialState, action) {
@@ -13,11 +11,12 @@ export function currentUserReducer(state = initialState, action) {
       return {
         ...state,
         isAuthorized: action.isAuthorized,
+        roles: action.roles,
+        companyId: action.companyId,
       };
     }
 
     case types.CURRENT_USER_LOGOUT: {
-      localStorage.removeItem('token');
       return {
         ...initialState,
         isAuthorized: false,

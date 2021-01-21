@@ -1,44 +1,39 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
-
 import { useForm, FormProvider } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
 
+import { userResolver as resolver } from './userResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
-import { userResolver as resolver } from './userResolver';
+import { dispatchSetUser, dispatchUpdateUser } from 'redux/actions/users';
+import { usePending } from 'utils';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-// temporary solution
-const preNormalize = (data, id) => {
-  if (!id) return undefined;
-  const currentUser = data.find(({ id: _id }) => _id.toString() === id);
+const selector = (id) => ({ users }) => {
+  const user = users.usersData.find(({ id: _id }) => _id.toString() === id);
+  const roles = user?.roles && user.roles.map(({ role }) => role);
 
-  return {
-    roles: [],
-    ...currentUser,
-    country: currentUser.country || 'Беларусь',
-  };
+  return user && { ...user, roles };
 };
 
 const normalize = ({ roles: asObj, ...data }, id) => ({
   ...data,
   id,
-  roles: Object.entries(asObj)
+  roles: Object.entries(asObj || {})
     .filter(([, checked]) => checked)
     .map(([role]) => role),
 });
@@ -50,17 +45,18 @@ function User() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
+  const sendFormData = (userId, formData) => dispatch(
+    userId
+      ? dispatchUpdateUser(normalize(formData, userId))
+      : dispatchSetUser(normalize(formData)),
+  );
+
+  const { bindPending, handler } = usePending(sendFormData.bind(null, id));
+
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
-        <form
-          noValidate
-          onSubmit={handleSubmit((formData) => (
-            id
-              ? dispatch(dispatchUpdateUser(normalize(formData, id)))
-              : dispatch(dispatchSetUser(normalize(formData)))
-          ))}
-        >
+        <form noValidate onSubmit={handleSubmit(handler)}>
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
@@ -115,8 +111,7 @@ function User() {
                 {errors.roles && 'Выберите хотя бы одну роль'}
               </FormHelperText>
             </FormControl>
-
-            <SubmitButton>Готово</SubmitButton>
+            <SubmitButton {...bindPending}>Готово</SubmitButton>
           </Grid>
         </form>
       </FormProvider>
@@ -124,12 +119,4 @@ function User() {
   );
 }
 
-export default connect(
-  ({ users }) => ({ data: users.usersData }),
-  (dispatch) => ({
-    sendFormData: (id, data) => (
-      id
-        ? dispatch(dispatchUpdateUser(normalize(data, id)))
-        : dispatch(dispatchSetUser(normalize(data)))),
-  }),
-)(User);
+export default User;

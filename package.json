@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front && npm install && npm run build"
+    "heroku-postbuild": "cd front && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "eslint": "^7.16.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-autofix": "^1.0.3",
     "eslint-plugin-import": "^2.22.1",

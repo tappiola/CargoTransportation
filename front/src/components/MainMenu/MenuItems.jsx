@@ -1,16 +1,18 @@
 import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import ReportIcon from '@material-ui/icons/Report';
-import EmailIcon from '@material-ui/icons/Email';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { NavLink, useLocation } from 'react-router-dom';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import EmailIcon from '@material-ui/icons/Email';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import PeopleIcon from '@material-ui/icons/People';
+import ReportIcon from '@material-ui/icons/Report';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+
 import { MODULE_NAMES } from 'constants/permissions';
 
 const menuItems = [
@@ -82,11 +84,12 @@ const MENU_ITEMS_CONFIG = {
   },
 };
 
-export function MenuItems() {
+export function MenuItems({ modules }) {
   const { pathname } = useLocation();
   return (
     <div>
       {menuItems
+        .filter(({ module }) => modules.includes(module))
         .map(({ module, basePath }) => {
           const itemConfig = MENU_ITEMS_CONFIG[module];
           const Icon = itemConfig.icon;

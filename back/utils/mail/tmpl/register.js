@@ -1,5 +1,4 @@
-module.exports = (email, password) => {
-	return `
+module.exports = (email, password) => `
     <div class="mailBox">
       <p>This mail was sent from <a href="https://jslab-cargo-transportation.herokuapp.com/" target="_blank">https://jslab-cargo-transportation.herokuapp.com/</a></p>
       <p>You received this letter because this email address was used when registering on the site.If you have not registered on this site, just ignore this letter and delete it. You will not receive such a letter again.</p>
@@ -21,4 +20,3 @@ module.exports = (email, password) => {
       <p>Administration <a href="https://jslab-cargo-transportation.herokuapp.com/" target="_blank">https://jslab-cargo-transportation.herokuapp.com/</a></p>
     </div>
   `;
-};
