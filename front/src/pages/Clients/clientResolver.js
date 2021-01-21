@@ -5,14 +5,14 @@ import { yup } from 'utils';
 const clientSchema = yup.object().shape({
   firstName: yup.string().required().min(4).max(50),
   lastName: yup.string().required().min(4).max(50),
-  middleName: yup.string().min(4).max(50),
-  companyName: yup.string(),
+  middleName: yup.string().max(50),
+  companyName: yup.string().required().min(4).max(50),
   email: yup.string().required().email(),
-  birthday: yup.date().max(new Date()),
-  country: yup.string().nullable(),
-  city: yup.string().nullable(),
-  street: yup.string().nullable(),
-  house: yup.string().nullable(),
+  birthday: yup.date().typeError(),
+  country: yup.string().required(),
+  city: yup.string().required().min(4).max(50),
+  street: yup.string().required().min(4).max(50),
+  house: yup.string().required().min(1).max(50),
   isActive: yup.bool(),
 });
 

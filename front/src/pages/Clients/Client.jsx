@@ -35,7 +35,7 @@ function User() {
   const sendFormData = (clientId, formData) => dispatch(
     id
       ? dispatchUpdateClient({ ...formData, clientId, companyId })
-      : dispatchSetClient({ ...formData, clientId }),
+      : dispatchSetClient({ ...formData, clientId, companyId }),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, id));
