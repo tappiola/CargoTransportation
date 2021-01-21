@@ -6,7 +6,6 @@ import React from "react";
 
 const ControlledAutocomplete = ({ options = [], label,fieldName, getOptionLabel, getOptionSelected, onChange: ignored, defaultValue, name, renderOption }) => {
   const { control, errors } = useFormContext();
-  console.log(errors, control);
 
   return (
     <Controller

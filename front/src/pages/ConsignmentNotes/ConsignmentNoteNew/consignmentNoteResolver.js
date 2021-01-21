@@ -11,9 +11,6 @@ function parseDateString(value, originalValue) {
 }
 
 const consignmentNoteSchema = yup.object().shape({
-  // firstName: yup.string().required().min(4).max(50),
-  // middleName: yup.string().required().min(4).max(50),
-  // lastName: yup.string().required().min(4).max(50),
   consignmentNoteNumber: yup.string().required().min(6).max(12),
   passportNumber: yup.string().required().min(6).max(20),
   // issuedDate: yup.date().transform(parseDateString).required().max(new Date()),
