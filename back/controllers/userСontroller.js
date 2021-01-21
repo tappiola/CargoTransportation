@@ -12,7 +12,8 @@ const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email, roles: role, companyId, ...userData } = req.body;
+  const { companyId } = req;
+  const { email, roles: role, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
   const company = await Company.findByPk(companyId);
   const roles = await Role.findAll({ where: { role } });
@@ -69,7 +70,7 @@ router.post('/login', async (req, res, next) => {
       }
 
       const token = user.generateJWT();
-      const { roles, company } = await User.findOne({
+      const { roles } = await User.findOne({
         where: {
           id: user.id
         },
@@ -86,7 +87,7 @@ router.post('/login', async (req, res, next) => {
         ]
       });
 
-      res.status(200).json({ token, roles, companyId: company && company.id });
+      res.status(200).json({ token, roles });
     });
   })(req, res, next);
 });

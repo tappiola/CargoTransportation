@@ -8,29 +8,22 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
 import {
-  FULLNAME, EMAIL, COMPANY, STATUS,
+  FULLNAME, EMAIL, COMPANY_NAME, STATUS,
 } from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteClients, dispatchGetClients } from 'redux/actions';
 
-const selector = ({ clients, currentUser }) => ({
-  clientsData: clients.clientsData,
-  clientsLoadComplete: clients.clientsLoadComplete,
-  companyId: currentUser.companyId,
-});
-
 function ClientsList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
-  const { clientsData, clientsLoadComplete, companyId } = useSelector(selector);
-
+  const { clientsData, clientsLoadComplete } = useSelector(({ clients }) => clients);
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const columns = [FULLNAME(path), EMAIL, COMPANY, STATUS];
+  const columns = [FULLNAME(path), EMAIL, COMPANY_NAME, STATUS];
 
   useEffect(() => {
-    dispatch(dispatchGetClients(companyId));
+    dispatch(dispatchGetClients());
   }, []);
 
   return (

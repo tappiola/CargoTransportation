@@ -11,22 +11,20 @@ export const handleDeleteClients = (ids) => ({
   ids,
 });
 
-export const dispatchGetClients = (companyId) => (dispatch) => (
-  api
-    .getClients(companyId)
+export const dispatchGetClients = () => (dispatch) => (
+  api.getClients()
     .then((data) => dispatch(setClients(data)))
 );
 
 export const dispatchDeleteClients = (ids) => (dispatch) => (
-  api
-    .deleteClients(ids)
+  api.deleteClients(ids)
     .then(() => dispatch(handleDeleteClients(ids)))
 );
 
-export const dispatchUpdateClient = ({ clientId, ...data }) => () => (
-  api.updateClient({ clientId, ...data })
+export const dispatchUpdateClient = (clientId, data) => () => (
+  api.updateClient(clientId, data)
 );
 
-export const dispatchSetClient = ({ clientId, companyId, ...data }) => () => (
-  api.setClient({ clientId, companyId, ...data })
+export const dispatchSetClient = (data) => () => (
+  api.setClient(data)
 );

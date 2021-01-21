@@ -11,16 +11,14 @@ export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
 
 export const dispatchLogoutUser = () => (dispatch) => {
   dispatch({ type: actionTypes.CURRENT_USER_LOGOUT });
-  localStorage.removeItem('token');
-  localStorage.removeItem('roles');
-  logoutUser();
+  logoutUser().then(() => localStorage.removeItem('token'));
 };
 
 export const loginUser = (email, password) => (dispatch) => signIn(email, password)
   .then(({ token, roles, companyId }) => {
+    localStorage.setItem('token', token);
     const userRoles = roles.map(({ role }) => role);
     dispatch(authorizationCompleted(!!token, userRoles, companyId));
-    localStorage.setItem('token', token);
 
     dispatch(enqueueToast({
       message: 'Вход в систему выполнен успешно',

@@ -4,7 +4,7 @@ const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.get('/', authorize('admin'), async (req, res) => {
-  const { companyId } = req.query;
+  const { companyId: id } = req;
 
   const users = await User.findAll({
     attributes: {
@@ -17,7 +17,7 @@ router.get('/', authorize('admin'), async (req, res) => {
       {
         model: Company,
         attributes: [],
-        where: { id: companyId },
+        where: { id },
       },
     ],
   });

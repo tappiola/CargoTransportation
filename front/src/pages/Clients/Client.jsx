@@ -17,25 +17,25 @@ import BaseField from 'components/ControlledField';
 import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions/clients';
 import { usePending } from 'utils';
 
-const selector = (id) => ({ clients, currentUser: { companyId } }) => {
+const selector = (id) => ({ clients }) => {
   const client = clients.clientsData.find(
     ({ id: _id }) => _id.toString() === id,
   );
 
-  return { ...client, companyId };
+  return client;
 };
 
 function User() {
   const { id } = useParams();
-  const { companyId, ...defaultValues } = useSelector(selector(id));
+  const defaultValues = useSelector(selector(id));
   const dispatch = useDispatch();
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
   const sendFormData = (clientId, formData) => dispatch(
     id
-      ? dispatchUpdateClient({ ...formData, clientId, companyId })
-      : dispatchSetClient({ ...formData, clientId, companyId }),
+      ? dispatchUpdateClient(formData, clientId)
+      : dispatchSetClient(formData),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, id));

@@ -4,8 +4,10 @@ const { authorize } = require('../middlewares/auth');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+const auth = authorize('admin', 'manager', 'dispatcher');
+
+router.get('/', auth, async (req, res) => {
+  const { companyId } = req;
 
   const clients = await Client.findAll({
     where: { linkedCompanyId: companyId },
@@ -14,8 +16,10 @@ router.get('/', async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.post('/register', authorize('admin', 'manager', 'dispatcher'), async (req, res, next) => {
-  const { email, companyId: linkedCompanyId, ...clientData } = req.body;
+router.post('/register', auth, async (req, res, next) => {
+  const { email, ...clientData } = req.body;
+  const { companyId: linkedCompanyId } = req;
+
   const client = await Client.findOne({ where: { email } });
   
   if (client) {
@@ -36,9 +40,11 @@ router.post('/register', authorize('admin', 'manager', 'dispatcher'), async (req
   }
 });
 
-router.put('/:id', authorize('admin', 'manager', 'dispatcher'), async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const { companyId: linkedCompanyId, ...clientData } = req.body;
+  const { ...clientData } = req.body;
+  const { companyId: linkedCompanyId } = req;
+
   const client = await Client.findOne({ where: { id, linkedCompanyId } });
 
   if (!client) {
@@ -50,12 +56,14 @@ router.put('/:id', authorize('admin', 'manager', 'dispatcher'), async (req, res)
   res.status(200).json(client);
 });
 
-router.delete('/', authorize('admin', 'manager'), async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const ids = req.body;
-  
+  const { companyId: linkedCompanyId } = req;
+
   await Client.destroy({
     where: {
       id: ids.map((id) => Number(id)),
+      linkedCompanyId,
     },
   });
 
