@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const { Client } = require('../models');
 const { authorize } = require('../middlewares/auth');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../contants');
 
 const router = Router();
-
-const auth = authorize('admin', 'manager', 'dispatcher');
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
 router.get('/', auth, async (req, res) => {
   const { companyId } = req;
@@ -51,7 +51,9 @@ router.put('/:id', auth, async (req, res) => {
     return res.status(400).json({ error: { message: 'client not found' } });
   }
 
-  await client.update(clientData);
+  await client.update(clientData).catch((err) => {
+    res.status(400).json(err);
+  });
 
   res.status(200).json(client);
 });
