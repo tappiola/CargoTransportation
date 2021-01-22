@@ -1,24 +1,42 @@
 const es = require('../config/elastic.config');
 
-// const { Client } = require('../models');
+const { Client, User } = require('../models');
 
-// async function createIndex() {
-//   const clients = await Client.findAll({ where: {} });
+async function createIndex() {
+  const clients = await Client.findAll({ where: {} });
+  const users = await User.findAll({ where: {} });
 
-//   clients.forEach(async (client) => {
-//     await es.index({
-//       index: 'clients',
-//       body: {
-//         firstName: client.firstName,
-//         companyName: client.companyName,
-//       },
-//     });
-//   });
+  clients.forEach(async ({ firstName, companyName, id }) => {
+    await es.index({
+      id,
+      index: 'clients',
+      body: {  firstName, companyName },
+    });
+  });
 
-//   await es.indices.refresh({ index: 'clients' });
+  users.forEach(async ({ firstName, lastName, id }) => {
+    await es.index({
+      id,
+      index: 'users',
+      body: {  firstName, lastName },
+    });
+  });
 
-// }
+  await es.indices.refresh({ index: 'users' });
+  await es.indices.refresh({ index: 'clients' });
+
+}
 // createIndex();
+
+async function deleteIndex() {
+  await es.indices.delete({
+    index: '_all',
+  });
+}
+// deleteIndex();
+
+
+
 
 const { Router } = require('express');
 const router = Router();
@@ -40,5 +58,7 @@ router.post('/', async (req, res) => {
 
   res.status(200).json(body.hits ? body.hits.hits : []);
 });
+
+
 
 module.exports = router;

@@ -69,19 +69,26 @@ const Client = db.define('client', {
   },
 });
 
-Client.beforeCreate((client) => {
-  elastic.documents.create({
-    id: client.id,
-    index: 'client',
-    type: 'client',
-    body: { title: client.companyName },
+Client.beforeCreate(async ({ firstName, companyName, id }) => {
+  await elastic.index({
+    id,
+    index: 'clients',
+    body: { firstName,  companyName },
   });
 });
 
-Client.beforeDestroy((client) => {
-  elastic.documents.destroy({
-    id: client.id,
+Client.beforeUpdate(async ({ firstName, companyName, id }) => {
+  await elastic.index({
+    id,
+    index: 'clients',
+    body: { firstName,  companyName },
   });
+
+  await elastic.indices.refresh({ index: 'clients' });
+});
+
+Client.beforeDestroy(({ id }) => {
+  elastic.delete({ id, index: 'clients' });
 });
 
 module.exports = Client;

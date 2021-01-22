@@ -17,15 +17,14 @@ export default function ElasticField({ index, field }) {
   return (
     <Autocomplete
       options={options}
-      getOptionLabel={({ firstName }) => firstName}
-      style={{ width: 300 }}
+      getOptionLabel={(option) => option[field]}
+      style={{ width: 300, margin: 50 }}
       renderInput={(params) => (
         <TextField
           {...params}
           value={query}
           onChange={({ target }) => setQuery(target.value)}
           label={field}
-          variant="outlined"
         />
       )}
     />

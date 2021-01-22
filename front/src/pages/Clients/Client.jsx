@@ -4,7 +4,7 @@ import ElasticField from 'components/ElasticField';
 
 function Client() {
   return (
-    <ElasticField index="clients" field="firstName" />
+    <ElasticField index="users" field="firstName" />
   );
 }
 

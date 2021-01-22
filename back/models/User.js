@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const { DataTypes } = require('sequelize');
 const elastic = require('../config/elastic.config');
@@ -85,22 +86,38 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 };
 
-User.beforeUpdate((user, { password }) => {
-  // TODO: Not sure that we need this, user is registered and usable even without these lines
-  // TODO: method beforeCreate() should be enough, as we don't need to update password during each update
+
+User.beforeCreate(async (user) => {
+  const { id, firstName, lastName, password } = user;
+  user.password = hashPassword(password);
+  
+  await elastic.index({
+    id,
+    index: 'users',
+    body: { firstName, lastName },
+  });
+  await elastic.indices.refresh({ index: 'users' });
+});
+
+User.beforeUpdate(async (user, { password }) => {
+  const { id, firstName, lastName } = user;
+
   if (password && isValidPassword(password)) {
     user.password = hashPassword(password);
   }
-  elastic.create({
-    id: user.id,
-    index: 'client',
-    type: 'client',
-    body: { title: user.firstName },
+
+  await elastic.index({
+    id,
+    index: 'users',
+    body: { firstName, lastName },
   });
+  await elastic.indices.refresh({ index: 'users' });
 });
 
-User.beforeCreate((user) => {
-  user.password = hashPassword(user.password);
+User.beforeDestroy(async ({ id }) => {
+  const response = await elastic.delete({ id, index: 'users' });
+  console.log(response);
+  await elastic.indices.refresh({ index: 'users' });
 });
 
 User.prototype.isValidPassword = (password, hash) =>
