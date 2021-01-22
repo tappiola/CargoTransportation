@@ -21,8 +21,8 @@ export const dispatchDeleteClients = (ids) => (dispatch) => (
     .then(() => dispatch(handleDeleteClients(ids)))
 );
 
-export const dispatchUpdateClient = (clientId, data) => () => (
-  api.updateClient(clientId, data)
+export const dispatchUpdateClient = (data, clientId) => () => (
+  api.updateClient(data, clientId)
 );
 
 export const dispatchSetClient = (data) => () => (

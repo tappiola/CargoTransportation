@@ -32,13 +32,13 @@ function User() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
-  const sendFormData = (clientId, formData) => dispatch(
-    id
+  const sendFormData = (clientId) => (formData) => dispatch(
+    clientId
       ? dispatchUpdateClient(formData, clientId)
       : dispatchSetClient(formData),
   );
 
-  const { bindPending, handler } = usePending(sendFormData.bind(null, id));
+  const { bindPending, handler } = usePending(sendFormData(id));
 
   return (
     <Container maxWidth="sm">
