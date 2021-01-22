@@ -40,7 +40,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     }
     const token = newUser.generateJWT();
     const mail = setMailOptions({
-      to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
+      to: process.env.SEND_TO_USER ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
       html: registerTemplate(email, password),
     });
