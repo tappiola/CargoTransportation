@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 
 const Client = db.define('client', {
@@ -66,6 +67,21 @@ const Client = db.define('client', {
   isActive: {
     type: DataTypes.BOOLEAN,
   },
+});
+
+Client.beforeCreate((client) => {
+  elastic.documents.create({
+    id: client.id,
+    index: 'client',
+    type: 'client',
+    body: { title: client.companyName },
+  });
+});
+
+Client.beforeDestroy((client) => {
+  elastic.documents.destroy({
+    id: client.id,
+  });
 });
 
 module.exports = Client;

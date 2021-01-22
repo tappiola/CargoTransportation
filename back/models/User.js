@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { DataTypes } = require('sequelize');
+const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 const { isValidPassword } = require('../utils/password.utils');
 
@@ -90,24 +91,34 @@ User.beforeUpdate((user, { password }) => {
   if (password && isValidPassword(password)) {
     user.password = hashPassword(password);
   }
+  elastic.create({
+    id: user.id,
+    index: 'client',
+    type: 'client',
+    body: { title: user.firstName },
+  });
 });
 
 User.beforeCreate((user) => {
   user.password = hashPassword(user.password);
 });
 
-User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
+User.prototype.isValidPassword = (password, hash) =>
+  bcrypt.compareSync(password, hash);
 
 User.prototype.generateJWT = function () {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
 
-  return jwt.sign({
-    email: this.email,
-    id: this.id,
-    exp: parseInt(expirationDate.getTime() / 1000, 10),
-  }, process.env.jwtToken || 'secret');
+  return jwt.sign(
+    {
+      email: this.email,
+      id: this.id,
+      exp: parseInt(expirationDate.getTime() / 1000, 10),
+    },
+    process.env.jwtToken || 'secret',
+  );
 };
 
 module.exports = User;
