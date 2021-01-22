@@ -1,8 +1,11 @@
-import { useParams } from 'react-router-dom';
+import React from 'react';
+
+import ElasticField from 'components/ElasticField';
 
 function Client() {
-  const { id } = useParams();
-  return `client ${id}`;
+  return (
+    <ElasticField index="clients" field="firstName" />
+  );
 }
 
 export default Client;

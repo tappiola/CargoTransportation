@@ -1,7 +1,8 @@
 const es = require('../config/elastic.config');
+
 // const { Client } = require('../models');
 
-// async function run() {
+// async function createIndex() {
 //   const clients = await Client.findAll({ where: {} });
 
 //   clients.forEach(async (client) => {
@@ -17,19 +18,21 @@ const es = require('../config/elastic.config');
 //   await es.indices.refresh({ index: 'clients' });
 
 // }
+// createIndex();
 
 const { Router } = require('express');
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const { firstName } = req.query;
+router.post('/', async (req, res) => {
+  const { query, index, field } = req.body;
+  console.log(query, index, field);
 
   const { body } = await es.search({
-    index: 'clients',
+    index,
     body: {
       query: {
         match_phrase_prefix: {
-          firstName,
+          [field]: query,
         },
       },
     },

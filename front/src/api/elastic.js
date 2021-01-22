@@ -2,4 +2,4 @@ import { fetchAPI } from 'api/fetchAPI';
 
 const BASE_URI = '/elastic';
 
-export const getResults = async (q) => fetchAPI(`${BASE_URI}?firstName=${q}`);
+export const getOptions = async (query) => fetchAPI(BASE_URI, query, 'POST');
