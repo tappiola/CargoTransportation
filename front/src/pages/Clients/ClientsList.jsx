@@ -8,7 +8,7 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
 import {
-  FULLNAME, EMAIL, COMPANY_NAME, STATUS,
+  FULLNAME, EMAIL, COMPANY, STATUS,
 } from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
@@ -20,7 +20,7 @@ function ClientsList() {
   const { clientsData, clientsLoadComplete } = useSelector(({ clients }) => clients);
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const columns = [FULLNAME(path), EMAIL, COMPANY_NAME, STATUS];
+  const columns = [FULLNAME(path), EMAIL, COMPANY, STATUS];
 
   useEffect(() => {
     dispatch(dispatchGetClients());
