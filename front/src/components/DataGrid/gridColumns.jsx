@@ -110,13 +110,6 @@ export const TTN_CLIENT = {
   renderCell: ({ value }) => value.shortFullName,
 };
 
-export const TTN_ADDRESS = {
-  field: 'warehouse',
-  headerName: 'Cклад',
-  flex: 4,
-  renderCell: ({ value }) => value.fullAddress,
-};
-
 export const TTN_MANAGER = {
   field: 'assignedTo',
   headerName: 'Менеджер',

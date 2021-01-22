@@ -22,7 +22,6 @@ function ConsignmentNotesList({
   const columns = [
     COLUMNS.TNN_NUMBER(path),
     COLUMNS.TTN_CLIENT,
-    COLUMNS.TTN_ADDRESS,
     COLUMNS.TTN_MANAGER,
     COLUMNS.TTN_DRIVER,
     COLUMNS.TTN_STATUS,

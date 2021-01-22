@@ -2,10 +2,9 @@ const { Router } = require('express');
 const {
   ConsignmentNote,
   User,
-  Vehicle,
   Client,
-  Warehouse,
   ConsignmentNoteStatus,
+  Documents,
 } = require('../models');
 const validate = require('../middlewares/validate');
 
@@ -15,7 +14,7 @@ router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
   const clients = await ConsignmentNote.findAll({
-    attributes: ['id', 'number', 'issuedAt'],
+    attributes: ['id', 'number', 'issuedAt', 'vehicle'],
     where: { linkedCompanyId: companyId },
     include: [
       {
@@ -25,10 +24,6 @@ router.get('/', async (req, res) => {
       {
         model: Client,
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      },
-      {
-        model: Warehouse,
-        attributes: ['name', 'fullAddress', 'country', 'city', 'street', 'house'],
       },
       {
         model: User,
@@ -44,10 +39,6 @@ router.get('/', async (req, res) => {
         model: User,
         as: 'createdBy',
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      },
-      {
-        model: Vehicle,
-        attributes: ['number'],
       }],
   });
 
@@ -66,9 +57,29 @@ router.delete('/', async (req, res) => {
   res.status(204).end();
 });
 
-router.post('/create', validate.consignmentNote, async (req, res, next) => {
-  await ConsignmentNote.create(req.body);
-  res.status(200).end();
+router.post('/create', validate.consignmentNote, async (req, res) => {
+  console.log('/create:', req.body);
+
+  const { passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData} = req.body;
+
+  const newNote = {
+    ...consignmentNoteData,
+    linkedCompanyId: 1, // TODO: replace with real value
+    issuedAt: new Date().toISOString(),
+    consignmentNoteStatusId: 1,
+    createdById: 14, // TODO: replace with real value
+  };
+
+  await ConsignmentNote.create(newNote);
+
+  await Documents.upsert({
+    passportNumber,
+    passportIssuedBy,
+    passportIssuedAt,
+    userId: consignmentNoteData.driverId,
+  });
+
+  res.status(200).json({});
 });
 
 module.exports = router;

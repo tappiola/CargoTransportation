@@ -16,9 +16,11 @@ const consignmentNoteSchema = yup.object().shape({
   // issuedDate: yup.date().transform(parseDateString).required().max(new Date()),
   issuedDate: yup.date().required().max(new Date()),
   passportIssuedAt: yup.date().required().max(new Date()),
-  driverName: yup.object({fullName: yup.string().required()}),
-  clientName: yup.object({fullName: yup.string().required()}),
+  manager: yup.object({fullName: yup.string().required()}),
+  driver: yup.object({fullName: yup.string().required()}),
+  client: yup.object({fullName: yup.string().required()}),
   passportIssuedBy: yup.string().required().min(6).max(50),
+  vehicle: yup.string().required().min(5).max(30),
 });
 
 export const consignmentNoteResolver = yupResolver(consignmentNoteSchema);

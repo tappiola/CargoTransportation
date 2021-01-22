@@ -31,6 +31,9 @@ const ConsignmentNote = db.define('consignment_note', {
   revenue: {
     type: DataTypes.INTEGER,
   },
+  vehicle: {
+    type: DataTypes.TEXT,
+  }
 });
 
 module.exports = { ConsignmentNote, ConsignmentNoteStatus };

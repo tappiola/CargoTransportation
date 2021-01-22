@@ -1,21 +1,17 @@
 import Grid from "@material-ui/core/Grid";
 import ControlledAutocomplete from "../../../components/ControlledAutocomplete";
-import BaseField from "../../../components/ControlledField";
+import BaseField from "components/ControlledField";
 import React, {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
 import {useSelector} from "react-redux";
 import * as api from "../../../api";
-
-const driversSelector = (employeesData) => {
-  return employeesData.filter(u => u.roles.reduce((prev, next) => [...prev, next.role], []).includes('driver'));
-
-}
+import {usersWithRoleSelector} from 'redux/selectors/employees';
 
 const DriverForm = () => {
   const { setValue } = useFormContext();
 
   const {employeesData} = useSelector(({employees}) => employees);
-  const driversData = driversSelector(employeesData);
+  const driversData = usersWithRoleSelector(employeesData, 'driver');
 
   const [driverId, setDriverId] = useState();
   const [passportData, setPassportData] = useState({});
@@ -43,7 +39,7 @@ const DriverForm = () => {
               <Grid item xs={12} md={7}>
 
                 <ControlledAutocomplete
-                  name="driverName"
+                  name="driver"
                   fieldName="fullName"
                   options={driversData}
                   getOptionLabel={(option) => option.fullName}
@@ -55,19 +51,22 @@ const DriverForm = () => {
                   defaultValue={{}}
                 />
               </Grid>
-              <Grid item xs={12} md={5}>
+                  <Grid item xs={12} md={5}>
+                <BaseField name="vehicle" label="Транспортное средство" value={passportData.passportNumber}/>
+              </Grid>
+              <Grid item xs={12} md={3}>
                 <BaseField name="passportNumber" label="Номер паспорта" value={passportData.passportNumber}/>
               </Grid>
-              <Grid item xs={12} md={7}>
-                <BaseField name="passportIssuedBy" label="Место выдачи паспорта"/>
-              </Grid>
-              <Grid item xs={12} md={5}>
+                 <Grid item xs={12} md={3}>
                 <BaseField
                   name="passportIssuedAt"
                   label="Дата выдачи паспорта"
                   type="date"
                   InputLabelProps={{shrink: true}}
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <BaseField name="passportIssuedBy" label="Место выдачи паспорта"/>
               </Grid>
             </Grid>
 }

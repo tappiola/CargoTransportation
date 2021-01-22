@@ -12,23 +12,24 @@ export const handleDeleteConsignmentNotes = (ids) => ({
   ids,
 });
 
-export const handleCreateConsignmentNote = (data) => ({
-  type: actionTypes.CONSIGNMENT_NOTES_DELETE,
-  data,
-});
-
-export const dispatchGetConsignmentNotes = () => (dispatch) => {
+export const dispatchGetConsignmentNotes = () => (dispatch) => (
   // TODO: get companyId from token/cookie/session_data
-  api.getConsignmentNotes(1).then((data) => dispatch(setConsignmentNotes(data)));
-};
+  api.getConsignmentNotes(1).then((data) => dispatch(setConsignmentNotes(data)))
+);
 
-export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => {
+export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => (
   api.deleteConsignmentNotes(ids)
-    .then(() => dispatch(handleDeleteConsignmentNotes(ids)));
-};
+    .then(() => dispatch(handleDeleteConsignmentNotes(ids)))
+);
 
-export const dispatchCreateConsignmentNote = (data) => (dispatch) => {
-  api.createConsignmentNote(data)
-    .then(
-      () => dispatch(handleCreateConsignmentNote(data)))
-};
+export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
+
+  api
+    .createConsignmentNote(data)
+    .then(() =>
+      dispatch(enqueueToast({message: 'ТТН успешно зарегистрирована', type: 'success'}))
+    )
+    .catch((e) => {
+      dispatch(enqueueToast({message: `Ошибка при создании ТТН: ${e}`, type: 'error'}));
+    })
+);

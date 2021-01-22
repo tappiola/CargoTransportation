@@ -3,24 +3,23 @@ import ControlledAutocomplete from "../../../components/ControlledAutocomplete";
 import NavButton from "../../../components/Buttons/NavButton";
 import React from "react";
 import {useSelector} from "react-redux";
+import {usersWithRoleSelector} from "../../../redux/selectors/employees";
 
 const ClientForm = () => {
-  const {clientsData} = useSelector(({clients}) => clients);
+  const {employeesData} = useSelector(({employees}) => employees);
+  const managersData = usersWithRoleSelector(employeesData, 'manager');
 
   return <Grid container spacing={3} justify="space-between" alignItems="center">
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12}>
                 <ControlledAutocomplete
-                  name="client"
+                  name="manager"
                   fieldName="fullName"
-                  options={clientsData}
+                  options={managersData}
                   getOptionLabel={(option) => option.fullName}
                   getOptionSelected={(option, value) => option.fullName === value.fullName}
                   label='ФИО'
                   defaultValue={{}}
                 />
-              </Grid>
-              <Grid item xs={12} md={4} lg={3}>
-                <NavButton variant="contained" color="secondary" to={'/clients/new'}>Добавить нового клиента</NavButton>
               </Grid>
             </Grid>
 }

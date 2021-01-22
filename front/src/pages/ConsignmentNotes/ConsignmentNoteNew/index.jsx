@@ -1,25 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
-import Grid from '@material-ui/core/Grid';
-import * as api from 'api';
-
-import BaseField from '../../../components/ControlledField';
 import {FormProvider, useForm} from "react-hook-form";
 import {consignmentNoteResolver as resolver} from "./consignmentNoteResolver";
 import PaddedContainer from "../../../components/PaddedContainer";
 import makeStyles from "@material-ui/styles/makeStyles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Paper from '@material-ui/core/Paper';
 import Typography from "@material-ui/core/Typography";
 import GridToolbar from "../../../components/GridToolbar";
 import SubmitButton from "components/Buttons/SubmitButton";
 import {usePending} from "utils";
-import ControlledAutocomplete from "components/ControlledAutocomplete";
 import {dispatchCreateConsignmentNote} from "../../../redux/actions/consignmentNotes";
 import Goods from './Goods';
 import ClientForm from "./ClientForm";
 import ConsignmentNoteForm from "./ConsignmentNoteForm";
 import DriverForm from "./DriverForm";
+import ManagerForm from './ManagerForm';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
 }));
+
+const normalize = (formData) => {
+  console.log('formData', formData)
+  const {consignmentNoteNumber, client, manager, driver, ...other} = formData;
+  return {
+    ...other,
+    number: Number(consignmentNoteNumber),
+    clientId: client.id,
+    driverId: driver.id,
+    assignedToId: manager.id,
+    goods: [] // TODO
+  };
+}
 
 function Title({children}) {
   return (
@@ -48,7 +57,7 @@ function ConsignmentNoteNew() {
   const {handleSubmit} = methods;
   const classes = useStyles();
   const dispatch = useDispatch();
-  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(formData));
+  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)));
   // const sendFormData = data => console.log(data);
 
   const {bindPending, handler} = usePending(sendFormData);
@@ -78,9 +87,12 @@ function ConsignmentNoteNew() {
             <Title>Шаг 4 - введите данные о грузе</Title>
             <Goods/>
           </Paper>
+          <Paper className={classes.paper}>
+            <Title>Шаг 5 - выберите менеджера для обработки ТТН</Title>
+            <ManagerForm/>
+          </Paper>
           <SubmitButton {...bindPending}>Готово</SubmitButton>
         </form>
-
       </FormProvider>
     </PaddedContainer>
   );

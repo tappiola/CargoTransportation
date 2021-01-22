@@ -21,10 +21,6 @@ export function consignmentNotesReducer(state = initialState, action) {
             [...state.consignmentNotesData.filter((u) => !action.ids.includes(String(u.id)))],
       };
     }
-    case types.CONSIGNMENT_NOTE_CREATE: {
-      return {...state,
-      consignmentNotesData: [...state.consignmentNotesData, action.data]}
-    }
 
     default: {
       return state;
