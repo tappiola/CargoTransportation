@@ -5,6 +5,7 @@ const {
   Client,
   ConsignmentNoteStatus,
   Documents,
+  Good
 } = require('../models');
 const validate = require('../middlewares/validate');
 
@@ -70,7 +71,8 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
     createdById: 14, // TODO: replace with real value
   };
 
-  await ConsignmentNote.create(newNote);
+
+  const {id} = await ConsignmentNote.create(newNote);
 
   await Documents.upsert({
     passportNumber,
@@ -79,7 +81,9 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
     userId: consignmentNoteData.driverId,
   });
 
-  res.status(200).json({});
+  await Good.bulkCreate(goods);
+
+  res.status(200).json({id, consignmentNote: consignmentNoteData.number});
 });
 
 module.exports = router;

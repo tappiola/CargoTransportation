@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import * as api from 'api';
 import {enqueueToast} from "./notifications";
+import {TOAST_TYPES} from 'constants/toastsTypes';
 
 export const setConsignmentNotes = (consignmentNotesData) => ({
   type: actionTypes.CONSIGNMENT_NOTES_SET,
@@ -19,7 +20,10 @@ export const dispatchGetConsignmentNotes = () => (dispatch) => (
 
 export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => (
   api.deleteConsignmentNotes(ids)
-    .then(() => dispatch(handleDeleteConsignmentNotes(ids)))
+    .then(() => {
+      dispatch(handleDeleteConsignmentNotes(ids));
+      dispatch(enqueueToast({message: 'ТТН были успешно удалены', type: TOAST_TYPES.SUCCESS}))
+    })
 );
 
 export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
@@ -27,9 +31,9 @@ export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
   api
     .createConsignmentNote(data)
     .then(() =>
-      dispatch(enqueueToast({message: 'ТТН успешно зарегистрирована', type: 'success'}))
+      dispatch(enqueueToast({message: 'ТТН успешно зарегистрирована', type: TOAST_TYPES.SUCCESS}))
     )
     .catch((e) => {
-      dispatch(enqueueToast({message: `Ошибка при создании ТТН: ${e}`, type: 'error'}));
+      dispatch(enqueueToast({message: `Ошибка при создании ТТН: ${e}`, type: TOAST_TYPES.ERROR}));
     })
 );

@@ -17,7 +17,7 @@ const Documents = db.define('document', {
     allowNull: false,
   },
   passportIssuedAt: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
 });

@@ -12,6 +12,7 @@ const ConsignmentNoteForm = () => {
                   name="issuedDate"
                   label="Дата выдачи"
                   type="date"
+                  disabled
                   defaultValue={new Date().toISOString().slice(0, 10)}
                   InputLabelProps={{shrink: true}}
                 />

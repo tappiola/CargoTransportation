@@ -3,9 +3,10 @@ import ControlledAutocomplete from "../../../components/ControlledAutocomplete";
 import BaseField from "components/ControlledField";
 import React, {useEffect, useState} from "react";
 import {useFormContext} from "react-hook-form";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as api from "../../../api";
 import {usersWithRoleSelector} from 'redux/selectors/employees';
+import {dispatchGetEmployees} from "../../../redux/actions";
 
 const DriverForm = () => {
   const { setValue } = useFormContext();
@@ -16,16 +17,17 @@ const DriverForm = () => {
   const [driverId, setDriverId] = useState();
   const [passportData, setPassportData] = useState({});
 
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(dispatchGetEmployees())}, []);
+
   useEffect(() => {
     if (driverId) {
-
       api.getDocuments(driverId).then(data => {
         setPassportData(data);
         setValue('passportNumber', data.passportNumber, { shouldValidate: true });
         setValue('passportIssuedBy', data.passportIssuedBy, { shouldValidate: true });
-        setValue('passportIssuedAt', data.passportIssuedAt, { shouldValidate: true });
+        setValue('passportIssuedAt', data.passportIssuedAt.slice(0, 10), { shouldValidate: true });
       }
-
       );
     } else {
       setPassportData({});

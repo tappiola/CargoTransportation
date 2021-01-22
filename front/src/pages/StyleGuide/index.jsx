@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
 import { enqueueToast } from 'redux/actions';
+import {TOAST_TYPES} from 'constants/toastsTypes';
 
 function StyleGuide() {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function StyleGuide() {
       </Button>
       <Button onClick={() => onToastEnqueue({
         message: 'ТТН №5698538 была переведена в статус "Обработана" ',
-        type: 'info',
+        type: TOAST_TYPES.INFO,
       })}
       >
         Add info toast
@@ -30,7 +31,7 @@ function StyleGuide() {
       <Button onClick={() => onToastEnqueue(
         {
           message: 'Произошла ошибка при попытке получить список пользователей',
-          type: 'error',
+          type: TOAST_TYPES.ERROR,
           duration: 5000,
         },
       )}
@@ -38,10 +39,10 @@ function StyleGuide() {
         Add error toast
       </Button>
       {/* Examples how to trigger notification from React component directly. */}
-      <Button onClick={() => addToast('Вы успешно вошли в систему', 'success')}>
+      <Button onClick={() => addToast('Вы успешно вошли в систему', TOAST_TYPES.SUCCESS)}>
         Add success toast
       </Button>
-      <Button onClick={() => addToast('Пользователь с данным логином не найден', 'warning')}>
+      <Button onClick={() => addToast('Пользователь с данным логином не найден', TOAST_TYPES.WARNING)}>
         Add warning toast
       </Button>
     </>

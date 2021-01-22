@@ -1,11 +1,15 @@
 import Grid from "@material-ui/core/Grid";
 import ControlledAutocomplete from "../../../components/ControlledAutocomplete";
 import NavButton from "../../../components/Buttons/NavButton";
-import React from "react";
-import {useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {dispatchGetClients} from "redux/actions";
 
 const ClientForm = () => {
   const {clientsData} = useSelector(({clients}) => clients);
+
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(dispatchGetClients())}, []);
 
   return <Grid container spacing={3} justify="space-between" alignItems="center">
               <Grid item xs={12} md={8} lg={9}>

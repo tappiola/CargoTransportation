@@ -11,11 +11,12 @@ function parseDateString(value, originalValue) {
 }
 
 const consignmentNoteSchema = yup.object().shape({
-  consignmentNoteNumber: yup.string().required().min(6).max(12),
+  consignmentNoteNumber:
+    yup.number().required()
+      .typeError('Номер ТТН должен быть числом')
+      .positive().integer(),
   passportNumber: yup.string().required().min(6).max(20),
-  // issuedDate: yup.date().transform(parseDateString).required().max(new Date()),
-  issuedDate: yup.date().required().max(new Date()),
-  passportIssuedAt: yup.date().required().max(new Date()),
+  passportIssuedAt: yup.date().typeError('Невалидная дата').max(new Date()),
   manager: yup.object({fullName: yup.string().required()}),
   driver: yup.object({fullName: yup.string().required()}),
   client: yup.object({fullName: yup.string().required()}),

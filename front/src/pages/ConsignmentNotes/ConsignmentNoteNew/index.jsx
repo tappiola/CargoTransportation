@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 
 import {FormProvider, useForm} from "react-hook-form";
 import {consignmentNoteResolver as resolver} from "./consignmentNoteResolver";
@@ -17,7 +17,6 @@ import ConsignmentNoteForm from "./ConsignmentNoteForm";
 import DriverForm from "./DriverForm";
 import ManagerForm from './ManagerForm';
 
-
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -31,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const normalize = (formData) => {
-  console.log('formData', formData)
   const {consignmentNoteNumber, client, manager, driver, ...other} = formData;
   return {
     ...other,
@@ -58,7 +56,6 @@ function ConsignmentNoteNew() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)));
-  // const sendFormData = data => console.log(data);
 
   const {bindPending, handler} = usePending(sendFormData);
 
