@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const { DataTypes } = require('sequelize');
 const elastic = require('../config/elastic.config');
@@ -86,38 +85,36 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 };
 
-
 User.beforeCreate(async (user) => {
-  const { id, firstName, lastName, password } = user;
-  user.password = hashPassword(password);
-  
-  await elastic.index({
+  user.password = hashPassword(user.password);
+});
+
+User.afterCreate(({ id, firstName, lastName }) => {
+  elastic.index({
     id,
     index: 'users',
     body: { firstName, lastName },
   });
-  await elastic.indices.refresh({ index: 'users' });
 });
 
-User.beforeUpdate(async (user, { password }) => {
+User.beforeUpdate((user, { password }) => {
   const { id, firstName, lastName } = user;
+  
+  elastic.update({
+    id,
+    index: 'users',
+    body: {
+      doc: { firstName, lastName },
+    },
+  });
 
   if (password && isValidPassword(password)) {
     user.password = hashPassword(password);
   }
-
-  await elastic.index({
-    id,
-    index: 'users',
-    body: { firstName, lastName },
-  });
-  await elastic.indices.refresh({ index: 'users' });
 });
 
-User.beforeDestroy(async ({ id }) => {
-  const response = await elastic.delete({ id, index: 'users' });
-  console.log(response);
-  await elastic.indices.refresh({ index: 'users' });
+User.beforeBulkDestroy(async ({ where: { id: ids } }) => {
+  ids.forEach((id) => elastic.delete({ id, index: 'users' }));
 });
 
 User.prototype.isValidPassword = (password, hash) =>

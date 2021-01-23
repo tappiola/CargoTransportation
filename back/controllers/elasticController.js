@@ -22,8 +22,8 @@ async function createIndex() {
     });
   });
 
-  await es.indices.refresh({ index: 'users' });
   await es.indices.refresh({ index: 'clients' });
+  await es.indices.refresh({ index: 'users' });
 
 }
 // createIndex();
