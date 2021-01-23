@@ -19,10 +19,6 @@ import ManagerForm from './ManagerForm';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    width: '100%',
-  },
   paper: {
     padding: theme.spacing(3),
     overflow: 'auto',
@@ -31,14 +27,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const normalize = (formData) => {
-  const {consignmentNoteNumber, client, manager, driver, ...other} = formData;
+  const {consignmentNoteNumber, client, manager, driver, goods, ...other} = formData;
+  const goodsData = goods.map(({id, ...data}) => data);
   return {
     ...other,
-    // number: Number(consignmentNoteNumber),
-    // clientId: client.id,
-    // driverId: driver.id,
-    // assignedToId: manager.id,
-    goods: [] // TODO
+    number: Number(consignmentNoteNumber),
+    clientId: client.id,
+    driverId: driver.id,
+    assignedToId: manager.id,
+    goods: goodsData,
   };
 }
 
@@ -71,21 +68,21 @@ function ConsignmentNoteNew() {
           // noValidate
           onSubmit={handleSubmit(handler)}
         >
-          {/*<Paper className={classes.paper}>*/}
-          {/*  <Title>Шаг 1 - выберите клиента</Title>*/}
-          {/*  <ClientForm/>*/}
-          {/*</Paper>*/}
-          {/*<Paper className={classes.paper}>*/}
-          {/*  <Title>Шаг 2 - заполните данные ТТН</Title>*/}
-          {/*  <ConsignmentNoteForm/>*/}
-          {/*</Paper>*/}
-          {/*<Paper className={classes.paper}>*/}
-          {/*  <Title>Шаг 3 - введите данные водителя</Title>*/}
-          {/*  <DriverForm/>*/}
-          {/*</Paper>*/}
+          <Paper className={classes.paper}>
+            <Title>Шаг 1 - выберите клиента</Title>
+            <ClientForm/>
+          </Paper>
+          <Paper className={classes.paper}>
+            <Title>Шаг 2 - заполните данные ТТН</Title>
+            <ConsignmentNoteForm/>
+          </Paper>
+          <Paper className={classes.paper}>
+            <Title>Шаг 3 - введите данные водителя</Title>
+            <DriverForm/>
+          </Paper>
           <Paper className={classes.paper}>
             <Title>Шаг 4 - введите данные о грузе</Title>
-            <Goods/>
+            <Goods />
           </Paper>
           <Paper className={classes.paper}>
             <Title>Шаг 5 - выберите менеджера для обработки ТТН</Title>

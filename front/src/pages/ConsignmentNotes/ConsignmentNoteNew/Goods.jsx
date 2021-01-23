@@ -15,6 +15,8 @@ import {ConfirmDialog} from "@tappiola/material-ui-externals";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Input from "@material-ui/core/Input";
 import {useFormContext} from "react-hook-form";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,8 +25,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     overflowX: "auto"
   },
+  formControl: {
+    width: '100%',
+  },
   table: {
-    minWidth: 650
+    width: '100%',
   },
   selectTableCell: {
     width: 60
@@ -39,11 +44,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const createData = (name, quantity, measurement, cost, remarks) => ({
+const createData = (name, quantity, unit, cost, remarks) => ({
   id: +new Date(),
   name,
   quantity,
-  measurement,
+  unit,
   cost,
   remarks,
 });
@@ -78,8 +83,17 @@ const CustomTableRow = ({row, onDelete, onRowChange}) => {
     setCurrentData(currentData => ({...currentData, ...newData}));
   };
 
+  const onCancel = ({id, ...data}) => {
+    if (Object.values(data).some(v => v !== '')) {
+      setIsEditMode(false);
+      setCurrentData({});
+    } else {
+      onDelete();
+    }
+  }
+
   return <>
-    <TableRow key={row.id} form="my_form">
+    <TableRow key={row.id}>
                     <TableCell className={classes.selectTableCell}>
                       {isEditMode ? (
                         <>
@@ -97,11 +111,7 @@ const CustomTableRow = ({row, onDelete, onRowChange}) => {
                           <Tooltip title="Отменить">
                             <IconButton
                               aria-label="revert"
-                              onClick={() => {
-                                setIsEditMode(false);
-                                setCurrentData({});
-                              }
-                              }
+                              onClick={() => onCancel(row)}
                             >
                               <RevertIcon/>
                             </IconButton>
@@ -132,7 +142,7 @@ const CustomTableRow = ({row, onDelete, onRowChange}) => {
                     </TableCell>
                     <CustomTableCell {...{row, isEditMode, name: "name", onChange}} />
                     <CustomTableCell {...{row, isEditMode, name: "quantity", onChange}} />
-                    <CustomTableCell {...{row, isEditMode, name: "measurement", onChange}} />
+                    <CustomTableCell {...{row, isEditMode, name: "unit", onChange}} />
                     <CustomTableCell {...{row, isEditMode, name: "cost", onChange}} />
                     <CustomTableCell {...{row, isEditMode, name: "remarks", onChange}} />
                   </TableRow>
@@ -143,7 +153,7 @@ const CustomTableRow = ({row, onDelete, onRowChange}) => {
           onPopupClose={() => setIsConfirmDialogOpen(false)}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            onDelete(row.id);
+            onDelete();
           }}
         />
       )}
@@ -151,9 +161,9 @@ const CustomTableRow = ({row, onDelete, onRowChange}) => {
 }
 
 const Goods = () => {
-    const classes = useStyles();
-  const [rows, setRows] = React.useState([]);
-  const { setValue, register } = useFormContext();
+  const classes = useStyles();
+  const [rows, setRows] = useState([]);
+  const { setValue, register, errors, clearErrors } = useFormContext();
 
   useEffect(() => {
     register({ name: "goods" });
@@ -168,6 +178,7 @@ const Goods = () => {
   }
 
   const onRowAdd = () => {
+    clearErrors();
     setRows(rows => [...rows, createData('', '', '', '', '')]);
   }
 
@@ -175,8 +186,8 @@ const Goods = () => {
     setRows(rows => rows.map(r => r.id === row.id ? {...row, ...newData}: r));
   }
 
-  return <>
-    <Table className={classes.table} aria-label="caption table" ref={register}>
+  return <FormControl error={!!errors?.goods}>
+    <Table className={classes.table} ref={register}>
               <caption>
                 <Button
                   color="secondary"
@@ -203,7 +214,16 @@ const Goods = () => {
                 />)}
               </TableBody>
             </Table>
-    </>
+    <FormHelperText>{errors.goods?.message}</FormHelperText>
+                {errors.goods?.constructor === Array
+                && Array.from(new Set(errors.goods
+                  .map(e => Object.values(e))
+                  .reduce((prev, next)=> [...prev, ...next], [])
+                  .map(i=> i.message)))
+                  .map(message => <FormHelperText>{message}</FormHelperText>)
+                }
+
+            </FormControl>
 }
 
 export default Goods;
