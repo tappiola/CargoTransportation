@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import { signIn, logoutUser } from 'api';
-import {TOAST_TYPES} from 'constants/toastsTypes';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,

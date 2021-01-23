@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
+import { TOAST_TYPES } from 'constants/toastsTypes';
 import { enqueueToast } from 'redux/actions';
-import {TOAST_TYPES} from 'constants/toastsTypes';
 
 function StyleGuide() {
   const dispatch = useDispatch();

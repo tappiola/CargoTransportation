@@ -6,4 +6,4 @@ export { getClients, deleteClients } from './clients';
 export { getWarehouses, deleteWarehouses } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
 export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
-export {getDocuments} from './documents';
+export { getDocuments } from './documents';

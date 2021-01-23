@@ -1,7 +1,7 @@
+import { TOAST_TYPES } from '../../constants/toastsTypes';
 import * as actionTypes from './actionTypes';
 import * as api from 'api';
-import {authorizationCompleted, enqueueToast} from 'redux/actions';
-import {TOAST_TYPES} from "../../constants/toastsTypes";
+import { authorizationCompleted, enqueueToast } from 'redux/actions';
 
 const redirectionHandler = (dispatch) => ({ error }) => {
   if (error?.message === 'Forbidden') {
@@ -49,6 +49,6 @@ export const dispatchDeleteUsers = (ids) => (dispatch) => (
     .deleteUsers(ids)
     .then(() => {
       dispatch(handleDeleteUsers(ids));
-      dispatch(enqueueToast({message: 'Пользователи были успешно удалены', type: TOAST_TYPES.SUCCESS}))
+      dispatch(enqueueToast({ message: 'Пользователи были успешно удалены', type: TOAST_TYPES.SUCCESS }));
     })
 );

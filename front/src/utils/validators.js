@@ -16,7 +16,7 @@ yup.setLocale({
   object: {
     string: {
       required: 'Обязательное поле',
-    }
+    },
   },
 });
 

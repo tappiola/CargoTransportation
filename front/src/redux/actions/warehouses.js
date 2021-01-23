@@ -1,7 +1,7 @@
+import { TOAST_TYPES } from '../../constants/toastsTypes';
 import * as actionTypes from './actionTypes';
+import { enqueueToast } from './notifications';
 import * as api from 'api';
-import {enqueueToast} from "./notifications";
-import {TOAST_TYPES} from "../../constants/toastsTypes";
 
 export const setWarehouses = (warehousesData) => ({
   type: actionTypes.WAREHOUSES_SET,
@@ -22,6 +22,6 @@ export const dispatchDeleteWarehouses = (ids) => (dispatch) => {
   api.deleteWarehouses(ids)
     .then(() => {
       dispatch(handleDeleteWarehouses(ids));
-      dispatch(enqueueToast({message: 'Склады были успешно удалены', type: TOAST_TYPES.SUCCESS}))
+      dispatch(enqueueToast({ message: 'Склады были успешно удалены', type: TOAST_TYPES.SUCCESS }));
     });
 };

@@ -1,12 +1,12 @@
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
-import {Controller, useFormContext} from "react-hook-form";
-import React from "react";
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const ControlledAutocomplete = ({
-  options = [], label,fieldName, getOptionLabel, getOptionSelected, onChange: ignored,
-  defaultValue, name, renderOption, onSelectionChange
+  options = [], label, fieldName, getOptionLabel, getOptionSelected,
+  defaultValue, name, renderOption, onSelectionChange,
 }) => {
   const { control, errors } = useFormContext();
 
@@ -28,7 +28,7 @@ const ControlledAutocomplete = ({
             />
           )}
           onChange={(e, data) => {
-            if(onSelectionChange){
+            if (onSelectionChange) {
               onSelectionChange(data);
             }
             onChange(data);
@@ -42,6 +42,6 @@ const ControlledAutocomplete = ({
       control={control}
     />
   );
-}
+};
 
 export default ControlledAutocomplete;
