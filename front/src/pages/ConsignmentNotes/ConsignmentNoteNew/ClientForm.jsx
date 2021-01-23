@@ -4,6 +4,7 @@ import NavButton from "../../../components/Buttons/NavButton";
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {dispatchGetClients} from "redux/actions";
+import {isEmpty} from "../../../utils/objectComparison";
 
 const ClientForm = () => {
   const {clientsData} = useSelector(({clients}) => clients);
@@ -17,8 +18,8 @@ const ClientForm = () => {
                   name="client"
                   fieldName="fullName"
                   options={clientsData}
-                  getOptionLabel={(option) => option.fullName}
-                  getOptionSelected={(option, value) => option.fullName === value.fullName}
+                  getOptionLabel={(option) => option?.fullName || ""}
+                  getOptionSelected={(option, value) => isEmpty(value) || option.fullName === value.fullName}
                   label='ФИО'
                   defaultValue={{}}
                 />

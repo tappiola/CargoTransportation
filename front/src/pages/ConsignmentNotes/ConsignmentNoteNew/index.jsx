@@ -16,6 +16,7 @@ import ClientForm from "./ClientForm";
 import ConsignmentNoteForm from "./ConsignmentNoteForm";
 import DriverForm from "./DriverForm";
 import ManagerForm from './ManagerForm';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -51,12 +52,14 @@ function Title({children}) {
 
 function ConsignmentNoteNew() {
 
+  const classes = useStyles();
+  const history = useHistory();
+  const redirect = () => Promise.resolve(history.push('/consignment-notes'));
+
   const methods = useForm({resolver});
   const {handleSubmit} = methods;
-  const classes = useStyles();
   const dispatch = useDispatch();
-  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)));
-
+  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData))).then(redirect);
   const {bindPending, handler} = usePending(sendFormData);
 
   return (

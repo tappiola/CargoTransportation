@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as api from "../../../api";
 import {usersWithRoleSelector} from 'redux/selectors/employees';
 import {dispatchGetEmployees} from "../../../redux/actions";
+import {isEmpty} from "../../../utils/objectComparison";
 
 const DriverForm = () => {
   const { setValue } = useFormContext();
@@ -44,10 +45,10 @@ const DriverForm = () => {
                   name="driver"
                   fieldName="fullName"
                   options={driversData}
-                  getOptionLabel={(option) => option.fullName}
+                  getOptionLabel={(option) => option?.fullName || ""}
                   getOptionSelected={(option, value) => {
                     setDriverId(value.id);
-                    return option.fullName === value.fullName
+                    return isEmpty(value) || option.fullName === value.fullName
                   }}
                   label='ФИО'
                   defaultValue={{}}
