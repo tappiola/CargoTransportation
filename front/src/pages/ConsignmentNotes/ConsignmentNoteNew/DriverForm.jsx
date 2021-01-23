@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import * as api from "../../../api";
 import {usersWithRoleSelector} from 'redux/selectors/employees';
 import {dispatchGetEmployees} from "../../../redux/actions";
-import {isEmpty} from "../../../utils/objectComparison";
+import {isEmpty} from "utils/objectUtils";
 
 const DriverForm = () => {
   const { setValue } = useFormContext();
@@ -27,7 +27,7 @@ const DriverForm = () => {
         setPassportData(data);
         setValue('passportNumber', data.passportNumber, { shouldValidate: true });
         setValue('passportIssuedBy', data.passportIssuedBy, { shouldValidate: true });
-        setValue('passportIssuedAt', data.passportIssuedAt.slice(0, 10), { shouldValidate: true });
+        setValue('passportIssuedAt', data.passportIssuedAt, { shouldValidate: true });
       }
       );
     } else {
@@ -45,10 +45,10 @@ const DriverForm = () => {
                   name="driver"
                   fieldName="fullName"
                   options={driversData}
-                  getOptionLabel={(option) => option?.fullName || ""}
-                  getOptionSelected={(option, value) => {
-                    setDriverId(value.id);
-                    return isEmpty(value) || option.fullName === value.fullName
+                  getOptionLabel={(option) => option.fullName || ""}
+                  getOptionSelected={(option, value) => isEmpty(value) || option.fullName === value.fullName}
+                  onSelectionChange={(value) => {
+                    setDriverId(value?.id);
                   }}
                   label='ФИО'
                   defaultValue={{}}

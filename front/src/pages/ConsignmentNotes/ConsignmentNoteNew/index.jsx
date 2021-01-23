@@ -17,6 +17,7 @@ import ConsignmentNoteForm from "./ConsignmentNoteForm";
 import DriverForm from "./DriverForm";
 import ManagerForm from './ManagerForm';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,13 +28,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const normalize = (formData) => {
-  const {consignmentNoteNumber, client, manager, driver, goods, ...other} = formData;
+  const {consignmentNoteNumber, client, manager, driver, passportIssuedAt, goods, ...other} = formData;
   const goodsData = goods.map(({id, ...data}) => data);
   return {
     ...other,
     number: Number(consignmentNoteNumber),
     clientId: client.id,
     driverId: driver.id,
+    passportIssuedAt: format(passportIssuedAt, 'yyyy-MM-dd'),
     assignedToId: manager.id,
     goods: goodsData,
   };

@@ -13,10 +13,10 @@ import Table from "@material-ui/core/Table";
 import React, {useState, useEffect} from "react";
 import {ConfirmDialog} from "@tappiola/material-ui-externals";
 import makeStyles from "@material-ui/styles/makeStyles";
-import Input from "@material-ui/core/Input";
 import {useFormContext} from "react-hook-form";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
+import BaseField from 'components/ControlledField';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,16 +54,18 @@ const createData = (name, quantity, unit, cost, remarks) => ({
 });
 
 const CustomTableCell = ({row, isEditMode, name, onChange}) => {
+  const {register} = useFormContext();
   const classes = useStyles();
   return (
     <TableCell align="left" className={classes.tableCell}>
       {isEditMode ? (
-        <Input
+        <BaseField
           defaultValue={row[name]}
           name={name}
           placeholder={name}
-          onChange={e => onChange(e, row)}
+          onInput={e => onChange(e, row)}
           className={classes.input}
+          inputRef={register}
         />
       ) : (
         row[name]
@@ -222,7 +224,6 @@ const Goods = () => {
                   .map(i=> i.message)))
                   .map(message => <FormHelperText>{message}</FormHelperText>)
                 }
-
             </FormControl>
 }
 

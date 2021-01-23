@@ -4,7 +4,10 @@ import {Controller, useFormContext} from "react-hook-form";
 import React from "react";
 
 
-const ControlledAutocomplete = ({ options = [], label,fieldName, getOptionLabel, getOptionSelected, onChange: ignored, defaultValue, name, renderOption }) => {
+const ControlledAutocomplete = ({
+  options = [], label,fieldName, getOptionLabel, getOptionSelected, onChange: ignored,
+  defaultValue, name, renderOption, onSelectionChange
+}) => {
   const { control, errors } = useFormContext();
 
   return (
@@ -24,7 +27,12 @@ const ControlledAutocomplete = ({ options = [], label,fieldName, getOptionLabel,
               helperText={errors[name] && errors[name][fieldName]?.message}
             />
           )}
-          onChange={(e, data) => {onChange(data)}}
+          onChange={(e, data) => {
+            if(onSelectionChange){
+              onSelectionChange(data);
+            }
+            onChange(data);
+          }}
           {...props}
         />
       )}
@@ -32,7 +40,6 @@ const ControlledAutocomplete = ({ options = [], label,fieldName, getOptionLabel,
       defaultValue={defaultValue}
       name={name}
       control={control}
-
     />
   );
 }

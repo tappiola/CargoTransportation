@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {usersWithRoleSelector} from "redux/selectors/employees";
 import {dispatchGetEmployees} from "redux/actions";
-import {isEmpty} from "../../../utils/objectComparison";
+import {isEmpty} from "utils/objectUtils";
 
 const ClientForm = () => {
   const {employeesData} = useSelector(({employees}) => employees);
@@ -19,7 +19,7 @@ const ClientForm = () => {
                   name="manager"
                   fieldName="fullName"
                   options={managersData}
-                  getOptionLabel={(option) => option?.fullName || ""}
+                  getOptionLabel={(option) => option.fullName || ""}
                   getOptionSelected={(option, value) => isEmpty(value) || option.fullName === value.fullName}
                   label='ФИО'
                   defaultValue={{}}

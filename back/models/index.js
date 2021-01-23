@@ -26,7 +26,7 @@ Role.belongsToMany(Endpoint, { through: RolePermission });
 Client.belongsTo(Company, { as: 'linkedCompany' });
 Warehouse.belongsTo(Company, { as: 'linkedCompany' });
 
-Documents.belongsTo(User);
+User.hasOne(Documents);
 
 ConsignmentNote.belongsTo(ConsignmentNoteStatus);
 ConsignmentNote.belongsTo(Client);
