@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { getOptions } from 'api/elastic';
+const useElastic = (index, field) => {
+  const [options, setOptions] = useState([]);
+  const socket = new WebSocket('ws://localhost:5000/api/elastic');
+
+  socket.onmessage = ({ data }) => {
+    const results = JSON.parse(data).map(({ _source }) => _source);
+    setOptions(results);
+  };
+
+  return {
+    options,
+    onChange: ({ target }) => {
+      if (socket.readyState === socket.OPEN) {
+        socket.send(JSON.stringify({ query: target.value, index, field }));
+      }
+    },
+  };
+};
 
 export default function ElasticField({ index, field }) {
-  const [options, setOptions] = useState([]);
-  const [query, setQuery] = useState('');
-
-  useEffect(async () => {
-    const result = await getOptions({ index, query, field });
-    setOptions(result.map(({ _source }) => _source));
-  }, [query]);
+  const { options, onChange } = useElastic(index, field);
 
   return (
     <Autocomplete
@@ -22,8 +33,7 @@ export default function ElasticField({ index, field }) {
       renderInput={(params) => (
         <TextField
           {...params}
-          value={query}
-          onChange={({ target }) => setQuery(target.value)}
+          onChange={onChange}
           label={field}
         />
       )}
