@@ -10,10 +10,12 @@ import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
 import EditIcon from "@material-ui/icons/EditOutlined";
 import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined";
 import Table from "@material-ui/core/Table";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {ConfirmDialog} from "@tappiola/material-ui-externals";
 import makeStyles from "@material-ui/styles/makeStyles";
 import Input from "@material-ui/core/Input";
+import {useFormContext} from "react-hook-form";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,22 +39,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const createData = (name, quantity, measurement, cost, remarks, isEditMode = false) => ({
-  id: name ? name.replace(" ", "_") : '777',
+const createData = (name, quantity, measurement, cost, remarks) => ({
+  id: +new Date(),
   name,
-  quantity, measurement, cost, remarks,
-  isEditMode
+  quantity,
+  measurement,
+  cost,
+  remarks,
 });
 
-const CustomTableCell = ({row, name, onChange}) => {
+const CustomTableCell = ({row, isEditMode, name, onChange}) => {
   const classes = useStyles();
-  const {isEditMode} = row;
   return (
     <TableCell align="left" className={classes.tableCell}>
       {isEditMode ? (
         <Input
-          value={row[name]}
+          defaultValue={row[name]}
           name={name}
+          placeholder={name}
           onChange={e => onChange(e, row)}
           className={classes.input}
         />
@@ -63,70 +67,116 @@ const CustomTableCell = ({row, name, onChange}) => {
   );
 };
 
-const Goods = () => {
+const CustomTableRow = ({row, onDelete, onRowChange}) => {
   const classes = useStyles();
-  // table
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [selectedRowId, setSelectedRowId] = useState();
-  const [rows, setRows] = React.useState([
-    createData("Ламинат", 7, 'упаковка', 24, '-'),
-    createData("Плинтус", 237, 'штука', 37, 'Хрупкий товар'),
-    createData("Обои", 262, 'рулон', 24, '-')
-  ]);
-  const [previous, setPrevious] = React.useState({});
+  const [isEditMode, setIsEditMode] = useState(true);
+  const [currentData, setCurrentData] = useState({});
 
-  const onToggleEditMode = id => {
-    setRows(state => {
-      return rows.map(row => {
-        if (row.id === id) {
-          return {...row, isEditMode: !row.isEditMode};
-        }
-        return row;
-      });
-    });
+  const onChange = (e) => {
+    const newData = {[e.target.name]: e.target.value};
+    setCurrentData(currentData => ({...currentData, ...newData}));
   };
+
+  return <>
+    <TableRow key={row.id} form="my_form">
+                    <TableCell className={classes.selectTableCell}>
+                      {isEditMode ? (
+                        <>
+                          <Tooltip title="Сохранить">
+                            <IconButton
+                              aria-label="done"
+                              onClick={() => {
+                                onRowChange(currentData);
+                                setIsEditMode(false);
+                              }}
+                            >
+                              <DoneIcon/>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Отменить">
+                            <IconButton
+                              aria-label="revert"
+                              onClick={() => {
+                                setIsEditMode(false);
+                                setCurrentData({});
+                              }
+                              }
+                            >
+                              <RevertIcon/>
+                            </IconButton>
+                          </Tooltip>
+                        </>
+                      ) : (
+                        <>
+                          <Tooltip title="Редактировать">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => {
+                                setIsEditMode(true);
+                              }}
+                            >
+                              <EditIcon/>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Удалить">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => setIsConfirmDialogOpen(true)}
+                            >
+                              <DeleteForeverOutlinedIcon/>
+                            </IconButton>
+                          </Tooltip>
+                        </>
+                      )}
+                    </TableCell>
+                    <CustomTableCell {...{row, isEditMode, name: "name", onChange}} />
+                    <CustomTableCell {...{row, isEditMode, name: "quantity", onChange}} />
+                    <CustomTableCell {...{row, isEditMode, name: "measurement", onChange}} />
+                    <CustomTableCell {...{row, isEditMode, name: "cost", onChange}} />
+                    <CustomTableCell {...{row, isEditMode, name: "remarks", onChange}} />
+                  </TableRow>
+        {isConfirmDialogOpen && (
+        <ConfirmDialog
+          title="Удаление товарной позиции"
+          description="Вы уверены, что хотите удалить выбранный товар"
+          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onActionConfirm={() => {
+            setIsConfirmDialogOpen(false);
+            onDelete(row.id);
+          }}
+        />
+      )}
+      </>
+}
+
+const Goods = () => {
+    const classes = useStyles();
+  const [rows, setRows] = React.useState([]);
+  const { setValue, register } = useFormContext();
+
+  useEffect(() => {
+    register({ name: "goods" });
+  }, [register]);
+
+  useEffect(() => {
+    setValue("goods", rows);
+  },[rows]);
 
   const onDelete = (rowId) => {
     setRows(rows => [...rows.filter(r => r.id !== rowId)]);
   }
 
   const onRowAdd = () => {
-    setRows(rows => [...rows, createData('', '', '', '', '', true)]);
+    setRows(rows => [...rows, createData('', '', '', '', '')]);
   }
 
-  const onChange = (e, row) => {
-    if (!previous[row.id]) {
-      setPrevious(state => ({...state, [row.id]: row}));
-    }
-    const value = e.target.value;
-    const name = e.target.name;
-    const {id} = row;
-    const newRows = rows.map(row => {
-      if (row.id === id) {
-        return {...row, [name]: value};
-      }
-      return row;
-    });
-    setRows(newRows);
-  };
-
-  const onRevert = id => {
-    const newRows = rows.map(row => {
-      if (row.id === id) {
-        return previous[id] ? previous[id] : row;
-      }
-      return row;
-    });
-    setRows(newRows);
-    setPrevious(state => {
-      delete state[id];
-      return state;
-    });
-    onToggleEditMode(id);
-  };
+  const onRowChange = (row, newData) => {
+    setRows(rows => rows.map(r => r.id === row.id ? {...row, ...newData}: r));
+  }
 
   return <>
-    <Table className={classes.table} aria-label="caption table">
+    <Table className={classes.table} aria-label="caption table" ref={register}>
               <caption>
                 <Button
                   color="secondary"
@@ -145,73 +195,14 @@ const Goods = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map(row => (
-                  <TableRow key={row.id}>
-                    <TableCell className={classes.selectTableCell}>
-                      {row.isEditMode ? (
-                        <>
-                          <Tooltip title="Сохранить">
-                            <IconButton
-                              aria-label="done"
-                              onClick={() => onToggleEditMode(row.id)}
-                            >
-                              <DoneIcon/>
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Отменить">
-                            <IconButton
-                              aria-label="revert"
-                              onClick={() => onRevert(row.id)}
-                            >
-                              <RevertIcon/>
-                            </IconButton>
-                          </Tooltip>
-                        </>
-                      ) : (
-                        <>
-                          <Tooltip title="Редактировать">
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => onToggleEditMode(row.id)}
-                            >
-                              <EditIcon/>
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Удалить">
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => {
-                                setSelectedRowId(row.id);
-                                setIsConfirmDialogOpen(true);
-                              }}
-                            >
-                              <DeleteForeverOutlinedIcon/>
-                            </IconButton>
-                          </Tooltip>
-                        </>
-                      )}
-                    </TableCell>
-                    <CustomTableCell {...{row, name: "name", onChange}} />
-                    <CustomTableCell {...{row, name: "quantity", onChange}} />
-                    <CustomTableCell {...{row, name: "measurement", onChange}} />
-                    <CustomTableCell {...{row, name: "cost", onChange}} />
-                    <CustomTableCell {...{row, name: "remarks", onChange}} />
-                  </TableRow>
-                ))}
+                {rows.map(row => <CustomTableRow
+                  key={row.id}
+                  row={row}
+                  onDelete={() => onDelete(row.id)}
+                  onRowChange={newData => onRowChange(row, newData)}
+                />)}
               </TableBody>
             </Table>
-    {isConfirmDialogOpen && (
-        <ConfirmDialog
-          title="Удаление товарной позиции"
-          description="Вы уверены, что хотите удалить выбранный товар"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
-          onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
-            onDelete(selectedRowId);
-            setSelectedRowId(null);
-          }}
-        />
-      )}
     </>
 }
 

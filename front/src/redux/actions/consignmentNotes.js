@@ -31,9 +31,7 @@ export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
   api
     .createConsignmentNote(data)
     .then(() =>
-      dispatch(enqueueToast({message: 'ТТН успешно зарегистрирована', type: TOAST_TYPES.SUCCESS}))
+      dispatch(enqueueToast({message: 'ТТН успешно зарегистрирована', type: TOAST_TYPES.SUCCESS})),
+      (e) => dispatch(enqueueToast({message: `Ошибка при создании ТТН: ${e}`, type: TOAST_TYPES.ERROR}))
     )
-    .catch((e) => {
-      dispatch(enqueueToast({message: `Ошибка при создании ТТН: ${e}`, type: TOAST_TYPES.ERROR}));
-    })
 );

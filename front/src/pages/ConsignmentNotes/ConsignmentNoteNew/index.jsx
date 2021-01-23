@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 
 import {FormProvider, useForm} from "react-hook-form";
-import {consignmentNoteResolver as resolver} from "./consignmentNoteResolver";
+import {consignmentNoteResolver as resolver} from "./resolvers";
 import PaddedContainer from "../../../components/PaddedContainer";
 import makeStyles from "@material-ui/styles/makeStyles";
 import {useDispatch} from "react-redux";
@@ -34,10 +34,10 @@ const normalize = (formData) => {
   const {consignmentNoteNumber, client, manager, driver, ...other} = formData;
   return {
     ...other,
-    number: Number(consignmentNoteNumber),
-    clientId: client.id,
-    driverId: driver.id,
-    assignedToId: manager.id,
+    // number: Number(consignmentNoteNumber),
+    // clientId: client.id,
+    // driverId: driver.id,
+    // assignedToId: manager.id,
     goods: [] // TODO
   };
 }
@@ -71,18 +71,18 @@ function ConsignmentNoteNew() {
           // noValidate
           onSubmit={handleSubmit(handler)}
         >
-          <Paper className={classes.paper}>
-            <Title>Шаг 1 - выберите клиента</Title>
-            <ClientForm/>
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 2 - заполните данные ТТН</Title>
-            <ConsignmentNoteForm/>
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 3 - введите данные водителя</Title>
-            <DriverForm/>
-          </Paper>
+          {/*<Paper className={classes.paper}>*/}
+          {/*  <Title>Шаг 1 - выберите клиента</Title>*/}
+          {/*  <ClientForm/>*/}
+          {/*</Paper>*/}
+          {/*<Paper className={classes.paper}>*/}
+          {/*  <Title>Шаг 2 - заполните данные ТТН</Title>*/}
+          {/*  <ConsignmentNoteForm/>*/}
+          {/*</Paper>*/}
+          {/*<Paper className={classes.paper}>*/}
+          {/*  <Title>Шаг 3 - введите данные водителя</Title>*/}
+          {/*  <DriverForm/>*/}
+          {/*</Paper>*/}
           <Paper className={classes.paper}>
             <Title>Шаг 4 - введите данные о грузе</Title>
             <Goods/>
