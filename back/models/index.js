@@ -26,8 +26,6 @@ Role.belongsToMany(Endpoint, { through: RolePermission });
 Client.belongsTo(Company, { as: 'linkedCompany' });
 Warehouse.belongsTo(Company, { as: 'linkedCompany' });
 
-User.hasOne(Documents);
-
 ConsignmentNote.belongsTo(ConsignmentNoteStatus);
 ConsignmentNote.belongsTo(Client);
 ConsignmentNote.belongsTo(Company, { as: 'linkedCompany' });
@@ -52,7 +50,7 @@ LossReport.belongsTo(User, { as: 'responsible' });
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
-db.sync({ alter: true, logging: false }).then(() => {
+db.sync({ alter: true, logging: true }).then(() => {
   console.log('DB sync completed');
 });
 

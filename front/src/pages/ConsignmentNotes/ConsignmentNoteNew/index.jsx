@@ -61,9 +61,9 @@ function ConsignmentNoteNew() {
   const methods = useForm({ resolver, mode: 'onBlur' });
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
-  const sendFormData = (formData) => {
-    dispatch(dispatchCreateConsignmentNote(normalize(formData))).then(redirect);
-  };
+  const sendFormData = (formData) => (
+    dispatch(dispatchCreateConsignmentNote(normalize(formData))).then(redirect)
+  )
   const { bindPending, handler } = usePending(sendFormData);
 
   return (
