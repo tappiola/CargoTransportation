@@ -4,7 +4,10 @@ const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.get('/', authorize('admin'), async (req, res) => {
-  const { companyId } = req.query;
+  const { companyId, roleCode } = req.query;
+
+  const companyFilter = { id: companyId };
+  const roleFilter = roleCode ? {role: roleCode} : {};
 
   const users = await User.findAll({
     attributes: {
@@ -13,11 +16,12 @@ router.get('/', authorize('admin'), async (req, res) => {
     include: [
       {
         model: Role,
+        where: roleFilter,
       },
       {
         model: Company,
         attributes: [],
-        where: { id: companyId },
+        where: companyFilter,
       },
     ],
   });

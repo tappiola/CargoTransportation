@@ -1,19 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
 import ControlledAutocomplete from '../../../components/ControlledAutocomplete';
-import { dispatchGetEmployees } from 'redux/actions';
-import { usersWithRoleSelector } from 'redux/selectors/employees';
+import * as api from 'api';
+import { ROLES } from 'constants/permissions';
 import { isEmpty } from 'utils/objectUtils';
 
 const ClientForm = () => {
-  const { employeesData } = useSelector(({ employees }) => employees);
-  const managersData = usersWithRoleSelector(employeesData, 'manager');
+  const [managersData, setManagersData] = useState([]);
 
-  const dispatch = useDispatch();
-  useEffect(() => { dispatch(dispatchGetEmployees()); }, []);
+  useEffect(() => {
+    api.getEmployeesWithRole(ROLES.MANAGER)
+      .then((data) => {
+        setManagersData(data);
+      });
+  }, []);
 
   return (
     <Grid container spacing={3} justify="space-between" alignItems="center">

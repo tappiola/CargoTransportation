@@ -50,7 +50,7 @@ LossReport.belongsTo(User, { as: 'responsible' });
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
-db.sync({ alter: true, logging: true }).then(() => {
+db.sync({ alter: true, logging: false }).then(() => {
   console.log('DB sync completed');
 });
 

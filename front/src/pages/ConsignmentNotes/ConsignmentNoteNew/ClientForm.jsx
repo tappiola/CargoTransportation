@@ -30,7 +30,7 @@ const ClientForm = () => {
         />
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
-        <NavButton variant="contained" color="secondary" to="/clients/new">Добавить нового клиента</NavButton>
+        <NavButton variant="contained" to="/clients/new">Добавить нового клиента</NavButton>
       </Grid>
     </Grid>
   );

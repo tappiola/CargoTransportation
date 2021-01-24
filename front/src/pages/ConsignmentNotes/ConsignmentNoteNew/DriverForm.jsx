@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 
-import * as api from '../../../api';
 import ControlledAutocomplete from '../../../components/ControlledAutocomplete';
-import { dispatchGetEmployees } from '../../../redux/actions';
+import * as api from 'api';
 import BaseField from 'components/ControlledField';
-import { usersWithRoleSelector } from 'redux/selectors/employees';
+import { ROLES } from 'constants/permissions';
 import { isEmpty } from 'utils/objectUtils';
 
 const DriverForm = () => {
   const { setValue } = useFormContext();
 
-  const { employeesData } = useSelector(({ employees }) => employees);
-  const driversData = usersWithRoleSelector(employeesData, 'driver');
-
+  const [driversData, setDriversData] = useState([]);
   const [driverId, setDriverId] = useState();
   const [passportData, setPassportData] = useState({});
 
-  const dispatch = useDispatch();
-  useEffect(() => { dispatch(dispatchGetEmployees()); }, []);
+  useEffect(() => {
+    api.getEmployeesWithRole(ROLES.DRIVER)
+      .then((data) => {
+        setDriversData(data);
+      });
+  }, []);
 
   useEffect(() => {
     if (driverId) {

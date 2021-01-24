@@ -61,10 +61,20 @@ router.delete('/', async (req, res) => {
 router.post('/create', validate.consignmentNote, async (req, res) => {
   console.log('/create:', req.body);
 
-  const { passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData} = req.body;
+  const {
+    number, passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData
+  } = req.body;
+
+  const existingNote = await ConsignmentNote.findOne({ where: { number } });
+
+  console.log('existing note:', existingNote);
+  if(existingNote){
+    res.status(400).json({ message: `ТТН ${number} уже существует` } );
+  }
 
   const newNote = {
     ...consignmentNoteData,
+    number,
     linkedCompanyId: 1, // TODO: replace with real value
     issuedAt: new Date().toISOString(),
     consignmentNoteStatusId: 1,
@@ -83,7 +93,7 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
 
   await Good.bulkCreate(goods.map(good => ({...good, goodStatusId: 1, consignmentNoteId: id})));
 
-  res.status(200).json({id, consignmentNote: consignmentNoteData.number});
+  res.status(200).json({id, consignmentNote: number});
 });
 
 module.exports = router;

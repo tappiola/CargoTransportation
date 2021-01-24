@@ -3,11 +3,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import makeStyles from '@material-ui/styles/makeStyles';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { format } from 'date-fns';
 
+import PaddedPaper from '../../../components/PaddedPaper';
+import { TOAST_TYPES } from '../../../constants/toastsTypes';
+import { enqueueToast } from '../../../redux/actions';
 import ClientForm from './ClientForm';
 import ConsignmentNoteForm from './ConsignmentNoteForm';
 import DriverForm from './DriverForm';
@@ -20,14 +21,6 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchCreateConsignmentNote } from 'redux/actions/consignmentNotes';
 import { usePending } from 'utils';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(3),
-    overflow: 'auto',
-    marginBottom: theme.spacing(3),
-  },
-}));
 
 const normalize = (formData) => {
   const {
@@ -45,56 +38,56 @@ const normalize = (formData) => {
   };
 };
 
-function Title({ children }) {
-  return (
-    <Typography component="h2" variant="h6" color="primary" gutterBottom>
-      {children}
-    </Typography>
-  );
-}
-
 function ConsignmentNoteNew() {
-  const classes = useStyles();
   const history = useHistory();
-  const redirect = () => Promise.resolve(history.push('/consignment-notes'));
+  const dispatch = useDispatch();
 
   const methods = useForm({ resolver, mode: 'onBlur' });
   const { handleSubmit } = methods;
-  const dispatch = useDispatch();
+
   const sendFormData = (formData) => (
-    dispatch(dispatchCreateConsignmentNote(normalize(formData))).then(redirect)
-  )
+    dispatch(dispatchCreateConsignmentNote(normalize(formData)))
+      .then(() => {
+        history.push('/consignment-notes');
+      })
+      .catch((e) => {
+        dispatch(enqueueToast({
+          message: `Ошибка при создании ТТН: ${e.message}`,
+          type: TOAST_TYPES.ERROR,
+        }));
+      })
+  );
   const { bindPending, handler } = usePending(sendFormData);
 
   return (
     <PaddedContainer>
-      <NavButton variant="outlined" color="primary" to="/consignment-notes">К списку ТТН</NavButton>
+      <NavButton
+        variant="outlined"
+        to="/consignment-notes"
+        startIcon={(
+          <KeyboardBackspaceIcon />
+)}
+      >
+        К списку ТТН
+      </NavButton>
       <GridToolbar title="Добавление ТТН" />
       <FormProvider {...methods}>
-        <form
-          // noValidate
-          onSubmit={handleSubmit(handler)}
-        >
-          <Paper className={classes.paper}>
-            <Title>Шаг 1 - выберите клиента</Title>
+        <form onSubmit={handleSubmit(handler)}>
+          <PaddedPaper title="Шаг 1 - выберите клиента">
             <ClientForm />
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 2 - заполните данные ТТН</Title>
+          </PaddedPaper>
+          <PaddedPaper title="Шаг 2 - заполните данные ТТН">
             <ConsignmentNoteForm />
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 3 - введите данные водителя</Title>
+          </PaddedPaper>
+          <PaddedPaper title="Шаг 3 - введите данные водителя">
             <DriverForm />
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 4 - введите данные о грузе</Title>
+          </PaddedPaper>
+          <PaddedPaper title="Шаг 4 - введите данные о грузе">
             <Goods />
-          </Paper>
-          <Paper className={classes.paper}>
-            <Title>Шаг 5 - выберите менеджера для обработки ТТН</Title>
+          </PaddedPaper>
+          <PaddedPaper title="Шаг 5 - выберите менеджера для обработки ТТН">
             <ManagerForm />
-          </Paper>
+          </PaddedPaper>
           <SubmitButton {...bindPending}>Готово</SubmitButton>
         </form>
       </FormProvider>

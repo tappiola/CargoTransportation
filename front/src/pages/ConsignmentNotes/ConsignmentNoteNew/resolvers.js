@@ -15,14 +15,19 @@ const consignmentNoteSchema = yup.object().shape({
   client: yup.object({ fullName: yup.string().required() }),
   passportIssuedBy: yup.string().required().min(6).max(50),
   vehicle: yup.string().required().min(5).max(30),
-  name: yup.string().required(),
-  unit: yup.string().required(),
-  quantity: yup.number('Введите число').required().typeError('Введите число').min(1, 'Минимальное значение: 1')
-    .integer('Введите целое число'),
-  cost: yup.number()
-    .required()
-    .typeError('Введите число')
-    .positive('Введите значение > 0'),
+  // name: yup.string().required(),
+  // unit: yup.string().required(),
+  // quantity: yup.number('Введите число').required().typeError('Введите число')
+  // .min(1, 'Минимальное значение: 1')
+  //   .integer('Введите целое число'),
+  // cost: yup.number()
+  //   .required()
+  //   .typeError('Введите число')
+  //   .positive('Введите значение > 0'),
+  // weight: yup.number()
+  //   .required()
+  //   .typeError('Введите число')
+  //   .positive('Введите значение > 0'),
   goods: yup.array().of(yup.object().shape({
     name: yup.string().required('Проверьте, что для всех товарных позиций указано название'),
     quantity: yup.number().required('Проверьте, что для всех товарных позиций указано количество')
