@@ -13,6 +13,7 @@ import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 
 import Notifier from './components/Notifier';
 import StyleGuide from './pages/StyleGuide';
+import { dispatchTokenExpired } from './redux/actions/currentUser';
 import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
@@ -20,7 +21,6 @@ import { THEME } from 'constants/themes';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
-import {dispatchTokenExpired} from "./redux/actions/currentUser";
 
 const ProtectedApp = ({ userRoles, theme, setTheme }) => {
   const routes = PROTECTED_ROUTES
@@ -68,7 +68,7 @@ function App() {
     localStorage.setItem('cargoTheme', theme);
   }, [theme]);
 
-  React.useEffect(() => dispatchTokenExpired(), [])
+  React.useEffect(() => dispatchTokenExpired(), []);
 
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
