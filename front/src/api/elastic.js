@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-const socket = new WebSocket('ws://localhost:5000/api/elastic');
 export const useElastic = (index, field) => {
   const [options, setOptions] = useState([]);
+  const socket = useMemo(() => new WebSocket('ws://localhost:5000/api/elastic'), []);
 
   socket.onmessage = ({ data }) => {
     const results = JSON.parse(data).map(({ _source }) => _source);

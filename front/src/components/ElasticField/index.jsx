@@ -5,21 +5,21 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { useElastic } from 'api';
 
-export default function ElasticField({ index, field }) {
+const ElasticField = ({
+  index, field, inputProps, ...props
+}) => {
   const { options, onChange } = useElastic(index, field);
 
   return (
     <Autocomplete
       options={options}
       getOptionLabel={(option) => option[field]}
-      style={{ width: 300, margin: 50 }}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          onChange={onChange}
-          label={field}
-        />
+        <TextField {...params} {...inputProps} onChange={onChange} />
       )}
+      {...props}
     />
   );
-}
+};
+
+export default ElasticField;
