@@ -6,11 +6,11 @@ const es = require('../config/elastic.config');
 //   const clients = await Client.findAll({ where: {} });
 //   const users = await User.findAll({ where: {} });
 
-//   clients.forEach(async ({ firstName, companyName, id }) => {
+//   clients.forEach(async ({ lastName, firstName, middleName, companyName, id }) => {
 //     await es.index({
 //       id,
 //       index: 'clients',
-//       body: { firstName, companyName },
+//       body: { lastName, firstName, middleName, companyName, id },
 //     });
 //   });
 
@@ -18,7 +18,7 @@ const es = require('../config/elastic.config');
 //     await es.index({
 //       id,
 //       index: 'users',
-//       body: { firstName, lastName },
+//       body: { firstName, lastName, id },
 //     });
 //   });
 
@@ -27,12 +27,15 @@ const es = require('../config/elastic.config');
 // }
 // createIndex();
 
-// async function deleteIndex() {
+// async function deleteIndex(index) {
 //   await es.indices.delete({
-//     index: '_all',
-//   });
+//     index: index || '_all',
+//   }).then(
+//     (resp) => console.log(resp),
+//     (err) => console.log(err)
+//   );
 // }
-// deleteIndex();
+// deleteIndex('clients');
 
 function router(ws) {
   ws.on('message', async (msg) => {
@@ -50,7 +53,7 @@ function router(ws) {
       },
     });
 
-    ws.send(JSON.stringify(body.hits ? body.hits.hits : []));
+    ws.send(JSON.stringify(body.hits.hits ? body.hits.hits : []));
   });
 }
 

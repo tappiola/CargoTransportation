@@ -8,6 +8,7 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
+import ElasticField from 'components/ElasticField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteClients, dispatchGetClients } from 'redux/actions';
@@ -30,6 +31,12 @@ function ClientsList({
     initClients();
   }, []);
 
+  const getClientLink = ({ id, companyName }) => (
+    <NavButton to={`${path}/${id}`} style={{ whiteSpace: 'nowrap' }}>
+      {companyName}
+    </NavButton>
+  );
+
   return (
     <>
       <PaddedContainer>
@@ -39,6 +46,7 @@ function ClientsList({
             isDisabled={selection.length === 0}
             onButtonClick={() => { setIsConfirmDialogOpen(true); }}
           />
+          <ElasticField index="clients" field="companyName" renderOption={getClientLink} />
         </GridToolbar>
         <CustomGrid
           rows={clientsData}

@@ -1,20 +1,28 @@
 import { useState, useMemo } from 'react';
 
 export const useElastic = (index, field) => {
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(null);
   const socket = useMemo(() => new WebSocket('ws://localhost:5000/api/elastic'), []);
 
   socket.onmessage = ({ data }) => {
-    const results = JSON.parse(data).map(({ _source }) => _source);
-    setOptions(results);
+    try {
+      const results = JSON.parse(data).map(({ _source }) => _source);
+      setOptions(results);
+    } catch {
+      setOptions([]);
+    }
   };
 
   return {
     options,
     onChange: ({ target }) => {
-      if (socket.readyState === socket.OPEN) {
-        socket.send(JSON.stringify({ query: target.value, index, field }));
+      if (!target.value) {
+        return setOptions(null);
       }
+      if (socket.readyState === socket.OPEN) {
+        return socket.send(JSON.stringify({ query: target.value, index, field }));
+      }
+      return null;
     },
   };
 };
