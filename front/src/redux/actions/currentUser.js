@@ -1,10 +1,9 @@
 import jwtDecode from 'jwt-decode';
 
-import { updateToken } from '../../api/users';
-import { getAuthToken } from '../../utils';
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
-import { signIn, logoutUser } from 'api';
+import { signIn, logoutUser, updateToken } from 'api';
+import { getAuthToken } from 'utils';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
@@ -40,22 +39,16 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
     }));
   });
 
-const isExpired = (exp) => {
-  if (!exp) {
-    return false;
-  }
-
-  return Date.now() > exp;
-};
+const isExpired = (exp) => exp && exp > Date.now();
 
 export const dispatchTokenExpired = () => {
-  const LSToken = getAuthToken();
+  const lsToken = getAuthToken();
 
-  if (LSToken) {
-    const { exp } = jwtDecode(LSToken);
+  if (lsToken) {
+    const { exp } = jwtDecode(lsToken);
     if (isExpired(exp)) {
       updateToken()
-        .then((res) => localStorage.setItem('token', res.data));
+        .then((res) => localStorage.setItem('token', res.updateToken));
     }
   }
 };
