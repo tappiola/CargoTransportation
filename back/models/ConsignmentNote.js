@@ -25,7 +25,7 @@ const ConsignmentNote = db.define('consignment_note', {
     type: DataTypes.INTEGER,
     unique: true,
   },
-  issuedAt: {
+  issuedDate: {
     type: DataTypes.DATEONLY,
   },
   revenue: {

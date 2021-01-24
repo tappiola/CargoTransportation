@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
   const clients = await ConsignmentNote.findAll({
-    attributes: ['id', 'number', 'issuedAt', 'vehicle'],
+    attributes: ['id', 'number', 'issuedDate', 'vehicle'],
     where: { linkedCompanyId: companyId },
     include: [
       {
@@ -59,15 +59,11 @@ router.delete('/', async (req, res) => {
 });
 
 router.post('/create', validate.consignmentNote, async (req, res) => {
-  console.log('/create:', req.body);
-
   const {
     number, passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData
   } = req.body;
 
   const existingNote = await ConsignmentNote.findOne({ where: { number } });
-
-  console.log('existing note:', existingNote);
   if(existingNote){
     res.status(400).json({ message: `ТТН ${number} уже существует` } );
   }
@@ -76,14 +72,11 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
     ...consignmentNoteData,
     number,
     linkedCompanyId: 1, // TODO: replace with real value
-    issuedAt: new Date().toISOString(),
     consignmentNoteStatusId: 1,
     createdById: 14, // TODO: replace with real value
   };
 
-
   const {id} = await ConsignmentNote.create(newNote);
-
   await Documents.upsert({
     passportNumber,
     passportIssuedBy,
@@ -97,4 +90,3 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
 });
 
 module.exports = router;
-

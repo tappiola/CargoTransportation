@@ -17,10 +17,12 @@ import CustomTableCell from './CustomTableCell';
 
 const CustomTableRow = (
   {
+    rowIndex,
     row,
     onDelete,
     onRowChange,
     columnKeys,
+    tableName,
     tableColumns,
     confirmDeleteTitle,
     confirmDeleteDescription,
@@ -31,10 +33,10 @@ const CustomTableRow = (
   const classes = useStyles();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(true);
-  const [previousData, setPreviousData] = useState({});
+  const [previousData, setPreviousData] = useState(row);
 
-  const onChange = (e) => {
-    const newData = { [e.target.name]: e.target.value };
+  const onChange = (e, name) => {
+    const newData = { [name]: e.target.value };
     onRowChange(newData);
   };
 
@@ -57,7 +59,7 @@ const CustomTableRow = (
                 <IconButton
                   aria-label="done"
                   onClick={() => {
-                    trigger(columnKeys)
+                    trigger(columnKeys.map((k) => `${tableName}Rows[${rowIndex}][${k}]`))
                       .then((status) => {
                         if (status === true) {
                           setIsEditMode(false);
@@ -103,7 +105,14 @@ const CustomTableRow = (
         </TableCell>
         {tableColumns.map((c) => (
           <CustomTableCell {...{
-            row, isEditMode, label: c.columnName, name: c.columnKey, onChange, key: c.columnKey,
+            rowIndex,
+            row,
+            isEditMode,
+            label: c.columnName,
+            name: c.columnKey,
+            onChange,
+            key: c.columnKey,
+            tableName,
           }}
           />
         ))}

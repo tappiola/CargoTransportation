@@ -5,7 +5,7 @@ import ControlledTable from 'components/ControlledTable';
 const TABLE_COLUMNS = [
   { columnKey: 'name', columnName: 'Наименование' },
   { columnKey: 'quantity', columnName: 'Кол-во' },
-  { columnKey: 'unit', columnName: 'Единица измерения' },
+  { columnKey: 'unit', columnName: 'Ед. измерения' },
   { columnKey: 'cost', columnName: 'Стоимость (руб)' },
   { columnKey: 'weight', columnName: 'Масса (кг)' },
   { columnKey: 'remarks', columnName: 'Примечания' },

@@ -2,16 +2,23 @@ const Joi = require('@hapi/joi');
 
 const consignmentNoteSchema = Joi.object({
   number: Joi.number().required(),
-  issuedDate: Joi.string(),
+  issuedDate: Joi.string().required(),
   revenue: Joi.number(),
   clientId: Joi.number().required(),
-  vehicle: Joi.string().required(),
   driverId: Joi.number().required(),
   assignedToId: Joi.number().required(),
   passportNumber: Joi.string().required(),
   passportIssuedBy: Joi.string().required(),
   passportIssuedAt: Joi.string().required(),
-  goods: Joi.array().required(),
+  vehicle: Joi.string().required(),
+  goods: Joi.array().items(Joi.object({
+    name: Joi.string().required(),
+    quantity: Joi.number().required(),
+    cost: Joi.number().required(),
+    unit: Joi.number().required(),
+    weight: Joi.number().required(),
+    remarks: Joi.string().allow(null, ''),
+  })).required(),
 });
 
 module.exports = { consignmentNoteSchema };

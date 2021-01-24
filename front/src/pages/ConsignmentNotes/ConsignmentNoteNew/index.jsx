@@ -27,6 +27,7 @@ const normalize = (formData) => {
     consignmentNoteNumber, client, manager, driver, passportIssuedAt, goods, ...other
   } = formData;
   const goodsData = goods.map(({ id, ...data }) => data);
+
   return {
     ...other,
     number: Number(consignmentNoteNumber),
@@ -63,10 +64,10 @@ function ConsignmentNoteNew() {
     <PaddedContainer>
       <NavButton
         variant="outlined"
-        to="/consignment-notes"
+        to="/consignment-notes" // TODO: Extract to constant? (something like ROLES)
         startIcon={(
           <KeyboardBackspaceIcon />
-)}
+        )}
       >
         К списку ТТН
       </NavButton>

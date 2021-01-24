@@ -47,7 +47,7 @@ const ControlledTable = (
 
   const onRowAdd = () => {
     clearErrors();
-    setRows((currentRows) => [...currentRows, createData(columnKeys, ['', '', '', '', ''])]);
+    setRows((currentRows) => [...currentRows, createData(columnKeys, ['', '', '', '', '',''])]);
   };
 
   const onRowChange = (row, newData) => {
@@ -74,13 +74,15 @@ const ControlledTable = (
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row, i) => (
             <CustomTableRow
               key={row.id}
+              rowIndex={i}
               row={row}
               onDelete={() => onDelete(row.id)}
               onRowChange={(newData) => onRowChange(row, newData)}
               columnKeys={columnKeys}
+              tableName={tableName}
               tableColumns={tableColumns}
               confirmDeleteTitle={confirmDeleteTitle}
               confirmDeleteDescription={confirmDeleteDescription}
@@ -88,8 +90,8 @@ const ControlledTable = (
           ))}
         </TableBody>
       </Table>
-      <FormHelperText>{errors[tableName] && errors[tableName].message}</FormHelperText>
-      {errors[tableName] && errors[tableName].constructor === Array
+      <FormHelperText>{errors?.[tableName]?.message}</FormHelperText>
+      {errors?.[tableName]?.constructor === Array
                 && Array.from(new Set(errors[tableName]
                   .map((e) => Object.values(e))
                   .reduce((prev, next) => [...prev, ...next], [])
