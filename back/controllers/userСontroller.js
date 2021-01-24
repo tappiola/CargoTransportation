@@ -10,6 +10,7 @@ const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
 const router = Router();
+const jwt = require('jsonwebtoken')
 
 router.post('/register', validate.register, async (req, res, next) => {
   const { email, roles: role, companyId, ...userData } = req.body;
@@ -168,5 +169,24 @@ router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
 
   res.status(200).json(user);
 });
+
+router.post('/update-token', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1]
+
+  if (!token) {
+    return res.status(403).json({ error: { message: 'token not found' } })
+  }
+
+  const { id } = jwt.verify(token, process.env.jwtToken)
+  const user = await User.findOne({
+    where: { id },
+    include: {
+      model: Role
+    },
+  })
+  const updateToken = user.generateJWT()
+
+  res.status(200).json({ updateToken })
+})
 
 module.exports = router;
