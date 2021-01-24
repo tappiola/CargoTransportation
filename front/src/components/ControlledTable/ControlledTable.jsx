@@ -47,7 +47,7 @@ const ControlledTable = (
 
   const onRowAdd = () => {
     clearErrors();
-    setRows((currentRows) => [...currentRows, createData(columnKeys, ['', '', '', '', '',''])]);
+    setRows((currentRows) => [...currentRows, createData(columnKeys, ['', '', '', '', '', ''])]);
   };
 
   const onRowChange = (row, newData) => {
