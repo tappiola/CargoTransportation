@@ -6,3 +6,4 @@ export { getClients, deleteClients } from './clients';
 export { getWarehouses, deleteWarehouses } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
 export { getConsignmentNotes, deleteConsignmentNotes } from './consignmentNotes';
+export { useElastic } from './elastic';
