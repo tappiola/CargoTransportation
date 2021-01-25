@@ -11,7 +11,7 @@
     "start": "node server.js",
     "heroku-postbuild": "cd front && npm install && npm run build",
     "precommit": "lint-staged",
-    "eslint": "npx eslint back"
+    "lint": "npx eslint back"
   },
   "keywords": [],
   "author": "",
@@ -56,6 +56,7 @@
   },
   "lint-staged": {
     "*.{js, jsx}": [
+      "npm run lint",
       "prettier --write",
       "git add"
     ]
