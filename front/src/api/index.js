@@ -1,8 +1,8 @@
 /* eslint-disable object-curly-newline */
 export { fetchAPI } from './fetchAPI';
-export { setUser, updateUser, getUsers, signIn, deleteUsers, logoutUser } from './users';
+export { getUsers, deleteUsers, setUser, updateUser, signIn, logoutUser } from './users';
 export { getEmployees, deleteEmployees, setEmployee, updateEmployee } from './employees';
-export { getClients, deleteClients } from './clients';
+export { getClients, deleteClients, setClient, updateClient } from './clients';
 export { getWarehouses, deleteWarehouses } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
 export { getConsignmentNotes, deleteConsignmentNotes } from './consignmentNotes';

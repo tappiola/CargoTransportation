@@ -2,9 +2,12 @@ const db = require('../database/db');
 
 const PORT = process.env.PORT || 5000;
 const Logger = require('./logger');
+const checkEnvVariables = require('../utils/checkEnvVariables');
 
 module.exports = async (app) => {
   try {
+    checkEnvVariables();
+
     await db.authenticate();
     Logger.info('Database connected successfully');
 

@@ -9,13 +9,13 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
+const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../contants');
 
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const {
-    email, roles: role, companyId, ...userData
-  } = req.body;
+  const { companyId } = req;
+  const { email, roles: role, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
   const company = await Company.findByPk(companyId);
   const roles = await Role.findAll({ where: { role } });
@@ -42,7 +42,7 @@ router.post('/register', validate.register, async (req, res, next) => {
     }
     const token = newUser.generateJWT();
     const mail = setMailOptions({
-      to: process.env.NODE_ENV === 'production' ? email : process.env.GMAIL_USER,
+      to: process.env.SEND_TO_USER ? email : process.env.GMAIL_USER,
       subject: 'Registration in "Transportation system"',
       html: registerTemplate(email, password),
     });
@@ -74,7 +74,7 @@ router.post('/login', async (req, res, next) => {
       }
 
       const token = user.generateJWT();
-      const { roles, company } = await User.findOne({
+      const { roles } = await User.findOne({
         where: {
           id: user.id,
         },
@@ -91,14 +91,14 @@ router.post('/login', async (req, res, next) => {
         ],
       });
 
-      return res.status(200).json({ token, roles, companyId: company && company.id });
+      return res.status(200).json({ token, roles });
     });
 
     return next();
   })(req, res, next);
 });
 
-router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
+router.get('/', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
   const users = await User.findAll({
     attributes: {
       exclude: ['password'],
@@ -106,7 +106,7 @@ router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
     include: [
       {
         model: Role,
-        where: { role: 'admin' },
+        where: { role: ADMIN },
       },
       {
         model: Company,
@@ -121,7 +121,7 @@ router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
   return res.status(200).json(users);
 });
 
-router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
+router.get('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
   const { id } = req.params;
 
   const user = await User.findOne({
@@ -158,7 +158,7 @@ router.get('/logout', authorize(), (req, res) => {
   res.status(204).end();
 });
 
-router.put('/:id', authorize('global_admin', 'admin'), async (req, res) => {
+router.put('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
   const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role } });
