@@ -6,7 +6,9 @@ const checkEnvVariables = require('../utils/checkEnvVariables');
 
 module.exports = async (app) => {
   try {
-    checkEnvVariables();
+    if (process.env.NODE_ENV !== 'production') {
+      await checkEnvVariables();
+    }
 
     await db.authenticate();
     Logger.info('Database connected successfully');
