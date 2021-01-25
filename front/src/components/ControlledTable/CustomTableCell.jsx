@@ -19,18 +19,22 @@ const CustomTableCell = (
 ) => {
   const { register, errors } = useFormContext();
   const classes = useStyles();
+
+  const tableRows = `${tableName}Rows`;
+  const cellError = errors?.[tableRows]?.[rowIndex]?.[name];
+
   return (
     <TableCell align="left" className={classes.tableCell}>
       {isEditMode ? (
         <BaseField
           defaultValue={row[name]}
-          name={`${tableName}Rows[${rowIndex}][${name}]`}
+          name={`${tableRows}[${rowIndex}][${name}]`}
           placeholder={label}
           onInput={(e) => onChange(e, name)}
           className={classes.input}
           inputRef={register}
-          customError={!!errors?.[`${tableName}Rows`]?.[rowIndex]?.[name]}
-          customHelperText={errors?.[`${tableName}Rows`]?.[rowIndex]?.[name]?.message}
+          customError={!!cellError}
+          customHelperText={cellError?.message}
         />
       ) : (
         row[name]

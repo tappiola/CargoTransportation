@@ -73,7 +73,7 @@ const CustomTableRow = (
               <Tooltip title="Отменить">
                 <IconButton
                   aria-label="revert"
-                  onClick={() => onCancel(row)}
+                  onClick={() => onCancel(previousData)}
                 >
                   <RevertIcon />
                 </IconButton>

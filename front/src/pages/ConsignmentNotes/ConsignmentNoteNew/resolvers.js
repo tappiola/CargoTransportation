@@ -2,6 +2,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { yup } from 'utils';
 
+// Type error localization doesn't work
+const INVALID_NUMBER = 'Введите число';
+
 const consignmentNoteSchema = yup.object().shape({
   consignmentNoteNumber:
     yup.number().required()
@@ -19,16 +22,18 @@ const consignmentNoteSchema = yup.object().shape({
     yup.object().shape({
       name: yup.string().required(),
       unit: yup.string().required(),
-      quantity: yup.number().required().typeError()
+      quantity: yup.number()
+        .required()
+        .typeError(INVALID_NUMBER)
         .min(1)
         .integer(),
       cost: yup.number()
         .required()
-        .typeError()
+        .typeError(INVALID_NUMBER)
         .positive(),
       weight: yup.number()
         .required()
-        .typeError()
+        .typeError(INVALID_NUMBER)
         .positive(),
     }),
   ),
