@@ -24,12 +24,6 @@ router.get('/', async (req, res) => {
       {
         model: ConsignmentNote,
         attributes: ['number'],
-        include: [
-          {
-            model: Warehouse,
-            attributes: ['fullAddress', 'country', 'city', 'street', 'house'],
-          },
-        ],
       },
     ],
   });
