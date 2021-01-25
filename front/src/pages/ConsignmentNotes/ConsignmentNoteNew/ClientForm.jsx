@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 
-import NavButton from '../../../components/Buttons/NavButton';
-import ControlledAutocomplete from '../../../components/ControlledAutocomplete';
+import NavButton from 'components/Buttons/NavButton';
+import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import { dispatchGetClients } from 'redux/actions';
 import { isEmpty } from 'utils/objectUtils';
 

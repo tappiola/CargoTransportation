@@ -1,7 +1,7 @@
-import { TOAST_TYPES } from '../../constants/toastsTypes';
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import * as api from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 export const setClients = (clientsData) => ({
   type: actionTypes.CLIENTS_SET,

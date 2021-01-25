@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import ControlledAutocomplete from '../../../components/ControlledAutocomplete';
 import * as api from 'api';
+import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import { ROLES } from 'constants/permissions';
 import { isEmpty } from 'utils/objectUtils';
 

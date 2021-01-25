@@ -1,6 +1,6 @@
-import { TOAST_TYPES } from '../../constants/toastsTypes';
 import * as actionTypes from './actionTypes';
 import * as api from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 import { authorizationCompleted, enqueueToast } from 'redux/actions';
 
 const redirectionHandler = (dispatch) => ({ error }) => {

@@ -11,9 +11,9 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import RevertIcon from '@material-ui/icons/NotInterestedOutlined';
 import { ConfirmDialog, ToastQueueContext } from '@tappiola/material-ui-externals';
 
-import { TOAST_TYPES } from '../../constants/toastsTypes';
 import { useStyles } from './ControlledTable.styles';
 import CustomTableCell from './CustomTableCell';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 const CustomTableRow = (
   {

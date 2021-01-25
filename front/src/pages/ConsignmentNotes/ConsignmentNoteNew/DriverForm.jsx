@@ -3,8 +3,8 @@ import { useFormContext } from 'react-hook-form';
 
 import Grid from '@material-ui/core/Grid';
 
-import ControlledAutocomplete from '../../../components/ControlledAutocomplete';
 import * as api from 'api';
+import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField from 'components/ControlledField';
 import { ROLES } from 'constants/permissions';
 import { isEmpty } from 'utils/objectUtils';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import BaseField from '../../../components/ControlledField';
+import BaseField from 'components/ControlledField';
 
 const ConsignmentNoteForm = () => (
   <Grid container spacing={3} justify="space-between" alignItems="center">

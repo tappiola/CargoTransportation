@@ -6,9 +6,6 @@ import { useHistory } from 'react-router-dom';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { format } from 'date-fns';
 
-import PaddedPaper from '../../../components/PaddedPaper';
-import { TOAST_TYPES } from '../../../constants/toastsTypes';
-import { enqueueToast } from '../../../redux/actions';
 import ClientForm from './ClientForm';
 import ConsignmentNoteForm from './ConsignmentNoteForm';
 import DriverForm from './DriverForm';
@@ -19,6 +16,9 @@ import NavButton from 'components/Buttons/NavButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
+import PaddedPaper from 'components/PaddedPaper';
+import { TOAST_TYPES } from 'constants/toastsTypes';
+import { enqueueToast } from 'redux/actions';
 import { dispatchCreateConsignmentNote } from 'redux/actions/consignmentNotes';
 import { usePending } from 'utils';
 

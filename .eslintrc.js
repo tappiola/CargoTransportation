@@ -13,6 +13,7 @@ module.exports = {
   },
   'plugins': ['autofix'],
   'rules': {
+    'autofix/no-debugger': 'error',
     'semi': 2,
     'quotes': [2, 'single'],
     'eol-last': 2,
