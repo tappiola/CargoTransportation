@@ -7,6 +7,7 @@ export const usePending = (fn, { errorText } = { errorText: 'Ошибка' }) =>
   const handler = (...args) => {
     setPending(true);
     fn(...args)
+      .then(() => setError(false))
       .catch(() => setError(errorText))
       .finally(() => setPending(false));
   };

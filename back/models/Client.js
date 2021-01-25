@@ -33,6 +33,8 @@ const Client = db.define('client', {
   },
   companyName: {
     type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null,
     unique: true,
   },
   email: {

@@ -13,8 +13,8 @@ export const handleDeleteEmployees = (ids) => ({
   ids,
 });
 
-export const dispatchGetEmployees = (companyId) => (dispatch) => (
-  getEmployees(companyId)
+export const dispatchGetEmployees = () => (dispatch) => (
+  getEmployees()
     .then((data) => dispatch(setEmployees(data)))
 );
 
@@ -23,8 +23,8 @@ export const dispatchDeleteEmployees = (ids) => (dispatch) => (
     .then(() => dispatch(handleDeleteEmployees(ids)))
 );
 
-export const dispatchSetEmployee = ({ companyId, ...data }) => () => (
-  setEmployee({ companyId, data })
+export const dispatchSetEmployee = (data) => () => (
+  setEmployee(data)
 );
 
 export const dispatchUpdateEmployee = ({ id, ...data }) => () => (
