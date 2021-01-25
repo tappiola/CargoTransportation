@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 
 export const useElastic = (index, field) => {
-  const [options, setOptions] = useState(null);
+  const [options, setOptions] = useState([]);
   const socket = useMemo(() => new WebSocket('ws://localhost:5000/api/elastic'), []);
 
   socket.onmessage = ({ data }) => {
@@ -17,7 +17,7 @@ export const useElastic = (index, field) => {
     options,
     onChange: ({ target }) => {
       if (!target.value) {
-        return setOptions(null);
+        return setOptions([]);
       }
       if (socket.readyState === socket.OPEN) {
         return socket.send(JSON.stringify({ query: target.value, index, field }));

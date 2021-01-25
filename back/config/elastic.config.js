@@ -1,4 +1,11 @@
 const { Client } = require('@elastic/elasticsearch');
 
-module.exports = new Client({ node: 'http://localhost:9200', log: 'info' });
-
+module.exports = new Client({
+  cloud: {
+    id: process.env.ELASTIC_CLOUD_ID,
+  },
+  auth: {
+    username: process.env.ELASTIC_USERNAME,
+    password: process.env.ELASTIC_PASSWORD,
+  },
+});
