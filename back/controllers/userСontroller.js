@@ -9,7 +9,7 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../contants');
+const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../constants');
 
 const router = Router();
 

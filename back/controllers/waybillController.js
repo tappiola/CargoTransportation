@@ -3,19 +3,21 @@ const {
   Waybill,
   WaybillStatus,
   ConsignmentNote,
-  Warehouse,
 } = require('../models');
+const { authorize } = require('../middlewares/auth');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+router.get('/', auth, async (req, res) => {
+  const { companyId: linkedCompanyId } = req;
 
   const clients = await Waybill.findAll({
     attributes: {
       exclude: ['waybillStatusId', 'consignmentNoteId'],
     },
-    where: { linkedCompanyId: companyId },
+    where: { linkedCompanyId },
     include: [
       {
         model: WaybillStatus,
@@ -31,7 +33,7 @@ router.get('/', async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const ids = req.body;
 
   await Waybill.destroy({

@@ -25,6 +25,7 @@ const verifyUser = async (req, res, next, roles) => {
     }
 
     req.companyId = user.companyId;
+    req.userId = user.id;
     next();
   } catch(err) {
     Logger.error(err);

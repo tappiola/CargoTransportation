@@ -7,16 +7,21 @@ const {
   Documents,
   Good
 } = require('../models');
+const { authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
 
 const router = Router();
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+router.get('/', auth, async (req, res) => {
+  const { companyId: linkedCompanyId } = req;
+  console.log('req', req);
+  console.log('linkedCompanyId', linkedCompanyId);
 
   const clients = await ConsignmentNote.findAll({
     attributes: ['id', 'number', 'issuedDate', 'vehicle'],
-    where: { linkedCompanyId: companyId },
+    where: { linkedCompanyId },
     include: [
       {
         model: ConsignmentNoteStatus,
@@ -46,7 +51,7 @@ router.get('/', async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const ids = req.body;
 
   await ConsignmentNote.destroy({
@@ -58,7 +63,8 @@ router.delete('/', async (req, res) => {
   res.status(204).end();
 });
 
-router.post('/create', validate.consignmentNote, async (req, res) => {
+router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
+  const { companyId: linkedCompanyId, userId: createdById } = req;
   const {
     number, passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData
   } = req.body;
@@ -71,9 +77,9 @@ router.post('/create', validate.consignmentNote, async (req, res) => {
   const newNote = {
     ...consignmentNoteData,
     number,
-    linkedCompanyId: 1, // TODO: replace with real value
+    linkedCompanyId,
     consignmentNoteStatusId: 1,
-    createdById: 14, // TODO: replace with real value
+    createdById,
   };
 
   const {id} = await ConsignmentNote.create(newNote);

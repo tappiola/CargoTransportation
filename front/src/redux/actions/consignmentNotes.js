@@ -14,8 +14,7 @@ export const handleDeleteConsignmentNotes = (ids) => ({
 });
 
 export const dispatchGetConsignmentNotes = () => (dispatch) => (
-  // TODO: get companyId from token/cookie/session_data
-  api.getConsignmentNotes(1).then((data) => dispatch(setConsignmentNotes(data)))
+  api.getConsignmentNotes().then((data) => dispatch(setConsignmentNotes(data)))
 );
 
 export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => (

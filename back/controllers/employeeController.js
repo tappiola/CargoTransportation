@@ -1,14 +1,13 @@
 const { Router } = require('express');
 const { User, Role, Company } = require('../models');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { ADMIN } } = require('../contants');
+const { ROLES: { ADMIN } } = require('../constants');
 
 const router = Router();
 
-router.get('/', authorize('admin'), async (req, res) => {
-  const { companyId: id, roleCode: role } = req.query;
-
-  const roleFilter = role ? {role} : {};
+router.get('/', authorize(ADMIN), async (req, res) => {
+  const {companyId: id} = req;
+  const { role } = req.query;
 
   const users = await User.findAll({
     attributes: {
@@ -17,7 +16,7 @@ router.get('/', authorize('admin'), async (req, res) => {
     include: [
       {
         model: Role,
-        where: { roleFilter },
+        where: (role ? {role} : {}),
       },
       {
         model: Company,

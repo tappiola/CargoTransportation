@@ -13,7 +13,7 @@ import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteEmployees, dispatchGetEmployees } from 'redux/actions';
 
 function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees, companyId,
+  employeesData, employeesLoadComplete, initEmployees, removeEmployees,
 }) {
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -27,7 +27,7 @@ function EmployeesList({
   ];
 
   useEffect(() => {
-    initEmployees(companyId);
+    initEmployees();
   }, []);
 
   return (
@@ -43,7 +43,7 @@ function EmployeesList({
         <CustomGrid
           rows={employeesData}
           columns={columns}
-          loading={companyId && !employeesLoadComplete}
+          loading={!employeesLoadComplete}
           onSelectionChange={(newSelection) => {
             setSelection(newSelection.rowIds);
           }}
@@ -66,16 +66,13 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ employees, currentUser }) => {
+const mapStateToProps = ({ employees }) => {
   const { employeesData, employeesLoadComplete } = employees;
-  const { companyId } = currentUser;
-  return {
-    employeesData, employeesLoadComplete, companyId,
-  };
+  return { employeesData, employeesLoadComplete };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  initEmployees: (id) => id && dispatch(dispatchGetEmployees(id)),
+  initEmployees: () => dispatch(dispatchGetEmployees()),
   removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
 });
 

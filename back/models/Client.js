@@ -35,7 +35,6 @@ const Client = db.define('client', {
     type: DataTypes.STRING,
     allowNull: true,
     defaultValue: null,
-    unique: true,
   },
   email: {
     type: DataTypes.STRING,
