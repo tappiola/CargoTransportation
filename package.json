@@ -11,7 +11,8 @@
     "start": "node server.js",
     "heroku-postbuild": "cd front && npm install && npm run build",
     "precommit": "lint-staged",
-    "lint": "npx eslint back"
+    "lint": "npx eslint back",
+    "lintwrite": "npx eslint back --fix"
   },
   "keywords": [],
   "author": "",
@@ -54,11 +55,12 @@
     "nodemon": "^2.0.6",
     "prettier": "^2.2.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.{js, jsx}": [
-      "npm run lint",
-      "prettier --write",
-      "git add"
-    ]
+    "*.(js)": ["npm run lint", "git add"]
   }
 }
