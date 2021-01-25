@@ -15,7 +15,7 @@ const consignmentNoteSchema = Joi.object({
     name: Joi.string().required(),
     quantity: Joi.number().required(),
     cost: Joi.number().required(),
-    unit: Joi.number().required(),
+    unit: Joi.string().required(),
     weight: Joi.number().required(),
     remarks: Joi.string().allow(null, ''),
   })).required(),
