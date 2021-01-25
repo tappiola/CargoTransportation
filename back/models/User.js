@@ -106,10 +106,8 @@ User.prototype.generateJWT = function () {
   return jwt.sign({
     email: this.email,
     id: this.id,
-    //+ Add by Makarenko M.A. 24.01.2021
     firstName: this.firstName,
     lastName: this.lastName,
-    //- Add by Makarenko M.A. 24.01.2021
     exp: parseInt(expirationDate.getTime() / 1000, 10),
   }, process.env.jwtToken || 'secret');
 };

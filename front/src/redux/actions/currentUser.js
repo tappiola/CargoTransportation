@@ -39,14 +39,12 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
     }));
   });
 
-const isExpired = (exp) => exp && exp > Date.now();
-
-export const dispatchTokenExpired = () => {
+export const refreshTokenIfExpired = () => {
   const lsToken = getAuthToken();
 
   if (lsToken) {
     const { exp } = jwtDecode(lsToken);
-    if (isExpired(exp)) {
+    if (exp && exp > Date.now()) {
       updateToken()
         .then((res) => localStorage.setItem('token', res.updateToken));
     }
