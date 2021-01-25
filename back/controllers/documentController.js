@@ -5,7 +5,6 @@ const router = Router();
 
 router.get('/:userId', async (req, res) => {
   const {userId} = req.params;
-  console.log(userId);
 
   const documentData = await Documents.findOne({where: {userId}});
 

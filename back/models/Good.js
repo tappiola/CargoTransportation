@@ -35,7 +35,7 @@ const Good = db.define('good', {
   weight: {
     type: DataTypes.DOUBLE,
   },
-  remarks: {
+  notes: {
     type: DataTypes.STRING,
   },
   checkedAt: {

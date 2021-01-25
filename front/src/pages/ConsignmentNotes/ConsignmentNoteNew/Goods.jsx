@@ -8,7 +8,7 @@ const TABLE_COLUMNS = [
   { columnKey: 'unit', columnName: 'Ед. измерения' },
   { columnKey: 'cost', columnName: 'Стоимость (руб)' },
   { columnKey: 'weight', columnName: 'Масса (кг)' },
-  { columnKey: 'remarks', columnName: 'Примечания' },
+  { columnKey: 'notes', columnName: 'Примечания' },
 ];
 
 const TABLE_NAME = 'goods';

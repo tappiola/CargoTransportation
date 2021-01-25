@@ -16,8 +16,6 @@ const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
 router.get('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId } = req;
-  console.log('req', req);
-  console.log('linkedCompanyId', linkedCompanyId);
 
   const clients = await ConsignmentNote.findAll({
     attributes: ['id', 'number', 'issuedDate', 'vehicle'],
@@ -70,6 +68,7 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
   } = req.body;
 
   const existingNote = await ConsignmentNote.findOne({ where: { number } });
+
   if(existingNote){
     res.status(400).json({ message: `ТТН ${number} уже существует` } );
   }
@@ -82,7 +81,8 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
     createdById,
   };
 
-  const {id} = await ConsignmentNote.create(newNote);
+  const { id } = await ConsignmentNote.create(newNote);
+
   await Documents.upsert({
     passportNumber,
     passportIssuedBy,

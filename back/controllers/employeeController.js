@@ -6,7 +6,7 @@ const { ROLES: { ADMIN } } = require('../constants');
 const router = Router();
 
 router.get('/', authorize(ADMIN), async (req, res) => {
-  const {companyId: id} = req;
+  const { companyId: id } = req;
   const { role } = req.query;
 
   const users = await User.findAll({
@@ -16,7 +16,7 @@ router.get('/', authorize(ADMIN), async (req, res) => {
     include: [
       {
         model: Role,
-        where: (role ? {role} : {}),
+        where: (role ? { role } : {}),
       },
       {
         model: Company,

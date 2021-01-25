@@ -49,6 +49,11 @@ const CustomTableRow = (
     }
   };
 
+  const validateRow = () => {
+    trigger(columnKeys.map((k) => `${tableName}Rows[${rowIndex}][${k}]`))
+      .then((status) => status === true && setIsEditMode(false));
+  };
+
   return (
     <>
       <TableRow key={row.id}>
@@ -58,14 +63,7 @@ const CustomTableRow = (
               <Tooltip title="Сохранить">
                 <IconButton
                   aria-label="done"
-                  onClick={() => {
-                    trigger(columnKeys.map((k) => `${tableName}Rows[${rowIndex}][${k}]`))
-                      .then((status) => {
-                        if (status === true) {
-                          setIsEditMode(false);
-                        }
-                      });
-                  }}
+                  onClick={validateRow}
                 >
                   <DoneIcon />
                 </IconButton>

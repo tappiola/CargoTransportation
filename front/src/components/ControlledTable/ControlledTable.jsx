@@ -47,7 +47,7 @@ const ControlledTable = (
 
   const onRowAdd = () => {
     clearErrors();
-    setRows((currentRows) => [...currentRows, createData(columnKeys, ['', '', '', '', '', ''])]);
+    setRows((currentRows) => [...currentRows, createData(columnKeys, Array(columnKeys.length).fill(''))]);
   };
 
   const onRowChange = (row, newData) => {
@@ -91,12 +91,6 @@ const ControlledTable = (
         </TableBody>
       </Table>
       <FormHelperText>{errors?.[tableName]?.message}</FormHelperText>
-      {errors?.[tableName]?.constructor === Array
-                && Array.from(new Set(errors[tableName]
-                  .map((e) => Object.values(e))
-                  .reduce((prev, next) => [...prev, ...next], [])
-                  .map((i) => i.message)))
-                  .map((message) => <FormHelperText>{message}</FormHelperText>)}
     </FormControl>
   );
 };
