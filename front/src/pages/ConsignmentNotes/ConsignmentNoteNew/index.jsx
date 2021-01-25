@@ -64,7 +64,7 @@ function ConsignmentNoteNew() {
     <PaddedContainer>
       <NavButton
         variant="outlined"
-        to="/consignment-notes" // TODO: Extract to constant? (something like ROLES)
+        to="/consignment-notes"
         startIcon={(
           <KeyboardBackspaceIcon />
         )}

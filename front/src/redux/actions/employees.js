@@ -15,7 +15,7 @@ export const handleDeleteEmployees = (ids) => ({
   ids,
 });
 
-// TODO: temporary
+// TODO: Remove companyId hardcode when backend will support company detection
 export const dispatchGetEmployees = (companyId = 1) => (dispatch) => (
   getEmployees(companyId)
     .then((data) => dispatch(setEmployees(data)))
