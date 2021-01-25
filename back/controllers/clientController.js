@@ -6,9 +6,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   const { companyId } = req.query;
 
-  const clients = await Client.findAll({
-    where: { linkedCompanyId: companyId },
-  });
+  const clients = await Client.findAll({ where: { linkedCompanyId: companyId } });
 
   res.status(200).json(clients);
 });

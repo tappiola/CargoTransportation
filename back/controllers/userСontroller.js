@@ -13,7 +13,9 @@ const { authorize } = require('../middlewares/auth');
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
-  const { email, roles: role, companyId, ...userData } = req.body;
+  const {
+    email, roles: role, companyId, ...userData
+  } = req.body;
   const user = await User.findOne({ where: { email } });
   const company = await Company.findByPk(companyId);
   const roles = await Role.findAll({ where: { role } });

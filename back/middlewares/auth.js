@@ -32,7 +32,10 @@ const verifyUser = async (req, res, next, roles) => {
   }
 };
 
-const authorize = (...roles) => (req, res, next) =>
-  Promise.resolve(verifyUser(req, res, next, roles)).catch(next);
+const authorize = (...roles) => (req, res, next) => (
+  Promise
+    .resolve(verifyUser(req, res, next, roles))
+    .catch(next)
+);
 
 module.exports = { authorize };

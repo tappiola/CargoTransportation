@@ -11,6 +11,7 @@ module.exports = {
   },
   plugins: ['autofix', 'prettier'],
   rules: {
+    'object-curly-spacing': ['error', 'always'],
     'autofix/no-debugger': 'error',
     semi: 2,
     quotes: [2, 'single'],
