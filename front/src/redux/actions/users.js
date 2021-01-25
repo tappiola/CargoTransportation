@@ -28,9 +28,9 @@ export const dispatchGetUsers = () => (dispatch) => (
     )
 );
 
-export const dispatchSetUser = ({ id, ...data }) => (dispatch) => (
+export const dispatchSetUser = (data) => (dispatch) => (
   api
-    .setUser({ id, data })
+    .setUser(data)
     .then(
       () => dispatch({
         type: actionTypes.USERS_SET_USER_COMPLETE,

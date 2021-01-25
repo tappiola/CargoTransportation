@@ -1,10 +1,13 @@
 const { Router } = require('express');
 const { Client } = require('../models');
+const { authorize } = require('../middlewares/auth');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../contants');
 
 const router = Router();
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+router.get('/', auth, async (req, res) => {
+  const { companyId } = req;
 
   const clients = await Client.findAll({
     where: { linkedCompanyId: companyId },
@@ -13,12 +16,56 @@ router.get('/', async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.delete('/', async (req, res) => {
+router.post('/register', auth, async (req, res, next) => {
+  const { email, ...clientData } = req.body;
+  const { companyId: linkedCompanyId } = req;
+
+  const client = await Client.findOne({ where: { email } });
+  
+  if (client) {
+    return res.status(400).json({ error: { message: 'Email already in use!' } });
+  }
+
+  try {
+    const newClient = await Client.create({
+      email,
+      linkedCompanyId,
+      ...clientData,
+    });
+
+    res.status(200).json(newClient);
+  } catch (e) {
+    e.status = 400;
+    next(e);
+  }
+});
+
+router.put('/:id', auth, async (req, res) => {
+  const { id } = req.params;
+  const { ...clientData } = req.body;
+  const { companyId: linkedCompanyId } = req;
+
+  const client = await Client.findOne({ where: { id, linkedCompanyId } });
+
+  if (!client) {
+    return res.status(400).json({ error: { message: 'client not found' } });
+  }
+
+  await client.update(clientData).catch((err) => {
+    res.status(400).json(err);
+  });
+
+  res.status(200).json(client);
+});
+
+router.delete('/', auth, async (req, res) => {
   const ids = req.body;
+  const { companyId: linkedCompanyId } = req;
 
   await Client.destroy({
     where: {
       id: ids.map((id) => Number(id)),
+      linkedCompanyId,
     },
   });
 

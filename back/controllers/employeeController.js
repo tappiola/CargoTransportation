@@ -1,13 +1,14 @@
 const { Router } = require('express');
 const { User, Role, Company } = require('../models');
 const { authorize } = require('../middlewares/auth');
+const { ROLES: { ADMIN } } = require('../contants');
+
 const router = Router();
 
 router.get('/', authorize('admin'), async (req, res) => {
-  const { companyId, roleCode } = req.query;
+  const { companyId: id, roleCode: role } = req.query;
 
-  const companyFilter = { id: companyId };
-  const roleFilter = roleCode ? {role: roleCode} : {};
+  const roleFilter = role ? {role} : {};
 
   const users = await User.findAll({
     attributes: {
@@ -16,12 +17,12 @@ router.get('/', authorize('admin'), async (req, res) => {
     include: [
       {
         model: Role,
-        where: roleFilter,
+        where: { roleFilter },
       },
       {
         model: Company,
         attributes: [],
-        where: companyFilter,
+        where: { id },
       },
     ],
   });
@@ -29,7 +30,7 @@ router.get('/', authorize('admin'), async (req, res) => {
   res.status(200).json(users);
 });
 
-router.delete('/', authorize('admin'), async (req, res) => {
+router.delete('/', authorize(ADMIN), async (req, res) => {
   const ids = req.body;
 
   await User.destroy({
@@ -39,11 +40,11 @@ router.delete('/', authorize('admin'), async (req, res) => {
   res.status(204).end();
 });
 
-router.post('/register', authorize('admin'), async (req, res) => {
+router.post('/register', authorize(ADMIN), async (req, res) => {
   res.redirect(307, '../users/register');
 });
 
-router.put('/:id', authorize('admin'), async (req, res) => {
+router.put('/:id', authorize(ADMIN), async (req, res) => {
   const { id } = req.params;
   res.redirect(`../users/${id}`);
 });

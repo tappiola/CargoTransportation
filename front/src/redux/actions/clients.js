@@ -13,11 +13,10 @@ export const handleDeleteClients = (ids) => ({
   ids,
 });
 
-export const dispatchGetClients = () => (dispatch) => {
-  // TODO: get companyId from user profile
-  api.getClients(1)
-    .then((data) => dispatch(setClients(data)));
-};
+export const dispatchGetClients = () => (dispatch) => (
+  api.getClients()
+    .then((data) => dispatch(setClients(data)))
+);
 
 export const dispatchDeleteClients = (ids) => (dispatch) => {
   api.deleteClients(ids)
@@ -26,3 +25,11 @@ export const dispatchDeleteClients = (ids) => (dispatch) => {
       dispatch(enqueueToast({ message: 'Клиенты были успешно удалены', type: TOAST_TYPES.SUCCESS }));
     });
 };
+
+export const dispatchUpdateClient = (data, clientId) => () => (
+  api.updateClient(data, clientId)
+);
+
+export const dispatchSetClient = (data) => () => (
+  api.setClient(data)
+);
