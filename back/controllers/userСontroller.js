@@ -9,6 +9,7 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
+
 const router = Router();
 
 router.post('/register', validate.register, async (req, res, next) => {
@@ -44,12 +45,14 @@ router.post('/register', validate.register, async (req, res, next) => {
       html: registerTemplate(email, password),
     });
 
-    sendEmail(mail).then((res) => console.log('Email sent...', res.messageId)).catch((err) => Logger.error(err.message));
+    sendEmail(mail)
+      .then(({ messageId }) => Logger.log('Email sent...', messageId))
+      .catch((err) => Logger.error(err.message));
 
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
   } catch (e) {
     e.status = 400;
-    next(e);
+    return next(e);
   }
 });
 
@@ -63,15 +66,15 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
-    req.login(user, async (err) => {
-      if (err) {
-        return res.status(401).json(err);
+    req.login(user, async (error) => {
+      if (error) {
+        return res.status(401).json(error);
       }
 
       const token = user.generateJWT();
       const { roles, company } = await User.findOne({
         where: {
-          id: user.id
+          id: user.id,
         },
         attributes: [],
         include: [
@@ -82,12 +85,14 @@ router.post('/login', async (req, res, next) => {
           {
             model: Company,
             attributes: ['id'],
-          }
-        ]
+          },
+        ],
       });
 
-      res.status(200).json({ token, roles, companyId: company && company.id });
+      return res.status(200).json({ token, roles, companyId: company && company.id });
     });
+
+    return next();
   })(req, res, next);
 });
 
@@ -111,11 +116,11 @@ router.get('/', authorize('global_admin', 'admin'), async (req, res) => {
       ['lastName', 'ASC'],
     ],
   });
-  res.status(200).json(users);
+  return res.status(200).json(users);
 });
 
 router.get('/:id', authorize('global_admin', 'admin'), async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
   const user = await User.findOne({
     where: { id },
@@ -151,7 +156,7 @@ router.get('/logout', authorize(), (req, res) => {
   res.status(204).end();
 });
 
-router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
+router.put('/:id', authorize('global_admin', 'admin'), async (req, res) => {
   const { password, roles: role, ...userData } = req.body;
   const user = await User.findByPk(req.params.id);
   const roles = await Role.findAll({ where: { role } });
@@ -166,7 +171,7 @@ router.put('/:id', authorize('global_admin', 'admin'),async (req, res) => {
 
   await user.update(userData, { password });
 
-  res.status(200).json(user);
+  return res.status(200).json(user);
 });
 
 module.exports = router;

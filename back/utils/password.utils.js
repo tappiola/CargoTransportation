@@ -12,6 +12,7 @@ const createRandomPassword = () => {
   const randomLength = Math.floor(Math.random() * (maxLength - minLength)) + minLength;
 
   while (!passwordRegExp.test(password)) {
+    // eslint-disable-next-line no-useless-escape
     password = generatePassword(randomLength, false, /[\w\d\?\-]/);
   }
 

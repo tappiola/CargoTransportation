@@ -13,6 +13,7 @@ const { Waybill, WaybillStatus } = require('./Waybill');
 const { ControlPoint, ControlPointStatus } = require('./ControlPoint');
 const LossReport = require('./LossReport');
 const CongratulationTemplate = require('./CongratulationTemplate');
+const Logger = require('../config/logger');
 
 User.belongsTo(Company);
 
@@ -55,7 +56,7 @@ LossReport.belongsTo(User, { as: 'responsible' });
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
 db.sync({ alter: true, logging: false }).then(() => {
-  console.log('DB sync completed');
+  Logger.log('DB sync completed');
 });
 
 module.exports = {
