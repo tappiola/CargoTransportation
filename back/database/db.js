@@ -8,7 +8,7 @@ module.exports = new Sequelize(
     },
     logging: false,
     dialectOptions: {
-        ssl: true
+        ssl: (process.env.NODE_ENV !== 'production')
     }
   },
 );
