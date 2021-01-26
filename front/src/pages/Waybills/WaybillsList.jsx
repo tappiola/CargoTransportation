@@ -18,7 +18,8 @@ function WaybillsList() {
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const waybillsData = waybillsSelector(useSelector(({ waybills }) => waybills.waybillsData ));
+
+  const waybillsData = waybillsSelector(useSelector(({ waybills }) => waybills.waybillsData));
   const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [
