@@ -6,7 +6,7 @@ const checkEnvVariables = require('../utils/checkEnvVariables');
 
 module.exports = async (app) => {
   try {
-    checkEnvVariables();
+    await checkEnvVariables();
 
     await db.authenticate();
     Logger.info('Database connected successfully');
@@ -15,7 +15,7 @@ module.exports = async (app) => {
       Logger.info(`Server has started on port ${PORT}`);
     });
   } catch (e) {
-    Logger.error('Database connection FAILED');
+    Logger.error('Database connection FAILED: ' + e );
     process.exit(1);
   }
 };

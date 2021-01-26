@@ -2,20 +2,24 @@ const { Router } = require('express');
 const {
   ConsignmentNote,
   User,
-  Vehicle,
   Client,
-  Warehouse,
   ConsignmentNoteStatus,
+  Documents,
+  Good
 } = require('../models');
+const { authorize } = require('../middlewares/auth');
+const validate = require('../middlewares/validate');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
 
 const router = Router();
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+router.get('/', auth, async (req, res) => {
+  const { companyId: linkedCompanyId } = req;
 
   const clients = await ConsignmentNote.findAll({
-    attributes: ['id', 'number', 'issuedAt'],
-    where: { linkedCompanyId: companyId },
+    attributes: ['id', 'number', 'issuedDate', 'vehicle'],
+    where: { linkedCompanyId },
     include: [
       {
         model: ConsignmentNoteStatus,
@@ -24,10 +28,6 @@ router.get('/', async (req, res) => {
       {
         model: Client,
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      },
-      {
-        model: Warehouse,
-        attributes: ['name', 'fullAddress', 'country', 'city', 'street', 'house'],
       },
       {
         model: User,
@@ -43,17 +43,13 @@ router.get('/', async (req, res) => {
         model: User,
         as: 'createdBy',
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      },
-      {
-        model: Vehicle,
-        attributes: ['number'],
       }],
   });
 
   res.status(200).json(clients);
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const ids = req.body;
 
   await ConsignmentNote.destroy({
@@ -63,6 +59,40 @@ router.delete('/', async (req, res) => {
   });
 
   res.status(204).end();
+});
+
+router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
+  const { companyId: linkedCompanyId, userId: createdById } = req;
+  const {
+    number, passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData
+  } = req.body;
+
+  const existingNote = await ConsignmentNote.findOne({ where: { number } });
+
+  if(existingNote){
+    res.status(400).json({ message: `ТТН ${number} уже существует` } );
+  }
+
+  const newNote = {
+    ...consignmentNoteData,
+    number,
+    linkedCompanyId,
+    consignmentNoteStatusId: 1,
+    createdById,
+  };
+
+  const { id } = await ConsignmentNote.create(newNote);
+
+  await Documents.upsert({
+    passportNumber,
+    passportIssuedBy,
+    passportIssuedAt,
+    userId: consignmentNoteData.driverId,
+  });
+
+  await Good.bulkCreate(goods.map(good => ({...good, goodStatusId: 1, consignmentNoteId: id})));
+
+  res.status(200).json({id, consignmentNote: number});
 });
 
 module.exports = router;

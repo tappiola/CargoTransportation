@@ -3,7 +3,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import TextField from '@material-ui/core/TextField';
 
-const ControlledField = ({ name, type, ...props }) => {
+const ControlledField = ({
+  name, type, onChange, customError, customHelperText, ...props
+}) => {
   const { control, errors } = useFormContext();
 
   return (
@@ -12,8 +14,8 @@ const ControlledField = ({ name, type, ...props }) => {
       name={name}
       control={control}
       margin="normal"
-      error={errors && !!errors[name]}
-      helperText={errors && errors[name]?.message}
+      error={customError || (errors && !!errors[name])}
+      helperText={customHelperText || (errors && errors[name]?.message)}
       fullWidth
       defaultValue=""
       type={type}

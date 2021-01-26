@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { Client } = require('../models');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../contants');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
 
 const router = Router();
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);

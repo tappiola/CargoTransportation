@@ -5,7 +5,6 @@ const Role = require('./Role');
 const Endpoint = require('./Endpoint');
 const Client = require('./Client');
 const Warehouse = require('./Warehouse');
-const Vehicle = require('./Vehicle');
 const Documents = require('./Documents');
 const { ConsignmentNote, ConsignmentNoteStatus } = require('./ConsignmentNote');
 const { Good, GoodStatus } = require('./Good');
@@ -28,12 +27,8 @@ Role.belongsToMany(Endpoint, { through: RolePermission });
 Client.belongsTo(Company, { as: 'linkedCompany' });
 Warehouse.belongsTo(Company, { as: 'linkedCompany' });
 
-Documents.belongsTo(User);
-
 ConsignmentNote.belongsTo(ConsignmentNoteStatus);
 ConsignmentNote.belongsTo(Client);
-ConsignmentNote.belongsTo(Warehouse);
-ConsignmentNote.belongsTo(Vehicle);
 ConsignmentNote.belongsTo(Company, { as: 'linkedCompany' });
 ConsignmentNote.belongsTo(User, { as: 'driver' });
 ConsignmentNote.belongsTo(User, { as: 'createdBy' });
@@ -45,6 +40,7 @@ Good.belongsTo(ConsignmentNote);
 
 Waybill.belongsTo(WaybillStatus);
 Waybill.belongsTo(ConsignmentNote);
+Waybill.belongsTo(Warehouse);
 Waybill.belongsTo(Company, { as: 'linkedCompany' });
 
 ControlPoint.belongsTo(ControlPointStatus);
@@ -66,7 +62,6 @@ module.exports = {
   Endpoint,
   Client,
   Warehouse,
-  Vehicle,
   Documents,
   Good,
   Waybill,
