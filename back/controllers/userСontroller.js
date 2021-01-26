@@ -69,7 +69,7 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
-    req.login(user, async (error) => {
+    return req.login(user, async (error) => {
       if (error) {
         return res.status(401).json(error);
       }
@@ -94,8 +94,6 @@ router.post('/login', async (req, res, next) => {
 
       return res.status(200).json({ token, roles });
     });
-
-    return next();
   })(req, res, next);
 });
 
