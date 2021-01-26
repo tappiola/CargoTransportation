@@ -18,7 +18,7 @@ function UsersList() {
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const usersData = useSelector(({ users }) => { usersSelector(users.usersData); });
+  const usersData = usersSelector(useSelector(({ users }) => users.usersData ));
   const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
 
   useEffect(() => {

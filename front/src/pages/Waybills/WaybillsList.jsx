@@ -18,7 +18,7 @@ function WaybillsList() {
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const waybillsData = useSelector(({ waybills }) => { waybillsSelector(waybills.waybillsData); });
+  const waybillsData = waybillsSelector(useSelector(({ waybills }) => waybills.waybillsData ));
   const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [
@@ -35,7 +35,7 @@ function WaybillsList() {
 
   return (
     <>
-       <PaddedContainer>
+      <PaddedContainer>
         <GridToolbar title="Путевые листы">
           <NavButton color="primary" to={`${path}/new`}>Добавить путевой лист</NavButton>
           <DeleteButton
@@ -51,18 +51,18 @@ function WaybillsList() {
             setSelection(newSelection.rowIds);
           }}
         />
-       </PaddedContainer>
-       {isConfirmDialogOpen && (
-        <ConfirmDialog
-          title="Удаление путевых листоы"
-          description="Вы уверены, что хотите удалить выбранные путевые листы?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
-          onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
-            dispatch(dispatchDeleteWaybills(selection));
-          }}
-        />
-       )}
+      </PaddedContainer>
+      {isConfirmDialogOpen && (
+      <ConfirmDialog
+        title="Удаление путевых листоы"
+        description="Вы уверены, что хотите удалить выбранные путевые листы?"
+        onPopupClose={() => setIsConfirmDialogOpen(false)}
+        onActionConfirm={() => {
+          setIsConfirmDialogOpen(false);
+          dispatch(dispatchDeleteWaybills(selection));
+        }}
+      />
+      )}
     </>
   );
 }
