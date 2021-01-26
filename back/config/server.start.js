@@ -15,7 +15,7 @@ module.exports = async (app) => {
       Logger.info(`Server has started on port ${PORT}`);
     });
   } catch (e) {
-    Logger.error('Database connection FAILED: ' + e );
+    Logger.error(`Database connection FAILED: ${  e}` );
     process.exit(1);
   }
 };

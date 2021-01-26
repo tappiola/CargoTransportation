@@ -7,6 +7,7 @@ const {
 } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
+
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
 const router = Router();

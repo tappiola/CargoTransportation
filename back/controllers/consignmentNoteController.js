@@ -90,9 +90,9 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
     userId: consignmentNoteData.driverId,
   });
 
-  await Good.bulkCreate(goods.map(good => ({...good, goodStatusId: 1, consignmentNoteId: id})));
+  await Good.bulkCreate(goods.map(good => ({ ...good, goodStatusId: 1, consignmentNoteId: id })));
 
-  res.status(200).json({id, consignmentNote: number});
+  res.status(200).json({ id, consignmentNote: number });
 });
 
 module.exports = router;
