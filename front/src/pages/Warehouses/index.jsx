@@ -10,7 +10,7 @@ export default function Warehouses() {
   return (
     <Switch>
       <Route path={`${path}/:id(\\d+)`} component={Warehouse} />
-      <Route path={`${path}/new`}>Страница добавления склада </Route>
+      <Route path={`${path}/new`} component={Warehouse} />
       <Route exact path={path} component={WarehousesList} />
       <Route>Страница не найдена</Route>
     </Switch>
