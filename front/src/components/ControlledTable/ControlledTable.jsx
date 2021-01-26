@@ -14,7 +14,7 @@ import { useStyles } from './ControlledTable.styles';
 import CustomTableRow from './CustomTableRow';
 
 const createData = (columnKeys, values) => ({
-  id: +new Date(),
+  id: Number(new Date()),
   ...Object.fromEntries(columnKeys.map((k, index) => ([k, values[index]]))),
 });
 
