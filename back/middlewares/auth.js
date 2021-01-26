@@ -16,7 +16,7 @@ const verifyUser = async (req, res, next, roles) => {
       where: { id },
       include: {
         model: Role,
-        where: roles.length ? { role: roles } : {}
+        where: roles.length ? { role: roles } : {},
       },
     });
 
@@ -26,16 +26,18 @@ const verifyUser = async (req, res, next, roles) => {
 
     req.companyId = user.companyId;
     req.userId = user.id;
-    next();
+    
+    return next();
   } catch(err) {
     Logger.error(err);
     return res.status(403).json({ message: 'Forbidden' });
   }
 };
 
-const authorize = (...roles) => (req, res, next) =>
+const authorize = (...roles) => (req, res, next) => (
   Promise
     .resolve(verifyUser(req, res, next, roles))
-    .catch(next);
+    .catch(next)
+);
 
 module.exports = { authorize };

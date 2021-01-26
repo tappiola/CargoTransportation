@@ -1,4 +1,5 @@
 const { Router } = require('express');
+
 const { User, Role, Company } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN } } = require('../constants');

@@ -9,9 +9,7 @@ const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 router.get('/', auth, async (req, res) => {
   const { companyId } = req;
 
-  const clients = await Client.findAll({
-    where: { linkedCompanyId: companyId },
-  });
+  const clients = await Client.findAll({ where: { linkedCompanyId: companyId } });
 
   res.status(200).json(clients);
 });
@@ -33,10 +31,10 @@ router.post('/register', auth, async (req, res, next) => {
       ...clientData,
     });
 
-    res.status(200).json(newClient);
+    return res.status(200).json(newClient);
   } catch (e) {
     e.status = 400;
-    next(e);
+    return next(e);
   }
 });
 
@@ -55,7 +53,7 @@ router.put('/:id', auth, async (req, res) => {
     res.status(400).json(err);
   });
 
-  res.status(200).json(client);
+  return res.status(200).json(client);
 });
 
 router.delete('/', auth, async (req, res) => {
