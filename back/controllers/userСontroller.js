@@ -12,8 +12,9 @@ const { authorize } = require('../middlewares/auth');
 const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../constants');
 
 const router = Router();
+const auth = authorize(ADMIN, GLOBAL_ADMIN);
 
-router.post('/register', validate.register, async (req, res, next) => {
+router.post('/register', [auth, validate.register], async (req, res, next) => {
   const { companyId } = req;
   const { email, roles: role, ...userData } = req.body;
   const user = await User.findOne({ where: { email } });
