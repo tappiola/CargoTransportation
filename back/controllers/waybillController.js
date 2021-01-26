@@ -3,6 +3,7 @@ const {
   Waybill,
   WaybillStatus,
   ConsignmentNote,
+  Warehouse
 } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
@@ -27,6 +28,9 @@ router.get('/', auth, async (req, res) => {
         model: ConsignmentNote,
         attributes: ['number'],
       },
+      {
+        model: Warehouse,
+      }
     ],
   });
 
