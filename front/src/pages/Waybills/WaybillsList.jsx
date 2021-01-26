@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -13,12 +13,13 @@ import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteWaybills, dispatchGetWaybills } from 'redux/actions';
 import { waybillsSelector } from 'redux/selectors/waybills';
 
-function WaybillsList({
-  waybillsData, waybillsLoadComplete, initWaybills, removeWaybills,
-}) {
+function WaybillsList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+  const waybillsData = useSelector(({ waybills }) => { waybillsSelector(waybills.waybillsData); });
+  const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [
     COLUMNS.WAYBILL_TTN(path),
@@ -29,12 +30,12 @@ function WaybillsList({
   ];
 
   useEffect(() => {
-    initWaybills();
+    dispatch(dispatchGetWaybills());
   }, []);
 
   return (
     <>
-      <PaddedContainer>
+       <PaddedContainer>
         <GridToolbar title="Путевые листы">
           <NavButton color="primary" to={`${path}/new`}>Добавить путевой лист</NavButton>
           <DeleteButton
@@ -50,32 +51,20 @@ function WaybillsList({
             setSelection(newSelection.rowIds);
           }}
         />
-      </PaddedContainer>
-      {isConfirmDialogOpen && (
+       </PaddedContainer>
+       {isConfirmDialogOpen && (
         <ConfirmDialog
           title="Удаление путевых листоы"
           description="Вы уверены, что хотите удалить выбранные путевые листы?"
           onPopupClose={() => setIsConfirmDialogOpen(false)}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            removeWaybills(selection);
+            dispatch(dispatchDeleteWaybills(selection));
           }}
         />
-      )}
+       )}
     </>
   );
 }
 
-const mapStateToProps = ({ waybills: { waybillsData, waybillsLoadComplete } }) => (
-  {
-    waybillsData: waybillsSelector(waybillsData),
-    waybillsLoadComplete,
-  }
-);
-
-const mapDispatchToProps = (dispatch) => ({
-  initWaybills: () => dispatch(dispatchGetWaybills()),
-  removeWaybills: (ids) => dispatch(dispatchDeleteWaybills(ids)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WaybillsList);
+export default WaybillsList;
