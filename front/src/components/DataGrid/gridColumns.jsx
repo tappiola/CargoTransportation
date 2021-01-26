@@ -53,7 +53,7 @@ export const ADDRESS = {
 };
 
 export const COMPANY_NAME = {
-  field: 'company_name',
+  field: 'companyName',
   headerName: 'Компания',
   flex: 3,
   renderCell: valueOrBlank,
@@ -108,13 +108,6 @@ export const TTN_CLIENT = {
   headerName: 'Клиент',
   flex: 3,
   renderCell: ({ value }) => value.shortFullName,
-};
-
-export const TTN_ADDRESS = {
-  field: 'warehouse',
-  headerName: 'Cклад',
-  flex: 4,
-  renderCell: ({ value }) => value.fullAddress,
 };
 
 export const TTN_MANAGER = {

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../database/db');
+const User = require('./User');
 
 const Documents = db.define('document', {
   id: {
@@ -10,16 +11,23 @@ const Documents = db.define('document', {
   },
   passportNumber: {
     type: DataTypes.STRING,
-    unique: true,
   },
   passportIssuedBy: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   passportIssuedAt: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    unique: true,
+    references: {
+      model: User,
+      key: 'id'
+    }
+  }
 });
 
 module.exports = Documents;

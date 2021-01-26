@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import { signIn, logoutUser } from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
@@ -22,7 +23,7 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
 
     dispatch(enqueueToast({
       message: 'Вход в систему выполнен успешно',
-      type: 'success',
+      type: TOAST_TYPES.SUCCESS,
     }));
   },
   (err) => {
@@ -30,6 +31,6 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
 
     dispatch(enqueueToast({
       message: err.message || 'Произошла ошибка',
-      type: 'error',
+      type: TOAST_TYPES.ERROR,
     }));
   });

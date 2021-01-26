@@ -29,6 +29,15 @@ const Good = db.define('good', {
   unit: {
     type: DataTypes.STRING,
   },
+  cost: {
+    type: DataTypes.DOUBLE,
+  },
+  weight: {
+    type: DataTypes.DOUBLE,
+  },
+  notes: {
+    type: DataTypes.STRING,
+  },
   checkedAt: {
     type: DataTypes.DATE,
   },
