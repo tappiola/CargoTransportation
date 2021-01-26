@@ -1,29 +1,22 @@
 const dotenv = require('dotenv');
 const fs = require('fs');
-const Logger = require('../config/logger');
+const logger = require('../config/logger');
 
-module.exports = async () =>
-  await fs.readFile('./.env.example', 'utf8', function (err, example) {
+module.exports = () =>
+  fs.readFile('./.env.example', 'utf8', (err, example) => {
     if (err) {
       throw err;
     }
 
-    const exmBuffer = Buffer.from(example);
-    const exmVars = Object.keys(dotenv.parse(exmBuffer));
+    const exmVars = Object.keys(dotenv.parse(Buffer.from(example)));
+    const envVars = Object.keys(process.env);
+    const unincluded = exmVars.filter((exmVar) => !envVars.includes(exmVar));
 
-    fs.readFile('./.env', 'utf8', function (err, envirenment) {
-      if (err) {
-        throw err;
-      }
-
-      const envBuffer = Buffer.from(envirenment);
-      const envVars = Object.keys(dotenv.parse(envBuffer));
-
-      const unincluded = envVars.filter((envVar) => !exmVars.includes(envVar));
-      if (unincluded.length) {
-        throw new Error(`Not all variables included in .env.example : ${JSON.stringify(unincluded)}`);
-      } else {
-        Logger.info('All variables included');
-      }
-    });
+    if (unincluded.length) {
+      throw new Error(
+        `Not all variables included: ${JSON.stringify(unincluded)}`,
+      );
+    } else {
+      logger.info('All variables included');
+    }
   });
