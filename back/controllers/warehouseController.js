@@ -57,13 +57,13 @@ router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
   const { companyId: linkedCompanyId } = req;
 
-  const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
-
-  if (!warehouse) {
-    return res.status(400).json({ error: { message: 'Склад не найден' } });
-  }
-
   try {
+    const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
+
+    if (!warehouse) {
+      return res.status(400).json({ error: { message: 'Склад не найден' } });
+    }
+
     await warehouse.update(req.body);
     return res.status(200).json(warehouse);
   } catch (e){
