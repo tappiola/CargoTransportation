@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
-const expressWs = require('express-ws')(app);
 const routes = require('./back/routes');
 const serverConfig = require('./back/config/server.config');
 const errorHandler = require('./back/middlewares/errorHandler');

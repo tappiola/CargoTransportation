@@ -4,6 +4,10 @@ const { DataTypes } = require('sequelize');
 const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 const { isValidPassword } = require('../utils/password.utils');
+const Role = require('./Role');
+const {
+  ROLES: { MANAGER, DISPATCHER, DRIVER },
+} = require('../constants');
 
 const User = db.define('user', {
   id: {
@@ -85,28 +89,40 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 };
 
+const upadateIndex = (index, { fullName, companyName, companyId, id }) => {
+  elastic.update({
+    id,
+    index,
+    body: {
+      doc: { fullName, companyName, companyId, id },
+    },
+  });
+};
+
 User.beforeCreate(async (user) => {
   // eslint-disable-next-line no-param-reassign
   user.password = hashPassword(user.password);
 });
 
-User.afterCreate(({ id, firstName, lastName }) => {
-  elastic.index({
+User.afterCreate(async ({ fullName, companyName, companyId, id }) => {
+  await elastic.index({
     id,
     index: 'users',
-    body: { firstName, lastName },
+    body: { fullName, companyName, companyId, id },
   });
 });
 
-User.beforeUpdate((user, { password }) => {
-  const { id, firstName, lastName } = user;
-  
-  elastic.update({
-    id,
-    index: 'users',
-    body: {
-      doc: { firstName, lastName },
-    },
+
+User.beforeUpdate(async (user, { password }) => {
+  const roles = await user.getRoles();
+  roles.forEach(({ role }) => {
+    if (role === MANAGER) {
+      return upadateIndex('managers', user);
+    }
+    if (role === DRIVER) {
+      return upadateIndex('drivers', user);
+    }
+    return upadateIndex('users', user);
   });
 
   if (password && isValidPassword(password)) {
@@ -119,8 +135,7 @@ User.beforeBulkDestroy(async ({ where: { id: ids } }) => {
   ids.forEach((id) => elastic.delete({ id, index: 'users' }));
 });
 
-User.prototype.isValidPassword = (password, hash) =>
-  bcrypt.compareSync(password, hash);
+User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
 User.prototype.generateJWT = function generateJWT() {
   const today = new Date();
@@ -133,7 +148,7 @@ User.prototype.generateJWT = function generateJWT() {
       id: this.id,
       exp: parseInt(expirationDate.getTime() / 1000, 10),
     },
-    process.env.jwtToken || 'secret',
+    process.env.jwtToken || 'secret'
   );
 };
 
