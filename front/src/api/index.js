@@ -1,6 +1,6 @@
 export { fetchAPI } from './fetchAPI';
 export {
-  setUser, updateUser, getUsers, signIn, deleteUsers, logoutUser,
+  setUser, updateUser, getUsers, signIn, deleteUsers, logoutUser, updateToken
 } from './users';
 export {
   getEmployees, getEmployeesWithRole, deleteEmployees, setEmployee, updateEmployee,
