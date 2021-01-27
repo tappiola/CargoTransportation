@@ -1,55 +1,57 @@
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
-import NavButton from '../../components/Buttons/NavButton';
-import GridToolbar from '../../components/GridToolbar';
-import PaddedContainer from '../../components/PaddedContainer';
-import PaddedPaper from '../../components/PaddedPaper';
 import { warehouseResolver as resolver } from './warehouseResolver';
+import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
-import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions/clients';
+import GridToolbar from 'components/GridToolbar';
+import PaddedContainer from 'components/PaddedContainer';
+import PaddedPaper from 'components/PaddedPaper';
+import { TOAST_TYPES } from 'constants/toastsTypes';
+import { dispatchSetWarehouse, dispatchUpdateWarehouse, enqueueToast } from 'redux/actions';
 import { usePending } from 'utils';
 
-const selector = (id) => ({ clients }) => clients.clientsData.find(
-  ({ id: _id }) => _id.toString() === id,
+const selector = (warehouseId) => ({ warehouses }) => warehouses.warehousesData.find(
+  ({ id }) => id.toString() === warehouseId,
 );
 
 function User() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const { id } = useParams();
   const defaultValues = useSelector(selector(id));
-  const dispatch = useDispatch();
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
   const sendFormData = (clientId) => (formData) => dispatch(
     clientId
-      ? dispatchUpdateClient(formData, clientId)
-      : dispatchSetClient(formData),
-  );
+      ? dispatchUpdateWarehouse(formData, clientId)
+      : dispatchSetWarehouse(formData),
+  ).then(() => {
+    history.push('/warehouses');
+  })
+    .catch((e) => {
+      dispatch(enqueueToast({
+        message: `Ошибка при создании склада: ${e.message}`,
+        type: TOAST_TYPES.ERROR,
+      }));
+    });
 
   const { bindPending, handler } = usePending(sendFormData(id));
 
   return (
     <PaddedContainer>
-      <NavButton
-        variant="outlined"
-        to="/warehouses"
-        startIcon={(
-          <KeyboardBackspaceIcon />
-        )}
-      >
-        К списку складов
-      </NavButton>
+      <Index link="/warehouses" text="К списку складов" />
       <GridToolbar title="Добавление склада" />
       <FormProvider {...methods}>
         <form noValidate onSubmit={handleSubmit(handler)}>
@@ -90,7 +92,7 @@ function User() {
                     <Checkbox
                       inputRef={register}
                       name="isTrusted"
-                      defaultChecked={defaultValues?.isActive}
+                      defaultChecked={defaultValues?.isTrusted}
                     />
                   )}
                   label="Доверенный"

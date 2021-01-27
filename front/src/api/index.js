@@ -8,7 +8,9 @@ export {
 export {
   getClients, deleteClients, setClient, updateClient,
 } from './clients';
-export { getWarehouses, deleteWarehouses } from './warehouses';
+export {
+  getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse,
+} from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
 export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
 export { getDocuments } from './documents';

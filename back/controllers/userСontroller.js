@@ -22,7 +22,7 @@ router.post('/register', [auth, validate.register], async (req, res, next) => {
   const roles = await Role.findAll({ where: { role } });
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.status(400).json({ error: { message: 'Email уже используется!' } });
   }
 
   try {
