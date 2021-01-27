@@ -1,7 +1,9 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { Warehouse } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
+const validate = require('../middlewares/validate');
 
 const router = Router();
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);
@@ -16,20 +18,27 @@ router.get('/', auth, async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.post('/create', auth, async (req, res, next) => {
+router.post('/create', [auth, validate.warehouse], async (req, res, next) => {
   const { email, name } = req.body;
   const { companyId: linkedCompanyId } = req;
 
-  const warehouseWithEmail = await Warehouse.findOne({ where: { email } });
+  const duplicateWarehouse = await Warehouse.findOne({
+    where: {
+      [Op.or]: [
+        { name },
+        { email }
+      ]
+    }
+  });
 
-  if (warehouseWithEmail) {
-    return res.status(400).json({ message: 'Email уже используется!' });
-  }
-
-  const warehouseWithName = await Warehouse.findOne({ where: { name } });
-
-  if (warehouseWithName) {
-    return res.status(400).json({ message: 'Склад с таким названием уже существует' });
+  if (duplicateWarehouse) {
+    if (duplicateWarehouse.email === email) {
+      return res.status(500).json({ message: 'Email уже используется!' });
+    }
+    if (duplicateWarehouse.name === name) {
+      return res.status(500).json({ message: 'Склад с таким названием уже существует' });
+    } 
+    return res.status(500).json({ message: 'Произошла неизвестная ошибка' });
   }
 
   try {
@@ -40,7 +49,7 @@ router.post('/create', auth, async (req, res, next) => {
 
     return res.status(200).json(newWarehouse);
   } catch (e) {
-    e.status = 400;
+    e.status = 500;
     return next(e);
   }
 });
@@ -52,14 +61,15 @@ router.put('/:id', auth, async (req, res) => {
   const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
 
   if (!warehouse) {
-    return res.status(400).json({ error: { message: 'Склад не найден' } });
+    return res.status(500).json({ error: { message: 'Склад не найден' } });
   }
 
-  await warehouse.update(req.body).catch((err) => {
-    res.status(400).json(err);
-  });
-
-  return res.status(200).json(warehouse);
+  try {
+    await warehouse.update(req.body);
+    return res.status(200).json(warehouse);
+  } catch (e){
+    return res.status(500).json(e);
+  }
 });
 
 router.delete('/', async (req, res) => {
