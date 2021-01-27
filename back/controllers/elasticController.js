@@ -13,6 +13,14 @@ const es = require('../config/elastic.config');
 //     },
 //   ],
 // });
+// const managers = await User.findAll({
+//   include: [
+//     {
+//       model: Role,
+//       where: { role: 'manager' },
+//     },
+//   ],
+// });
 
 // clients.forEach(async ({ lastName, firstName, middleName, companyName, id }) => {
 //   await es.index({
@@ -37,9 +45,19 @@ const es = require('../config/elastic.config');
 //     body: { lastName, firstName, middleName, fullName, companyName, id },
 //   });
 // });
-// await es.indices.refresh({ index: 'clients' });
-// await es.indices.refresh({ index: 'users' });
-// await es.indices.refresh({ index: 'drivers' });
+
+//   managers.forEach(async ({ lastName, firstName, fullName, middleName, companyName, id }) => {
+//     await es.index({
+//       id,
+//       index: 'managers',
+//       body: { lastName, firstName, middleName, fullName, companyName, id },
+//     });
+//   });
+
+//   await es.indices.refresh({ index: 'clients' });
+//   await es.indices.refresh({ index: 'users' });
+//   await es.indices.refresh({ index: 'drivers' });
+//   await es.indices.refresh({ index: 'manangers' });
 // }
 // createIndex();
 
