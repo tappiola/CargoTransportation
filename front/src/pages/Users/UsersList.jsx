@@ -59,6 +59,7 @@ function UsersList({
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             removeUsers(selection);
+            setSelection([]);
           }}
         />
       )}

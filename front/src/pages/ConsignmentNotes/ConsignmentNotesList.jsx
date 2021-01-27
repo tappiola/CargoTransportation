@@ -58,6 +58,7 @@ function ConsignmentNotesList({
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             removeConsignmentNotes(selection);
+            setSelection([]);
           }}
         />
       )}

@@ -59,6 +59,7 @@ function EmployeesList({
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             removeEmployees(selection);
+            setSelection([]);
           }}
         />
       )}
