@@ -17,10 +17,24 @@ export const dispatchGetWarehouses = () => (dispatch) => {
   api.getWarehouses().then((data) => dispatch(setWarehouses(data)));
 };
 
-export const dispatchDeleteWarehouses = (ids) => (dispatch) => {
+export const dispatchDeleteWarehouses = (ids) => (dispatch) => (
   api.deleteWarehouses(ids)
     .then(() => {
       dispatch(handleDeleteWarehouses(ids));
       dispatch(enqueueToast({ message: 'Склады были успешно удалены', type: TOAST_TYPES.SUCCESS }));
-    });
-};
+    })
+);
+
+export const dispatchUpdateWarehouse = (data, warehouseId) => (dispatch) => (
+  api.updateWarehouse(data, warehouseId)
+    .then(() => {
+      dispatch(enqueueToast({ message: 'Изменения успешно сохранены', type: TOAST_TYPES.SUCCESS }));
+    })
+);
+
+export const dispatchSetWarehouse = (data) => (dispatch) => (
+  api.setWarehouse(data)
+    .then(() => {
+      dispatch(enqueueToast({ message: 'Склад успешно добавлен в систему', type: TOAST_TYPES.SUCCESS }));
+    })
+);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -12,12 +12,12 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteWarehouses, dispatchGetWarehouses } from 'redux/actions';
 
-function WarehousesList({
-  warehousesData, warehousesLoadComplete, initWarehouses, removeWarehouses,
-}) {
+function WarehousesList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+  const { warehousesData, warehousesLoadComplete } = useSelector(({ warehouses }) => warehouses);
 
   const columns = [
     COLUMNS.LEGAL_NAME(path),
@@ -27,7 +27,7 @@ function WarehousesList({
   ];
 
   useEffect(() => {
-    initWarehouses();
+    dispatch(dispatchGetWarehouses());
   }, []);
 
   return (
@@ -56,7 +56,7 @@ function WarehousesList({
           onPopupClose={() => setIsConfirmDialogOpen(false)}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            removeWarehouses(selection);
+            dispatch(dispatchDeleteWarehouses(selection));
           }}
         />
       )}
@@ -64,15 +64,4 @@ function WarehousesList({
   );
 }
 
-const mapStateToProps = ({ warehouses: { warehousesData, warehousesLoadComplete } }) => (
-  {
-    warehousesData, warehousesLoadComplete,
-  }
-);
-
-const mapDispatchToProps = (dispatch) => ({
-  initWarehouses: () => dispatch(dispatchGetWarehouses()),
-  removeWarehouses: (ids) => dispatch(dispatchDeleteWarehouses(ids)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WarehousesList);
+export default WarehousesList;
