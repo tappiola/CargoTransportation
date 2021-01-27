@@ -1,10 +1,13 @@
 const { Router } = require('express');
 const { Warehouse } = require('../models');
+const { authorize } = require('../middlewares/auth');
+const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
 
 const router = Router();
+const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 
-router.get('/', async (req, res) => {
-  const { companyId } = req.query;
+router.get('/', auth, async (req, res) => {
+  const { companyId } = req;
 
   const clients = await Warehouse.findAll({
     where: { linkedCompanyId: companyId },

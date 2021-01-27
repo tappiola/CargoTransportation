@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ToastQueueContext } from '@tappiola/material-ui-externals';
 
-import { processToast } from '../../redux/actions';
+import { processToast } from 'redux/actions';
 
 function Notifier() {
   // eslint-disable-next-line no-shadow

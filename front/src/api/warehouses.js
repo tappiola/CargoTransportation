@@ -2,5 +2,5 @@ import { fetchAPI } from './fetchAPI';
 
 const BASE_URI = '/warehouses';
 
-export const getWarehouses = async (companyId) => fetchAPI(`${BASE_URI}?companyId=${companyId}`);
+export const getWarehouses = async () => fetchAPI(BASE_URI);
 export const deleteWarehouses = async (ids) => fetchAPI(`${BASE_URI}`, ids, 'DELETE');

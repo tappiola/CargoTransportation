@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode';
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import { signIn, logoutUser, updateToken } from 'api';
-import { getAuthToken } from 'utils';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
@@ -14,20 +14,18 @@ export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
 
 export const dispatchLogoutUser = () => (dispatch) => {
   dispatch({ type: actionTypes.CURRENT_USER_LOGOUT });
-  localStorage.removeItem('token');
-  localStorage.removeItem('roles');
-  logoutUser();
+  logoutUser().then(() => localStorage.removeItem('token'));
 };
 
 export const loginUser = (email, password) => (dispatch) => signIn(email, password)
   .then(({ token, roles, companyId }) => {
+    localStorage.setItem('token', token);
     const userRoles = roles.map(({ role }) => role);
     dispatch(authorizationCompleted(!!token, userRoles, companyId));
-    localStorage.setItem('token', token);
 
     dispatch(enqueueToast({
       message: 'Вход в систему выполнен успешно',
-      type: 'success',
+      type: TOAST_TYPES.SUCCESS,
     }));
   },
   (err) => {
@@ -35,7 +33,7 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
 
     dispatch(enqueueToast({
       message: err.message || 'Произошла ошибка',
-      type: 'error',
+      type: TOAST_TYPES.ERROR,
     }));
   });
 

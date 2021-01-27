@@ -86,19 +86,22 @@ const hashPassword = (password) => {
 
 User.beforeUpdate((user, { password }) => {
   // TODO: Not sure that we need this, user is registered and usable even without these lines
-  // TODO: method beforeCreate() should be enough, as we don't need to update password during each update
+  // TODO: method beforeCreate() should be enough,
+  // as we don't need to update password during each update
   if (password && isValidPassword(password)) {
+    // eslint-disable-next-line no-param-reassign
     user.password = hashPassword(password);
   }
 });
 
 User.beforeCreate((user) => {
+  // eslint-disable-next-line no-param-reassign
   user.password = hashPassword(user.password);
 });
 
 User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);
 
-User.prototype.generateJWT = function () {
+User.prototype.generateJWT = function generateJWT() {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);

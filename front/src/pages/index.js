@@ -18,19 +18,19 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.ACTS,
     basePath: '/acts',
     component: Acts,
-    roles: [GLOBAL_ADMIN, MANAGER, DRIVER],
+    roles: [MANAGER, DRIVER],
   },
   {
     module: MODULE_NAMES.CLIENTS,
     basePath: '/clients',
     component: Clients,
-    roles: [GLOBAL_ADMIN, ADMIN],
+    roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,
     basePath: '/consignment-notes',
     component: ConsignmentNotes,
-    roles: [GLOBAL_ADMIN, MANAGER, DISPATCHER, ADMIN],
+    roles: [MANAGER, DISPATCHER, ADMIN],
   },
   {
     module: MODULE_NAMES.MAILINGS,
@@ -42,7 +42,7 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.REPORTS,
     basePath: '/reports',
     component: Reports,
-    roles: [GLOBAL_ADMIN, MANAGER],
+    roles: [MANAGER],
   },
   {
     module: MODULE_NAMES.USERS,
@@ -54,18 +54,18 @@ export const PROTECTED_ROUTES = [
     module: MODULE_NAMES.EMPLOYEES,
     basePath: '/employees',
     component: Employees,
-    roles: [GLOBAL_ADMIN, ADMIN],
+    roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.WAREHOUSES,
     basePath: '/warehouses',
     component: Warehouses,
-    roles: [GLOBAL_ADMIN, ADMIN, DISPATCHER, MANAGER],
+    roles: [ADMIN, DISPATCHER, MANAGER],
   },
   {
     module: MODULE_NAMES.WAYBILLS,
     basePath: '/waybills',
     component: Waybills,
-    roles: [GLOBAL_ADMIN, ADMIN, DRIVER, MANAGER],
+    roles: [ADMIN, DRIVER, MANAGER],
   },
 ];

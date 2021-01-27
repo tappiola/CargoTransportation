@@ -5,10 +5,9 @@ import Button from '@material-ui/core/Button';
 
 const NavButton = ({ children, to, ...props }) => (
   <Button
-    {...props}
-    color="primary"
     component={NavLink}
     to={to}
+    {...props}
   >
     {children}
   </Button>

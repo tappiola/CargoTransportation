@@ -5,7 +5,6 @@ const Role = require('./Role');
 const Endpoint = require('./Endpoint');
 const Client = require('./Client');
 const Warehouse = require('./Warehouse');
-const Vehicle = require('./Vehicle');
 const Documents = require('./Documents');
 const { ConsignmentNote, ConsignmentNoteStatus } = require('./ConsignmentNote');
 const { Good, GoodStatus } = require('./Good');
@@ -13,6 +12,7 @@ const { Waybill, WaybillStatus } = require('./Waybill');
 const { ControlPoint, ControlPointStatus } = require('./ControlPoint');
 const LossReport = require('./LossReport');
 const CongratulationTemplate = require('./CongratulationTemplate');
+const Logger = require('../config/logger');
 
 User.belongsTo(Company);
 
@@ -27,12 +27,8 @@ Role.belongsToMany(Endpoint, { through: RolePermission });
 Client.belongsTo(Company, { as: 'linkedCompany' });
 Warehouse.belongsTo(Company, { as: 'linkedCompany' });
 
-Documents.belongsTo(User);
-
 ConsignmentNote.belongsTo(ConsignmentNoteStatus);
 ConsignmentNote.belongsTo(Client);
-ConsignmentNote.belongsTo(Warehouse);
-ConsignmentNote.belongsTo(Vehicle);
 ConsignmentNote.belongsTo(Company, { as: 'linkedCompany' });
 ConsignmentNote.belongsTo(User, { as: 'driver' });
 ConsignmentNote.belongsTo(User, { as: 'createdBy' });
@@ -44,6 +40,7 @@ Good.belongsTo(ConsignmentNote);
 
 Waybill.belongsTo(WaybillStatus);
 Waybill.belongsTo(ConsignmentNote);
+Waybill.belongsTo(Warehouse);
 Waybill.belongsTo(Company, { as: 'linkedCompany' });
 
 ControlPoint.belongsTo(ControlPointStatus);
@@ -55,7 +52,7 @@ LossReport.belongsTo(User, { as: 'responsible' });
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
 db.sync({ alter: true, logging: false }).then(() => {
-  console.log('DB sync completed');
+  Logger.log('DB sync completed');
 });
 
 module.exports = {
@@ -65,7 +62,6 @@ module.exports = {
   Endpoint,
   Client,
   Warehouse,
-  Vehicle,
   Documents,
   Good,
   Waybill,

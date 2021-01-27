@@ -11,30 +11,33 @@ const verifyUser = async (req, res, next, roles) => {
     return res.sendStatus(401);
   }
   try {
-    const user = jwt.verify(token, process.env.jwtToken);
-    const hasPermission = await User.findOne({
-      where: { id: user.id },
+    const { id } = jwt.verify(token, process.env.jwtToken);
+    const user = await User.findOne({
+      where: { id },
       include: {
         model: Role,
-        where: roles.length ? { role: roles } : {}
+        where: roles.length ? { role: roles } : {},
       },
     });
 
-    if (!hasPermission) {
-      throw new Error('Forbidden');
+    if (!user) {
+      throw new Error();
     }
 
-    req.user = user;
-    next();
+    req.companyId = user.companyId;
+    req.userId = user.id;
+    
+    return next();
   } catch(err) {
     Logger.error(err);
     return res.status(403).json({ message: 'Forbidden' });
   }
 };
 
-const authorize = (...roles) => (req, res, next) =>
+const authorize = (...roles) => (req, res, next) => (
   Promise
     .resolve(verifyUser(req, res, next, roles))
-    .catch(next);
+    .catch(next)
+);
 
 module.exports = { authorize };
