@@ -1,30 +1,24 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
+import { useElastic } from 'api';
 import NavButton from 'components/Buttons/NavButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import { dispatchGetClients } from 'redux/actions';
-import { isEmpty } from 'utils/objectUtils';
 
 const ClientForm = () => {
-  const { clientsData } = useSelector(({ clients }) => clients);
-
-  const dispatch = useDispatch();
-  useEffect(() => { dispatch(dispatchGetClients()); }, []);
-
+  const { options, onChange } = useElastic('clients', 'fullName');
+  const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
   return (
     <Grid container spacing={3} justify="space-between" alignItems="center">
       <Grid item xs={12} md={8} lg={9}>
         <ControlledAutocomplete
           name="client"
           fieldName="fullName"
-          options={clientsData}
-          getOptionLabel={(option) => option.fullName || ''}
-          getOptionSelected={
-            (option, value) => isEmpty(value) || option.fullName === value.fullName
-          }
+          options={options}
+          onInputChange={onChange}
+          getOptionLabel={({ fullName }) => fullName || ''}
+          getOptionSelected={getOption}
           label="ФИО"
           defaultValue={{}}
         />
