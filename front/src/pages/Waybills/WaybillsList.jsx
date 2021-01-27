@@ -11,7 +11,11 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteWaybills, dispatchGetWaybills } from 'redux/actions';
-import { waybillsSelector } from 'redux/selectors/waybills';
+
+export const waybillsSelector = ({ waybillsData }) => waybillsData.map((u) => {
+  const { consignment_note: consignmentNote, ...other } = u;
+  return { ...other, ...consignmentNote };
+});
 
 function WaybillsList() {
   const dispatch = useDispatch();
@@ -19,7 +23,7 @@ function WaybillsList() {
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
-  const waybillsData = waybillsSelector(useSelector(({ waybills }) => waybills.waybillsData));
+  const waybillsData = useSelector(({ waybills }) => waybillsSelector(waybills));
   const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [

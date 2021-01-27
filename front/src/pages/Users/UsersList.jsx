@@ -11,7 +11,11 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteUsers, dispatchGetUsers } from 'redux/actions';
-import { usersSelector } from 'redux/selectors/users';
+
+export const usersSelector = ({ usersData }) => usersData.map((u) => {
+  const { company, ...user } = u;
+  return { ...user, ...company };
+});
 
 function UsersList() {
   const dispatch = useDispatch();
@@ -19,7 +23,7 @@ function UsersList() {
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
-  const usersData = usersSelector(useSelector(({ users }) => users.usersData));
+  const usersData = useSelector(({ users }) => usersSelector(users));
   const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
 
   useEffect(() => {
