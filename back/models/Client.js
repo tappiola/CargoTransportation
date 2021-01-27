@@ -70,21 +70,19 @@ const Client = db.define('client', {
   },
 });
 
-Client.afterCreate(({ firstName, companyName, id }) => {
-  elastic.index({
+const indexClient = async ({ id, companyName, fullName, ...other }) => {
+  const { linkedCompanyId: companyId } = other.dataValues;
+  
+  await elastic.index({
     id,
     index: 'clients',
-    body: { firstName,  companyName },
+    body: { id, fullName, companyName, companyId },
   });
-});
+};
 
-Client.beforeUpdate(({ firstName, companyName, id }) => {
-  elastic.index({
-    id,
-    index: 'clients',
-    body: { firstName,  companyName },
-  });
-});
+Client.afterCreate(indexClient);
+
+Client.beforeUpdate(indexClient);
 
 Client.beforeBulkDestroy(async ({ where: { id: ids } }) => {
   ids.forEach((id) => elastic.delete({ id, index: 'clients' }));
