@@ -1,29 +1,45 @@
 const es = require('../config/elastic.config');
 
-// const { Client, User } = require('../models');
+// const { Client, User, Role } = require('../models');
 
 // async function createIndex() {
-//   const clients = await Client.findAll({ where: {} });
-//   const users = await User.findAll({ where: {} });
+// const clients = await Client.findAll({ where: {} });
+// const users = await User.findAll({ where: {} });
+// const drivers = await User.findAll({
+//   include: [
+//     {
+//       model: Role,
+//       where: { role: 'driver' },
+//     },
+//   ],
+// });
 
-//   clients.forEach(async ({ lastName, firstName, middleName, companyName, id }) => {
-//     await es.index({
-//       id,
-//       index: 'clients',
-//       body: { lastName, firstName, middleName, companyName, id },
-//     });
+// clients.forEach(async ({ lastName, firstName, middleName, companyName, id }) => {
+//   await es.index({
+//     id,
+//     index: 'clients',
+//     body: { lastName, firstName, middleName, companyName, id },
 //   });
+// });
 
-//   users.forEach(async ({ firstName, lastName, id }) => {
-//     await es.index({
-//       id,
-//       index: 'users',
-//       body: { firstName, lastName, id },
-//     });
+// users.forEach(async ({ firstName, lastName, id }) => {
+//   await es.index({
+//     id,
+//     index: 'users',
+//     body: { firstName, lastName, id },
 //   });
+// });
 
-//   await es.indices.refresh({ index: 'clients' });
-//   await es.indices.refresh({ index: 'users' });
+// drivers.forEach(async ({ lastName, firstName, fullName, middleName, companyName, id }) => {
+//   await es.index({
+//     id,
+//     index: 'drivers',
+//     body: { lastName, firstName, middleName, fullName, companyName, id },
+//   });
+// });
+// await es.indices.refresh({ index: 'clients' });
+// await es.indices.refresh({ index: 'users' });
+// await es.indices.refresh({ index: 'drivers' });
 // }
 // createIndex();
 
@@ -35,7 +51,7 @@ const es = require('../config/elastic.config');
 //     (err) => console.log(err)
 //   );
 // }
-// deleteIndex('clients');
+// deleteIndex('drivers');
 
 function router(ws) {
   ws.on('message', async (msg) => {

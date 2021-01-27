@@ -4,24 +4,18 @@ import { useFormContext } from 'react-hook-form';
 import Grid from '@material-ui/core/Grid';
 
 import * as api from 'api';
+import { useElastic } from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField from 'components/ControlledField';
-import { ROLES } from 'constants/permissions';
-import { isEmpty } from 'utils/objectUtils';
 
 const DriverForm = () => {
-  const { setValue } = useFormContext();
-
-  const [driversData, setDriversData] = useState([]);
   const [driverId, setDriverId] = useState();
   const [passportData, setPassportData] = useState({});
 
-  useEffect(() => {
-    api.getEmployeesWithRole(ROLES.DRIVER)
-      .then((data) => {
-        setDriversData(data);
-      });
-  }, []);
+  const { setValue } = useFormContext();
+  const { options, onChange } = useElastic('drivers', 'fullName');
+
+  const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
 
   useEffect(() => {
     if (driverId) {
@@ -46,14 +40,11 @@ const DriverForm = () => {
         <ControlledAutocomplete
           name="driver"
           fieldName="fullName"
-          options={driversData}
-          getOptionLabel={(option) => option.fullName || ''}
-          getOptionSelected={
-            (option, value) => isEmpty(value) || option.fullName === value.fullName
-          }
-          onSelectionChange={(value) => {
-            setDriverId(value?.id);
-          }}
+          options={options}
+          onInputChange={onChange}
+          getOptionSelected={getOption}
+          getOptionLabel={({ fullName }) => fullName || ''}
+          onSelectionChange={(driver) => setDriverId(driver?.id)}
           label="ФИО"
           defaultValue={{}}
         />
