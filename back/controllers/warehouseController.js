@@ -47,7 +47,6 @@ router.post('/create', auth, async (req, res, next) => {
 
 router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const { ...clientData } = req.body;
   const { companyId: linkedCompanyId } = req;
 
   const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
@@ -56,7 +55,7 @@ router.put('/:id', auth, async (req, res) => {
     return res.status(400).json({ error: { message: 'Склад не найден' } });
   }
 
-  await warehouse.update(clientData).catch((err) => {
+  await warehouse.update(req.body).catch((err) => {
     res.status(400).json(err);
   });
 
