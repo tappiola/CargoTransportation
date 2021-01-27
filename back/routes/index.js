@@ -8,7 +8,7 @@ const elasticRouter = require('../controllers/elasticController');
 const documentController = require('../controllers/documentController');
 
 module.exports = (app) => {
-  app.ws('/api/elastic', elasticRouter);
+  app.use('/api/elastic', elasticRouter);
   app.use('/api/users', userRouter);
   app.use('/api/employees', employeeRouter);
   app.use('/api/clients', clientRouter);

@@ -10,6 +10,6 @@ export {
 } from './clients';
 export { getWarehouses, deleteWarehouses } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
-export { useElastic } from './elastic';
+export { getOptions } from './elastic';
 export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
 export { getDocuments } from './documents';

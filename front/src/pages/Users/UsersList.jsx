@@ -8,7 +8,6 @@ import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
-import ElasticField from 'components/ElasticField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteUsers, dispatchGetUsers } from 'redux/actions';
@@ -33,14 +32,6 @@ function UsersList({
     initUsers();
   }, []);
 
-  const getUserLink = ({
-    id, lastName, firstName, middleName,
-  }) => (
-    <NavButton to={`${path}/${id}`}>
-      {`${lastName} ${firstName[0]}.${(middleName && middleName[0]) || ''}`}
-    </NavButton>
-  );
-
   return (
     <>
       <PaddedContainer>
@@ -50,7 +41,6 @@ function UsersList({
             isDisabled={selection.length === 0}
             onButtonClick={() => { setIsConfirmDialogOpen(true); }}
           />
-          <ElasticField index="users" field="lastName" renderOption={getUserLink} />
         </GridToolbar>
         <CustomGrid
           rows={usersData}
@@ -75,17 +65,14 @@ function UsersList({
     </>
   );
 }
-
 const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
   {
     usersData: usersSelector(usersData),
     usersLoadComplete,
   }
 );
-
 const mapDispatchToProps = (dispatch) => ({
   initUsers: () => dispatch(dispatchGetUsers()),
   removeUsers: (ids) => dispatch(dispatchDeleteUsers(ids)),
 });
-
 export default connect(mapStateToProps, mapDispatchToProps)(UsersList);

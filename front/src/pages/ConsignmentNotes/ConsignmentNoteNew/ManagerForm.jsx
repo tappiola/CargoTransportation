@@ -2,8 +2,8 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import { useElastic } from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
+import { useElastic } from 'utils';
 
 const ClientForm = () => {
   const { options, onChange } = useElastic('managers', 'fullName');
