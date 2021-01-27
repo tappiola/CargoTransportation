@@ -18,39 +18,38 @@ router.get('/', auth, async (req, res) => {
   res.status(200).json(clients);
 });
 
-router.post('/create', [auth, validate.warehouse], async (req, res, next) => {
+router.post('/create', [auth, validate.warehouse], async (req, res) => {
   const { email, name } = req.body;
   const { companyId: linkedCompanyId } = req;
 
-  const duplicateWarehouse = await Warehouse.findOne({
-    where: {
-      [Op.or]: [
-        { name },
-        { email }
-      ]
-    }
-  });
-
-  if (duplicateWarehouse) {
-    if (duplicateWarehouse.email === email) {
-      return res.status(500).json({ message: 'Email уже используется!' });
-    }
-    if (duplicateWarehouse.name === name) {
-      return res.status(500).json({ message: 'Склад с таким названием уже существует' });
-    } 
-    return res.status(500).json({ message: 'Произошла неизвестная ошибка' });
-  }
-
   try {
+    const duplicateWarehouse = await Warehouse.findOne({
+      where: {
+        [Op.or]: [
+          { name },
+          { email }
+        ]
+      }
+    });
+
+    if (duplicateWarehouse) {
+      if (duplicateWarehouse.email === email) {
+        return res.status(400).json({ message: 'Email уже используется!' });
+      }
+      if (duplicateWarehouse.name === name) {
+        return res.status(400).json({ message: 'Склад с таким названием уже существует' });
+      }
+    }
+
     const newWarehouse = await Warehouse.create({
       ...req.body,
       linkedCompanyId,
     });
 
     return res.status(200).json(newWarehouse);
+
   } catch (e) {
-    e.status = 500;
-    return next(e);
+    return res.status(500).json(e);
   }
 });
 
@@ -61,7 +60,7 @@ router.put('/:id', auth, async (req, res) => {
   const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
 
   if (!warehouse) {
-    return res.status(500).json({ error: { message: 'Склад не найден' } });
+    return res.status(400).json({ error: { message: 'Склад не найден' } });
   }
 
   try {
