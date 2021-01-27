@@ -86,6 +86,7 @@ const hashPassword = (password) => {
 };
 
 User.beforeCreate(async (user) => {
+  // eslint-disable-next-line no-param-reassign
   user.password = hashPassword(user.password);
 });
 
@@ -109,6 +110,7 @@ User.beforeUpdate((user, { password }) => {
   });
 
   if (password && isValidPassword(password)) {
+    // eslint-disable-next-line no-param-reassign
     user.password = hashPassword(password);
   }
 });
@@ -120,7 +122,7 @@ User.beforeBulkDestroy(async ({ where: { id: ids } }) => {
 User.prototype.isValidPassword = (password, hash) =>
   bcrypt.compareSync(password, hash);
 
-User.prototype.generateJWT = function () {
+User.prototype.generateJWT = function generateJWT() {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);

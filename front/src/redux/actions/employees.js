@@ -1,7 +1,9 @@
 import * as actionTypes from './actionTypes';
+import { enqueueToast } from './notifications';
 import {
   deleteEmployees, getEmployees, setEmployee, updateEmployee,
 } from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 export const setEmployees = (employeesData) => ({
   type: actionTypes.EMPLOYEES_SET,
@@ -13,18 +15,21 @@ export const handleDeleteEmployees = (ids) => ({
   ids,
 });
 
-export const dispatchGetEmployees = (companyId) => (dispatch) => (
-  getEmployees(companyId)
+export const dispatchGetEmployees = () => (dispatch) => (
+  getEmployees()
     .then((data) => dispatch(setEmployees(data)))
 );
 
 export const dispatchDeleteEmployees = (ids) => (dispatch) => (
   deleteEmployees(ids)
-    .then(() => dispatch(handleDeleteEmployees(ids)))
+    .then(() => {
+      dispatch(handleDeleteEmployees(ids));
+      dispatch(enqueueToast({ message: 'Удаление сотрудников прошло успешно', type: TOAST_TYPES.SUCCESS }));
+    })
 );
 
-export const dispatchSetEmployee = ({ companyId, ...data }) => () => (
-  setEmployee({ companyId, data })
+export const dispatchSetEmployee = (data) => () => (
+  setEmployee(data)
 );
 
 export const dispatchUpdateEmployee = ({ id, ...data }) => () => (

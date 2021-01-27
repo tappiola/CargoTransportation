@@ -5,6 +5,7 @@ const warehouseRouter = require('../controllers/warehouseController');
 const consignmentNoteRouter = require('../controllers/consignmentNoteController');
 const waybillRouter = require('../controllers/waybillController');
 const elasticRouter = require('../controllers/elasticController');
+const documentController = require('../controllers/documentController');
 
 module.exports = (app) => {
   app.ws('/api/elastic', elasticRouter);
@@ -14,4 +15,5 @@ module.exports = (app) => {
   app.use('/api/warehouses', warehouseRouter);
   app.use('/api/consignment-notes', consignmentNoteRouter);
   app.use('/api/waybills', waybillRouter);
+  app.use('/api/documents', documentController);
 };

@@ -21,7 +21,7 @@ module.exports = (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    User.findByPk(id).then(user => {
+    User.findByPk(id).then((user) => {
       if (!user) {
         done(user.error, null);
       }
