@@ -1,7 +1,10 @@
+import jwtDecode from 'jwt-decode';
+
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
-import { signIn, logoutUser } from 'api';
+import { signIn, logoutUser, updateToken } from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
+import { getAuthToken } from 'utils';
 
 export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
@@ -34,3 +37,15 @@ export const loginUser = (email, password) => (dispatch) => signIn(email, passwo
       type: TOAST_TYPES.ERROR,
     }));
   });
+
+export const refreshTokenIfExpired = () => {
+  const lsToken = getAuthToken();
+
+  if (lsToken) {
+    const { exp } = jwtDecode(lsToken);
+    if (exp && exp > Date.now()) {
+      updateToken()
+        .then((res) => localStorage.setItem('token', res.updateToken));
+    }
+  }
+};

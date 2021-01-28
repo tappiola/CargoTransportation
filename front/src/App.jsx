@@ -20,6 +20,7 @@ import { THEME } from 'constants/themes';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
+import { refreshTokenIfExpired } from 'redux/actions/currentUser';
 
 const ProtectedApp = ({ userRoles, theme, setTheme }) => {
   const routes = PROTECTED_ROUTES
@@ -66,6 +67,8 @@ function App() {
   useEffect(() => {
     localStorage.setItem('cargoTheme', theme);
   }, [theme]);
+
+  useEffect(() => refreshTokenIfExpired(), []);
 
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>

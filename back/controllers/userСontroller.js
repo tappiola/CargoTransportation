@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const Logger = require('../config/logger');
 const { createRandomPassword } = require('../utils/password.utils');
 const User = require('../models/User');
@@ -22,7 +23,7 @@ router.post('/register', [auth, validate.register], async (req, res, next) => {
   const roles = await Role.findAll({ where: { role } });
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.status(400).json({ error: { message: 'Email уже используется!' } });
   }
 
   try {
@@ -173,6 +174,25 @@ router.put('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
   await user.update(userData, { password });
 
   return res.status(200).json(user);
+});
+
+router.post('/update-token', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1];
+
+  if (!token) {
+    return res.status(403).json({ error: { message: 'token not found' } });
+  }
+
+  const { id } = jwt.verify(token, process.env.jwtToken);
+  const user = await User.findOne({
+    where: { id },
+    include: {
+      model: Role
+    },
+  });
+  const updateToken = user.generateJWT();
+
+  return res.status(200).json({ updateToken });
 });
 
 module.exports = router;

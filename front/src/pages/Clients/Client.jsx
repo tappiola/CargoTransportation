@@ -19,7 +19,7 @@ import BaseField from 'components/ControlledField';
 import PaddedContainer from 'components/PaddedContainer';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { URLS } from 'constants/urls';
-import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions/clients';
+import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions';
 import { usePending } from 'utils';
 
 const selector = (id) => ({ clients }) => clients.clientsData.find(

@@ -16,10 +16,7 @@ import { employeeResolver as resolver } from './employeeResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
-import {
-  dispatchSetEmployee,
-  dispatchUpdateEmployee,
-} from 'redux/actions/employees';
+import { dispatchSetEmployee, dispatchUpdateEmployee } from 'redux/actions';
 import { usePending } from 'utils';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(

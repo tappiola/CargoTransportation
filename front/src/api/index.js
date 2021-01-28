@@ -1,6 +1,6 @@
 export { fetchAPI } from './fetchAPI';
 export {
-  setUser, updateUser, getUsers, signIn, deleteUsers, logoutUser,
+  setUser, updateUser, getUsers, signIn, deleteUsers, updateToken, logoutUser,
 } from './users';
 export {
   getEmployees, getEmployeesWithRole, deleteEmployees, setEmployee, updateEmployee,
@@ -8,7 +8,9 @@ export {
 export {
   getClients, deleteClients, setClient, updateClient,
 } from './clients';
-export { getWarehouses, deleteWarehouses } from './warehouses';
+export {
+  getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse,
+} from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
 export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
 export { getDocuments } from './documents';
