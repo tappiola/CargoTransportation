@@ -34,3 +34,8 @@ export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
       }));
     })
 );
+
+export const dispatchConfirmConsigmentNote = (ids) => () => (
+  api.aproveConsigmentNotes(ids)
+  // TODO precreate Waybill
+);

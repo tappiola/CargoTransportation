@@ -9,7 +9,10 @@ const {
 } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
+const {
+  ROLES: { ADMIN, MANAGER, DISPATCHER },
+  CONSIGMENT_NOTES_STATUSES_ID: { ACCEPTED, VERIFIED },
+} = require('../constants');
 
 const router = Router();
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);
@@ -77,7 +80,7 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
     ...consignmentNoteData,
     number,
     linkedCompanyId,
-    consignmentNoteStatusId: 1,
+    consignmentNoteStatusId: ACCEPTED,
     createdById,
   };
 
@@ -93,6 +96,17 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
   await Good.bulkCreate(goods.map(good => ({ ...good, goodStatusId: 1, consignmentNoteId: id })));
 
   res.status(200).json({ id, consignmentNote: number });
+});
+
+router.put('/', auth, async (req, res) => {
+  const ids = req.body;
+
+  await ConsignmentNote.update(
+    { consignmentNoteStatusId: VERIFIED },
+    { where: {  id: ids.map((id) => Number(id)) } },
+  );
+
+  res.status(204).end();
 });
 
 module.exports = router;
