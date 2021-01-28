@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { format } from 'date-fns';
 
 import ClientForm from './ClientForm';
@@ -12,19 +11,24 @@ import DriverForm from './DriverForm';
 import Goods from './Goods';
 import ManagerForm from './ManagerForm';
 import { consignmentNoteResolver as resolver } from './resolvers';
-import NavButton from 'components/Buttons/NavButton';
+import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
 import { TOAST_TYPES } from 'constants/toastsTypes';
-import { enqueueToast } from 'redux/actions';
-import { dispatchCreateConsignmentNote } from 'redux/actions/consignmentNotes';
+import { enqueueToast, dispatchCreateConsignmentNote } from 'redux/actions';
 import { usePending } from 'utils';
 
 const normalize = (formData) => {
   const {
-    consignmentNoteNumber, client, manager, driver, passportIssuedAt, goods, ...other
+    consignmentNoteNumber,
+    client,
+    manager,
+    driver,
+    passportIssuedAt,
+    goods,
+    ...other
   } = formData;
   const goodsData = goods.map(({ id, ...data }) => data);
 
@@ -46,31 +50,23 @@ function ConsignmentNoteNew() {
   const methods = useForm({ resolver, mode: 'onBlur' });
   const { handleSubmit } = methods;
 
-  const sendFormData = (formData) => (
-    dispatch(dispatchCreateConsignmentNote(normalize(formData)))
-      .then(() => {
-        history.push('/consignment-notes');
-      })
-      .catch((e) => {
-        dispatch(enqueueToast({
+  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)))
+    .then(() => {
+      history.push('/consignment-notes');
+    })
+    .catch((e) => {
+      dispatch(
+        enqueueToast({
           message: `Ошибка при создании ТТН: ${e.message}`,
           type: TOAST_TYPES.ERROR,
-        }));
-      })
-  );
+        }),
+      );
+    });
   const { bindPending, handler } = usePending(sendFormData);
 
   return (
     <PaddedContainer>
-      <NavButton
-        variant="outlined"
-        to="/consignment-notes"
-        startIcon={(
-          <KeyboardBackspaceIcon />
-        )}
-      >
-        К списку ТТН
-      </NavButton>
+      <Index link="/warehouses" text="К списку складов" />
       <GridToolbar title="Добавление ТТН" />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handler)}>

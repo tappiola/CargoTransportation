@@ -4,10 +4,7 @@ const { DataTypes } = require('sequelize');
 const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 const { isValidPassword } = require('../utils/password.utils');
-const Role = require('./Role');
-const {
-  ROLES: { MANAGER, DISPATCHER, DRIVER },
-} = require('../constants');
+const { ROLES: { MANAGER, DRIVER } } = require('../constants');
 
 const User = db.define('user', {
   id: {
@@ -142,14 +139,13 @@ User.prototype.generateJWT = function generateJWT() {
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
 
-  return jwt.sign(
-    {
-      email: this.email,
-      id: this.id,
-      exp: parseInt(expirationDate.getTime() / 1000, 10),
-    },
-    process.env.jwtToken || 'secret'
-  );
+  return jwt.sign({
+    email: this.email,
+    id: this.id,
+    firstName: this.firstName,
+    lastName: this.lastName,
+    exp: parseInt(expirationDate.getTime() / 1000, 10),
+  }, process.env.jwtToken || 'secret');
 };
 
 module.exports = User;

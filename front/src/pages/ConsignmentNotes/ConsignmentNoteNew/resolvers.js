@@ -10,7 +10,8 @@ const consignmentNoteSchema = yup.object().shape({
     yup.number().required()
       .typeError('Номер ТТН должен быть числом')
       .positive()
-      .integer(),
+      .integer()
+      .max(999999999999, 'Невалидный номер ТТН'),
   passportNumber: yup.string().required().min(6).max(20),
   passportIssuedAt: yup.date().typeError('Невалидная дата').max(new Date()),
   manager: yup.object({ fullName: yup.string().required() }),

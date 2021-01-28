@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import { clientResolver as resolver } from './clientResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
-import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions/clients';
+import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions';
 import { usePending } from 'utils';
 
 const selector = (id) => ({ clients }) => {

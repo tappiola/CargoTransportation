@@ -10,6 +10,7 @@ const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../constants');
+const jwt = require('jsonwebtoken')
 
 const router = Router();
 const auth = authorize(ADMIN, GLOBAL_ADMIN);
@@ -22,7 +23,7 @@ router.post('/register', [auth, validate.register], async (req, res, next) => {
   const roles = await Role.findAll({ where: { role } });
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.status(400).json({ error: { message: 'Email уже используется!' } });
   }
 
   try {
@@ -69,7 +70,7 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ message: 'Неверно введен email либо пароль' });
     }
 
-    req.login(user, async (error) => {
+    return req.login(user, async (error) => {
       if (error) {
         return res.status(401).json(error);
       }
@@ -94,8 +95,6 @@ router.post('/login', async (req, res, next) => {
 
       return res.status(200).json({ token, roles });
     });
-
-    return next();
   })(req, res, next);
 });
 
@@ -176,5 +175,24 @@ router.put('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
 
   return res.status(200).json(user);
 });
+
+router.post('/update-token', async (req, res) => {
+  const token = req.headers.authorization.split('Bearer ')[1]
+
+  if (!token) {
+    return res.status(403).json({ error: { message: 'token not found' } })
+  }
+
+  const { id } = jwt.verify(token, process.env.jwtToken)
+  const user = await User.findOne({
+    where: { id },
+    include: {
+      model: Role
+    },
+  })
+  const updateToken = user.generateJWT()
+
+  res.status(200).json({ updateToken })
+})
 
 module.exports = router;

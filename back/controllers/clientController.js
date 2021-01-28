@@ -21,7 +21,7 @@ router.post('/register', auth, async (req, res, next) => {
   const client = await Client.findOne({ where: { email } });
   
   if (client) {
-    return res.status(400).json({ error: { message: 'Email already in use!' } });
+    return res.status(400).json({ error: { message: 'Email уже используется!' } });
   }
 
   try {

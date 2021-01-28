@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -11,14 +11,24 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteUsers, dispatchGetUsers } from 'redux/actions';
-import { usersSelector } from 'redux/selectors/users';
 
-function UsersList({
-  usersData, usersLoadComplete, initUsers, removeUsers,
-}) {
+export const usersSelector = ({ usersData }) => usersData.map((u) => {
+  const { company, ...user } = u;
+  return { ...user, ...company };
+});
+
+function UsersList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+
+  const usersData = useSelector(({ users }) => usersSelector(users));
+  const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
+
+  useEffect(() => {
+    dispatch(dispatchGetUsers());
+  }, []);
 
   const columns = [
     COLUMNS.FULLNAME(path),
@@ -29,7 +39,7 @@ function UsersList({
   ];
 
   useEffect(() => {
-    initUsers();
+    dispatch(dispatchGetUsers());
   }, []);
 
   return (
@@ -58,21 +68,12 @@ function UsersList({
           onPopupClose={() => setIsConfirmDialogOpen(false)}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            removeUsers(selection);
+            dispatch(dispatchDeleteUsers(selection));
           }}
         />
       )}
     </>
   );
 }
-const mapStateToProps = ({ users: { usersData, usersLoadComplete } }) => (
-  {
-    usersData: usersSelector(usersData),
-    usersLoadComplete,
-  }
-);
-const mapDispatchToProps = (dispatch) => ({
-  initUsers: () => dispatch(dispatchGetUsers()),
-  removeUsers: (ids) => dispatch(dispatchDeleteUsers(ids)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
+
+export default UsersList;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -12,12 +12,15 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteConsignmentNotes, dispatchGetConsignmentNotes } from 'redux/actions';
 
-function ConsignmentNotesList({
-  consignmentNotesData, consignmentNotesLoadComplete, initConsignmentNotes, removeConsignmentNotes,
-}) {
+function ConsignmentNotesList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+  const {
+    consignmentNotesData,
+    consignmentNotesLoadComplete,
+  } = useSelector(({ consignmentNotes }) => consignmentNotes);
 
   const columns = [
     COLUMNS.TNN_NUMBER(path),
@@ -28,7 +31,7 @@ function ConsignmentNotesList({
   ];
 
   useEffect(() => {
-    initConsignmentNotes();
+    dispatch(dispatchGetConsignmentNotes());
   }, []);
 
   return (
@@ -57,7 +60,7 @@ function ConsignmentNotesList({
           onPopupClose={() => setIsConfirmDialogOpen(false)}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            removeConsignmentNotes(selection);
+            dispatch(dispatchDeleteConsignmentNotes(selection));
           }}
         />
       )}
@@ -65,21 +68,4 @@ function ConsignmentNotesList({
   );
 }
 
-const mapStateToProps = (
-  {
-    consignmentNotes: {
-      consignmentNotesData, consignmentNotesLoadComplete,
-    },
-  },
-) => (
-  {
-    consignmentNotesData, consignmentNotesLoadComplete,
-  }
-);
-
-const mapDispatchToProps = (dispatch) => ({
-  initConsignmentNotes: () => dispatch(dispatchGetConsignmentNotes()),
-  removeConsignmentNotes: (ids) => dispatch(dispatchDeleteConsignmentNotes(ids)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ConsignmentNotesList);
+export default ConsignmentNotesList;
