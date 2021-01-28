@@ -20,4 +20,18 @@ const CONSIGMENT_NOTES_STATUSES_ID = {
   COMPLITED: 5, 
 };
 
-module.exports = { ROLES, CONSIGMENT_NOTES_STATUSES, CONSIGMENT_NOTES_STATUSES_ID };
+const WAYBILL_STATUSES = {
+  ISSUED: 'Оформлена',
+  STARTED: 'Перевозка начата',
+  COMPLITED: 'Перевозка завершена',
+  IN_PROCESS: 'В процессе оформления',
+};
+
+const WAYBILL_STATUSES_ID = {
+  STARTED: 1,
+  COMPLITED: 2, 
+  ISSUED: 3,
+  IN_PROCESS: 4,
+};
+
+module.exports = { ROLES, CONSIGMENT_NOTES_STATUSES, CONSIGMENT_NOTES_STATUSES_ID, WAYBILL_STATUSES, WAYBILL_STATUSES_ID };

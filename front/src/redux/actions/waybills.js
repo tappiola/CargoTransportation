@@ -19,3 +19,7 @@ export const dispatchDeleteWaybills = (ids) => (dispatch) => {
   api.deleteWaybills(ids)
     .then(() => dispatch(handleDeleteWaybills(ids)));
 };
+
+export const dispatchCreateWaybill = (consignmentNoteId) => () => (
+  api.precreateWaybill(consignmentNoteId)
+);

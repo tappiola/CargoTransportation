@@ -11,10 +11,11 @@ export {
   dispatchGetWarehouses, dispatchDeleteWarehouses, dispatchSetWarehouse, dispatchUpdateWarehouse,
 } from './warehouses';
 export {
-  dispatchGetWaybills, dispatchDeleteWaybills,
+  dispatchGetWaybills, dispatchDeleteWaybills, dispatchCreateWaybill,
 } from './waybills';
 export {
   dispatchGetConsignmentNotes,
+  dispatchGetConsignmentNote,
   dispatchDeleteConsignmentNotes,
   dispatchCreateConsignmentNote,
   dispatchConfirmConsigmentNote,
