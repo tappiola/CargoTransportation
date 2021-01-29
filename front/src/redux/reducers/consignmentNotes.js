@@ -14,15 +14,6 @@ export function consignmentNotesReducer(state = initialState, action) {
         consignmentNotesLoadComplete: true,
       };
     }
-    case types.CONSIGNMENT_NOTES_SET_CURRENT: {
-      return {
-        ...state,
-        current: {
-          ...action.consignmentNote,
-          goods: action.goods,
-        },
-      };
-    }
     case types.CONSIGNMENT_NOTES_DELETE: {
       return {
         ...state,

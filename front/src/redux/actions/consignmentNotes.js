@@ -8,12 +8,6 @@ export const setConsignmentNotes = (consignmentNotesData) => ({
   consignmentNotesData,
 });
 
-export const setConsignmentNote = ({ goods, consignmentNote }) => ({
-  type: actionTypes.CONSIGNMENT_NOTES_SET_CURRENT,
-  consignmentNote,
-  goods,
-});
-
 export const handleDeleteConsignmentNotes = (ids) => ({
   type: actionTypes.CONSIGNMENT_NOTES_DELETE,
   ids,
@@ -21,10 +15,6 @@ export const handleDeleteConsignmentNotes = (ids) => ({
 
 export const dispatchGetConsignmentNotes = () => (dispatch) => (
   api.getConsignmentNotes().then((data) => dispatch(setConsignmentNotes(data)))
-);
-
-export const dispatchGetConsignmentNote = (id) => (dispatch) => (
-  api.getConsignmentNote(id).then((data) => dispatch(setConsignmentNote(data)))
 );
 
 export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => (
@@ -43,8 +33,4 @@ export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
         type: TOAST_TYPES.SUCCESS,
       }));
     })
-);
-
-export const dispatchConfirmConsigmentNote = (id) => async () => (
-  api.aproveConsigmentNote(id)
 );
