@@ -11,7 +11,7 @@ const { authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
 const {
   ROLES: { ADMIN, MANAGER, DISPATCHER },
-  CONSIGMENT_NOTES_STATUSES_ID: { ACCEPTED, VERIFIED },
+  CONSIGNMENT_NOTES_STATUSES_ID: { ACCEPTED, VERIFIED },
 } = require('../constants');
 
 const router = Router();

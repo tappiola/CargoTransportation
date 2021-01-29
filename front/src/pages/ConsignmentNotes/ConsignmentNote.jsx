@@ -19,7 +19,7 @@ import ControlledField from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
-import { CONSIGMENT_NOTES_STATUSES_ID } from 'constants/permissions';
+import { CONSIGNMENT_NOTES_STATUSES_ID } from 'constants/permissions';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { enqueueToast } from 'redux/actions';
 import { usePending, yup } from 'utils';
@@ -43,7 +43,7 @@ function ConsignmentNote() {
   const [warehousesData, setWarehousesData] = useState([]);
 
   const sendFormData = ({ warehouse: { id: warehouseId } }) => api
-    .aproveConsigmentNote(consignmentNoteId)
+    .aproveConsignmentNote(consignmentNoteId)
     .then(api
       .precreateWaybill({ consignmentNoteId, warehouseId })
       .then(({ id }) => history.push(`/waybills/${id}`)))
@@ -57,7 +57,7 @@ function ConsignmentNote() {
   useEffect(() => {
     api.getWarehouses().then((data) => setWarehousesData(data));
     api.getConsignmentNote(consignmentNoteId).then(({ consignmentNote, goods }) => {
-      const { VERIFIED } = CONSIGMENT_NOTES_STATUSES_ID;
+      const { VERIFIED } = CONSIGNMENT_NOTES_STATUSES_ID;
       const isCheckedNote = consignmentNote?.consignmentNoteStatusId === VERIFIED;
       if (isCheckedNote) {
         api.getWarehouse(consignmentNoteId)

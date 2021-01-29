@@ -47,8 +47,8 @@ router.delete('/', auth, async (req, res) => {
 
 router.post('/', auth, async (req, res) => {
   const { consignmentNoteId, warehouseId } = req.body;
-  const consigmentNote = await ConsignmentNote.findOne({ where: { id: consignmentNoteId } });
-  const { linkedCompanyId, clientId } = consigmentNote;
+  const consignmentNote = await ConsignmentNote.findOne({ where: { id: consignmentNoteId } });
+  const { linkedCompanyId, clientId } = consignmentNote;
 
   const { country, city, street, house } = await Client.findByPk(clientId);
 

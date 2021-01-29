@@ -17,6 +17,6 @@ export {
   getConsignmentNote,
   deleteConsignmentNotes,
   createConsignmentNote,
-  aproveConsigmentNote,
+  aproveConsignmentNote,
 } from './consignmentNotes';
 export { getDocuments } from './documents';
