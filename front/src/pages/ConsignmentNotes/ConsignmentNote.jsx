@@ -19,7 +19,7 @@ import ControlledField from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
-import { CONSIGNMENT_NOTES_STATUSES_ID } from 'constants/permissions';
+import { CONSIGNMENT_NOTES_STATUSES_ID } from 'constants/statuses';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { enqueueToast } from 'redux/actions';
 import { usePending, yup } from 'utils';
