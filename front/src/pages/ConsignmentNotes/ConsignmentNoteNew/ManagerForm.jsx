@@ -3,7 +3,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import { ELASTIC_INDICIES } from 'constants/permissions';
+import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
 const ClientForm = () => {

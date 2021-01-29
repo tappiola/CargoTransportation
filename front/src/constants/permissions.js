@@ -26,10 +26,3 @@ export const ROLE_NAMES = {
   [ROLES.GLOBAL_ADMIN]: 'Системный администратор',
   [ROLES.DISPATCHER]: 'Диспетчер',
 };
-
-export const ELASTIC_INDICIES = {
-  MANAGERS: 'managers',
-  DRIVERS: 'drivers',
-  USERS: 'users',
-  CLIENTS: 'clients',
-};

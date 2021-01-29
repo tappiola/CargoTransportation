@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import * as api from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField from 'components/ControlledField';
-import { ELASTIC_INDICIES } from 'constants/permissions';
+import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
 const DriverForm = () => {

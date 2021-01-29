@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 import NavButton from 'components/Buttons/NavButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import { ELASTIC_INDICIES } from 'constants/permissions';
+import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
 const ClientForm = () => {
