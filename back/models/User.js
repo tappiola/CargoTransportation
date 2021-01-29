@@ -86,7 +86,7 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 };
 
-const upadateIndex = (index, { fullName, companyName, companyId, id }) => {
+const updateIndex = (index, { fullName, companyName, companyId, id }) => {
   elastic.update({
     id,
     index,
@@ -114,12 +114,12 @@ User.beforeUpdate(async (user, { password }) => {
   const roles = await user.getRoles();
   roles.forEach(({ role }) => {
     if (role === MANAGER) {
-      return upadateIndex('managers', user);
+      return updateIndex('managers', user);
     }
     if (role === DRIVER) {
-      return upadateIndex('drivers', user);
+      return updateIndex('drivers', user);
     }
-    return upadateIndex('users', user);
+    return updateIndex('users', user);
   });
 
   if (password && isValidPassword(password)) {
