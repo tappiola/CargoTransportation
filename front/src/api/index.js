@@ -9,7 +9,7 @@ export {
   getClients, deleteClients, setClient, updateClient,
 } from './clients';
 export {
-  getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse,
+  getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse, getWarehouse,
 } from './warehouses';
 export { getWaybills, deleteWaybills, precreateWaybill } from './waybills';
 export {

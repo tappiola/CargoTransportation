@@ -20,6 +20,6 @@ export const dispatchDeleteWaybills = (ids) => (dispatch) => {
     .then(() => dispatch(handleDeleteWaybills(ids)));
 };
 
-export const dispatchCreateWaybill = (consignmentNoteId) => () => (
-  api.precreateWaybill(consignmentNoteId)
+export const dispatchCreateWaybill = (consignmentNoteId, warehouseId) => () => (
+  api.precreateWaybill({ consignmentNoteId, warehouseId })
 );

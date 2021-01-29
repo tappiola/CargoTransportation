@@ -27,4 +27,32 @@ const ROLE_NAMES = {
   [ROLES.DISPATCHER]: 'Диспетчер',
 };
 
+export const CONSIGMENT_NOTES_STATUSES = {
+  ACCEPTED: 'Принята',
+  ISSUED: 'Оформлена',
+  VERIFIED: 'Проверка завершена',
+  COMPLITED: 'Перевозка завершена',
+};
+
+export const CONSIGMENT_NOTES_STATUSES_ID = {
+  ACCEPTED: 1,
+  ISSUED: 2,
+  VERIFIED: 3,
+  COMPLITED: 5,
+};
+
+export const WAYBILL_STATUSES = {
+  ISSUED: 'Оформлена',
+  STARTED: 'Перевозка начата',
+  COMPLITED: 'Перевозка завершена',
+  IN_PROCESS: 'В процессе оформления',
+};
+
+export const WAYBILL_STATUSES_ID = {
+  STARTED: 1,
+  COMPLITED: 2,
+  ISSUED: 3,
+  IN_PROCESS: 4,
+};
+
 export { MODULE_NAMES, ROLES, ROLE_NAMES };

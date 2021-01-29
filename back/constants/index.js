@@ -10,14 +10,14 @@ const CONSIGMENT_NOTES_STATUSES = {
   ACCEPTED: 'Принята',
   ISSUED: 'Оформлена',
   VERIFIED: 'Проверка завершена',
-  COMPLITED: 'Перевозка завершена', 
+  COMPLITED: 'Перевозка завершена',
 };
 
 const CONSIGMENT_NOTES_STATUSES_ID = {
   ACCEPTED: 1,
   ISSUED: 2,
   VERIFIED: 3,
-  COMPLITED: 5, 
+  COMPLITED: 5,
 };
 
 const WAYBILL_STATUSES = {
@@ -29,7 +29,7 @@ const WAYBILL_STATUSES = {
 
 const WAYBILL_STATUSES_ID = {
   STARTED: 1,
-  COMPLITED: 2, 
+  COMPLITED: 2,
   ISSUED: 3,
   IN_PROCESS: 4,
 };

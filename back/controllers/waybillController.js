@@ -46,15 +46,15 @@ router.delete('/', auth, async (req, res) => {
 });
 
 router.post('/', auth, async (req, res) => {
-  const { id: consigmentNoteId } = req.body;
-  const consigmentNote = await ConsignmentNote.findOne({ where: { id: consigmentNoteId } });
-  const { id: consignmentNoteId, linkedCompanyId, clientId } = consigmentNote;
+  const { consignmentNoteId, warehouseId } = req.body;
+  const consigmentNote = await ConsignmentNote.findOne({ where: { id: consignmentNoteId } });
+  const { linkedCompanyId, clientId } = consigmentNote;
 
   const { country, city, street, house } = await Client.findByPk(clientId);
 
   const { id } = await Waybill.create({
     waybillStatusId: WAYBILL_STATUSES_ID.IN_PROCESS,
-    warehouseId: 1,
+    warehouseId,
     consignmentNoteId,
     linkedCompanyId,
     country,
