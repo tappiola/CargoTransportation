@@ -3,10 +3,11 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
+import { ELASTIC_INDICIES } from 'constants/permissions';
 import { useElastic } from 'utils';
 
 const ClientForm = () => {
-  const { options, onChange } = useElastic('managers', 'fullName');
+  const { options, onChange } = useElastic(ELASTIC_INDICIES.MANAGERS, 'fullName');
   const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
 
   return (

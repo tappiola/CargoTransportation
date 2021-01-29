@@ -1,4 +1,4 @@
-const MODULE_NAMES = {
+export const MODULE_NAMES = {
   CLIENTS: 'CLIENTS',
   ACTS: 'ACTS',
   USERS: 'USERS',
@@ -11,7 +11,7 @@ const MODULE_NAMES = {
 };
 
 // object values should correspond to role names in DB, table 'role'
-const ROLES = {
+export const ROLES = {
   GLOBAL_ADMIN: 'global_admin',
   ADMIN: 'admin',
   DRIVER: 'driver',
@@ -19,7 +19,7 @@ const ROLES = {
   DISPATCHER: 'dispatcher',
 };
 
-const ROLE_NAMES = {
+export const ROLE_NAMES = {
   [ROLES.DRIVER]: 'Водитель',
   [ROLES.ADMIN]: ' Администратор',
   [ROLES.MANAGER]: 'Менеджер',
@@ -27,4 +27,9 @@ const ROLE_NAMES = {
   [ROLES.DISPATCHER]: 'Диспетчер',
 };
 
-export { MODULE_NAMES, ROLES, ROLE_NAMES };
+export const ELASTIC_INDICIES = {
+  MANAGERS: 'managers',
+  DRIVERS: 'drivers',
+  USERS: 'users',
+  CLIENTS: 'clients',
+};

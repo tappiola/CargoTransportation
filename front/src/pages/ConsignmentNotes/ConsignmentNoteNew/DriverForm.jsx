@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import * as api from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField from 'components/ControlledField';
+import { ELASTIC_INDICIES } from 'constants/permissions';
 import { useElastic } from 'utils';
 
 const DriverForm = () => {
@@ -13,7 +14,7 @@ const DriverForm = () => {
   const [passportData, setPassportData] = useState({});
 
   const { setValue } = useFormContext();
-  const { options, onChange } = useElastic('drivers', 'fullName');
+  const { options, onChange } = useElastic(ELASTIC_INDICIES.DRIVERS, 'fullName');
 
   const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
 

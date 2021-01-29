@@ -4,10 +4,11 @@ import Grid from '@material-ui/core/Grid';
 
 import NavButton from 'components/Buttons/NavButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
+import { ELASTIC_INDICIES } from 'constants/permissions';
 import { useElastic } from 'utils';
 
 const ClientForm = () => {
-  const { options, onChange } = useElastic('clients', 'fullName');
+  const { options, onChange } = useElastic(ELASTIC_INDICIES.CLIENTS, 'fullName');
   const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
 
   return (
