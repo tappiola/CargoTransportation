@@ -158,5 +158,5 @@ export const DEPARTURE_DATE = {
   field: 'departedAt',
   headerName: 'Дата отправки',
   flex: 3,
-  renderCell: ({ value }) => value.slice(0, 10),
+  renderCell: ({ value }) => value && value.slice(0, 10),
 };
