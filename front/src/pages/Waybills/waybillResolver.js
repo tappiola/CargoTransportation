@@ -26,8 +26,8 @@ const waybillSchema = yup.object().shape({
     expectedArrivalAt: yup.date().required(),
   }),
   points: yup.array().of(yup.object({
-    name: yup.string().required(),
-    date: yup.date().required(),
+    name: yup.string().min(4).required(),
+    expectedArrivalAt: yup.date().required(),
   })),
 });
 

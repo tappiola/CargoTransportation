@@ -4,7 +4,8 @@ export const useStyles = makeStyles((theme) => ({
   footer: {
     margin: theme.spacing(2, 2, 1),
     display: 'flex',
-    alignItems: 'end',
+    justifyContent: 'space-between',
+    // alignItems: 'end',
   },
   pointsGrid: (rowsNumber) => ({
     height: rowsNumber * 42 + 110,

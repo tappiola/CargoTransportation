@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import Container from '@material-ui/core/Container';
@@ -11,13 +11,13 @@ import { format, parseISO } from 'date-fns';
 
 import { PointsGrid } from './PointsGrid';
 import { waybillResolver as resolver } from './waybillResolver';
+import * as api from 'api';
 import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField, { DateField } from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedPaper from 'components/PaddedPaper';
 import { DATE } from 'constants/dateFormats';
-import { dispatchSetClient, dispatchUpdateClient } from 'redux/actions';
 import { usePending } from 'utils';
 
 const formatDate = (dirtyDate) => {
@@ -80,20 +80,12 @@ const Row = ({ children, title }) => (
 function Waybill() {
   const { id: waybillId } = useParams();
   const defaultValues = useSelector(selector(+waybillId));
-  const dispatch = useDispatch();
   const methods = useForm({ defaultValues, resolver });
-  const { handleSubmit } = methods;
+  const { handleSubmit, errors } = methods;
 
-  // const sendFormData = (clientId) => (formData) => dispatch(
-  //   clientId
-  //     ? dispatchUpdateClient(formData, clientId)
-  //     : dispatchSetClient(formData),
-  // );
-
-  const sendFormData = (formData) => {
-    console.log(formData);
-  };
-
+  const sendFormData = (id) => ({ points: ps, ...data }) => (
+    api.updateWaybill(id, { ...data, points: ps.map((p) => p) })
+  );
   const { bindPending, handler } = usePending(sendFormData(waybillId));
 
   return (
@@ -102,7 +94,7 @@ function Waybill() {
       <GridToolbar title="Оформление путевого листа" />
 
       <FormProvider {...methods}>
-        <form noValidate onSubmit={handleSubmit((d) => console.log(d))}>
+        <form noValidate onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
 
             <Row title="Накладная">
@@ -135,7 +127,7 @@ function Waybill() {
               Контрольные точки
             </Typography>
 
-            <PointsGrid />
+            <PointsGrid errors={errors.points} />
           </PaddedPaper>
           <SubmitButton {...bindPending}>Готово</SubmitButton>
         </form>
