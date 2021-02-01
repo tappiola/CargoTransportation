@@ -1,5 +1,6 @@
 import Employees from './Employees';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
+import { URLS } from 'constants/urls';
 import Acts from 'pages/Acts';
 import Clients from 'pages/Clients';
 import ConsignmentNotes from 'pages/ConsignmentNotes';
@@ -16,55 +17,55 @@ const {
 export const PROTECTED_ROUTES = [
   {
     module: MODULE_NAMES.ACTS,
-    basePath: '/acts',
+    basePath: URLS.ACTS,
     component: Acts,
     roles: [MANAGER, DRIVER],
   },
   {
     module: MODULE_NAMES.CLIENTS,
-    basePath: '/clients',
+    basePath: URLS.CLIENTS,
     component: Clients,
     roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,
-    basePath: '/consignment-notes',
+    basePath: URLS.CONSIGNMENT_NOTES,
     component: ConsignmentNotes,
     roles: [MANAGER, DISPATCHER, ADMIN],
   },
   {
     module: MODULE_NAMES.MAILINGS,
-    basePath: '/mailings',
+    basePath: URLS.MAILINGS,
     component: Mailings,
     roles: [GLOBAL_ADMIN, ADMIN],
   },
   {
     module: MODULE_NAMES.REPORTS,
-    basePath: '/reports',
+    basePath: URLS.REPORTS,
     component: Reports,
     roles: [MANAGER],
   },
   {
     module: MODULE_NAMES.USERS,
-    basePath: '/users',
+    basePath: URLS.USERS,
     component: Users,
     roles: [GLOBAL_ADMIN],
   },
   {
     module: MODULE_NAMES.EMPLOYEES,
-    basePath: '/employees',
+    basePath: URLS.EMPLOYEES,
     component: Employees,
     roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.WAREHOUSES,
-    basePath: '/warehouses',
+    basePath: URLS.WAREHOUSES,
     component: Warehouses,
     roles: [ADMIN, DISPATCHER, MANAGER],
   },
   {
     module: MODULE_NAMES.WAYBILLS,
-    basePath: '/waybills',
+    basePath: URLS.WAYBILLS,
     component: Waybills,
     roles: [ADMIN, DRIVER, MANAGER],
   },

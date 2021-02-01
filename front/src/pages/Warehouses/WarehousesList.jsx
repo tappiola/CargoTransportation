@@ -57,6 +57,7 @@ function WarehousesList() {
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             dispatch(dispatchDeleteWarehouses(selection));
+            setSelection([]);
           }}
         />
       )}

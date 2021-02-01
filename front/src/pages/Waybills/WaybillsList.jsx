@@ -65,6 +65,7 @@ function WaybillsList() {
         onActionConfirm={() => {
           setIsConfirmDialogOpen(false);
           dispatch(dispatchDeleteWaybills(selection));
+          setSelection([]);
         }}
       />
       )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -11,12 +11,15 @@ import DriverForm from './DriverForm';
 import Goods from './Goods';
 import ManagerForm from './ManagerForm';
 import { consignmentNoteResolver as resolver } from './resolvers';
-import Index from 'components/Buttons/BackButton';
+import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
+import FormDialog from 'components/FormDialog';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
 import { TOAST_TYPES } from 'constants/toastsTypes';
+import { URLS } from 'constants/urls';
+import Client from 'pages/Clients/Client';
 import { enqueueToast, dispatchCreateConsignmentNote } from 'redux/actions';
 import { usePending } from 'utils';
 
@@ -43,11 +46,12 @@ function ConsignmentNoteNew() {
 
   const methods = useForm({ resolver, mode: 'onBlur' });
   const { handleSubmit } = methods;
+  const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
 
   const sendFormData = (formData) => (
     dispatch(dispatchCreateConsignmentNote(normalize(formData)))
       .then(() => {
-        history.push('/consignment-notes');
+        history.push(URLS.CONSIGNMENT_NOTES);
       })
       .catch((e) => {
         dispatch(enqueueToast({
@@ -59,30 +63,39 @@ function ConsignmentNoteNew() {
   const { bindPending, handler } = usePending(sendFormData);
 
   return (
-    <PaddedContainer>
-      <Index link="/warehouses" text="К списку складов" />
-      <GridToolbar title="Добавление ТТН" />
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(handler)}>
-          <PaddedPaper title="Шаг 1 - выберите клиента">
-            <ClientForm />
-          </PaddedPaper>
-          <PaddedPaper title="Шаг 2 - заполните данные ТТН">
-            <ConsignmentNoteForm />
-          </PaddedPaper>
-          <PaddedPaper title="Шаг 3 - введите данные водителя">
-            <DriverForm />
-          </PaddedPaper>
-          <PaddedPaper title="Шаг 4 - введите данные о грузе">
-            <Goods />
-          </PaddedPaper>
-          <PaddedPaper title="Шаг 5 - выберите менеджера для обработки ТТН">
-            <ManagerForm />
-          </PaddedPaper>
-          <SubmitButton {...bindPending}>Готово</SubmitButton>
-        </form>
-      </FormProvider>
-    </PaddedContainer>
+    <>
+      <PaddedContainer>
+        <BackButton link="/warehouses" text="К списку складов" />
+        <GridToolbar title="Добавление ТТН" />
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(handler)}>
+            <PaddedPaper title="Шаг 1 - выберите клиента">
+              <ClientForm onAddClient={() => setIsClientDialogOpen(true)} />
+            </PaddedPaper>
+            <PaddedPaper title="Шаг 2 - заполните данные ТТН">
+              <ConsignmentNoteForm />
+            </PaddedPaper>
+            <PaddedPaper title="Шаг 3 - введите данные водителя">
+              <DriverForm />
+            </PaddedPaper>
+            <PaddedPaper title="Шаг 4 - введите данные о грузе">
+              <Goods />
+            </PaddedPaper>
+            <PaddedPaper title="Шаг 5 - выберите менеджера для обработки ТТН">
+              <ManagerForm />
+            </PaddedPaper>
+            <SubmitButton {...bindPending}>Готово</SubmitButton>
+          </form>
+        </FormProvider>
+      </PaddedContainer>
+      <FormDialog
+        title="Добавление клиента"
+        isOpen={isClientDialogOpen}
+        onClose={() => setIsClientDialogOpen(false)}
+      >
+        <Client isPopup onPopupClose={() => setIsClientDialogOpen(false)} />
+      </FormDialog>
+    </>
   );
 }
 
