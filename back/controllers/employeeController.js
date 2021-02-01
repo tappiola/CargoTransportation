@@ -2,11 +2,12 @@ const { Router } = require('express');
 
 const { User, Role, Company } = require('../models');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { ADMIN } } = require('../constants');
+const { ROLES: { ADMIN, DISPATCHER, MANAGER } } = require('../constants');
 
 const router = Router();
+const auth = authorize(ADMIN, DISPATCHER, MANAGER);
 
-router.get('/', authorize(ADMIN), async (req, res) => {
+router.get('/', auth, async (req, res) => {
   const { companyId: id } = req;
   const { role } = req.query;
 

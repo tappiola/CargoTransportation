@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { Op } = require('sequelize');
-const { Warehouse } = require('../models');
+const { Warehouse, Waybill } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
 const validate = require('../middlewares/validate');
@@ -11,11 +11,18 @@ const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 router.get('/', auth, async (req, res) => {
   const { companyId } = req;
 
-  const clients = await Warehouse.findAll({
+  const warehouses = await Warehouse.findAll({
     where: { linkedCompanyId: companyId },
   });
 
-  res.status(200).json(clients);
+  res.status(200).json(warehouses);
+});
+
+router.get('/:id', auth, async (req, res) => {
+  const { warehouseId } = await Waybill.findOne({ where: { consignmentNoteId: req.params.id } });
+  const warehouse = await Warehouse.findByPk(warehouseId);
+  
+  res.status(200).json(warehouse);
 });
 
 router.post('/create', [auth, validate.warehouse], async (req, res) => {

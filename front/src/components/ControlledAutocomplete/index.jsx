@@ -6,7 +6,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const ControlledAutocomplete = ({
   options = [], label, fieldName, getOptionLabel, getOptionSelected,
-  defaultValue, name, renderOption, onSelectionChange, onInputChange,
+  defaultValue, name, renderOption, onSelectionChange, disabled, onInputChange,
 }) => {
   const { control, errors } = useFormContext();
 
@@ -18,6 +18,7 @@ const ControlledAutocomplete = ({
           getOptionLabel={getOptionLabel}
           getOptionSelected={getOptionSelected}
           renderOption={renderOption}
+          disabled={disabled}
           onInputChange={onInputChange}
           renderInput={(params) => (
             <TextField

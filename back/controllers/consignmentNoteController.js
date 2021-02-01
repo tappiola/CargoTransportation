@@ -9,7 +9,10 @@ const {
 } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
-const { ROLES: { ADMIN, MANAGER, DISPATCHER } } = require('../constants');
+const {
+  ROLES: { ADMIN, MANAGER, DISPATCHER },
+  CONSIGNMENT_NOTES_STATUSES_ID: { ACCEPTED, VERIFIED },
+} = require('../constants');
 
 const router = Router();
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);
@@ -17,7 +20,7 @@ const auth = authorize(ADMIN, MANAGER, DISPATCHER);
 router.get('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId } = req;
 
-  const clients = await ConsignmentNote.findAll({
+  const consignmentNotes = await ConsignmentNote.findAll({
     attributes: ['id', 'number', 'issuedDate', 'vehicle'],
     where: { linkedCompanyId },
     include: [
@@ -46,7 +49,7 @@ router.get('/', auth, async (req, res) => {
       }],
   });
 
-  res.status(200).json(clients);
+  res.status(200).json(consignmentNotes);
 });
 
 router.delete('/', auth, async (req, res) => {
@@ -77,7 +80,7 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
     ...consignmentNoteData,
     number,
     linkedCompanyId,
-    consignmentNoteStatusId: 1,
+    consignmentNoteStatusId: ACCEPTED,
     createdById,
   };
 
@@ -93,6 +96,53 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
   await Good.bulkCreate(goods.map(good => ({ ...good, goodStatusId: 1, consignmentNoteId: id })));
 
   res.status(200).json({ id, consignmentNote: number });
+});
+
+router.put('/', auth, async (req, res) => {
+  const { id } = req.body;
+
+  await ConsignmentNote.update(
+    { consignmentNoteStatusId: VERIFIED },
+    { where: { id } },
+  );
+
+  res.status(204).end();
+});
+
+router.get('/:id', auth, async (req, res) => {
+  const { id: consignmentNoteId } = req.params;
+
+  const consignmentNote = await ConsignmentNote.findOne({
+    where: { id: consignmentNoteId },
+    include: [
+      {
+        model: ConsignmentNoteStatus,
+        attributes: ['status'],
+      },
+      {
+        model: Client,
+        attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+      },
+      {
+        model: User,
+        as: 'driver',
+        attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+      },
+      {
+        model: User,
+        as: 'assignedTo',
+        attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+      },
+      {
+        model: User,
+        as: 'createdBy',
+        attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+      }],
+  });
+
+  const goods = await Good.findAll({ where: { consignmentNoteId } });
+
+  res.status(200).json({  consignmentNote, goods });
 });
 
 module.exports = router;
