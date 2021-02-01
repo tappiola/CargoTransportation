@@ -17,6 +17,7 @@ import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
+import { URLS } from 'constants/urls';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
@@ -41,18 +42,18 @@ const ProtectedApp = ({
               component={component}
             />
           ))}
-          <Route path="/settings">
+          <Route path={URLS.SETTINGS}>
             <Settings theme={theme} onThemeChange={setTheme} />
           </Route>
           {isDevelopment() && (
-          <Route exact path="/styleguide" component={StyleGuide} />
+          <Route exact path={URLS.STYLE_GUIDE} component={StyleGuide} />
           )}
           {protectedRoute && (
           <>
             <Route exact path="/">
               <Redirect to={protectedRoute.basePath} />
             </Route>
-            <Route exact path="/signin">
+            <Route exact path={URLS.SIGN_IN}>
               <Redirect to={protectedRoute.basePath} />
             </Route>
           </>
@@ -99,8 +100,8 @@ function App() {
             />
           ) : (
             <>
-              <Route path="/signin" component={SignIn} />
-              <Redirect to="/signin" />
+              <Route path={URLS.SIGN_IN} component={SignIn} />
+              <Redirect to={URLS.SIGN_IN} />
             </>
           )}
         </Router>

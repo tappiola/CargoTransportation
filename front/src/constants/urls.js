@@ -8,4 +8,7 @@ export const URLS = {
   EMPLOYEES: '/employees',
   WAREHOUSES: '/warehouses',
   WAYBILLS: '/waybills',
+  SETTINGS: '/settings',
+  STYLE_GUIDE: '/styleguide',
+  SIGN_IN: '/signin',
 };

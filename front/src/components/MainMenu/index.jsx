@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 
 import { useMenuStyles } from './MainMenu.styles';
 import { MenuItems } from './MenuItems';
+import { URLS } from 'constants/urls';
 import { dispatchLogoutUser } from 'redux/actions';
 
 export default function MainMenu({
@@ -48,7 +49,7 @@ export default function MainMenu({
           <Typography component="h6">
             {`${userName}${company ? ` (${company})` : ''}`}
           </Typography>
-          <IconButton color="inherit" component={Link} to="/settings">
+          <IconButton color="inherit" component={Link} to={URLS.SETTINGS}>
             <SettingsIcon />
           </IconButton>
           <IconButton color="inherit" onClick={logout}>
