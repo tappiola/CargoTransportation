@@ -61,6 +61,7 @@ function ConsignmentNotesList() {
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             dispatch(dispatchDeleteConsignmentNotes(selection));
+            setSelection([]);
           }}
         />
       )}
