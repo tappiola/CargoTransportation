@@ -2,10 +2,8 @@ const { Router } = require('express');
 const { Waybill, WaybillStatus, ConsignmentNote, Warehouse } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const {
-  ROLES: { ADMIN, MANAGER, DISPATCHER },
-} = require('../constants');
-const {
   WAYBILL_STATUSES_ID,
+  ROLES: { ADMIN, MANAGER, DISPATCHER },
   CONTROL_POINT_STATUSES_ID: { EXPECTED },
 } = require('../constants');
 const { ControlPoint } = require('../models/ControlPoint');
@@ -64,7 +62,7 @@ router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
   const { client, warehouse, points } = req.body;
   const [country, city, street, house] = warehouse.fullAddress.split(', ');
- 
+
   await ControlPoint.destroy({ where: { waybillId: id } });
 
   if (points) {
@@ -73,7 +71,8 @@ router.put('/:id', auth, async (req, res) => {
         controlPointStatusId: EXPECTED,
         waybillId: id,
         ...controlPoint,
-      })));
+      }))
+    );
   }
 
   const waybill = await Waybill.update(
@@ -81,13 +80,16 @@ router.put('/:id', auth, async (req, res) => {
       departedAt: client.departedAt,
       expectedArrivalAt: warehouse.expectedArrivalAt,
       waybillStatusId: WAYBILL_STATUSES_ID.ISSUED,
-      country, city, street, house
+      country,
+      city,
+      street,
+      house,
     },
     {
-      where: { id }
+      where: { id },
     }
   );
-  
+
   res.status(200).json(waybill);
 });
 
