@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button, IconButton, Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import { IconButton, Typography, Grid } from '@material-ui/core';
+import { AddCircle, Delete } from '@material-ui/icons';
 import { format, parseISO } from 'date-fns';
 
 import { useStyles } from './Waybill.styles';
@@ -12,98 +11,97 @@ import BaseField, { DateTimeField } from 'components/ControlledField';
 import CustomGrid from 'components/DataGrid';
 import { DATE_TIME } from 'constants/dateFormats';
 
-const formatDate = (dirtyDate) => {
+const formatDate = (dirtyDate, ...params) => {
   try {
     return (typeof dirtyDate === 'string')
-      ? format(parseISO(dirtyDate), DATE_TIME)
-      : format(dirtyDate, DATE_TIME);
+      ? format(parseISO(dirtyDate), ...params)
+      : format(dirtyDate, ...params);
   } catch {
     return dirtyDate;
   }
 };
 
 export const PointsGrid = ({ errors }) => {
-  const { id } = useParams();
+  const { id: waybillId } = useParams();
   const [points, setPoints] = useState([]);
   const classes = useStyles(points.length);
 
   useEffect(async () => {
-    const { controlPoints: cps } = await getWaybill(id);
-    setPoints(cps.map(({ expectedArrivalAt, ...other }) => ({
-      expectedArrivalAt: formatDate(expectedArrivalAt),
+    const { controlPoints } = await getWaybill(waybillId);
+    setPoints(controlPoints.map(({ expectedArrivalAt: date, ...other }, id) => ({
+      expectedArrivalAt: formatDate(date, DATE_TIME),
       ...other,
+      id,
     })));
   }, []);
 
-  const addEmptyPoint = () => {
-    const pointId = points.length ? points[points.length - 1].id + 1 : 0;
-    const emptyPoint = { id: pointId, point: '', date: format(Date.now(), DATE_TIME) };
-    setPoints([...points, emptyPoint]);
+  const addPoint = (id) => {
+    setPoints([...points, { id, point: '', date: '' }]);
+  };
+
+  const deletePoint = (id) => {
+    setPoints((prevPoints) => prevPoints.filter(({ id: _id }) => _id !== id));
   };
 
   const GridFooter = () => (
     <Grid className={classes.footer}>
-      <Button onClick={addEmptyPoint} size="small" variant="outlined" color="primary" disabled={points.length >= 9}>
-        Добавить
-      </Button>
+      <IconButton onClick={() => addPoint(points.length)} disabled={points.length >= 9}>
+        <AddCircle fontSize="large" color="secondary" />
+      </IconButton>
       {errors && (
       <Typography color="error" variant="caption">
-        Заполните поле
+        Заполните поля &#34;Пункт назначения&#34; и &#34;Время прохождения&#34;
       </Typography>
       )}
     </Grid>
   );
 
-  const deletePoint = (pointId) => setPoints(
-    (prevPoints) => prevPoints.filter(({ id: _id }) => _id !== pointId),
+  const ArrivalCell = ({ value, rowIndex }) => (
+    <DateTimeField
+      error={errors && errors[rowIndex]?.expectedArrivalAt?.message}
+      className={classes.date}
+      name={`points.${rowIndex}.expectedArrivalAt`}
+      defaultValue={value}
+      InputProps={{
+        classes: { underline: classes.point },
+        disableUnderline: true,
+      }}
+    />
   );
 
-  const columns = [
-    {
-      field: 'name',
-      headerName: 'Пункт назначения',
-      flex: 1,
-      renderCell: ({ value, row }) => (
-        <>
-          <IconButton size="small" onClick={() => deletePoint(row.id)} edge="end" style={{ marginRight: 16 }}>
-            <DeleteIcon fontSize="small" color={errors ? 'secondary' : 'primary'} />
-          </IconButton>
-          <BaseField
-            size="small"
-            error={errors && errors[row.id]?.name?.message}
-            defaultValue={value}
-            name={`points.${row.id}.name`}
-            InputProps={{
-              classes: { underline: classes.point },
-            }}
-          />
-        </>
-      ),
-    },
-    {
-      field: 'expectedArrivalAt',
-      headerName: 'Время прохождения',
-      width: 220,
-      renderCell: ({ value, row }) => (
-        <DateTimeField
-          error={errors && errors[row.id]?.expectedArrivalAt?.message}
-          className={classes.date}
-          name={`points.${row.id}.expectedArrivalAt`}
-          defaultValue={value}
-          InputProps={{
-            classes: { underline: classes.point },
-            disableUnderline: true,
-          }}
-        />
-      ),
-    },
-  ];
+  const PointCell = ({ value, rowIndex }) => (
+    <>
+      <IconButton size="small" onClick={() => deletePoint(rowIndex)} style={{ marginRight: 16 }}>
+        <Delete fontSize="small" />
+      </IconButton>
+      <BaseField
+        size="small"
+        defaultValue={value}
+        name={`points.${rowIndex}.name`}
+        error={errors && errors[rowIndex]?.name?.message}
+        InputProps={{ classes: { underline: classes.point } }}
+      />
+    </>
+  );
 
   return (
     <Grid className={classes.pointsGrid}>
       <CustomGrid
         rows={points}
-        columns={columns}
+        columns={[
+          {
+            field: 'name',
+            headerName: 'Пункт назначения',
+            flex: 1,
+            renderCell: PointCell,
+          },
+          {
+            field: 'expectedArrivalAt',
+            headerName: 'Время прохождения',
+            width: 220,
+            renderCell: ArrivalCell,
+          },
+        ]}
         checkboxSelection={false}
         hideFooter
         disableColumnFilter

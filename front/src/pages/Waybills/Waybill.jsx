@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import { Container, Grid, Typography } from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
 
 import { PointsGrid } from './PointsGrid';
@@ -82,10 +79,7 @@ function Waybill() {
   const defaultValues = useSelector(selector(+waybillId));
   const methods = useForm({ defaultValues, resolver });
   const { handleSubmit, errors } = methods;
-
-  const sendFormData = (id) => ({ points: ps, ...data }) => (
-    api.updateWaybill(id, { ...data, points: ps.map((p) => p) })
-  );
+  const sendFormData = (id) => (data) => api.updateWaybill(id, data);
   const { bindPending, handler } = usePending(sendFormData(waybillId));
 
   return (
@@ -96,28 +90,23 @@ function Waybill() {
       <FormProvider {...methods}>
         <form noValidate onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
-
             <Row title="Накладная">
               <BaseField name="consignmentNote.number" label="Номер" disabled />
               <DateField name="consignmentNote.issuedDate" label="Дата" disabled />
             </Row>
-
             <Row title="Путевой лист">
               <BaseField name="waybill.number" label="Номер" disabled />
               <BaseField name="waybill.issuedDate" label="Дата оформления" disabled />
             </Row>
-
             <Row title="Автомобиль">
               <BaseField name="vehicle.number" label="Марка, номер" disabled />
               <BaseField name="vehicle.driver" label="Водитель" disabled />
             </Row>
-
             <Row title="Начальная точка маршрута">
               <BaseField name="client.shortFullName" label="Отправитель" disabled />
               <BaseField name="client.fullAddress" label="Адрес" disabled />
               <DateField name="client.departedAt" label="Дата выезда" />
             </Row>
-
             <Row title="Конечная точка маршрута">
               <BaseField name="warehouse.name" label="Получатель" disabled />
               <BaseField name="warehouse.fullAddress" label="Адрес" disabled />
@@ -126,7 +115,6 @@ function Waybill() {
             <Typography color="primary" variant="subtitle1" style={{ marginTop: 24 }}>
               Контрольные точки
             </Typography>
-
             <PointsGrid errors={errors.points} />
           </PaddedPaper>
           <SubmitButton {...bindPending}>Готово</SubmitButton>

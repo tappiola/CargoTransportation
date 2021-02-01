@@ -1,4 +1,3 @@
-const { Op } = require('sequelize');
 const { Router } = require('express');
 const { Waybill, WaybillStatus, ConsignmentNote, Warehouse } = require('../models');
 const { authorize } = require('../middlewares/auth');
@@ -58,47 +57,17 @@ router.get('/:id', auth, async (req, res) => {
   const waybill = await Waybill.findOne({ where: { id } });
   const controlPoints = await ControlPoint.findAll({ where: { waybillId: id } });
 
-  await ControlPoint.destroy({ 
-    where: {
-      name: null,
-      // waybillId: id,
-    },
-  });
-
   res.status(200).json({ waybill, controlPoints });
 });
 
 router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const { client, consignmentNote, vehicle, warehouse, waybill, points } = req.body;
-
-  // client.departedAt
-  // warehouse.expectedArrivalAt
-  // country, city, street, house - warehouse.fullAddress
-  // waybillStatusId - 3 - Оформлен
-  // warehouseId - тот же
-  // linkedCompanyId - тот же
-
-  // Control Point
-  // points => ControlPoint
-  //            name - name
-  //            expectedArrivalAt - date
-  //            controlPointStatusId -
-  // ControlPoints constrolPointStatusId
+  const { client, warehouse, points } = req.body;
   const [country, city, street, house] = warehouse.fullAddress.split(', ');
-  
  
+  await ControlPoint.destroy({ where: { waybillId: id } });
 
-  await ControlPoint.destroy({ 
-    where: {
-      name: {
-        [Op.not]: points ? points.filter(p => p).map(({ name }) => name) : [],
-      },
-      waybillId: id,
-    },
-  });
-
-  if (points && points.length) {
+  if (points) {
     await ControlPoint.bulkCreate(
       points.map((controlPoint) => ({
         controlPointStatusId: EXPECTED,
@@ -107,7 +76,7 @@ router.put('/:id', auth, async (req, res) => {
       })));
   }
 
-  const wb = await Waybill.update(
+  const waybill = await Waybill.update(
     {
       departedAt: client.departedAt,
       expectedArrivalAt: warehouse.expectedArrivalAt,
@@ -119,7 +88,7 @@ router.put('/:id', auth, async (req, res) => {
     }
   );
   
-  res.status(200).json(wb);
+  res.status(200).json(waybill);
 });
 
 module.exports = router;

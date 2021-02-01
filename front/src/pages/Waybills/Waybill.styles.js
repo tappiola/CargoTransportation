@@ -5,7 +5,6 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 2, 1),
     display: 'flex',
     justifyContent: 'space-between',
-    // alignItems: 'end',
   },
   pointsGrid: (rowsNumber) => ({
     height: rowsNumber * 42 + 110,
