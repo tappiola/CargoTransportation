@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { DataTypes } = require('sequelize');
+const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 const { isValidPassword } = require('../utils/password.utils');
+const { ROLES: { MANAGER, DRIVER } } = require('../constants');
 
 const User = db.define('user', {
   id: {
@@ -84,19 +86,50 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 };
 
-User.beforeUpdate((user, { password }) => {
-  // TODO: Not sure that we need this, user is registered and usable even without these lines
-  // TODO: method beforeCreate() should be enough,
-  // as we don't need to update password during each update
+const updateIndex = (index, { fullName, companyName, companyId, id }) => {
+  elastic.update({
+    id,
+    index,
+    body: {
+      doc: { fullName, companyName, companyId, id },
+    },
+  });
+};
+
+User.beforeCreate(async (user) => {
+  // eslint-disable-next-line no-param-reassign
+  user.password = hashPassword(user.password);
+});
+
+User.afterCreate(async ({ fullName, companyName, companyId, id }) => {
+  await elastic.index({
+    id,
+    index: 'users',
+    body: { fullName, companyName, companyId, id },
+  });
+});
+
+
+User.beforeUpdate(async (user, { password }) => {
+  const roles = await user.getRoles();
+  roles.forEach(({ role }) => {
+    if (role === MANAGER) {
+      return updateIndex('managers', user);
+    }
+    if (role === DRIVER) {
+      return updateIndex('drivers', user);
+    }
+    return updateIndex('users', user);
+  });
+
   if (password && isValidPassword(password)) {
     // eslint-disable-next-line no-param-reassign
     user.password = hashPassword(password);
   }
 });
 
-User.beforeCreate((user) => {
-  // eslint-disable-next-line no-param-reassign
-  user.password = hashPassword(user.password);
+User.beforeBulkDestroy(async ({ where: { id: ids } }) => {
+  ids.forEach((id) => elastic.delete({ id, index: 'users' }));
 });
 
 User.prototype.isValidPassword = (password, hash) => bcrypt.compareSync(password, hash);

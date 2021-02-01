@@ -12,5 +12,6 @@ export {
   getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse,
 } from './warehouses';
 export { getWaybills, deleteWaybills } from './waybills';
+export { getOptions } from './elastic';
 export { getConsignmentNotes, deleteConsignmentNotes, createConsignmentNote } from './consignmentNotes';
 export { getDocuments } from './documents';
