@@ -56,7 +56,7 @@ function ConsignmentNoteNew() {
 
   const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)))
     .then(() => {
-      history.push(history.push(URLS.CONSIGNMENT_NOTES););
+      history.push(history.push(URLS.CONSIGNMENT_NOTES));
     })
     .catch((e) => {
       dispatch(

@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import { ELASTIC_INDICIES } from 'constants/elastic';
+import { dispatchGetClients } from 'redux/actions';
 import { useElastic } from 'utils';
 
-const ClientForm = () => {
-  const { clientsData } = useSelector(({ clients }) => clients);
-
+const ClientForm = ({ onAddClient }) => {
   const dispatch = useDispatch();
   useEffect(() => { dispatch(dispatchGetClients()); }, []);
 
   const { options, onChange } = useElastic(ELASTIC_INDICIES.CLIENTS, 'fullName');
   const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
-
 
   return (
     <>
@@ -24,7 +23,8 @@ const ClientForm = () => {
           <ControlledAutocomplete
             name="client"
             fieldName="fullName"
-            options={clientsData}
+            options={options}
+            onInputChange={onChange}
             getOptionLabel={(option) => option.fullName || ''}
             getOptionSelected={getOption}
             label="ФИО"
