@@ -134,8 +134,8 @@ export const TTN_WAYBILL = {
     ? (
       <NavButton
         color="primary"
-        variant="contained"
-        to={`/waybills/${value.id}`}
+        variant="outlined"
+        to={`${URLS.WAYBILLS}/${value.id}`}
       >
         Просмотреть
       </NavButton>
@@ -143,7 +143,7 @@ export const TTN_WAYBILL = {
     : (
       <NavButton
         color="secondary"
-        variant="contained"
+        variant="outlined"
         to={`${URLS.WAYBILLS}/new`}
       >
         Создать

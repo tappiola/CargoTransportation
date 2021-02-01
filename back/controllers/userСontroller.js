@@ -10,6 +10,7 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
+
 const { ROLES: { GLOBAL_ADMIN, ADMIN }, ALL_ROLES } = require('../constants');
 
 const router = Router();
