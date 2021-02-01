@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { Suspense, useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -20,31 +20,34 @@ import { THEME } from 'constants/themes';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
-import { refreshTokenIfExpired } from 'redux/actions/currentUser';
+import { refreshTokenIfExpired, getUserProfile } from 'redux/actions/currentUser';
 
-const ProtectedApp = ({ userRoles, theme, setTheme }) => {
+const ProtectedApp = ({
+  userRoles, userName, company, theme, setTheme,
+}) => {
   const routes = PROTECTED_ROUTES
     .filter(({ roles: routeRoles }) => routeRoles.some((role) => userRoles.includes(role)));
   const modules = routes.map(({ module }) => module);
   const [protectedRoute] = routes;
 
   return (
-    <MainMenu modules={modules}>
-      <Switch>
-        {routes.map(({ basePath, component }) => (
-          <Route
-            key={basePath.slice(1)}
-            path={basePath}
-            component={component}
-          />
-        ))}
-        <Route path="/settings">
-          <Settings theme={theme} onThemeChange={setTheme} />
-        </Route>
-        {isDevelopment() && (
+    <MainMenu modules={modules} userName={userName} company={company}>
+      <Suspense fallback={<div>Идет загрузка...</div>}>
+        <Switch>
+          {routes.map(({ basePath, component }) => (
+            <Route
+              key={basePath.slice(1)}
+              path={basePath}
+              component={component}
+            />
+          ))}
+          <Route path="/settings">
+            <Settings theme={theme} onThemeChange={setTheme} />
+          </Route>
+          {isDevelopment() && (
           <Route exact path="/styleguide" component={StyleGuide} />
-        )}
-        {protectedRoute && (
+          )}
+          {protectedRoute && (
           <>
             <Route exact path="/">
               <Redirect to={protectedRoute.basePath} />
@@ -53,15 +56,18 @@ const ProtectedApp = ({ userRoles, theme, setTheme }) => {
               <Redirect to={protectedRoute.basePath} />
             </Route>
           </>
-        )}
-        <Route>У вас нет доступа к запрашиваемой странице</Route>
-      </Switch>
+          )}
+          <Route>У вас нет доступа к запрашиваемой странице</Route>
+        </Switch>
+      </Suspense>
     </MainMenu>
   );
 };
 
 function App() {
-  const { isAuthorized, roles } = useSelector(({ currentUser }) => currentUser);
+  const {
+    isAuthorized, roles, fullName, company,
+  } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -70,6 +76,13 @@ function App() {
 
   useEffect(() => refreshTokenIfExpired(), []);
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (isAuthorized) {
+      dispatch(getUserProfile());
+    }
+  }, [isAuthorized]);
+
   return (
     <ThemeProvider theme={getCustomTheme(theme)}>
       <ToastQueueProvider theme={getCustomTheme(theme)}>
@@ -77,7 +90,13 @@ function App() {
         <Notifier />
         <Router>
           {isAuthorized ? (
-            <ProtectedApp theme={theme} setTheme={setTheme} userRoles={roles} />
+            <ProtectedApp
+              theme={theme}
+              setTheme={setTheme}
+              userRoles={roles}
+              userName={fullName}
+              company={company}
+            />
           ) : (
             <>
               <Route path="/signin" component={SignIn} />

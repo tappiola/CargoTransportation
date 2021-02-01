@@ -17,4 +17,6 @@ export {
   dispatchGetConsignmentNotes, dispatchDeleteConsignmentNotes, dispatchCreateConsignmentNote,
 } from './consignmentNotes';
 export { enqueueToast, processToast } from './notifications';
-export { loginUser, dispatchLogoutUser, authorizationCompleted } from './currentUser';
+export {
+  loginUser, dispatchLogoutUser, authorizationCompleted, getUserProfile,
+} from './currentUser';

@@ -2,15 +2,24 @@ import jwtDecode from 'jwt-decode';
 
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
+import * as api from 'api';
 import { signIn, logoutUser, updateToken } from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
 
-export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
+export const authorizationCompleted = (isAuthorized, roles, company, fullName) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
   isAuthorized,
   roles,
-  companyId,
+  company,
+  fullName,
+});
+
+export const setUserProfile = ({ companyName, fullName, roles }) => ({
+  type: actionTypes.USER_PROFILE_SET,
+  companyName,
+  fullName,
+  roles,
 });
 
 export const dispatchLogoutUser = () => (dispatch) => {
@@ -48,4 +57,8 @@ export const refreshTokenIfExpired = () => {
         .then((res) => localStorage.setItem('token', res.updateToken));
     }
   }
+};
+
+export const getUserProfile = () => (dispatch) => {
+  api.getUserProfile().then((data) => dispatch(setUserProfile(data)));
 };

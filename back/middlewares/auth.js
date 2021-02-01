@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Role = require('../models/Role');
+const Company = require('../models/Company');
 const Logger = require('../config/logger');
 
 const verifyUser = async (req, res, next, roles) => {
@@ -14,10 +15,14 @@ const verifyUser = async (req, res, next, roles) => {
     const { id } = jwt.verify(token, process.env.jwtToken);
     const user = await User.findOne({
       where: { id },
-      include: {
+      include: [{
         model: Role,
         where: roles.length ? { role: roles } : {},
       },
+      {
+        model: Company,
+        attributes: ['name']
+      }]
     });
 
     if (!user) {
@@ -26,6 +31,9 @@ const verifyUser = async (req, res, next, roles) => {
 
     req.companyId = user.companyId;
     req.userId = user.id;
+    req.fullName = user.fullName;
+    req.companyName = user.company?.name;
+    req.roles = user.roles.map(({ role }) => role);
     
     return next();
   } catch(err) {

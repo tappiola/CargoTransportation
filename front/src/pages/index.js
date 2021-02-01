@@ -1,14 +1,17 @@
+import { lazy } from 'react';
+
 import Employees from './Employees';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
 import { URLS } from 'constants/urls';
-import Acts from 'pages/Acts';
-import Clients from 'pages/Clients';
-import ConsignmentNotes from 'pages/ConsignmentNotes';
-import Mailings from 'pages/Mailings';
-import Reports from 'pages/Reports';
-import Users from 'pages/Users';
-import Warehouses from 'pages/Warehouses';
-import Waybills from 'pages/Waybills';
+
+const Acts = lazy(() => import('pages/Acts'));
+const Clients = lazy(() => import('pages/Clients'));
+const ConsignmentNotes = lazy(() => import('pages/ConsignmentNotes'));
+const Mailings = lazy(() => import('pages/Mailings'));
+const Reports = lazy(() => import('pages/Reports'));
+const Users = lazy(() => import('pages/Users'));
+const Warehouses = lazy(() => import('pages/Warehouses'));
+const Waybills = lazy(() => import('pages/Waybills'));
 
 const {
   GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER,

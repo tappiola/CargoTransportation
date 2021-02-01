@@ -6,4 +6,6 @@ const ROLES = {
   DISPATCHER: 'dispatcher',
 };
 
-module.exports = { ROLES };
+const ALL_ROLES = Object.values(ROLES);
+
+module.exports = { ROLES, ALL_ROLES };
