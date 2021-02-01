@@ -1,6 +1,6 @@
 export { fetchAPI } from './fetchAPI';
 export {
-  setUser, updateUser, getUsers, signIn, deleteUsers, updateToken,
+  setUser, updateUser, getUsers, signIn, deleteUsers, updateToken, logoutUser,
 } from './users';
 export {
   getEmployees, getEmployeesWithRole, deleteEmployees, setEmployee, updateEmployee,
@@ -12,6 +12,7 @@ export {
   getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse, getWarehouse,
 } from './warehouses';
 export { getWaybills, deleteWaybills, precreateWaybill } from './waybills';
+export { getOptions } from './elastic';
 export {
   getConsignmentNotes,
   getConsignmentNote,

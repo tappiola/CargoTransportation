@@ -69,6 +69,7 @@ function UsersList() {
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             dispatch(dispatchDeleteUsers(selection));
+            setSelection([]);
           }}
         />
       )}

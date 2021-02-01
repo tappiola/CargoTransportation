@@ -4,7 +4,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import NavButton from '../NavButton';
 
-const Index = ({ link, text }) => (
+const BackButton = ({ link, text }) => (
   <NavButton
     variant="outlined"
     to={link}
@@ -16,4 +16,4 @@ const Index = ({ link, text }) => (
   </NavButton>
 );
 
-export default Index;
+export default BackButton;

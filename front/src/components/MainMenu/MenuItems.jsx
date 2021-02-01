@@ -14,43 +14,44 @@ import ReportIcon from '@material-ui/icons/Report';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { MODULE_NAMES } from 'constants/permissions';
+import { URLS } from 'constants/urls';
 
 const menuItems = [
   {
     module: MODULE_NAMES.ACTS,
-    basePath: '/acts',
+    basePath: URLS.ACTS,
   },
   {
     module: MODULE_NAMES.CLIENTS,
-    basePath: '/clients',
+    basePath: URLS.CLIENTS,
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,
-    basePath: '/consignment-notes',
+    basePath: URLS.CONSIGNMENT_NOTES,
   },
   {
     module: MODULE_NAMES.MAILINGS,
-    basePath: '/mailings',
+    basePath: URLS.MAILINGS,
   },
   {
     module: MODULE_NAMES.REPORTS,
-    basePath: '/reports',
+    basePath: URLS.REPORTS,
   },
   {
     module: MODULE_NAMES.USERS,
-    basePath: '/users',
+    basePath: URLS.USERS,
   },
   {
     module: MODULE_NAMES.EMPLOYEES,
-    basePath: '/employees',
+    basePath: URLS.EMPLOYEES,
   },
   {
     module: MODULE_NAMES.WAREHOUSES,
-    basePath: '/warehouses',
+    basePath: URLS.WAREHOUSES,
   },
   {
     module: MODULE_NAMES.WAYBILLS,
-    basePath: '/waybills',
+    basePath: URLS.WAYBILLS,
   },
 ];
 
