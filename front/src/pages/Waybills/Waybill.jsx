@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-console */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -19,38 +17,6 @@ import PaddedPaper from 'components/PaddedPaper';
 import { DATE } from 'constants/dateFormats';
 import { usePending } from 'utils';
 
-const selector = (id) => ({ waybills, consignmentNotes: { consignmentNotesData } }) => {
-  const waybill = waybills.waybillsData.find(({ id: _id }) => id === _id);
-  const note = consignmentNotesData.find(({ number: n }) => n === +waybill.consignment_note.number);
-
-  const { fullAddress, departedAt, expectedArrivalAt } = waybill;
-  const { driver, vehicle, issuedDate } = note;
-
-  return {
-    client: {
-      ...note.client,
-      fullAddress,
-      departedAt: format(parseISO(departedAt), DATE),
-    },
-    vehicle: {
-      number: vehicle,
-      driver: driver.shortFullName,
-    },
-    consignmentNote: {
-      issuedDate: format(parseISO(issuedDate), DATE),
-      number: waybill.consignment_note.number,
-    },
-    waybill: {
-      number: id,
-      issuedDate: format(new Date(), DATE),
-    },
-    warehouse: {
-      expectedArrivalAt: format(parseISO(expectedArrivalAt), DATE),
-      ...waybill.warehouse,
-    },
-  };
-};
-
 const Row = ({ children, title }) => (
   <>
     <Typography color="primary" variant="subtitle1">{title}</Typography>
@@ -58,7 +24,7 @@ const Row = ({ children, title }) => (
       <Grid container spacing={2}>
         {children.map((Child) => (
           <Grid xs={12} md={12 / children.length} item key={JSON.stringify(Child.props)}>
-            { Child }
+            { Child}
           </Grid>
         ))}
       </Grid>
@@ -68,11 +34,43 @@ const Row = ({ children, title }) => (
 
 function Waybill() {
   const { id: waybillId } = useParams();
-  const defaultValues = useSelector(selector(+waybillId));
-  const methods = useForm({ defaultValues, resolver });
-  const { handleSubmit, errors } = methods;
+  const { consignmentNotesData } = useSelector(({ consignmentNotes }) => consignmentNotes);
+  const methods = useForm({ resolver });
+  const { handleSubmit, errors, reset } = methods;
   const sendFormData = (id) => (data) => api.updateWaybill(id, data);
   const { bindPending, handler } = usePending(sendFormData(waybillId));
+
+  useEffect(async () => {
+    const { waybill } = await api.getWaybill(waybillId);
+    const { fullAddress, departedAt, expectedArrivalAt, consignmentNoteId } = waybill;
+
+    const consignmentNote = consignmentNotesData.find(({ id }) => id === consignmentNoteId);
+    const { driver, vehicle, issuedDate, number, client } = consignmentNote;
+
+    reset({
+      client: {
+        ...client,
+        fullAddress,
+        departedAt: departedAt ? format(parseISO(departedAt), DATE) : '',
+      },
+      vehicle: {
+        number: vehicle,
+        driver: driver.shortFullName,
+      },
+      consignmentNote: {
+        issuedDate: format(parseISO(issuedDate), DATE),
+        number,
+      },
+      waybill: {
+        number: waybillId,
+        issuedDate: format(new Date(), DATE),
+      },
+      warehouse: {
+        ...waybill.warehouse,
+        expectedArrivalAt: expectedArrivalAt ? format(parseISO(expectedArrivalAt), DATE) : '',
+      },
+    });
+  }, []);
 
   return (
     <Container maxWidth="md">

@@ -47,7 +47,12 @@ router.delete('/', auth, async (req, res) => {
 
 router.get('/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const waybill = await Waybill.findOne({ where: { id } });
+  const waybill = await Waybill.findOne({
+    where: { id },
+    include: [{
+      model: Warehouse,
+    }]
+  });
   const controlPoints = await ControlPoint.findAll({ where: { waybillId: id } });
 
   res.status(200).json({ waybill, controlPoints });
