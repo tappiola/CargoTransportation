@@ -2,15 +2,23 @@ import jwtDecode from 'jwt-decode';
 
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
-import { signIn, updateToken } from 'api';
+import * as api from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
 
-export const authorizationCompleted = (isAuthorized, roles, companyId) => ({
+export const authorizationCompleted = (isAuthorized, roles, company, fullName) => ({
   type: actionTypes.AUTHORIZATION_COMPLETED,
   isAuthorized,
   roles,
-  companyId,
+  company,
+  fullName,
+});
+
+export const setUserProfile = ({ companyName, fullName, roles }) => ({
+  type: actionTypes.USER_PROFILE_SET,
+  companyName,
+  fullName,
+  roles,
 });
 
 export const dispatchLogoutUser = () => (dispatch) => {
@@ -18,7 +26,7 @@ export const dispatchLogoutUser = () => (dispatch) => {
   localStorage.removeItem('token');
 };
 
-export const loginUser = (email, password) => (dispatch) => signIn(email, password)
+export const loginUser = (email, password) => (dispatch) => api.signIn(email, password)
   .then(({ token, roles, companyId }) => {
     localStorage.setItem('token', token);
     const userRoles = roles.map(({ role }) => role);
@@ -44,8 +52,12 @@ export const refreshTokenIfExpired = () => {
   if (lsToken) {
     const { exp } = jwtDecode(lsToken);
     if (exp && exp > Date.now()) {
-      updateToken()
+      api.updateToken()
         .then((res) => localStorage.setItem('token', res.updateToken));
     }
   }
+};
+
+export const getUserProfile = () => (dispatch) => {
+  api.getUserProfile().then((data) => dispatch(setUserProfile(data)));
 };

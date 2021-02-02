@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Link } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
+import { Link, Checkbox, Button } from '@material-ui/core';
+import { Search as SearchIcon, Edit as EditIcon, LocalShipping } from '@material-ui/icons';
 
 import { ROLE_NAMES } from 'constants/permissions';
+import { URLS } from 'constants/urls';
 
 const valueOrBlank = ({ value }) => value || '-';
 const getRolesCellValue = ({ value }) => (value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ')) || '-';
@@ -99,29 +100,56 @@ export const TNN_NUMBER = (path) => ({
 export const TTN_STATUS = {
   field: 'consignment_note_status',
   headerName: 'Статус',
-  flex: 4,
+  width: 160,
   renderCell: ({ value }) => value.status,
 };
 
 export const TTN_CLIENT = {
   field: 'client',
   headerName: 'Клиент',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
 };
 
 export const TTN_MANAGER = {
   field: 'assignedTo',
   headerName: 'Менеджер',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
 };
 
 export const TTN_DRIVER = {
   field: 'driver',
   headerName: 'Водитель',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
+};
+
+export const TTN_WAYBILL = {
+  field: 'waybill',
+  headerName: <LocalShipping fontSize="large" style={{ margin: '24px 16px 0' }} />,
+  width: 90,
+  renderCell: ({ value }) => (value
+    ? (
+      <Button
+        variant="outlined"
+        color="primary"
+        to={`${URLS.WAYBILLS}/${value.id}`}
+        component={NavLink}
+      >
+        <SearchIcon fontSize="small" />
+      </Button>
+    )
+    : (
+      <Button
+        variant="outlined"
+        color="primary"
+        component={NavLink}
+        to={`${URLS.WAYBILLS}/new`}
+      >
+        <EditIcon fontSize="small" />
+      </Button>
+    )),
 };
 
 export const WAYBILL_TTN = (path) => ({
@@ -144,14 +172,14 @@ export const WAYBILL_END_ADDRESS = {
   field: 'warehouse',
   headerName: 'Конечная точка',
   flex: 4,
-  renderCell: ({ value }) => value.fullAddress,
+  renderCell: ({ value }) => value?.fullAddress,
 };
 
 export const WAYBILL_STATUS = {
   field: 'waybill_status',
   headerName: ' Статус',
   flex: 3,
-  renderCell: ({ value }) => value.status,
+  renderCell: ({ value }) => value?.status,
 };
 
 export const DEPARTURE_DATE = {

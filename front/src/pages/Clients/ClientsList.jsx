@@ -51,6 +51,7 @@ function ClientsList() {
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             dispatch(dispatchDeleteClients(selection));
+            setSelection([]);
           }}
         />
       )}

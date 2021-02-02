@@ -1,21 +1,16 @@
 const { Router } = require('express');
-const { Waybill, WaybillStatus, ConsignmentNote, Warehouse } = require('../models');
+const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, ControlPoint } = require('../models');
 const { authorize } = require('../middlewares/auth');
-const {
-  WAYBILL_STATUSES_ID,
-  ROLES: { ADMIN, MANAGER, DISPATCHER },
-  CONTROL_POINT_STATUSES_ID: { EXPECTED },
-} = require('../constants');
-const { ControlPoint } = require('../models/ControlPoint');
+const { ROLES, WAYBILL_STATUSES_ID, CONTROL_POINT_STATUSES_ID } = require('../constants');
 
-const auth = authorize(ADMIN, MANAGER, DISPATCHER);
+const auth = authorize(ROLES.ADMIN, ROLES.MANAGER, ROLES.DISPATCHER);
 
 const router = Router();
 
 router.get('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId } = req;
 
-  const clients = await Waybill.findAll({
+  const waybills = await Waybill.findAll({
     attributes: {
       exclude: ['waybillStatusId', 'consignmentNoteId'],
     },
@@ -35,7 +30,7 @@ router.get('/', auth, async (req, res) => {
     ],
   });
 
-  res.status(200).json(clients);
+  res.status(200).json(waybills);
 });
 
 router.delete('/', auth, async (req, res) => {
@@ -68,7 +63,7 @@ router.put('/:id', auth, async (req, res) => {
   if (points) {
     await ControlPoint.bulkCreate(
       points.map((controlPoint) => ({
-        controlPointStatusId: EXPECTED,
+        controlPointStatusId: CONTROL_POINT_STATUSES_ID.sEXPECTED,
         waybillId: id,
         ...controlPoint,
       }))
@@ -91,6 +86,27 @@ router.put('/:id', auth, async (req, res) => {
   );
 
   res.status(200).json(waybill);
+});
+
+router.post('/', auth, async (req, res) => {
+  const { consignmentNoteId, warehouseId } = req.body;
+  const consignmentNote = await ConsignmentNote.findOne({ where: { id: consignmentNoteId } });
+  const { linkedCompanyId, clientId } = consignmentNote;
+
+  const { country, city, street, house } = await Client.findByPk(clientId);
+
+  const { id } = await Waybill.create({
+    waybillStatusId: WAYBILL_STATUSES_ID.IN_PROCESS,
+    warehouseId,
+    consignmentNoteId,
+    linkedCompanyId,
+    country,
+    city,
+    street,
+    house,
+  });
+
+  res.status(200).json({ id });
 });
 
 module.exports = router;

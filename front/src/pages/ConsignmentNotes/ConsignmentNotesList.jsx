@@ -28,6 +28,7 @@ function ConsignmentNotesList() {
     COLUMNS.TTN_MANAGER,
     COLUMNS.TTN_DRIVER,
     COLUMNS.TTN_STATUS,
+    COLUMNS.TTN_WAYBILL,
   ];
 
   useEffect(() => {
@@ -61,6 +62,7 @@ function ConsignmentNotesList() {
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
             dispatch(dispatchDeleteConsignmentNotes(selection));
+            setSelection([]);
           }}
         />
       )}

@@ -13,6 +13,7 @@ function CustomGrid({
         pageSize={10}
         autoHeight
         rowHeight={42}
+        disableColumnMenu
         checkboxSelection
         rowsPerPageOptions={[10, 20]}
         {...otherProps}

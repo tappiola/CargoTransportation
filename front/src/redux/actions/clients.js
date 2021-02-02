@@ -26,10 +26,22 @@ export const dispatchDeleteClients = (ids) => (dispatch) => {
     });
 };
 
-export const dispatchUpdateClient = (data, clientId) => () => (
+export const dispatchUpdateClient = (data, clientId) => (dispatch) => (
   api.updateClient(data, clientId)
+    .then(() => {
+      dispatch(enqueueToast({
+        message: 'Изменения успешно сохранены',
+        type: TOAST_TYPES.SUCCESS,
+      }));
+    })
 );
 
-export const dispatchSetClient = (data) => () => (
+export const dispatchSetClient = (data) => (dispatch) => (
   api.setClient(data)
+    .then(() => {
+      dispatch(enqueueToast({
+        message: 'Клиент успешно добавлен',
+        type: TOAST_TYPES.SUCCESS,
+      }));
+    })
 );

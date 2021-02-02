@@ -39,6 +39,7 @@ Good.belongsTo(User, { as: 'checkedBy' });
 Good.belongsTo(ConsignmentNote);
 
 Waybill.belongsTo(WaybillStatus);
+ConsignmentNote.hasOne(Waybill);
 Waybill.belongsTo(ConsignmentNote);
 Waybill.belongsTo(Warehouse);
 Waybill.belongsTo(Company, { as: 'linkedCompany' });
@@ -69,4 +70,5 @@ module.exports = {
   ConsignmentNote,
   ConsignmentNoteStatus,
   WaybillStatus,
+  ControlPoint,
 };
