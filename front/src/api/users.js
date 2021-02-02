@@ -9,3 +9,4 @@ export const updateUser = async (data, id) => fetchAPI(`${BASE_URI}/${id}`, data
 export const signIn = async (email, password) => fetchAPI(`${BASE_URI}/login`, { email, password }, 'POST');
 export const updateToken = async () => fetchAPI(`${BASE_URI}/update-token`, null, 'POST');
 export const logoutUser = async () => fetchAPI(`${BASE_URI}/logout`, null);
+export const getUserProfile = async () => fetchAPI(`${BASE_URI}/profile`, null);

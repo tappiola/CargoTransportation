@@ -10,7 +10,8 @@ const validate = require('../middlewares/validate');
 const { sendEmail, setMailOptions } = require('../utils/mail/mail.utils');
 const registerTemplate = require('../utils/mail/tmpl/register');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { GLOBAL_ADMIN, ADMIN } } = require('../constants');
+
+const { ROLES: { GLOBAL_ADMIN, ADMIN }, ALL_ROLES } = require('../constants');
 
 const router = Router();
 const auth = authorize(ADMIN, GLOBAL_ADMIN);
@@ -119,6 +120,12 @@ router.get('/', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
     ],
   });
   return res.status(200).json(users);
+});
+
+router.get('/profile', authorize(...ALL_ROLES), async (req, res) => {
+  const { fullName, roles, companyName } = req;
+
+  return res.status(200).json({ fullName, roles, companyName });
 });
 
 router.get('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {

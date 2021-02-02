@@ -5,7 +5,8 @@ const {
   Client,
   ConsignmentNoteStatus,
   Documents,
-  Good
+  Good,
+  Waybill,
 } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
@@ -46,7 +47,10 @@ router.get('/', auth, async (req, res) => {
         model: User,
         as: 'createdBy',
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      }],
+      },{
+        model: Waybill,
+      }
+    ],
   });
 
   res.status(200).json(consignmentNotes);

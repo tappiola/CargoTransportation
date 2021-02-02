@@ -4,7 +4,9 @@ import { NavLink } from 'react-router-dom';
 import { Link } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import NavButton from '../Buttons/NavButton';
 import { ROLE_NAMES } from 'constants/permissions';
+import { URLS } from 'constants/urls';
 
 const valueOrBlank = ({ value }) => value || '-';
 const getRolesCellValue = ({ value }) => (value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ')) || '-';
@@ -99,29 +101,54 @@ export const TNN_NUMBER = (path) => ({
 export const TTN_STATUS = {
   field: 'consignment_note_status',
   headerName: 'Статус',
-  flex: 4,
+  flex: 2,
   renderCell: ({ value }) => value.status,
 };
 
 export const TTN_CLIENT = {
   field: 'client',
   headerName: 'Клиент',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
 };
 
 export const TTN_MANAGER = {
   field: 'assignedTo',
   headerName: 'Менеджер',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
 };
 
 export const TTN_DRIVER = {
   field: 'driver',
   headerName: 'Водитель',
-  flex: 3,
+  flex: 4,
   renderCell: ({ value }) => value.shortFullName,
+};
+
+export const TTN_WAYBILL = {
+  field: 'waybill',
+  headerName: 'Путевой лист',
+  flex: 3,
+  renderCell: ({ value }) => (value
+    ? (
+      <NavButton
+        color="primary"
+        variant="outlined"
+        to={`${URLS.WAYBILLS}/${value.id}`}
+      >
+        Просмотреть
+      </NavButton>
+    )
+    : (
+      <NavButton
+        color="secondary"
+        variant="outlined"
+        to={`${URLS.WAYBILLS}/new`}
+      >
+        Создать
+      </NavButton>
+    )),
 };
 
 export const WAYBILL_TTN = (path) => ({
