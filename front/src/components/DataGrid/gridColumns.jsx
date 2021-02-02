@@ -171,19 +171,19 @@ export const WAYBILL_END_ADDRESS = {
   field: 'warehouse',
   headerName: 'Конечная точка',
   flex: 4,
-  renderCell: ({ value }) => value.fullAddress,
+  renderCell: ({ value }) => value?.fullAddress,
 };
 
 export const WAYBILL_STATUS = {
   field: 'waybill_status',
   headerName: ' Статус',
   flex: 3,
-  renderCell: ({ value }) => value.status,
+  renderCell: ({ value }) => value?.status,
 };
 
 export const DEPARTURE_DATE = {
   field: 'departedAt',
   headerName: 'Дата отправки',
   flex: 3,
-  renderCell: ({ value }) => value.slice(0, 10),
+  renderCell: ({ value }) => value && value.slice(0, 10),
 };

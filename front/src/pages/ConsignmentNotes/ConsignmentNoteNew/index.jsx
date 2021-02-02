@@ -25,7 +25,13 @@ import { usePending } from 'utils';
 
 const normalize = (formData) => {
   const {
-    consignmentNoteNumber, client, manager, driver, passportIssuedAt, goods, ...other
+    consignmentNoteNumber,
+    client,
+    manager,
+    driver,
+    passportIssuedAt,
+    goods,
+    ...other
   } = formData;
   const goodsData = goods.map(({ id, ...data }) => data);
 
@@ -48,18 +54,18 @@ function ConsignmentNoteNew() {
   const { handleSubmit } = methods;
   const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
 
-  const sendFormData = (formData) => (
-    dispatch(dispatchCreateConsignmentNote(normalize(formData)))
-      .then(() => {
-        history.push(URLS.CONSIGNMENT_NOTES);
-      })
-      .catch((e) => {
-        dispatch(enqueueToast({
+  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)))
+    .then(() => {
+      history.push(history.push(URLS.CONSIGNMENT_NOTES));
+    })
+    .catch((e) => {
+      dispatch(
+        enqueueToast({
           message: `Ошибка при создании ТТН: ${e.message}`,
           type: TOAST_TYPES.ERROR,
-        }));
-      })
-  );
+        }),
+      );
+    });
   const { bindPending, handler } = usePending(sendFormData);
 
   return (

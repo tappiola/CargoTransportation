@@ -3,7 +3,6 @@ import jwtDecode from 'jwt-decode';
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import * as api from 'api';
-import { signIn, logoutUser, updateToken } from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
 
@@ -24,10 +23,10 @@ export const setUserProfile = ({ companyName, fullName, roles }) => ({
 
 export const dispatchLogoutUser = () => (dispatch) => {
   dispatch({ type: actionTypes.CURRENT_USER_LOGOUT });
-  logoutUser().then(() => localStorage.removeItem('token'));
+  localStorage.removeItem('token');
 };
 
-export const loginUser = (email, password) => (dispatch) => signIn(email, password)
+export const loginUser = (email, password) => (dispatch) => api.signIn(email, password)
   .then(({ token, roles, companyId }) => {
     localStorage.setItem('token', token);
     const userRoles = roles.map(({ role }) => role);
