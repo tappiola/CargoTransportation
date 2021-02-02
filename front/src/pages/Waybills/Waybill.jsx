@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-console */
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -17,16 +19,6 @@ import PaddedPaper from 'components/PaddedPaper';
 import { DATE } from 'constants/dateFormats';
 import { usePending } from 'utils';
 
-const formatDate = (dirtyDate) => {
-  try {
-    return (typeof dirtyDate === 'string')
-      ? format(parseISO(dirtyDate), DATE)
-      : format(dirtyDate, DATE);
-  } catch {
-    return dirtyDate;
-  }
-};
-
 const selector = (id) => ({ waybills, consignmentNotes: { consignmentNotesData } }) => {
   const waybill = waybills.waybillsData.find(({ id: _id }) => id === _id);
   const note = consignmentNotesData.find(({ number: n }) => n === +waybill.consignment_note.number);
@@ -38,22 +30,22 @@ const selector = (id) => ({ waybills, consignmentNotes: { consignmentNotesData }
     client: {
       ...note.client,
       fullAddress,
-      departedAt: formatDate(departedAt, DATE),
+      departedAt: format(parseISO(departedAt), DATE),
     },
     vehicle: {
       number: vehicle,
       driver: driver.shortFullName,
     },
     consignmentNote: {
-      issuedDate: formatDate(issuedDate, DATE),
+      issuedDate: format(parseISO(issuedDate), DATE),
       number: waybill.consignment_note.number,
     },
     waybill: {
       number: id,
-      issuedDate: formatDate(Date.now(), DATE),
+      issuedDate: format(new Date(), DATE),
     },
     warehouse: {
-      expectedArrivalAt: formatDate(expectedArrivalAt, DATE),
+      expectedArrivalAt: format(parseISO(expectedArrivalAt), DATE),
       ...waybill.warehouse,
     },
   };
@@ -92,11 +84,11 @@ function Waybill() {
           <PaddedPaper>
             <Row title="Накладная">
               <BaseField name="consignmentNote.number" label="Номер" disabled />
-              <DateField name="consignmentNote.issuedDate" label="Дата" disabled />
+              <DateField name="consignmentNote.issuedDate" label="Дата оформления" disabled />
             </Row>
             <Row title="Путевой лист">
               <BaseField name="waybill.number" label="Номер" disabled />
-              <BaseField name="waybill.issuedDate" label="Дата оформления" disabled />
+              <DateField name="waybill.issuedDate" label="Дата оформления" disabled />
             </Row>
             <Row title="Автомобиль">
               <BaseField name="vehicle.number" label="Марка, номер" disabled />

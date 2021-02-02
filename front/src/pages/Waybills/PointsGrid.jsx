@@ -11,16 +11,6 @@ import BaseField, { DateTimeField } from 'components/ControlledField';
 import CustomGrid from 'components/DataGrid';
 import { DATE_TIME } from 'constants/dateFormats';
 
-const formatDate = (dirtyDate, ...params) => {
-  try {
-    return (typeof dirtyDate === 'string')
-      ? format(parseISO(dirtyDate), ...params)
-      : format(dirtyDate, ...params);
-  } catch {
-    return dirtyDate;
-  }
-};
-
 export const PointsGrid = ({ errors }) => {
   const { id: waybillId } = useParams();
   const [points, setPoints] = useState([]);
@@ -29,14 +19,14 @@ export const PointsGrid = ({ errors }) => {
   useEffect(async () => {
     const { controlPoints } = await getWaybill(waybillId);
     setPoints(controlPoints.map(({ expectedArrivalAt: date, ...other }, id) => ({
-      expectedArrivalAt: formatDate(date, DATE_TIME),
+      expectedArrivalAt: format(parseISO(date), DATE_TIME),
       ...other,
       id,
     })));
   }, []);
 
   const addPoint = (id) => {
-    setPoints([...points, { id, point: '', date: '' }]);
+    setPoints([...points, { id, name: '', expectedArrivalAt: '' }]);
   };
 
   const deletePoint = (id) => {
@@ -69,9 +59,9 @@ export const PointsGrid = ({ errors }) => {
     />
   );
 
-  const PointCell = ({ value, rowIndex }) => (
+  const PointCell = ({ value, rowIndex, row }) => (
     <>
-      <IconButton size="small" onClick={() => deletePoint(rowIndex)} style={{ marginRight: 16 }}>
+      <IconButton size="small" onClick={() => deletePoint(row.id || rowIndex)} style={{ marginRight: 16 }}>
         <Delete fontSize="small" />
       </IconButton>
       <BaseField

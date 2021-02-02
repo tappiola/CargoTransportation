@@ -1,5 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 
+const rowHeigth = 42;
+const thumbHeigth = 82;
+const controlsHeigth = 139;
+
 export const useStyles = makeStyles((theme) => ({
   footer: {
     margin: theme.spacing(2, 2, 1),
@@ -7,7 +11,10 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   pointsGrid: (rowsNumber) => ({
-    height: rowsNumber * 42 + 110,
+    height: (rowsNumber * rowHeigth || thumbHeigth) + controlsHeigth,
+    position: 'relative',
+    paddingTop: 24,
+    top: -theme.spacing(2),
   }),
   point: {
     '&:before': {
