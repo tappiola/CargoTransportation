@@ -101,28 +101,28 @@ export const TTN_STATUS = {
   field: 'consignment_note_status',
   headerName: 'Статус',
   width: 160,
-  renderCell: ({ value }) => value.status,
+  renderCell: ({ value }) => value?.status,
 };
 
 export const TTN_CLIENT = {
   field: 'client',
   headerName: 'Клиент',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_MANAGER = {
   field: 'assignedTo',
   headerName: 'Менеджер',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_DRIVER = {
   field: 'driver',
   headerName: 'Водитель',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_WAYBILL = {
