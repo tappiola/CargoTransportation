@@ -3,193 +3,132 @@
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Button } from '@material-ui/core';
 import {
-  Container, makeStyles, Typography, TextField, Button,
-} from '@material-ui/core';
-import { cyan, green, grey } from '@material-ui/core/colors';
+  cyan, green, grey, red, blue, amber,
+} from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import { Add } from '@material-ui/icons';
 
+import LiveResult from './LiveResult';
+import { useStyles } from './Mailing.styles';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-// import ControlledField from 'components/ControlledField';
+import ControlledField from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPapper from 'components/PaddedPaper';
 import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
-const COLORS = [cyan, green, grey];
-const IMAGES = [
+const COLORS = [cyan, green, grey, red, blue, amber];
+const DEFAULT_IMAGES = [
   'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8aHVtYW58ZW58MHx8MHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbhPRCm9OEftQyqrF_vxXdQKZwf_YH9aaTKg&usqp=CAU',
+  'http://pngimg.com/uploads/gift/gift_PNG5946.png',
 ];
 
-const useStyles = makeStyles(() => ({
-  colorInput: {
-    width: 50,
-    height: 50,
-    border: 'none',
-    backgroundColor: 'transparent',
-    '&:focus': {
-      outline: 'none',
-    },
+const defaultValues = {
+  user: {
+    firstName: 'Стас',
+    lastName: 'Михайлов',
+    fullName: 'Михайлов Стас',
   },
-  aside: {
-    maxWidth: 400,
-  },
-  template: {
-    position: 'relative',
-    minWidth: 350,
-    minHeight: 700,
-    flex: 1,
-    '& *': {
-    },
-  },
-}));
+  image: null,
+  text: '',
+  birthday: Date.now(),
+};
 
 export default function Mailings() {
   const classes = useStyles();
-  const defaultValues = {
-    user: {
-      firstName: 'Стас',
-      lastName: 'Михайлов',
-      fullName: 'Михайлов Стас',
-    },
-  };
-  const [user, setUser] = useState(defaultValues.user);
   const methods = useForm({ defaultValues });
-  // const { handleSubmit } = methods;
   const { options, onChange } = useElastic(ELASTIC_INDICIES.USERS, 'fullName');
-  // const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
-  const [color, setColor] = useState('#000000');
-  const [image, setImage] = useState(IMAGES[0]);
-  const [text, setText] = useState('');
-  const [birthdate, setBirthdate] = useState('1995-12-17T03:24:00');
+  const [image, setImage] = useState(DEFAULT_IMAGES[0]);
+  const [userImages, setUserImages] = useState([]);
+  const [color, setColor] = useState('#fff');
 
-  const ColorInput = ({ onClick, disabled, ...props }) => (
-    <input
-      className={classes.colorInput}
-      type="color"
-      onClickCapture={(event) => {
-        if (disabled) {
-          setColor(event.target.value);
-          event.preventDefault();
-        }
-      }}
-      onChange={({ target }) => setColor(target.value)}
-      {...props}
-    />
-  );
+  const loadFiles = ({ target: { files } }) => {
+    const [file] = files;
+
+    if (file instanceof File) {
+      const reader = new FileReader();
+
+      reader.onload = ({ target }) => (
+        target?.result && setUserImages([...userImages, target?.result])
+      );
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const sendFormData = (formData) => {
+    console.log({ ...formData, image, color });
+  };
 
   return (
-    <>
-      <PaddedContainer>
-        <BackButton link="/" text="На главную страницу" />
-        <GridToolbar title="Редактирование шаблона" />
-        <Grid container justify="flex-start">
-          <Grid item className={classes.aside}>
-            <FormProvider {...methods}>
-              <form>
-                <PaddedPapper title="Текст шаблона">
-                  <ControlledAutocomplete
-                    name="user"
-                    options={options}
-                    label="Пользователь"
-                    onInputChange={(e) => e?.target && onChange(e)}
-                    onChange={setUser}
-                    getOptionLabel={({ firstName, lastName }) => `${lastName} ${firstName}` || '  '}
+    <PaddedContainer>
+      <BackButton link="/" text="На главную страницу" />
+      <GridToolbar title="Редактирование шаблона" />
+      <FormProvider {...methods}>
+        <Grid container justify="flex-start" spacing={4}>
+          <Grid item className={classes.aside} xs={12} md={6} xl={4}>
+            <form onSubmit={methods.handleSubmit(sendFormData)}>
+              <PaddedPapper title="Текст шаблона">
+                <ControlledAutocomplete
+                  name="user"
+                  label="Пользователь"
+                  options={options}
+                  onInputChange={(e) => e?.target && onChange(e)}
+                  getOptionLabel={({ firstName, lastName }) => `${lastName} ${firstName}` || '  '}
+                />
+                <ControlledField type="date" label="Дата рождения" name="birthdate" InputLabelProps={{ shrink: true }} />
+                <ControlledField label="Текст поздравления" name="text" multiline fullWidth />
+              </PaddedPapper>
+
+              <PaddedPapper title="Цвет фона">
+                {COLORS.map(({ A100: currColor }) => (
+                  <Button
+                    key={currColor}
+                    style={{ background: currColor }}
+                    className={classes.colorBtn}
+                    onClick={() => setColor(currColor)}
                   />
-                  <TextField type="date" label="Дата рождения" name="birthdate" InputLabelProps={{ shrink: true }} onChange={({ target }) => setBirthdate(target.value)} />
-                  <TextField label="Текст поздравления" multiline fullWidth value={text} onChange={({ target }) => setText(target.value)} />
-                </PaddedPapper>
+                ))}
+                <Button component="label" className={classes.colorBtn}>
+                  <input type="color" onInput={({ target }) => setColor(target.value)} />
+                </Button>
+              </PaddedPapper>
 
-                <PaddedPapper title="Цвет фона">
-                  <Grid container>
-                    <Typography>Свой цвет</Typography>
-                    <ColorInput defaultValue={color} />
-                    <Grid container>
-                      <Typography>Стандартные цвета </Typography>
-                      {COLORS.map((materialColor) => (
-                        <ColorInput
-                          key={materialColor[50]}
-                          defaultValue={materialColor[300]}
-                          disabled
-                        />
-                      ))}
-                    </Grid>
-                  </Grid>
-                </PaddedPapper>
-
-                <PaddedPapper title="Изображение">
-                  <Grid container spacing={1} wrap="wrap">
-                    {IMAGES.map((url) => (
-                      <Grid item key={url}>
-                        <img
-                          src={url}
-                          alt="avatar"
-                          width="100"
-                          height="100"
-                          onClick={() => setImage(url)}
-                        />
+              <PaddedPapper title="Изображение">
+                <Grid container spacing={1} wrap="wrap">
+                  {[...DEFAULT_IMAGES, ...userImages].map((src) => (
+                    src && (
+                      <Grid item key={src}>
+                        <img src={src} alt="avatar" className={classes.image} onClick={() => setImage(src)} />
                       </Grid>
-                    ))}
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        component="label"
-                        color="secondary"
-                        style={{ height: 100, width: 100 }}
-                      >
-                        <Add style={{ height: 95, width: 95 }} />
-                        <input type="file" hidden />
-                      </Button>
-                    </Grid>
+                    )
+                  ))}
+                  <Grid item>
+                    <Button variant="contained" component="label" color="secondary" className={classes.image}>
+                      <Add className={classes.iconButton} />
+                      <input name="image" onInput={loadFiles} type="file" hidden />
+                    </Button>
                   </Grid>
-                </PaddedPapper>
-              </form>
-            </FormProvider>
+                </Grid>
+              </PaddedPapper>
+              <SubmitButton>Сохранить</SubmitButton>
+            </form>
           </Grid>
 
-          <PaddedPapper title="Итоговый результат">
-            <Grid item>
-              <Container className={classes.template} style={{ backgroundColor: color }}>
-                <header style={{ paddingTop: 20 }}>
-                  <img alt="sdfsdf" src={image} style={{ display: 'inline-block', width: 100 }} />
-                  <h1 style={{ display: 'inline-block', width: '50%', marginLeft: 20 }}>
-                    {`Уважаемый ${user.firstName} ${user.middleName || ''}!`}
-                  </h1>
-                </header>
-                <main>
-                  <p>
-                    {`Поздраляем Вас с
-                ${new Date().getYear() - new Date(birthdate).getYear()}-летием.`}
-                  </p>
-                  <p>
-                    {text}
-                  </p>
-                </main>
-                <footer style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  marginTop: 20,
-                  paddingBottom: 20,
-                }}
-                >
-                  <p>
-                    С уваженем,
-                    <br />
-                    коллектив ООО
-                    <b> ”Транспортные системы”</b>
-                  </p>
-                </footer>
-              </Container>
-            </Grid>
-          </PaddedPapper>
+          <Grid item xs={12} md={6} xl={8} className={classes.template}>
+            <PaddedPapper title="Итоговый результат">
+              <LiveResult color={color} image={image} />
+            </PaddedPapper>
+          </Grid>
         </Grid>
-        <SubmitButton />
-      </PaddedContainer>
-    </>
+      </FormProvider>
+
+    </PaddedContainer>
   );
 }
