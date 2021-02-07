@@ -52,7 +52,7 @@ export const refreshTokenIfExpired = () => {
   if (lsToken) {
     const { exp } = jwtDecode(lsToken);
     if (exp && exp > Date.now()) {
-      updateToken()
+      api.updateToken()
         .then((res) => localStorage.setItem('token', res.updateToken));
     }
   }
