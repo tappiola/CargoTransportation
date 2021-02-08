@@ -15,6 +15,7 @@ const CongratulationTemplate = require('./CongratulationTemplate');
 const Logger = require('../config/logger');
 
 User.belongsTo(Company);
+User.hasOne(CongratulationTemplate);
 
 const UserRole = db.define('user_role', {});
 User.belongsToMany(Role, { through: UserRole });
@@ -52,9 +53,10 @@ LossReport.belongsTo(User, { as: 'responsible' });
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
-db.sync({ alter: true, logging: false }).then(() => {
-  Logger.log('DB sync completed');
-});
+db.sync({ alter: true, logging: false }).then(
+  () => Logger.info('DB sync completed'),
+  (err) => Logger.error(err)
+).catch((err) => Logger.error(err));
 
 module.exports = {
   User,
@@ -70,4 +72,5 @@ module.exports = {
   ConsignmentNote,
   ConsignmentNoteStatus,
   WaybillStatus,
+  CongratulationTemplate,
 };

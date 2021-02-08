@@ -60,7 +60,7 @@ const LiveResult = ({ color, image }) => {
     <Container style={{ backgroundColor: color }}>
       <header style={styles.header}>
         <h1 style={styles.h1}>
-          <strong>{`Уважаемый ${user.firstName} ${user.middleName || ''}!`}</strong>
+          <strong>{`Уважаемый ${user?.firstName} ${user?.middleName || ''}!`}</strong>
           <br />
           {`Поздраляем Вас с ${age}-летием.`}
         </h1>

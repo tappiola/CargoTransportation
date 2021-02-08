@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button } from '@material-ui/core';
@@ -20,7 +21,7 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPapper from 'components/PaddedPaper';
 import { ELASTIC_INDICIES } from 'constants/elastic';
-import { useElastic } from 'utils';
+import { useElastic, getAuthToken } from 'utils';
 
 const COLORS = [cyan, green, grey, red, blue, amber];
 const DEFAULT_IMAGES = [
@@ -47,10 +48,9 @@ export default function Mailings() {
   const [image, setImage] = useState(DEFAULT_IMAGES[0]);
   const [userImages, setUserImages] = useState([]);
   const [color, setColor] = useState('#fff');
-
+  const [userId, setUserId] = useState(null);
   const loadFiles = ({ target: { files } }) => {
     const [file] = files;
-
     if (file instanceof File) {
       const reader = new FileReader();
 
@@ -62,9 +62,49 @@ export default function Mailings() {
     }
   };
 
-  const sendFormData = (formData) => {
-    console.log({ ...formData, image, color });
+  useEffect(async () => {
+    console.log(userId);
+    if (!userId) {
+      return;
+    }
+    const response = await fetch(`http://localhost:5000/api/mails/${userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+    const template = await response.json();
+    setColor(template.color);
+    methods.setValue('text', template.text);
+
+    const blob = await fetch(`http://localhost:5000/api/mails/images/${template.image}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    const file = await blob.blob();
+    setImage(URL.createObjectURL(file));
+  }, [userId]);
+
+  const sendFormData = async (data) => {
+    const formData = new FormData();
+    formData.append('image', data.image[0]);
+    formData.append('color', color);
+    formData.append('text', data.text);
+    formData.append('userId', userId);
+
+    await fetch('http://localhost:5000/api/mails', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
   };
+
+  const getOption = () => true;
 
   return (
     <PaddedContainer>
@@ -80,6 +120,8 @@ export default function Mailings() {
                   label="Пользователь"
                   options={options}
                   onInputChange={(e) => e?.target && onChange(e)}
+                  getOptionSelected={getOption}
+                  onSelectionChange={(option) => option && setUserId(option.id)}
                   getOptionLabel={({ firstName, lastName }) => `${lastName} ${firstName}` || '  '}
                 />
                 <ControlledField type="date" label="Дата рождения" name="birthdate" InputLabelProps={{ shrink: true }} />
@@ -112,7 +154,7 @@ export default function Mailings() {
                   <Grid item>
                     <Button variant="contained" component="label" color="secondary" className={classes.image}>
                       <Add className={classes.iconButton} />
-                      <input name="image" onInput={loadFiles} type="file" hidden />
+                      <input name="image" ref={methods.register} onInput={loadFiles} type="file" />
                     </Button>
                   </Grid>
                 </Grid>
