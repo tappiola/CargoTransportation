@@ -7,6 +7,7 @@ const waybillRouter = require('../controllers/waybillController');
 const elasticRouter = require('../controllers/elasticController');
 const documentController = require('../controllers/documentController');
 const mailController = require('../controllers/mailController');
+const publicController = require('../controllers/publicController');
 
 module.exports = (app) => {
   app.use('/api/elastic', elasticRouter);
@@ -18,4 +19,5 @@ module.exports = (app) => {
   app.use('/api/waybills', waybillRouter);
   app.use('/api/documents', documentController);
   app.use('/api/mails', mailController);
+  app.use('/', publicController);
 };

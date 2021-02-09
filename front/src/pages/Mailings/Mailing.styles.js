@@ -14,6 +14,9 @@ export const useStyles = makeStyles((theme) => ({
       filter: 'brightness(1.1)',
     },
   },
+  fullWidth: {
+    flex: 1,
+  },
   image: {
     width: 100,
     height: 100,

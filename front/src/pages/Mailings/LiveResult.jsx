@@ -1,7 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import { Container } from '@material-ui/core';
+
+import { BACKEND_HOST } from 'constants/environment';
 
 const styles = {
   header: {
@@ -51,10 +54,11 @@ const styles = {
   },
 };
 
-const LiveResult = ({ color, image }) => {
+const LiveResult = ({ color, image, user }) => {
   const { watch } = useFormContext();
-  const { user, text, birthdate } = watch();
-  const age = new Date().getYear() - new Date(birthdate).getYear();
+  const { company } = useSelector(({ currentUser }) => currentUser);
+  const { text, birthday } = watch();
+  const age = new Date().getYear() - new Date(birthday).getYear();
 
   return (
     <Container style={{ backgroundColor: color }}>
@@ -68,7 +72,7 @@ const LiveResult = ({ color, image }) => {
         <img src="https://pngimg.com/uploads/confetti/confetti_PNG87007.png" alt="confettti" style={styles.confetti} />
       </header>
       <main style={{ position: 'relative' }}>
-        <img src={image} alt="gift" style={styles.gift} />
+        <img src={`${BACKEND_HOST}/${image}`} alt="gift" style={styles.gift} />
         <p>{text}</p>
       </main>
       <footer style={styles.footer}>
@@ -76,7 +80,11 @@ const LiveResult = ({ color, image }) => {
           С уваженем,
           <br />
           коллектив ООО
-          <b> ”Транспортные системы”</b>
+          <b>
+            ”
+            {company}
+            ”
+          </b>
         </p>
       </footer>
     </Container>

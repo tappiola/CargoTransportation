@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const path = require('path');
 const { authorize } = require('../middlewares/auth');
 const { CongratulationTemplate } = require('../models');
 
@@ -7,44 +6,45 @@ const router = Router();
 const auth = authorize();
 
 router.post('/', auth, async (req, res) => {
-  const { companyId, files } = req;
-  const { color, text, userId } = req.body;
-  console.log(color, text, userId);
+  const { companyId: linkedCompanyId, files } = req;
+  const { color, text, userId, image } = JSON.parse(req.body.data);
 
-  if (files && companyId) {
-    const { image } = files;
-    const randomName = `${Date.now()}.${image.name.split('.')[1]}`;
+  let template = await CongratulationTemplate.findOne({ where: { userId } });
 
-    await CongratulationTemplate.create({
-      linkedCompanyId: companyId,
-      image: randomName,
-      color,
-      text,
-      userId,
-    });
+  const data = { linkedCompanyId, color, text, userId };
 
+  if (template) {
+    await template.update(data);
+  } else {
+    template = await CongratulationTemplate.create(data);
+  }
+
+  if (files) {
+    const { image: file } = files;
+    const randomName = `${Date.now()}.${file.name.split('.')[1]}`;
+
+    template.image = randomName;
     image.mv(`uploads/templates/${randomName}`);
-    
+
     return res.status(204).end();
   }
-  return res.status(500).end();
-});
 
-router.get('/images/:image', auth, async (req, res) => {
-  const { image } = req.params;
+  template.image = image;
+  template.save();
 
-  const options = {
-    root: path.join(__dirname, '../../uploads/templates'),
-  };
-
-  res.sendFile(image, options);
+  return res.status(204).end();
 });
 
 router.get('/:userId', auth, async (req, res) => {
   const { userId } = req.params;
-  const { image, text, color } = await CongratulationTemplate.findOne({ where: { userId } });
+  // await CongratulationTemplate.sync({ force: true });
+  const template = await CongratulationTemplate.findOne({ where: { userId } });
 
-  res.json({ image, text, color });
+  if (template) {
+    return res.status(200).json(template);
+  }
+
+  return res.status(404).end();
 });
 
 module.exports = router;
