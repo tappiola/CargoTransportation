@@ -28,7 +28,7 @@ export const useStyles = makeStyles(() => ({
     position: 'absolute',
     top: 50,
     display: 'inline-block',
-    fontSize: 24,
+    fontSize: 20,
     marginLeft: 20,
     fontFamily: 'Arial',
     zIndex: 1,
@@ -43,7 +43,7 @@ export const useStyles = makeStyles(() => ({
   text: {
     zIndex: 2,
     fontFamily: 'sans-serif',
-    fontSize: 20,
+    fontSize: 16,
   },
   footer: {
     fontStyle: 'italic',

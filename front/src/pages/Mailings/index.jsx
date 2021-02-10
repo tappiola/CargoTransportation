@@ -51,9 +51,9 @@ export default function Mailings() {
   };
 
   useEffect(async () => {
-    setValue('birthday', user.birthday);
+    setValue('birthday', user?.birthday);
 
-    getTemplate(user.id).then(
+    getTemplate(user?.id).then(
       ({ color, text, image }) => {
         setSelectedColor(color);
         setSelectedImage(image);

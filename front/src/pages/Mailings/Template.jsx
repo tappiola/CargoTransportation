@@ -20,10 +20,10 @@ const Template = ({ color, image, user }) => {
       <header className={classes.header}>
         <h1 className={classes.h1}>
           <strong>
-            {`Уважаемый ${user?.firstName} ${user?.middleName || ''}!`}
+            {`Уважаемый ${user?.firstName || '...'} ${user?.middleName || ''}!`}
           </strong>
           <br />
-          {`Поздраляем Вас с ${age}-летием.`}
+          {`Поздраляем Вас с ${age || '...'}-летием.`}
         </h1>
         <img
           src="https://pngimg.com/uploads/confetti/confetti_PNG87007.png"

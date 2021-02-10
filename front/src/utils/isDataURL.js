@@ -1,1 +1,1 @@
-export const isDataURL = (str) => str.split('/')[0] === 'data:image';
+export const isDataURL = (str) => str?.split && str.split('/')[0] === 'data:image';

@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   fullWidth: {
     flex: 1,
+    padding: theme.spacing(3),
   },
   image: {
     width: 100,
