@@ -5,14 +5,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { Button } from '@material-ui/core';
-import {
-  cyan, green, grey, red, blue, amber,
-} from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import { Add } from '@material-ui/icons';
 
-import LiveResult from './LiveResult';
 import { useStyles } from './Mailing.styles';
+import Template from './Template';
+import { templateResolver } from './templateResolver';
 import { getTemplate } from 'api';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
@@ -22,58 +20,57 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPapper from 'components/PaddedPaper';
 import { BACKEND_HOST } from 'constants/environment';
-import { getAuthToken } from 'utils';
-
-const COLORS = [cyan, green, grey, red, blue, amber];
-const DEFAULT_IMAGES = [
-  'default1.png',
-  'default2.png',
-  'default3.png',
-];
+import { COLORS, DEFAULT_IMAGES } from 'constants/template';
+import { getAuthToken, isDataURL } from 'utils';
 
 export default function Mailings() {
   const classes = useStyles();
   const { employeesData } = useSelector(({ employees }) => employees);
   const { setValue, handleSubmit, ...methods } = useForm({
-    defaultValues: employeesData[0],
+    resolver: templateResolver,
+    reValidateMode: 'onBlur',
   });
 
-  const [selectedImage, setSelectedImage] = useState(DEFAULT_IMAGES[0]);
   const [userImages, setUserImages] = useState([]);
-  const [selectedColor, setSelectedColor] = useState('#fff');
   const [user, setUser] = useState(employeesData[0]);
+  const [selectedColor, setSelectedColor] = useState('#fff');
+  const [selectedImage, setSelectedImage] = useState(DEFAULT_IMAGES[0]);
 
   const loadFiles = ({ target: { files } }) => {
     const [file] = files;
 
-    if (!file) { return; }
+    if (!file) {
+      return;
+    }
 
     const reader = new FileReader();
-    reader.onload = ({ target: { result } }) => setUserImages([...userImages, result]);
-
+    reader.onload = ({ target: { result } }) => {
+      setUserImages([...userImages, result]);
+    };
     reader.readAsDataURL(file);
   };
 
   useEffect(async () => {
-    if (!user?.id) {
-      return;
-    }
     setValue('birthday', user.birthday);
-    getTemplate(user.id)
-      .then(({ color, text, image }) => {
+
+    getTemplate(user.id).then(
+      ({ color, text, image }) => {
         setSelectedColor(color);
-        setValue('text', text);
         setSelectedImage(image);
-      })
-      .catch(() => console.log('not found'));
+        setValue('text', text || '');
+      },
+    );
   }, [user?.id]);
 
-  const sendFormData = async (data) => {
+  const sendFormData = async ({ text }) => {
     const formData = new FormData();
 
-    formData.append('image', data.image[0]);
+    formData.append('image', methods.getValues('image')[0]);
     formData.append('data', JSON.stringify({
-      color: selectedColor, userId: user.id, text: data.text, image: selectedImage,
+      userId: user.id,
+      color: selectedColor,
+      image: isDataURL(selectedImage) ? 'file' : selectedImage,
+      text,
     }));
 
     await fetch('http://localhost:5000/api/mails', {
@@ -95,14 +92,16 @@ export default function Mailings() {
             <form onSubmit={handleSubmit(sendFormData)}>
               <PaddedPapper title="Текст шаблона">
                 <ControlledAutocomplete
-                  name="fullName"
+                  name="user"
+                  fieldName="fullName"
                   label="Пользователь"
                   options={employeesData}
                   getOptionSelected={({ id: opt }, { id: val }) => (!opt) || opt === val}
                   onSelectionChange={(option) => setUser(option)}
                   getOptionLabel={(option) => option.fullName || option}
+                  defaultValue={employeesData[0]}
                 />
-                <ControlledField name="birthday" label="Дата рождения" type="date" InputLabelProps={{ shrink: true }} />
+                <ControlledField name="birthday" label="Дата рождения" type="date" InputLabelProps={{ shrink: true }} disabled />
                 <ControlledField name="text" label="Текст поздравления" multiline />
               </PaddedPapper>
 
@@ -123,11 +122,14 @@ export default function Mailings() {
               <PaddedPapper title="Изображение">
                 <Grid container spacing={1} wrap="wrap">
                   {[...DEFAULT_IMAGES, ...userImages].map((src) => (
-                    src && (
-                      <Grid item key={src}>
-                        <img src={`${BACKEND_HOST}/${src}`} alt="avatar" className={classes.image} onClick={() => setSelectedImage(src)} />
-                      </Grid>
-                    )
+                    <Grid item key={src}>
+                      <img
+                        alt="avatar"
+                        className={classes.image}
+                        onClick={() => setSelectedImage(src)}
+                        src={isDataURL(src) ? src : `${BACKEND_HOST}/${src}`}
+                      />
+                    </Grid>
                   ))}
                   <Grid item>
                     <Button variant="contained" component="label" color="secondary" className={classes.image}>
@@ -143,7 +145,7 @@ export default function Mailings() {
 
           <Grid item xs={12} md={6} xl={8} className={classes.template}>
             <PaddedPapper title="Итоговый результат" className={classes.fullWidth}>
-              <LiveResult color={selectedColor} image={selectedImage} user={user} />
+              <Template color={selectedColor} image={selectedImage} user={user} />
             </PaddedPapper>
           </Grid>
         </Grid>

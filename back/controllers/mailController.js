@@ -7,44 +7,32 @@ const auth = authorize();
 
 router.post('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId, files } = req;
-  const { color, text, userId, image } = JSON.parse(req.body.data);
+  const data = JSON.parse(req.body.data);
 
-  let template = await CongratulationTemplate.findOne({ where: { userId } });
-
-  const data = { linkedCompanyId, color, text, userId };
+  let template = await CongratulationTemplate.findOne({ where: { userId: data.userId } });
 
   if (template) {
-    await template.update(data);
+    await template.update({ ...data, linkedCompanyId });
   } else {
-    template = await CongratulationTemplate.create(data);
+    template = await CongratulationTemplate.create({ ...data, linkedCompanyId });
   }
 
   if (files) {
-    const { image: file } = files;
-    const randomName = `${Date.now()}.${file.name.split('.')[1]}`;
-
+    const randomName = `${Date.now()}.${files.image.name.split('.')[1]}`;
+    files.image.mv(`uploads/templates/${randomName}`);
     template.image = randomName;
-    image.mv(`uploads/templates/${randomName}`);
-
-    return res.status(204).end();
+    template.save();
   }
-
-  template.image = image;
-  template.save();
-
+  
   return res.status(204).end();
 });
 
 router.get('/:userId', auth, async (req, res) => {
-  const { userId } = req.params;
   // await CongratulationTemplate.sync({ force: true });
+  const { userId } = req.params;
   const template = await CongratulationTemplate.findOne({ where: { userId } });
 
-  if (template) {
-    return res.status(200).json(template);
-  }
-
-  return res.status(404).end();
+  return res.status(200).json(template || {});
 });
 
 module.exports = router;
