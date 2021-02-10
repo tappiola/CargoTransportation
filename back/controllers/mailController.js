@@ -28,7 +28,6 @@ router.post('/', auth, async (req, res) => {
 });
 
 router.get('/:userId', auth, async (req, res) => {
-  // await CongratulationTemplate.sync({ force: true });
   const { userId } = req.params;
   const template = await CongratulationTemplate.findOne({ where: { userId } });
 
