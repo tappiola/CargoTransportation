@@ -1,35 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
 
 import PaddedContainer from 'components/PaddedContainer';
+import PaddedPaper from 'components/PaddedPaper';
 import { THEME } from 'constants/themes';
 
 export default function Settings({ theme, onThemeChange }) {
+  const [muted, setMuted] = useState(localStorage.getItem('muted') === 'true');
+
+  const switchMuted = () => {
+    localStorage.setItem('muted', !muted);
+    setMuted(!muted);
+  };
+
+  const switchTheme = () => (
+    onThemeChange(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK)
+  );
+
   return (
     <PaddedContainer>
-      <Typography component="h1" variant="h5" color="inherit" noWrap>
-        Настройки
-      </Typography>
-      <Typography variant="h6" color="inherit" noWrap>
-        Выбрать тему
-      </Typography>
-      <Grid component="label" container alignItems="center" spacing={1}>
-        <Grid item>Светлая</Grid>
-        <Grid item>
-          <Switch
-            checked={theme === THEME.DARK}
-            onChange={() => {
-              onThemeChange(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK);
-            }}
-            value="checked"
-            color="primary"
+      <PaddedPaper title="Настройки">
+        <Grid container direction="column">
+          <FormControlLabel
+            control={<Switch checked={theme === THEME.DARK} onChange={switchTheme} />}
+            label="Темная тема"
+          />
+          <FormControlLabel
+            control={<Switch checked={muted} onChange={switchMuted} />}
+            label="Показ уведомлений"
           />
         </Grid>
-        <Grid item>Темная</Grid>
-      </Grid>
+      </PaddedPaper>
     </PaddedContainer>
   );
 }

@@ -14,6 +14,7 @@ const {
   ROLES: { ADMIN, MANAGER, DISPATCHER },
   CONSIGNMENT_NOTES_STATUSES_ID: { ACCEPTED, VERIFIED },
 } = require('../constants');
+const { toastEmmiter, EVENTS } = require('../constants/events');
 
 const router = Router();
 const auth = authorize(ADMIN, MANAGER, DISPATCHER);
@@ -47,9 +48,10 @@ router.get('/', auth, async (req, res) => {
         model: User,
         as: 'createdBy',
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      },{
+      },
+      {
         model: Waybill,
-      }
+      },
     ],
   });
 
@@ -71,13 +73,18 @@ router.delete('/', auth, async (req, res) => {
 router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
   const { companyId: linkedCompanyId, userId: createdById } = req;
   const {
-    number, passportNumber, passportIssuedBy, passportIssuedAt, goods, ...consignmentNoteData
+    number,
+    passportNumber,
+    passportIssuedBy,
+    passportIssuedAt,
+    goods,
+    ...consignmentNoteData
   } = req.body;
 
   const existingNote = await ConsignmentNote.findOne({ where: { number } });
 
-  if(existingNote){
-    res.status(400).json({ message: `ТТН ${number} уже существует` } );
+  if (existingNote) {
+    res.status(400).json({ message: `ТТН ${number} уже существует` });
   }
 
   const newNote = {
@@ -97,7 +104,7 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
     userId: consignmentNoteData.driverId,
   });
 
-  await Good.bulkCreate(goods.map(good => ({ ...good, goodStatusId: 1, consignmentNoteId: id })));
+  await Good.bulkCreate(goods.map((good) => ({ ...good, goodStatusId: 1, consignmentNoteId: id })));
 
   res.status(200).json({ id, consignmentNote: number });
 });
@@ -105,11 +112,9 @@ router.post('/create', [auth, validate.consignmentNote], async (req, res) => {
 router.put('/', auth, async (req, res) => {
   const { id } = req.body;
 
-  await ConsignmentNote.update(
-    { consignmentNoteStatusId: VERIFIED },
-    { where: { id } },
-  );
-
+  await ConsignmentNote.update({ consignmentNoteStatusId: VERIFIED }, { where: { id } });
+  toastEmmiter.emit(EVENTS.CONSIGNMENT_NOTE_ADDED);
+ 
   res.status(204).end();
 });
 
@@ -141,12 +146,13 @@ router.get('/:id', auth, async (req, res) => {
         model: User,
         as: 'createdBy',
         attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
-      }],
+      },
+    ],
   });
 
   const goods = await Good.findAll({ where: { consignmentNoteId } });
 
-  res.status(200).json({  consignmentNote, goods });
+  res.status(200).json({ consignmentNote, goods });
 });
 
 module.exports = router;
