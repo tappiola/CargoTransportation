@@ -30,7 +30,7 @@ export default function Settings({ theme, onThemeChange }) {
           />
           <FormControlLabel
             control={<Switch checked={muted} onChange={switchMuted} />}
-            label="Показ уведомлений"
+            label="Скрыть уведомления"
           />
         </Grid>
       </PaddedPaper>

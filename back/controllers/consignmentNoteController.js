@@ -151,6 +151,7 @@ router.get('/:id', auth, async (req, res) => {
   });
 
   const goods = await Good.findAll({ where: { consignmentNoteId } });
+  toastEmmiter.emit(EVENTS.CONSIGNMENT_NOTE_ADDED);
 
   res.status(200).json({ consignmentNote, goods });
 });
