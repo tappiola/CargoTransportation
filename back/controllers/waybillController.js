@@ -68,7 +68,7 @@ router.put('/:id', auth, async (req, res) => {
   if (points) {
     await ControlPoint.bulkCreate(
       points.map((controlPoint) => ({
-        controlPointStatusId: CONTROL_POINT_STATUSES_ID.sEXPECTED,
+        controlPointStatusId: CONTROL_POINT_STATUSES_ID.EXPECTED,
         waybillId: id,
         ...controlPoint,
       }))
