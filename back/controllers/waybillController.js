@@ -83,7 +83,9 @@ router.get('/mobile/:driverId', async (req, res) => {
         where: { driverId },
         include: [{ model: Client }, { model: Good }],
       },
-      { model: Warehouse },
+      {
+        model: Warehouse
+      },
       {
         model: ControlPoint,
         order: [
@@ -97,7 +99,7 @@ router.get('/mobile/:driverId', async (req, res) => {
     ],
   });
 
-  res.status(200).json(waybills);
+  return res.status(200).json(waybills);
 });
 
 router.put('/mobile/checkPoint/:pointId', auth, async (req, res) => {
@@ -111,7 +113,25 @@ router.put('/mobile/checkPoint/:pointId', auth, async (req, res) => {
     { where: { id: req.params.pointId } },
   );
 
-  res.status(200).json(updatedPoint);
+  return res.status(200).json(updatedPoint);
+});
+
+router.put('/mobile/finish/:id', async (req, res) => {
+  const {id} = req.params;
+  const waybill = await Waybill.findOne({where: {id}});
+
+  if (!waybill) {
+    return res.status(400).json({error: {message: 'Путевой лист не найден.'}});
+  }
+
+  try {
+    waybill.waybillStatusId = WAYBILL_STATUSES_ID.COMPLETED;
+    await waybill.save();
+
+    res.status(200);
+  } catch (e) {
+    console.log(e.message);
+  }
 });
 
 module.exports = router;
