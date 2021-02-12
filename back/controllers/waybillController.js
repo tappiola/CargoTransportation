@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client } = require('../models');
+const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint, ControlPointStatus } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES, WAYBILL_STATUSES_ID } = require('../constants');
 
@@ -64,6 +64,54 @@ router.post('/', auth, async (req, res) => {
   });
 
   res.status(200).json({ id });
+});
+
+router.get('/mobile/:driverId', async (req, res) => {
+  const { driverId } = req.params;
+
+  if (!driverId) {
+    return res.status(400);
+  }
+
+  const waybills = await Waybill.findAll({
+    include: [
+      {
+        model: WaybillStatus,
+      },
+      {
+        model: ConsignmentNote,
+        where: { driverId },
+        include: [{ model: Client }, { model: Good }],
+      },
+      { model: Warehouse },
+      {
+        model: ControlPoint,
+        order: [
+          ['expectedArrivalAt', 'ASC'],
+        ],
+        include: [{ model: ControlPointStatus }],
+      },
+    ],
+    order: [
+      ['id', 'DESC'],
+    ],
+  });
+
+  res.status(200).json(waybills);
+});
+
+router.put('/mobile/checkPoint/:pointId', auth, async (req, res) => {
+  const point = await ControlPoint.findOne({ where: { id: req.params.pointId } });
+  if (!point) {
+    res.status(400);
+  }
+
+  const updatedPoint = await ControlPoint.update(
+    { controlPointStatusId: 2 },
+    { where: { id: req.params.pointId } },
+  );
+
+  res.status(200).json(updatedPoint);
 });
 
 module.exports = router;
