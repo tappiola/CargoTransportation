@@ -8,8 +8,10 @@ const elasticRouter = require('../controllers/elasticController');
 const documentController = require('../controllers/documentController');
 const mailController = require('../controllers/mailController');
 const publicController = require('../controllers/publicController');
+const notificationController = require('../controllers/notificationController');
 
 module.exports = (app) => {
+  app.ws('/notifications', notificationController);
   app.use('/api/elastic', elasticRouter);
   app.use('/api/users', userRouter);
   app.use('/api/employees', employeeRouter);
