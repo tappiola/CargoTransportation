@@ -32,7 +32,7 @@ const verifyUser = async (req, res, next, roles) => {
     req.companyId = user.companyId;
     req.userId = user.id;
     req.fullName = user.fullName;
-    req.companyName = user.company?.name;
+    req.companyName = user.company ? user.company.name : null;
     req.roles = user.roles.map(({ role }) => role);
     
     return next();

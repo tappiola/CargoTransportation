@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import * as actionTypes from './actionTypes';
 import { enqueueToast } from './notifications';
 import * as api from 'api';
+import { BACKEND_HOST } from 'constants/environment';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
 
@@ -52,7 +53,7 @@ export const refreshTokenIfExpired = () => {
   if (lsToken) {
     const { exp } = jwtDecode(lsToken);
     if (exp && exp > Date.now()) {
-      updateToken()
+      api.updateToken()
         .then((res) => localStorage.setItem('token', res.updateToken));
     }
   }
@@ -60,4 +61,26 @@ export const refreshTokenIfExpired = () => {
 
 export const getUserProfile = () => (dispatch) => {
   api.getUserProfile().then((data) => dispatch(setUserProfile(data)));
+};
+
+export const subscribeOnMessages = () => (dispatch) => {
+  const url = new URL(BACKEND_HOST);
+  url.protocol = 'ws:';
+
+  let ws = new WebSocket(`${url.origin}/notifications`);
+
+  ws.onmessage = ({ data }) => {
+    const { type, message } = JSON.parse(data);
+    const isMuted = localStorage.getItem('muted') === 'true';
+
+    if (isMuted) {
+      return;
+    }
+
+    dispatch(enqueueToast({ message, type }));
+  };
+
+  ws.onerror = () => {
+    ws = new WebSocket(`${url.origin}/notifications`);
+  };
 };

@@ -14,5 +14,5 @@ export { dispatchGetWaybills, dispatchDeleteWaybills } from './waybills';
 export { dispatchGetConsignmentNotes, dispatchDeleteConsignmentNotes, dispatchCreateConsignmentNote } from './consignmentNotes';
 export { enqueueToast, processToast } from './notifications';
 export {
-  loginUser, dispatchLogoutUser, authorizationCompleted, getUserProfile,
+  loginUser, dispatchLogoutUser, authorizationCompleted, getUserProfile, subscribeOnMessages,
 } from './currentUser';

@@ -3,3 +3,5 @@ node_modules
 .env
 .editorconfig
 logs
+.vscode
+uploads

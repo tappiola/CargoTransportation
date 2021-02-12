@@ -11,10 +11,10 @@ const Title = ({ children }) => (
   </Typography>
 );
 
-export default function PaddedPaper({ title, children }) {
+export default function PaddedPaper({ title, children, ...props }) {
   const classes = usePaperStyles();
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} {...props}>
       <Title>{title}</Title>
       {children}
     </Paper>

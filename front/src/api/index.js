@@ -11,7 +11,9 @@ export {
 export {
   getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse, getWarehouse,
 } from './warehouses';
-export { getWaybills, deleteWaybills, precreateWaybill } from './waybills';
+export {
+  getWaybills, deleteWaybills, updateWaybill, getWaybill, precreateWaybill,
+} from './waybills';
 export { getOptions } from './elastic';
 export {
   getConsignmentNotes,
@@ -21,3 +23,4 @@ export {
   aproveConsignmentNote,
 } from './consignmentNotes';
 export { getDocuments } from './documents';
+export { setTemplate, getTemplate } from './mail';

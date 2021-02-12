@@ -6,6 +6,7 @@ const routes = require('./back/routes');
 const serverConfig = require('./back/config/server.config');
 const errorHandler = require('./back/middlewares/errorHandler');
 const serverStart = require('./back/config/server.start');
+const expressWs = require('express-ws')(app);
 
 serverConfig(app);
 routes(app);
