@@ -128,7 +128,7 @@ router.put('/mobile/finish/:id', async (req, res) => {
     waybill.waybillStatusId = WAYBILL_STATUSES_ID.COMPLETED;
     await waybill.save();
 
-    res.status(200);
+    res.status(200).json(waybill);
   } catch (e) {
     console.log(e.message);
   }
