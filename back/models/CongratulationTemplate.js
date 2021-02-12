@@ -11,6 +11,12 @@ const CongratulationTemplate = db.define('congratulation_template', {
   text: {
     type: DataTypes.STRING,
   },
+  image: {
+    type: DataTypes.STRING,
+  },
+  color: {
+    type: DataTypes.STRING,
+  },
 });
 
 module.exports = CongratulationTemplate;

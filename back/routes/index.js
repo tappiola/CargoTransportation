@@ -6,6 +6,8 @@ const consignmentNoteRouter = require('../controllers/consignmentNoteController'
 const waybillRouter = require('../controllers/waybillController');
 const elasticRouter = require('../controllers/elasticController');
 const documentController = require('../controllers/documentController');
+const mailController = require('../controllers/mailController');
+const publicController = require('../controllers/publicController');
 const notificationController = require('../controllers/notificationController');
 
 module.exports = (app) => {
@@ -18,4 +20,6 @@ module.exports = (app) => {
   app.use('/api/consignment-notes', consignmentNoteRouter);
   app.use('/api/waybills', waybillRouter);
   app.use('/api/documents', documentController);
+  app.use('/api/mails', mailController);
+  app.use('/', publicController);
 };
