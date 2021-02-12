@@ -11,7 +11,7 @@
     "start": "node server.js",
     "heroku-postbuild": "cd front && npm install && npm run build",
     "precommit": "lint-staged",
-    "lint": "npx eslint back --ext .js",
+    "lint": "npx eslint back",
     "lint-fix": "npx eslint back --fix"
   },
   "keywords": [],

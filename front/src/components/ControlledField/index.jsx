@@ -24,4 +24,7 @@ const ControlledField = ({
   );
 };
 
+export const DateField = ({ ...props }) => <ControlledField {...props} type="date" InputLabelProps={{ shrink: true }} />;
+export const DateTimeField = ({ ...props }) => <ControlledField {...props} type="datetime-local" InputLabelProps={{ shrink: true }} />;
+
 export default ControlledField;

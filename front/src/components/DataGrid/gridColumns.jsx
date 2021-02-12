@@ -1,10 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Link } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
+import { Link, Checkbox, Button } from '@material-ui/core';
+import { Search as SearchIcon, Edit as EditIcon, LocalShipping } from '@material-ui/icons';
 
-import NavButton from '../Buttons/NavButton';
 import { ROLE_NAMES } from 'constants/permissions';
 import { URLS } from 'constants/urls';
 
@@ -101,53 +100,55 @@ export const TNN_NUMBER = (path) => ({
 export const TTN_STATUS = {
   field: 'consignment_note_status',
   headerName: 'Статус',
-  flex: 2,
-  renderCell: ({ value }) => value.status,
+  width: 160,
+  renderCell: ({ value }) => value?.status,
 };
 
 export const TTN_CLIENT = {
   field: 'client',
   headerName: 'Клиент',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_MANAGER = {
   field: 'assignedTo',
   headerName: 'Менеджер',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_DRIVER = {
   field: 'driver',
   headerName: 'Водитель',
   flex: 4,
-  renderCell: ({ value }) => value.shortFullName,
+  renderCell: ({ value }) => value?.shortFullName,
 };
 
 export const TTN_WAYBILL = {
   field: 'waybill',
-  headerName: 'Путевой лист',
-  flex: 3,
+  headerName: <LocalShipping fontSize="large" style={{ margin: '24px 16px 0' }} />,
+  width: 90,
   renderCell: ({ value }) => (value
     ? (
-      <NavButton
-        color="primary"
+      <Button
         variant="outlined"
+        color="primary"
         to={`${URLS.WAYBILLS}/${value.id}`}
+        component={NavLink}
       >
-        Просмотреть
-      </NavButton>
+        <SearchIcon fontSize="small" />
+      </Button>
     )
     : (
-      <NavButton
-        color="secondary"
+      <Button
         variant="outlined"
+        color="primary"
+        component={NavLink}
         to={`${URLS.WAYBILLS}/new`}
       >
-        Создать
-      </NavButton>
+        <EditIcon fontSize="small" />
+      </Button>
     )),
 };
 
