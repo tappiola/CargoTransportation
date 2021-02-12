@@ -5,3 +5,4 @@ export { getHelperText } from './getHelperText';
 export { throttle } from './throttle';
 export { usePending } from './usePending';
 export { useElastic } from './useElastic';
+export { isDataURL } from './isDataURL';

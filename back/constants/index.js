@@ -46,9 +46,26 @@ const WAYBILL_STATUSES_ID = {
   IN_PROCESS: 4,
 };
 
+
+const SOCKET_STATUSES = {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3,
+};
+
+const TOAST_TYPES = {
+  SUCCESS: 'success',
+  ERROR: 'error',
+  WARNING: 'warning',
+  INFO: 'info',
+};
+
 module.exports = {
   ROLES,
   ALL_ROLES,
+  TOAST_TYPES,
+  SOCKET_STATUSES,
   WAYBILL_STATUSES,
   WAYBILL_STATUSES_ID,
   CONTROL_POINT_STATUSES,

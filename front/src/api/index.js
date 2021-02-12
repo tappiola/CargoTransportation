@@ -23,3 +23,4 @@ export {
   aproveConsignmentNote,
 } from './consignmentNotes';
 export { getDocuments } from './documents';
+export { setTemplate, getTemplate } from './mail';
