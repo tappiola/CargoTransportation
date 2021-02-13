@@ -150,18 +150,20 @@ router.get('/mobile/:driverId', async (req, res) => {
   return res.status(200).json(waybills);
 });
 
-router.put('/mobile/checkPoint/:pointId', auth, async (req, res) => {
+router.put('/mobile/checkPoint/:pointId', async (req, res) => {
   const point = await ControlPoint.findOne({ where: { id: req.params.pointId } });
   if (!point) {
     res.status(400);
   }
 
-  const updatedPoint = await ControlPoint.update(
-    { controlPointStatusId: 2 },
-    { where: { id: req.params.pointId } },
-  );
+  try {
+    point.controlPointStatusId = 2;
+    await point.save();
 
-  return res.status(200).json(updatedPoint);
+    return res.status(200).json(point);
+  } catch (e) {
+    return res.status(400).json({error:{message:e.message}});
+  }
 });
 
 router.put('/mobile/finish/:id', async (req, res) => {
@@ -176,9 +178,9 @@ router.put('/mobile/finish/:id', async (req, res) => {
     waybill.waybillStatusId = WAYBILL_STATUSES_ID.COMPLETED;
     await waybill.save();
 
-    res.status(200).json(waybill);
+    return res.status(200).json(waybill);
   } catch (e) {
-    console.log(e.message);
+    return res.status(400).json({error:{message:e.message}});
   }
 });
 
