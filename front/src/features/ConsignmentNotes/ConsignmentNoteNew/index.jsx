@@ -53,12 +53,10 @@ function ConsignmentNoteNew() {
 
   const methods = useForm({ resolver, mode: 'onBlur' });
   const { handleSubmit } = methods;
-  const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)))
-    .then(() => {
-      history.push(history.push(URLS.CONSIGNMENT_NOTES));
-    })
+    .then(() => history.push(history.push(URLS.CONSIGNMENT_NOTES)))
     .catch((e) => {
       dispatch(
         enqueueToast({
@@ -77,7 +75,7 @@ function ConsignmentNoteNew() {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(handler)}>
             <PaddedPaper title="Шаг 1 - выберите клиента">
-              <ClientForm onAddClient={() => setIsClientDialogOpen(true)} />
+              <ClientForm onAddClient={() => setIsDialogOpen(true)} />
             </PaddedPaper>
             <PaddedPaper title="Шаг 2 - заполните данные ТТН">
               <ConsignmentNoteForm />
@@ -97,10 +95,10 @@ function ConsignmentNoteNew() {
       </PaddedContainer>
       <FormDialog
         title="Добавление клиента"
-        isOpen={isClientDialogOpen}
-        onClose={() => setIsClientDialogOpen(false)}
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
       >
-        <Client isPopup onPopupClose={() => setIsClientDialogOpen(false)} />
+        <Client isPopup onPopupClose={() => setIsDialogOpen(false)} />
       </FormDialog>
     </>
   );

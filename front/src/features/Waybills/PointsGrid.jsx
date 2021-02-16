@@ -93,11 +93,9 @@ export const PointsGrid = ({ errors }) => {
           },
         ]}
         checkboxSelection={false}
-        hideFooter
+        components={{ footer: GridFooter }}
         disableColumnFilter
-        components={{
-          footer: GridFooter,
-        }}
+        hideFooter
       />
     </Grid>
   );

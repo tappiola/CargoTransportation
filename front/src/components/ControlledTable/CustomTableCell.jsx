@@ -6,17 +6,15 @@ import TableCell from '@material-ui/core/TableCell';
 import BaseField from '../ControlledField';
 import { useStyles } from './ControlledTable.styles';
 
-const CustomTableCell = (
-  {
-    rowIndex,
-    row,
-    isEditMode,
-    name,
-    label,
-    onChange,
-    tableName,
-  },
-) => {
+const CustomTableCell = ({
+  rowIndex,
+  row,
+  isEditMode,
+  name,
+  label,
+  onChange,
+  tableName,
+}) => {
   const { register, errors } = useFormContext();
   const classes = useStyles();
 

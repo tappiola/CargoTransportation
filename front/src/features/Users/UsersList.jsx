@@ -21,7 +21,7 @@ function UsersList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const usersData = useSelector(({ users }) => usersSelector(users));
   const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
@@ -47,27 +47,22 @@ function UsersList() {
       <PaddedContainer>
         <GridToolbar title="Пользователи">
           <NavButton color="primary" to={`${path}/new`}>Новый пользователь</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={usersData}
           columns={columns}
           loading={!usersLoadComplete}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
+          onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isDialogOpen && (
         <ConfirmDialog
           title="Удаление пользователей"
           description="Вы уверены, что хотите удалить выбранных пользователей?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
+            setIsDialogOpen(false);
             dispatch(dispatchDeleteUsers(selection));
             setSelection([]);
           }}

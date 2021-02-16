@@ -66,9 +66,8 @@ const ProtectedApp = ({
 };
 
 function App() {
-  const {
-    isAuthorized, roles, fullName, company,
-  } = useSelector(({ currentUser }) => currentUser);
+  const dispatch = useDispatch();
+  const { isAuthorized, roles, fullName, company } = useSelector(({ currentUser }) => currentUser);
   const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
 
   useEffect(() => {
@@ -77,12 +76,10 @@ function App() {
 
   useEffect(() => refreshTokenIfExpired(), []);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     if (isAuthorized) {
       dispatch(getUserProfile());
       dispatch(subscribeOnMessages());
-      // initialize WebSocket
     }
   }, [isAuthorized]);
 

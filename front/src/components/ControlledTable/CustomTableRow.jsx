@@ -61,18 +61,12 @@ const CustomTableRow = (
           {isEditMode ? (
             <>
               <Tooltip title="Сохранить">
-                <IconButton
-                  aria-label="done"
-                  onClick={validateRow}
-                >
+                <IconButton aria-label="done" onClick={validateRow}>
                   <DoneIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Отменить">
-                <IconButton
-                  aria-label="revert"
-                  onClick={() => onCancel(previousData)}
-                >
+                <IconButton aria-label="revert" onClick={() => onCancel(previousData)}>
                   <RevertIcon />
                 </IconButton>
               </Tooltip>
@@ -91,10 +85,7 @@ const CustomTableRow = (
                 </IconButton>
               </Tooltip>
               <Tooltip title="Удалить">
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => setIsConfirmDialogOpen(true)}
-                >
+                <IconButton aria-label="delete" onClick={() => setIsConfirmDialogOpen(true)}>
                   <DeleteForeverOutlinedIcon />
                 </IconButton>
               </Tooltip>

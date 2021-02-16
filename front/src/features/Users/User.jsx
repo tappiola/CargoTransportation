@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import { userResolver as resolver } from './userResolver';
 import { dispatchSetUser, dispatchUpdateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import BaseField from 'components/ControlledField';
+import BaseField, { DateField } from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
 import { usePending } from 'utils';
 
@@ -83,12 +83,7 @@ function User() {
               </Grid>
             </Grid>
 
-            <BaseField
-              name="birthday"
-              type="date"
-              label="Дата рождения"
-              InputLabelProps={{ shrink: true }}
-            />
+            <DateField name="birthday" label="Дата рождения" />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>

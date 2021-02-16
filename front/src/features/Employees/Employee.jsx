@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import { employeeResolver as resolver } from './employeeResolver';
 import { dispatchSetEmployee, dispatchUpdateEmployee } from './employeesSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import BaseField from 'components/ControlledField';
+import BaseField, { DateField } from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
 import { usePending } from 'utils';
 
@@ -56,10 +56,7 @@ function Employee() {
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
-        <form
-          noValidate
-          onSubmit={handleSubmit(handler)}
-        >
+        <form noValidate onSubmit={handleSubmit(handler)}>
           <Grid container direction="column">
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
@@ -86,12 +83,7 @@ function Employee() {
               </Grid>
             </Grid>
 
-            <BaseField
-              name="birthday"
-              type="date"
-              label="Дата рождения"
-              InputLabelProps={{ shrink: true }}
-            />
+            <DateField name="birthday" label="Дата рождения" />
 
             <FormControl error={!!errors?.roles} margin="normal">
               <FormLabel>Роли:</FormLabel>

@@ -18,15 +18,13 @@ const createData = (columnKeys, values) => ({
   ...Object.fromEntries(columnKeys.map((k, index) => ([k, values[index]]))),
 });
 
-const ControlledTable = (
-  {
-    tableName,
-    tableColumns,
-    columnKeys,
-    confirmDeleteTitle,
-    confirmDeleteDescription,
-  },
-) => {
+const ControlledTable = ({
+  tableName,
+  tableColumns,
+  columnKeys,
+  confirmDeleteTitle,
+  confirmDeleteDescription,
+}) => {
   const classes = useStyles();
   const [rows, setRows] = useState([]);
   const {
@@ -59,11 +57,7 @@ const ControlledTable = (
     <FormControl fullWidth error={!!errors[tableName]}>
       <Table className={classes.table} ref={register}>
         <caption>
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={onRowAdd}
-          >
+          <Button color="secondary" variant="contained" onClick={onRowAdd}>
             Добавить товар
           </Button>
         </caption>

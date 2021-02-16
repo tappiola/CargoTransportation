@@ -1,26 +1,54 @@
-export { fetchAPI } from './fetchAPI';
 export {
-  setUser, updateUser, getUsers, signIn, deleteUsers, updateToken, logoutUser, getUserProfile,
+  getUsers,
+  setUser,
+  updateUser,
+  deleteUsers,
+  signIn,
+  updateToken,
+  logoutUser,
+  getUserProfile,
 } from './users';
+
 export {
-  getEmployees, getEmployeesWithRole, deleteEmployees, setEmployee, updateEmployee,
+  getEmployees,
+  getEmployeesWithRole,
+  setEmployee,
+  updateEmployee,
+  deleteEmployees,
 } from './employees';
+
 export {
-  getClients, deleteClients, setClient, updateClient,
+  getClients,
+  setClient,
+  updateClient,
+  deleteClients,
 } from './clients';
+
 export {
-  getWarehouses, deleteWarehouses, setWarehouse, updateWarehouse, getWarehouse,
+  getWarehouse,
+  getWarehouses,
+  setWarehouse,
+  updateWarehouse,
+  deleteWarehouses,
 } from './warehouses';
+
 export {
-  getWaybills, deleteWaybills, updateWaybill, getWaybill, precreateWaybill,
+  getWaybill,
+  getWaybills,
+  precreateWaybill,
+  updateWaybill,
+  deleteWaybills,
 } from './waybills';
-export { getOptions } from './elastic';
+
 export {
-  getConsignmentNotes,
   getConsignmentNote,
-  deleteConsignmentNotes,
+  getConsignmentNotes,
   createConsignmentNote,
   aproveConsignmentNote,
+  deleteConsignmentNotes,
 } from './consignmentNotes';
+
+export { fetchAPI } from './fetchAPI';
+export { getOptions } from './elastic';
 export { getDocuments } from './documents';
 export { setTemplate, getTemplate } from './mail';

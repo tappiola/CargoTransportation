@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 
 import * as api from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import BaseField from 'components/ControlledField';
+import BaseField, { DateField } from 'components/ControlledField';
 import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
@@ -57,12 +57,7 @@ const DriverForm = () => {
         <BaseField name="passportNumber" label="Номер паспорта" value={passportData.passportNumber} />
       </Grid>
       <Grid item xs={12} md={3}>
-        <BaseField
-          name="passportIssuedAt"
-          label="Дата выдачи паспорта"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-        />
+        <DateField name="passportIssuedAt" label="Дата выдачи паспорта" />
       </Grid>
       <Grid item xs={12} md={6}>
         <BaseField name="passportIssuedBy" label="Место выдачи паспорта" />

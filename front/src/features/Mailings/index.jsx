@@ -10,12 +10,12 @@ import { Add } from '@material-ui/icons';
 
 import { useStyles } from './Mailing.styles';
 import Template from './Template';
-import { templateResolver } from './templateResolver';
+import { templateResolver as resolver } from './templateResolver';
 import { getTemplate } from 'api';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import ControlledField from 'components/ControlledField';
+import ControlledField, { DateField } from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPapper from 'components/PaddedPaper';
@@ -27,7 +27,7 @@ export default function Mailings() {
   const classes = useStyles();
   const { employeesData } = useSelector(({ employees }) => employees);
   const { setValue, handleSubmit, ...methods } = useForm({
-    resolver: templateResolver,
+    resolver,
     reValidateMode: 'onBlur',
   });
 
@@ -101,7 +101,7 @@ export default function Mailings() {
                   getOptionLabel={(option) => option.fullName || option}
                   defaultValue={employeesData[0]}
                 />
-                <ControlledField name="birthday" label="Дата рождения" type="date" InputLabelProps={{ shrink: true }} disabled />
+                <DateField name="birthday" label="Дата рождения" disabled />
                 <ControlledField name="text" label="Текст поздравления" multiline />
               </PaddedPapper>
 

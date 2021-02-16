@@ -21,7 +21,7 @@ function WaybillsList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const waybillsData = useSelector(({ waybills }) => waybillsSelector(waybills));
   const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
@@ -43,27 +43,22 @@ function WaybillsList() {
       <PaddedContainer>
         <GridToolbar title="Путевые листы">
           <NavButton color="primary" to={`${path}/new`}>Добавить путевой лист</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={waybillsData}
           columns={columns}
           loading={!waybillsLoadComplete}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
+          onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isDialogOpen && (
       <ConfirmDialog
         title="Удаление путевых листоы"
         description="Вы уверены, что хотите удалить выбранные путевые листы?"
-        onPopupClose={() => setIsConfirmDialogOpen(false)}
+        onPopupClose={() => setIsDialogOpen(false)}
         onActionConfirm={() => {
-          setIsConfirmDialogOpen(false);
+          setIsDialogOpen(false);
           dispatch(dispatchDeleteWaybills(selection));
           setSelection([]);
         }}

@@ -16,7 +16,7 @@ function EmployeesList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { employeesData, employeesLoadComplete } = useSelector(({ employees }) => employees);
 
   const columns = [
@@ -35,29 +35,22 @@ function EmployeesList() {
       <PaddedContainer>
         <GridToolbar title="Сотрудники">
           <NavButton color="primary" to={`${path}/new`}>Добавить сотрудника</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={employeesData}
           columns={columns}
           loading={!employeesLoadComplete}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
+          onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isDialogOpen && (
         <ConfirmDialog
           title="Удаление сотрудников"
           description="Вы уверены, что хотите удалить выбранных сотрудников?"
-          onPopupClose={() => {
-            setIsConfirmDialogOpen(false);
-          }}
+          onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
+            setIsDialogOpen(false);
             dispatch(dispatchDeleteEmployees(selection));
             setSelection([]);
           }}

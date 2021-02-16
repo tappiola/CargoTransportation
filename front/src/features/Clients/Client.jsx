@@ -16,7 +16,7 @@ import { clientResolver as resolver } from './clientResolver';
 import { dispatchSetClient, dispatchUpdateClient, dispatchGetClients } from './clientsSlice';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import BaseField from 'components/ControlledField';
+import BaseField, { DateField } from 'components/ControlledField';
 import PaddedContainer from 'components/PaddedContainer';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { URLS } from 'constants/urls';
@@ -83,12 +83,7 @@ function Client({ isPopup = false, onPopupClose }) {
                 </Grid>
               </Grid>
 
-              <BaseField
-                name="birthday"
-                type="date"
-                label="Дата рождения"
-                InputLabelProps={{ shrink: true }}
-              />
+              <DateField name="birthday" label="Дата рождения" />
               <FormControl margin="normal">
                 <FormLabel>Статус: </FormLabel>
                 <FormGroup>

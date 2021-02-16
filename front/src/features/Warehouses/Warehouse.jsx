@@ -38,9 +38,8 @@ function User() {
     clientId
       ? dispatchUpdateWarehouse(formData, clientId)
       : dispatchSetWarehouse(formData),
-  ).then(() => {
-    history.push('/warehouses');
-  })
+  )
+    .then(() => history.push('/warehouses'))
     .catch((e) => {
       dispatch(enqueueToast({
         message: `Ошибка при создании склада: ${e.message}`,

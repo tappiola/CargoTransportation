@@ -16,7 +16,7 @@ import * as api from 'api';
 import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
-import ControlledField from 'components/ControlledField';
+import BaseField, { DateField } from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
@@ -82,13 +82,13 @@ function ConsignmentNote() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handler)}>
           <PaddedPaper title="Данные о накладной">
-            <ControlledField name="number" label="Номер накладной" disabled />
-            <ControlledField name="createdBy.shortFullName" label="Зарегистрировал" disabled />
-            <ControlledField name="registerDate" label="Дата регистрации" type="date" InputLabelProps={{ shrink: true }} disabled />
-            <ControlledField name="assignedTo.shortFullName" label="Проверил" disabled />
-            <ControlledField name="issuedDate" label="Дата оформления" type="date" InputLabelProps={{ shrink: true }} disabled />
-            <ControlledField name="client.shortFullName" label="Клиент" disabled />
-            <ControlledField name="driver.shortFullName" label="Водитель" disabled />
+            <BaseField name="number" label="Номер накладной" disabled />
+            <BaseField name="createdBy.shortFullName" label="Зарегистрировал" disabled />
+            <DateField name="registerDate" label="Дата регистрации" disabled />
+            <BaseField name="assignedTo.shortFullName" label="Проверил" disabled />
+            <BaseField name="issuedDate" label="Дата оформления" disabled />
+            <BaseField name="client.shortFullName" label="Клиент" disabled />
+            <BaseField name="driver.shortFullName" label="Водитель" disabled />
           </PaddedPaper>
           <PaddedPaper title="Товарная партия">
             <Table>
@@ -121,7 +121,7 @@ function ConsignmentNote() {
               getOptionLabel={(option) => option.name || ''}
               getOptionSelected={(val, opt) => opt?.warehouse?.name === val?.warehouse?.name}
             />
-            {isNoteIssued && <ControlledField name="warehouse.fullAddress" label="Адрес" disabled />}
+            {isNoteIssued && <BaseField name="warehouse.fullAddress" label="Адрес" disabled />}
           </PaddedPaper>
           <SubmitButton {...bindPending}>Отметить как проверенную</SubmitButton>
         </form>

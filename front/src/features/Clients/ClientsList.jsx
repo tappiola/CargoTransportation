@@ -8,9 +8,7 @@ import { dispatchDeleteClients, dispatchGetClients } from './clientsSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
-import {
-  FULLNAME, EMAIL, COMPANY, STATUS,
-} from 'components/DataGrid/gridColumns';
+import { FULLNAME, EMAIL, COMPANY, STATUS } from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 
@@ -19,7 +17,7 @@ function ClientsList() {
   const { path } = useRouteMatch();
   const { clientsData, clientsLoadComplete } = useSelector(({ clients }) => clients);
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const columns = [FULLNAME(path), EMAIL, COMPANY, STATUS];
 
   useEffect(() => {
@@ -31,10 +29,7 @@ function ClientsList() {
       <PaddedContainer>
         <GridToolbar title="Клиенты">
           <NavButton color="primary" to={`${path}/new`}>Добавить клиента</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={clientsData}
@@ -43,13 +38,13 @@ function ClientsList() {
           onSelectionChange={({ rowIds }) => setSelection(rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isOpen && (
         <ConfirmDialog
           title="Удаление клиентов"
           description="Вы уверены, что хотите удалить выбранных клиентов?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onPopupClose={() => setIsOpen(false)}
           onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
+            setIsOpen(false);
             dispatch(dispatchDeleteClients(selection));
             setSelection([]);
           }}

@@ -32,10 +32,7 @@ const ClientForm = ({ onAddClient }) => {
           />
         </Grid>
         <Grid item xs={12} md={4} lg={3}>
-          <Button
-            variant="contained"
-            onClick={onAddClient}
-          >
+          <Button variant="contained" onClick={onAddClient}>
             Добавить нового клиента
           </Button>
         </Grid>

@@ -16,7 +16,7 @@ function ConsignmentNotesList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {
     consignmentNotesData,
     consignmentNotesLoadComplete,
@@ -40,27 +40,22 @@ function ConsignmentNotesList() {
       <PaddedContainer>
         <GridToolbar title="ТТН">
           <NavButton color="primary" to={`${path}/new`}>Добавить ТТН</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={consignmentNotesData}
           columns={columns}
           loading={!consignmentNotesLoadComplete}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
+          onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isDialogOpen && (
         <ConfirmDialog
           title="Удаление ТТН"
           description="Вы уверены, что хотите удалить выбранные ТТН?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
+            setIsDialogOpen(false);
             dispatch(dispatchDeleteConsignmentNotes(selection));
             setSelection([]);
           }}

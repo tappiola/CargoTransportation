@@ -16,7 +16,7 @@ function WarehousesList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { warehousesData, warehousesLoadComplete } = useSelector(({ warehouses }) => warehouses);
 
   const columns = [
@@ -35,27 +35,22 @@ function WarehousesList() {
       <PaddedContainer>
         <GridToolbar title="Склады">
           <NavButton color="primary" to={`${path}/new`}>Добавить склад</NavButton>
-          <DeleteButton
-            isDisabled={selection.length === 0}
-            onButtonClick={() => { setIsConfirmDialogOpen(true); }}
-          />
+          <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
           rows={warehousesData}
           columns={columns}
           loading={!warehousesLoadComplete}
-          onSelectionChange={(newSelection) => {
-            setSelection(newSelection.rowIds);
-          }}
+          onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
-      {isConfirmDialogOpen && (
+      {isDialogOpen && (
         <ConfirmDialog
           title="Удаление складов"
           description="Вы уверены, что хотите удалить выбранные склады?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
+          onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
+            setIsDialogOpen(false);
             dispatch(dispatchDeleteWarehouses(selection));
             setSelection([]);
           }}
