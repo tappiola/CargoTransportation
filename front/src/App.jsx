@@ -21,7 +21,7 @@ import { URLS } from 'constants/urls';
 import { PROTECTED_ROUTES } from 'pages';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
-import { refreshTokenIfExpired, getUserProfile, subscribeOnMessages } from 'redux/actions/currentUser';
+import { refreshTokenIfExpired, getUserProfile, subscribeOnMessages } from 'redux/reducers/currentUser';
 
 const ProtectedApp = ({
   userRoles, userName, company, theme, setTheme,

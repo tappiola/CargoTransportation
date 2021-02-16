@@ -1,28 +1,53 @@
-import * as types from '../actions/actionTypes';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
+
+import { enqueueToast } from './notifications';
+import * as api from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
 
 const initialState = {
   employeesData: [],
   employeesLoadComplete: false,
 };
 
-export function employeesReducer(state = initialState, action) {
-  switch (action.type) {
-    case types.EMPLOYEES_SET: {
-      return {
-        ...state,
-        employeesData: action.employeesData,
-        employeesLoadComplete: true,
-      };
-    }
-    case types.EMPLOYEES_DELETE: {
-      return {
-        ...state,
-        employeesData: [...state.employeesData.filter((u) => !action.ids.includes(String(u.id)))],
-      };
-    }
+const employeesSlice = createSlice({
+  name: 'employees',
+  initialState,
+  reducers: {
+    setEmployees(state, action) {
+      state.employeesData = action.payload;
+      state.employeesLoadComplete = true;
+    },
+    deleteEmployees: {
+      reducer: (state, action) => {
+        state.employeesData = state.employeesData
+          .filter(({ id }) => !action.payload.includes(String(id)));
+      },
+    },
+  },
+});
 
-    default: {
-      return state;
-    }
-  }
-}
+export const { setEmployees, deleteEmployees } = employeesSlice.actions;
+
+export default employeesSlice.reducer;
+
+export const dispatchGetEmployees = () => (dispatch) => (
+  api.getEmployees()
+    .then((data) => dispatch(setEmployees(data)))
+);
+
+export const dispatchDeleteEmployees = (ids) => (dispatch) => (
+  api.deleteEmployees(ids)
+    .then(() => {
+      dispatch(deleteEmployees(ids));
+      dispatch(enqueueToast({ message: 'Удаление сотрудников прошло успешно', type: TOAST_TYPES.SUCCESS }));
+    })
+);
+
+export const dispatchSetEmployee = (data) => () => (
+  api.setEmployee(data)
+);
+
+export const dispatchUpdateEmployee = ({ id, ...data }) => () => (
+  api.updateEmployee(data, id)
+);

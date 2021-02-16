@@ -1,18 +1,44 @@
 export {
-  dispatchGetUsers, dispatchDeleteUsers, dispatchSetUser, dispatchUpdateUser,
-} from './users';
+  dispatchGetUsers,
+  dispatchDeleteUsers,
+  dispatchSetUser,
+  dispatchUpdateUser,
+} from '../reducers/users';
+
 export {
-  dispatchGetEmployees, dispatchDeleteEmployees, dispatchSetEmployee, dispatchUpdateEmployee,
-} from './employees';
+  dispatchGetEmployees,
+  dispatchDeleteEmployees,
+  dispatchSetEmployee,
+  dispatchUpdateEmployee,
+} from '../reducers/employees';
+
 export {
-  dispatchGetClients, dispatchDeleteClients, dispatchSetClient, dispatchUpdateClient,
-} from './clients';
+  dispatchGetClients,
+  dispatchDeleteClients,
+  dispatchSetClient,
+  dispatchUpdateClient,
+} from '../reducers/clients';
+
 export {
-  dispatchGetWarehouses, dispatchDeleteWarehouses, dispatchSetWarehouse, dispatchUpdateWarehouse,
-} from './warehouses';
-export { dispatchGetWaybills, dispatchDeleteWaybills } from './waybills';
-export { dispatchGetConsignmentNotes, dispatchDeleteConsignmentNotes, dispatchCreateConsignmentNote } from './consignmentNotes';
-export { enqueueToast, processToast } from './notifications';
+  dispatchGetWarehouses,
+  dispatchDeleteWarehouses,
+  dispatchSetWarehouse,
+  dispatchUpdateWarehouse,
+} from '../reducers/warehouses';
+
 export {
-  loginUser, dispatchLogoutUser, authorizationCompleted, getUserProfile, subscribeOnMessages,
-} from './currentUser';
+  dispatchGetConsignmentNotes,
+  dispatchDeleteConsignmentNotes,
+  dispatchCreateConsignmentNote,
+} from '../reducers/consignmentNotes';
+
+export {
+  loginUser,
+  dispatchLogoutUser,
+  authorizationCompleted,
+  getUserProfile,
+  subscribeOnMessages,
+} from '../reducers/currentUser';
+
+export { enqueueToast, processToast } from '../reducers/notifications';
+export { dispatchGetWaybills, dispatchDeleteWaybills } from '../reducers/waybills';

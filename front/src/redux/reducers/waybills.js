@@ -1,28 +1,40 @@
-import * as types from '../actions/actionTypes';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
+
+import * as api from 'api';
 
 const initialState = {
   waybillsData: [],
   waybillsLoadComplete: false,
 };
 
-export function waybillsReducer(state = initialState, action) {
-  switch (action.type) {
-    case types.WAYBILLS_SET: {
-      return {
-        ...state,
-        waybillsData: action.waybillsData,
-        waybillsLoadComplete: true,
-      };
-    }
-    case types.WAYBILLS_DELETE: {
-      return {
-        ...state,
-        waybillsData: [...state.waybillsData.filter((u) => !action.ids.includes(String(u.id)))],
-      };
-    }
+const waybillsSlice = createSlice({
+  name: 'waybills',
+  initialState,
+  reducers: {
+    setWaybills(state, action) {
+      state.waybillsData = action.payload;
+      state.waybillsLoadComplete = true;
+    },
+    deleteWaybills: {
+      reducer: (state, action) => {
+        state.waybillsData = state.waybillsData
+          .filter(({ id }) => !action.payload.includes(String(id)));
+      },
+    },
+  },
+});
 
-    default: {
-      return state;
-    }
-  }
-}
+export const { setWaybills, deleteWaybills } = waybillsSlice.actions;
+
+export default waybillsSlice.reducer;
+
+export const dispatchGetWaybills = () => (dispatch) => (
+  api.getWaybills()
+    .then((data) => dispatch(setWaybills(data)))
+);
+
+export const dispatchDeleteWaybills = (ids) => (dispatch) => (
+  api.deleteWaybills(ids)
+    .then(() => dispatch(deleteWaybills(ids)))
+);

@@ -1,27 +1,23 @@
-import * as types from '../actions/actionTypes';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   notifications: [],
 };
 
-export function notificationsReducer(state = initialState, action) {
-  switch (action.type) {
-    case types.ENQUEUE_TOAST:
-      return {
-        ...state,
-        notifications: [
-          ...state.notifications,
-          {
-            ...action.payload,
-          },
-        ],
-      };
-    case types.PROCESS_TOAST:
-      return {
-        ...state,
-        notifications: [...state.notifications.slice(1)],
-      };
-    default:
-      return state;
-  }
-}
+const toastsSlice = createSlice({
+  name: 'clients',
+  initialState,
+  reducers: {
+    enqueueToast(state, action) {
+      state.notifications.push(action.payload);
+    },
+    processToast(state) {
+      state.notifications.splice(0, 1);
+    },
+  },
+});
+
+export const { enqueueToast, processToast } = toastsSlice.actions;
+
+export default toastsSlice.reducer;

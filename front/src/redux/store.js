@@ -1,7 +1,5 @@
-import { applyMiddleware, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
 
-import middlewares from './middlewares';
 import rootReduser from './reducers/root';
 import { throttle } from 'utils';
 
@@ -24,11 +22,11 @@ const saveState = (state) => {
 
 const persistedState = loadState();
 
-const store = createStore(
-  rootReduser,
-  persistedState,
-  composeWithDevTools(applyMiddleware(...middlewares)),
-);
+const store = configureStore({
+  reducer: rootReduser,
+  preloadedState: persistedState,
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 store.subscribe(throttle(() => {
   saveState({ ...store.getState() });
