@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -12,12 +12,12 @@ import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteEmployees, dispatchGetEmployees } from 'redux/actions';
 
-function EmployeesList({
-  employeesData, employeesLoadComplete, initEmployees, removeEmployees, companyId,
-}) {
+function EmployeesList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+  const { employeesData, employeesLoadComplete } = useSelector(({ employees }) => employees);
 
   const columns = [
     COLUMNS.FULLNAME(path),
@@ -27,7 +27,7 @@ function EmployeesList({
   ];
 
   useEffect(() => {
-    initEmployees(companyId);
+    dispatch(dispatchGetEmployees());
   }, []);
 
   return (
@@ -43,7 +43,7 @@ function EmployeesList({
         <CustomGrid
           rows={employeesData}
           columns={columns}
-          loading={companyId && !employeesLoadComplete}
+          loading={!employeesLoadComplete}
           onSelectionChange={(newSelection) => {
             setSelection(newSelection.rowIds);
           }}
@@ -58,7 +58,8 @@ function EmployeesList({
           }}
           onActionConfirm={() => {
             setIsConfirmDialogOpen(false);
-            removeEmployees(selection);
+            dispatch(dispatchDeleteEmployees(selection));
+            setSelection([]);
           }}
         />
       )}
@@ -66,17 +67,4 @@ function EmployeesList({
   );
 }
 
-const mapStateToProps = ({ employees, currentUser }) => {
-  const { employeesData, employeesLoadComplete } = employees;
-  const { companyId } = currentUser;
-  return {
-    employeesData, employeesLoadComplete, companyId,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  initEmployees: (id) => id && dispatch(dispatchGetEmployees(id)),
-  removeEmployees: (ids) => dispatch(dispatchDeleteEmployees(ids)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeesList);
+export default EmployeesList;

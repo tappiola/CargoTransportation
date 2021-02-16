@@ -16,24 +16,18 @@ import { employeeResolver as resolver } from './employeeResolver';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
-import {
-  dispatchSetEmployee,
-  dispatchUpdateEmployee,
-} from 'redux/actions/employees';
+import { dispatchSetEmployee, dispatchUpdateEmployee } from 'redux/actions';
 import { usePending } from 'utils';
 
 const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-const selector = (employeeId) => ({ currentUser, employees }) => {
+const selector = (employeeId) => ({ employees }) => {
   const employee = employees.employeesData.find(({ id: _id }) => _id.toString() === employeeId);
   const roles = employee?.roles && employee.roles.map(({ role }) => role);
 
-  return {
-    companyId: currentUser.companyId,
-    defaultValues: employeeId && { ...employee, roles },
-  };
+  return employeeId && { ...employee, roles };
 };
 
 const normalize = ({ roles: asObj, ...data }, id) => ({
@@ -47,14 +41,14 @@ const normalize = ({ roles: asObj, ...data }, id) => ({
 function Employee() {
   const dispatch = useDispatch();
   const { id: employeeId } = useParams();
-  const { companyId, defaultValues } = useSelector(selector(employeeId));
+  const defaultValues = useSelector(selector(employeeId));
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
   const sendFormData = (id, formData) => dispatch(
     id
       ? dispatchUpdateEmployee(normalize(formData, id))
-      : dispatchSetEmployee({ ...normalize(formData), companyId }),
+      : dispatchSetEmployee(normalize(formData)),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, employeeId));
@@ -70,7 +64,6 @@ function Employee() {
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />
-            {/* <BaseField name="login" label="логин" /> */}
             <BaseField name="email" label="email" />
 
             {employeeId && <BaseField name="password" label="Пароль" type="password" />}

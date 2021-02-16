@@ -1,4 +1,4 @@
-const MODULE_NAMES = {
+export const MODULE_NAMES = {
   CLIENTS: 'CLIENTS',
   ACTS: 'ACTS',
   USERS: 'USERS',
@@ -8,10 +8,11 @@ const MODULE_NAMES = {
   REPORTS: 'REPORTS',
   MAILINGS: 'MAILINGS',
   EMPLOYEES: 'EMPLOYEES',
+  TEMPLATES: 'TEMPLATES',
 };
 
 // object values should correspond to role names in DB, table 'role'
-const ROLES = {
+export const ROLES = {
   GLOBAL_ADMIN: 'global_admin',
   ADMIN: 'admin',
   DRIVER: 'driver',
@@ -19,12 +20,10 @@ const ROLES = {
   DISPATCHER: 'dispatcher',
 };
 
-const ROLE_NAMES = {
+export const ROLE_NAMES = {
   [ROLES.DRIVER]: 'Водитель',
   [ROLES.ADMIN]: ' Администратор',
   [ROLES.MANAGER]: 'Менеджер',
   [ROLES.GLOBAL_ADMIN]: 'Системный администратор',
   [ROLES.DISPATCHER]: 'Диспетчер',
 };
-
-export { MODULE_NAMES, ROLES, ROLE_NAMES };

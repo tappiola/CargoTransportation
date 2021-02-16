@@ -17,9 +17,12 @@ import PropTypes from 'prop-types';
 
 import { useMenuStyles } from './MainMenu.styles';
 import { MenuItems } from './MenuItems';
+import { URLS } from 'constants/urls';
 import { dispatchLogoutUser } from 'redux/actions';
 
-export default function MainMenu({ children, modules }) {
+export default function MainMenu({
+  children, modules, userName, company,
+}) {
   const dispatch = useDispatch();
   const classes = useMenuStyles();
   const [open, setOpen] = useState(false);
@@ -43,7 +46,10 @@ export default function MainMenu({ children, modules }) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Грузоперевозки
           </Typography>
-          <IconButton color="inherit" component={Link} to="/settings">
+          <Typography component="h6">
+            {`${userName}${company ? ` (${company})` : ''}`}
+          </Typography>
+          <IconButton color="inherit" component={Link} to={URLS.SETTINGS}>
             <SettingsIcon />
           </IconButton>
           <IconButton color="inherit" onClick={logout}>

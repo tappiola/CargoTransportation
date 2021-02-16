@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
@@ -11,14 +11,20 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import { dispatchDeleteWaybills, dispatchGetWaybills } from 'redux/actions';
-import { waybillsSelector } from 'redux/selectors/waybills';
 
-function WaybillsList({
-  waybillsData, waybillsLoadComplete, initWaybills, removeWaybills,
-}) {
+export const waybillsSelector = ({ waybillsData }) => waybillsData.map((u) => {
+  const { consignment_note: consignmentNote, ...other } = u;
+  return { ...other, ...consignmentNote };
+});
+
+function WaybillsList() {
+  const dispatch = useDispatch();
+  const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const { path } = useRouteMatch();
+
+  const waybillsData = useSelector(({ waybills }) => waybillsSelector(waybills));
+  const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [
     COLUMNS.WAYBILL_TTN(path),
@@ -29,7 +35,7 @@ function WaybillsList({
   ];
 
   useEffect(() => {
-    initWaybills();
+    dispatch(dispatchGetWaybills());
   }, []);
 
   return (
@@ -52,30 +58,19 @@ function WaybillsList({
         />
       </PaddedContainer>
       {isConfirmDialogOpen && (
-        <ConfirmDialog
-          title="Удаление путевых листоы"
-          description="Вы уверены, что хотите удалить выбранные путевые листы?"
-          onPopupClose={() => setIsConfirmDialogOpen(false)}
-          onActionConfirm={() => {
-            setIsConfirmDialogOpen(false);
-            removeWaybills(selection);
-          }}
-        />
+      <ConfirmDialog
+        title="Удаление путевых листоы"
+        description="Вы уверены, что хотите удалить выбранные путевые листы?"
+        onPopupClose={() => setIsConfirmDialogOpen(false)}
+        onActionConfirm={() => {
+          setIsConfirmDialogOpen(false);
+          dispatch(dispatchDeleteWaybills(selection));
+          setSelection([]);
+        }}
+      />
       )}
     </>
   );
 }
 
-const mapStateToProps = ({ waybills: { waybillsData, waybillsLoadComplete } }) => (
-  {
-    waybillsData: waybillsSelector(waybillsData),
-    waybillsLoadComplete,
-  }
-);
-
-const mapDispatchToProps = (dispatch) => ({
-  initWaybills: () => dispatch(dispatchGetWaybills()),
-  removeWaybills: (ids) => dispatch(dispatchDeleteWaybills(ids)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WaybillsList);
+export default WaybillsList;

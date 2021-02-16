@@ -25,12 +25,15 @@ const ConsignmentNote = db.define('consignment_note', {
     type: DataTypes.INTEGER,
     unique: true,
   },
-  issuedAt: {
-    type: DataTypes.DATE,
+  issuedDate: {
+    type: DataTypes.DATEONLY,
   },
   revenue: {
     type: DataTypes.INTEGER,
   },
+  vehicle: {
+    type: DataTypes.TEXT,
+  }
 });
 
 module.exports = { ConsignmentNote, ConsignmentNoteStatus };

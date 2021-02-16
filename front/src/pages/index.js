@@ -1,13 +1,17 @@
+import { lazy } from 'react';
+
 import Employees from './Employees';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
-import Acts from 'pages/Acts';
-import Clients from 'pages/Clients';
-import ConsignmentNotes from 'pages/ConsignmentNotes';
-import Mailings from 'pages/Mailings';
-import Reports from 'pages/Reports';
-import Users from 'pages/Users';
-import Warehouses from 'pages/Warehouses';
-import Waybills from 'pages/Waybills';
+import { URLS } from 'constants/urls';
+
+const Acts = lazy(() => import('pages/Acts'));
+const Clients = lazy(() => import('pages/Clients'));
+const ConsignmentNotes = lazy(() => import('pages/ConsignmentNotes'));
+const Mailings = lazy(() => import('pages/Mailings'));
+const Reports = lazy(() => import('pages/Reports'));
+const Users = lazy(() => import('pages/Users'));
+const Warehouses = lazy(() => import('pages/Warehouses'));
+const Waybills = lazy(() => import('pages/Waybills'));
 
 const {
   GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER,
@@ -16,56 +20,56 @@ const {
 export const PROTECTED_ROUTES = [
   {
     module: MODULE_NAMES.ACTS,
-    basePath: '/acts',
+    basePath: URLS.ACTS,
     component: Acts,
-    roles: [GLOBAL_ADMIN, MANAGER, DRIVER],
+    roles: [MANAGER, DRIVER],
   },
   {
     module: MODULE_NAMES.CLIENTS,
-    basePath: '/clients',
+    basePath: URLS.CLIENTS,
     component: Clients,
-    roles: [GLOBAL_ADMIN, ADMIN],
+    roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.CONSIGNMENT_NOTES,
-    basePath: '/consignment-notes',
+    basePath: URLS.CONSIGNMENT_NOTES,
     component: ConsignmentNotes,
-    roles: [GLOBAL_ADMIN, MANAGER, DISPATCHER, ADMIN],
+    roles: [MANAGER, DISPATCHER, ADMIN],
   },
   {
     module: MODULE_NAMES.MAILINGS,
-    basePath: '/mailings',
+    basePath: URLS.MAILINGS,
     component: Mailings,
     roles: [GLOBAL_ADMIN, ADMIN],
   },
   {
     module: MODULE_NAMES.REPORTS,
-    basePath: '/reports',
+    basePath: URLS.REPORTS,
     component: Reports,
-    roles: [GLOBAL_ADMIN, MANAGER],
+    roles: [MANAGER],
   },
   {
     module: MODULE_NAMES.USERS,
-    basePath: '/users',
+    basePath: URLS.USERS,
     component: Users,
     roles: [GLOBAL_ADMIN],
   },
   {
     module: MODULE_NAMES.EMPLOYEES,
-    basePath: '/employees',
+    basePath: URLS.EMPLOYEES,
     component: Employees,
-    roles: [GLOBAL_ADMIN, ADMIN],
+    roles: [ADMIN],
   },
   {
     module: MODULE_NAMES.WAREHOUSES,
-    basePath: '/warehouses',
+    basePath: URLS.WAREHOUSES,
     component: Warehouses,
-    roles: [GLOBAL_ADMIN, ADMIN, DISPATCHER, MANAGER],
+    roles: [ADMIN, DISPATCHER, MANAGER],
   },
   {
     module: MODULE_NAMES.WAYBILLS,
-    basePath: '/waybills',
+    basePath: URLS.WAYBILLS,
     component: Waybills,
-    roles: [GLOBAL_ADMIN, ADMIN, DRIVER, MANAGER],
+    roles: [ADMIN, DRIVER, MANAGER],
   },
 ];

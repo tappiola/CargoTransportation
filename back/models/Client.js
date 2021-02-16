@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const elastic = require('../config/elastic.config');
 const db = require('../database/db');
 
 const Client = db.define('client', {
@@ -33,7 +34,8 @@ const Client = db.define('client', {
   },
   companyName: {
     type: DataTypes.STRING,
-    unique: true,
+    allowNull: true,
+    defaultValue: null,
   },
   email: {
     type: DataTypes.STRING,
@@ -66,6 +68,24 @@ const Client = db.define('client', {
   isActive: {
     type: DataTypes.BOOLEAN,
   },
+});
+
+const indexClient = async ({ id, companyName, fullName, ...other }) => {
+  const { linkedCompanyId: companyId } = other.dataValues;
+  
+  await elastic.index({
+    id,
+    index: 'clients',
+    body: { id, fullName, companyName, companyId },
+  });
+};
+
+Client.afterCreate(indexClient);
+
+Client.beforeUpdate(indexClient);
+
+Client.beforeBulkDestroy(async ({ where: { id: ids } }) => {
+  ids.forEach((id) => elastic.delete({ id, index: 'clients' }));
 });
 
 module.exports = Client;

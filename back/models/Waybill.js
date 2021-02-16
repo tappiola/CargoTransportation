@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../database/db');
+const { emitter, EVENTS } = require('../constants/events');
 
 const WaybillStatus = db.define('waybill_status', {
   id: {
@@ -44,6 +45,10 @@ const Waybill = db.define('waybill', {
       return `${this.country}, ${this.city}, ${this.street} ${this.house}`;
     },
   },
+});
+
+Waybill.afterCreate(() => {
+  emitter.emit(EVENTS.WAYBILL_CREATED);
 });
 
 module.exports = { Waybill, WaybillStatus };

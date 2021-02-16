@@ -6,6 +6,8 @@ import {
 } from '@material-ui/core';
 import { ruRU } from '@material-ui/core/locale';
 
+import { THEME, THEME_COLORS } from 'constants/themes';
+
 export const getCustomTheme = (colorTheme = 'light') => responsiveFontSizes(
   createMuiTheme({
     overrides: {
@@ -20,6 +22,12 @@ export const getCustomTheme = (colorTheme = 'light') => responsiveFontSizes(
     },
     palette: {
       type: colorTheme,
+      primary: {
+        main: (colorTheme === THEME.DARK ? THEME_COLORS.BLUE : THEME_COLORS.PURPLE),
+      },
+      secondary: {
+        main: colorTheme === THEME.DARK ? THEME_COLORS.PINK : THEME_COLORS.RED,
+      },
     },
   }, ruRU),
 );
