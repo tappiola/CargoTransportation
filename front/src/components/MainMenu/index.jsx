@@ -13,12 +13,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
+import { dispatchLogoutUser } from 'features/CurrentUser/currentUserSlice';
 import PropTypes from 'prop-types';
 
 import { useMenuStyles } from './MainMenu.styles';
 import { MenuItems } from './MenuItems';
 import { URLS } from 'constants/urls';
-import { dispatchLogoutUser } from 'redux/actions';
 
 export default function MainMenu({
   children, modules, userName, company,

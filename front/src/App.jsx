@@ -10,18 +10,18 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { ToastQueueProvider } from '@tappiola/material-ui-externals';
+import { PROTECTED_ROUTES } from 'features';
+import { refreshTokenIfExpired, getUserProfile, subscribeOnMessages } from 'features/CurrentUser/currentUserSlice';
+import Settings from 'features/Settings';
+import SignIn from 'features/SignIn';
 
-import Notifier from './components/Notifier';
-import StyleGuide from './pages/StyleGuide';
+import Notifier from './features/Notifier';
+import StyleGuide from './features/StyleGuide';
 import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
 import { URLS } from 'constants/urls';
-import { PROTECTED_ROUTES } from 'pages';
-import Settings from 'pages/Settings';
-import SignIn from 'pages/SignIn';
-import { refreshTokenIfExpired, getUserProfile, subscribeOnMessages } from 'redux/reducers/currentUser';
 
 const ProtectedApp = ({
   userRoles, userName, company, theme, setTheme,
