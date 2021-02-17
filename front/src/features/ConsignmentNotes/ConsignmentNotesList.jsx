@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteConsignmentNotes, dispatchGetConsignmentNotes } from './consignmentNotesSlice';
+import { deleteConsignmentNotes, getConsignmentNotes } from './consignmentNotesSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -32,7 +32,7 @@ function ConsignmentNotesList() {
   ];
 
   useEffect(() => {
-    dispatch(dispatchGetConsignmentNotes());
+    dispatch(getConsignmentNotes());
   }, []);
 
   return (
@@ -56,7 +56,7 @@ function ConsignmentNotesList() {
           onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
             setIsDialogOpen(false);
-            dispatch(dispatchDeleteConsignmentNotes(selection));
+            dispatch(deleteConsignmentNotes(selection));
             setSelection([]);
           }}
         />

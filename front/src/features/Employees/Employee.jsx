@@ -13,7 +13,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 
 import { employeeResolver as resolver } from './employeeResolver';
-import { dispatchSetEmployee, dispatchUpdateEmployee } from './employeesSlice';
+import { setEmployee, updateEmployee } from './employeesSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField, { DateField } from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
@@ -47,8 +47,8 @@ function Employee() {
 
   const sendFormData = (id, formData) => dispatch(
     id
-      ? dispatchUpdateEmployee(normalize(formData, id))
-      : dispatchSetEmployee(normalize(formData)),
+      ? updateEmployee(normalize(formData, id))
+      : setEmployee(normalize(formData)),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, employeeId));

@@ -11,23 +11,25 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { ToastQueueProvider } from '@tappiola/material-ui-externals';
 import { PROTECTED_ROUTES } from 'features';
-import { refreshTokenIfExpired, getUserProfile, subscribeOnMessages } from 'features/CurrentUser/currentUserSlice';
+import {
+  refreshTokenIfExpired,
+  getUserProfile,
+  subscribeOnMessages,
+} from 'features/CurrentUser/currentUserSlice';
+import Notifier from 'features/Notifier';
 import Settings from 'features/Settings';
 import SignIn from 'features/SignIn';
+import StyleGuide from 'features/StyleGuide';
 
-import Notifier from './features/Notifier';
-import StyleGuide from './features/StyleGuide';
-import { isDevelopment } from './utils/environment';
 import MainMenu from 'components/MainMenu';
 import { getCustomTheme } from 'config';
 import { THEME } from 'constants/themes';
 import { URLS } from 'constants/urls';
+import { isDevelopment } from 'utils/environment';
 
-const ProtectedApp = ({
-  userRoles, userName, company, theme, setTheme,
-}) => {
-  const routes = PROTECTED_ROUTES
-    .filter(({ roles: routeRoles }) => routeRoles.some((role) => userRoles.includes(role)));
+const ProtectedApp = ({ userRoles, userName, company, theme, setTheme }) => {
+  const routes = PROTECTED_ROUTES.filter(({ roles: routeRoles }) => (
+    routeRoles.some((role) => userRoles.includes(role))));
   const modules = routes.map(({ module }) => module);
   const [protectedRoute] = routes;
 
@@ -46,17 +48,17 @@ const ProtectedApp = ({
             <Settings theme={theme} onThemeChange={setTheme} />
           </Route>
           {isDevelopment() && (
-          <Route exact path={URLS.STYLE_GUIDE} component={StyleGuide} />
+            <Route exact path={URLS.STYLE_GUIDE} component={StyleGuide} />
           )}
           {protectedRoute && (
-          <>
-            <Route exact path="/">
-              <Redirect to={protectedRoute.basePath} />
-            </Route>
-            <Route exact path={URLS.SIGN_IN}>
-              <Redirect to={protectedRoute.basePath} />
-            </Route>
-          </>
+            <>
+              <Route exact path="/">
+                <Redirect to={protectedRoute.basePath} />
+              </Route>
+              <Route exact path={URLS.SIGN_IN}>
+                <Redirect to={protectedRoute.basePath} />
+              </Route>
+            </>
           )}
           <Route>У вас нет доступа к запрашиваемой странице</Route>
         </Switch>
@@ -67,8 +69,12 @@ const ProtectedApp = ({
 
 function App() {
   const dispatch = useDispatch();
-  const { isAuthorized, roles, fullName, company } = useSelector(({ currentUser }) => currentUser);
-  const [theme, setTheme] = useState(localStorage.getItem('cargoTheme') || THEME.LIGHT);
+  const { isAuthorized, roles, fullName, company } = useSelector(
+    ({ currentUser }) => currentUser,
+  );
+  const [theme, setTheme] = useState(
+    localStorage.getItem('cargoTheme') || THEME.LIGHT,
+  );
 
   useEffect(() => {
     localStorage.setItem('cargoTheme', theme);

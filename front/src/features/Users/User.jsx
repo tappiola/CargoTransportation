@@ -13,7 +13,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 
 import { userResolver as resolver } from './userResolver';
-import { dispatchSetUser, dispatchUpdateUser } from './usersSlice';
+import { setUser, updateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField, { DateField } from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
@@ -47,8 +47,8 @@ function User() {
 
   const sendFormData = (userId, formData) => dispatch(
     userId
-      ? dispatchUpdateUser(normalize(formData, userId))
-      : dispatchSetUser(normalize(formData)),
+      ? updateUser(normalize(formData, userId))
+      : setUser(normalize(formData)),
   );
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, id));

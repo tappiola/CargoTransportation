@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteEmployees, dispatchGetEmployees } from './employeesSlice';
+import { deleteEmployees, getEmployees } from './employeesSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -27,7 +27,7 @@ function EmployeesList() {
   ];
 
   useEffect(() => {
-    dispatch(dispatchGetEmployees());
+    dispatch(getEmployees());
   }, []);
 
   return (
@@ -51,7 +51,7 @@ function EmployeesList() {
           onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
             setIsDialogOpen(false);
-            dispatch(dispatchDeleteEmployees(selection));
+            dispatch(deleteEmployees(selection));
             setSelection([]);
           }}
         />

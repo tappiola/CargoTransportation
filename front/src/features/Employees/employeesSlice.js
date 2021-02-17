@@ -1,9 +1,44 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import * as api from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
+
+export const getEmployees = createAsyncThunk(
+  'employees/getEmployees',
+  api.getEmployees,
+);
+
+export const setEmployee = createAsyncThunk(
+  'employees/setEmployee',
+  api.setEmployee,
+);
+
+export const updateEmployee = createAsyncThunk(
+  'employees/updateEmployee',
+  async ({ id, ...data }) => {
+    await api.updateEmployee(data, id);
+  },
+);
+
+export const deleteEmployees = createAsyncThunk(
+  'employees/deleteEmployees',
+  async (ids, { dispatch }) => {
+    await api.deleteEmployees(ids)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Oшибка при удалении сотрудников',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'Удаление сотрудников прошло успешно',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+  },
+);
 
 const initialState = {
   employeesData: [],
@@ -13,41 +48,16 @@ const initialState = {
 const employeesSlice = createSlice({
   name: 'employees',
   initialState,
-  reducers: {
-    setEmployees(state, action) {
+  extraReducers: {
+    [deleteEmployees.fulfilled]: (state, action) => {
+      state.employeesData = state.employeesData
+        .filter(({ id }) => !action.payload.includes(String(id)));
+    },
+    [getEmployees.fulfilled]: (state, action) => {
       state.employeesData = action.payload;
       state.employeesLoadComplete = true;
-    },
-    deleteEmployees: {
-      reducer: (state, action) => {
-        state.employeesData = state.employeesData
-          .filter(({ id }) => !action.payload.includes(String(id)));
-      },
     },
   },
 });
 
-export const { setEmployees, deleteEmployees } = employeesSlice.actions;
-
 export default employeesSlice.reducer;
-
-export const dispatchGetEmployees = () => (dispatch) => (
-  api.getEmployees()
-    .then((data) => dispatch(setEmployees(data)))
-);
-
-export const dispatchDeleteEmployees = (ids) => (dispatch) => (
-  api.deleteEmployees(ids)
-    .then(() => {
-      dispatch(deleteEmployees(ids));
-      dispatch(enqueueToast({ message: 'Удаление сотрудников прошло успешно', type: TOAST_TYPES.SUCCESS }));
-    })
-);
-
-export const dispatchSetEmployee = (data) => () => (
-  api.setEmployee(data)
-);
-
-export const dispatchUpdateEmployee = ({ id, ...data }) => () => (
-  api.updateEmployee(data, id)
-);

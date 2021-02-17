@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { enqueueToast } from 'features/Notifier/NotifierSlice';
 import jwtDecode from 'jwt-decode';
 
@@ -13,27 +13,55 @@ const initialState = {
   roles: [],
 };
 
+export const loginUser = createAsyncThunk(
+  'currentUser/loginUser',
+  async ({ email, password }, { dispatch }) => {
+    const response = await api.signIn(email, password)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Произошла ошибка',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'Вход в систему выполнен успешно',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return response;
+  },
+);
+
 const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState,
   reducers: {
-    authorizationCompleted(state, action) {
-      state.isAuthorized = action.payload.isAuthorized;
-      state.roles = action.payload.roles;
-      state.companyId = action.payload.companyId;
-    },
     setUserProfile(state, action) {
-      state.roles = action.payload.roles;
-      state.company = action.payload.companyName;
-      state.fullName = action.payload.fullName;
+      const { roles, companyName, fullName } = action.payload;
+      state.roles = roles;
+      state.company = companyName;
+      state.fullName = fullName;
     },
     logoutUser(state) {
       state.isAuthorized = false;
     },
   },
+  extraReducers: {
+    [loginUser.fulfilled]: (state, action) => {
+      const { token, roles, companyId } = action.payload;
+      state.isAuthorized = true;
+      state.roles = roles.map(({ role }) => role);
+      state.companyId = companyId;
+      localStorage.setItem('token', token);
+    },
+    [loginUser.rejected]: (state) => {
+      state.isAuthorized = false;
+    },
+  },
 });
 
-export const { authorizationCompleted, setUserProfile, logoutUser } = currentUserSlice.actions;
+export const { setUserProfile, logoutUser } = currentUserSlice.actions;
 
 export default currentUserSlice.reducer;
 
@@ -41,26 +69,6 @@ export const dispatchLogoutUser = () => (dispatch) => {
   dispatch(logoutUser);
   localStorage.removeItem('token');
 };
-
-export const loginUser = (email, password) => (dispatch) => api.signIn(email, password)
-  .then(({ token, roles, companyId }) => {
-    localStorage.setItem('token', token);
-    const userRoles = roles.map(({ role }) => role);
-    dispatch(authorizationCompleted({ isAuthorized: !!token, roles: userRoles, companyId }));
-
-    dispatch(enqueueToast({
-      message: 'Вход в систему выполнен успешно',
-      type: TOAST_TYPES.SUCCESS,
-    }));
-  },
-  (err) => {
-    dispatch(authorizationCompleted(false));
-
-    dispatch(enqueueToast({
-      message: err.message || 'Произошла ошибка',
-      type: TOAST_TYPES.ERROR,
-    }));
-  });
 
 export const refreshTokenIfExpired = () => {
   const lsToken = getAuthToken();

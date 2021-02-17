@@ -5,9 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import { format } from 'date-fns';
 import Client from 'features/Clients/Client';
-import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
-import { dispatchCreateConsignmentNote } from '../consignmentNotesSlice';
+import { setConsignmentNote } from '../consignmentNotesSlice';
 import ClientForm from './ClientForm';
 import ConsignmentNoteForm from './ConsignmentNoteForm';
 import DriverForm from './DriverForm';
@@ -20,7 +19,6 @@ import FormDialog from 'components/FormDialog';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
-import { TOAST_TYPES } from 'constants/toastsTypes';
 import { URLS } from 'constants/urls';
 import { usePending } from 'utils';
 
@@ -55,16 +53,8 @@ function ConsignmentNoteNew() {
   const { handleSubmit } = methods;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const sendFormData = (formData) => dispatch(dispatchCreateConsignmentNote(normalize(formData)))
-    .then(() => history.push(history.push(URLS.CONSIGNMENT_NOTES)))
-    .catch((e) => {
-      dispatch(
-        enqueueToast({
-          message: `Ошибка при создании ТТН: ${e.message}`,
-          type: TOAST_TYPES.ERROR,
-        }),
-      );
-    });
+  const sendFormData = (formData) => dispatch(setConsignmentNote(normalize(formData)))
+    .then(() => history.push(history.push(URLS.CONSIGNMENT_NOTES)));
   const { bindPending, handler } = usePending(sendFormData);
 
   return (

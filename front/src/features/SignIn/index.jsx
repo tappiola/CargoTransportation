@@ -17,7 +17,7 @@ function SignIn() {
   const methods = useForm({ resolver });
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
-  const sendFormData = ({ email, password }) => dispatch(loginUser(email, password));
+  const sendFormData = ({ email, password }) => dispatch(loginUser({ email, password }));
   const { bindPending, handler } = usePending(sendFormData);
 
   return (

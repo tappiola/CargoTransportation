@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import * as api from 'api';
@@ -10,46 +10,67 @@ const initialState = {
   consignmentNotesLoadComplete: false,
 };
 
+export const getConsignmentNotes = createAsyncThunk(
+  'consignmentNotes/getConsignmentNotes',
+  api.getConsignmentNotes,
+);
+
+export const deleteConsignmentNotes = createAsyncThunk(
+  'consignmentNotes/deleteConsignmentNotes',
+  async (ids, { dispatch }) => {
+    const response = await api.deleteConsignmentNotes(ids)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Error',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'ТТН были успешно удалены',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return response;
+  },
+);
+
+export const setConsignmentNote = createAsyncThunk(
+  'consignmentNotes/setConsignmentNotes',
+  async (data, { dispatch }) => {
+    const response = await api.createConsignmentNote(data)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Ошибка при создании ТТН',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: `ТТН ${response.consignmentNote} успешно зарегистрирована`,
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return response;
+  },
+);
+
 const consignmentNoteSlice = createSlice({
   name: 'consignmentNotes',
   initialState,
-  reducers: {
-    setConsignmentNotes(state, action) {
+  extraReducers: {
+    [getConsignmentNotes.fulfilled]: (state, action) => {
       state.consignmentNotesData = action.payload;
       state.consignmentNotesLoadComplete = true;
     },
-    deleteConsignmentNotes: {
-      reducer: (state, action) => {
-        state.consignmentNotesData = state.consignmentNotesData
-          .filter(({ id }) => !action.payload.includes(String(id)));
-      },
+    [deleteConsignmentNotes.fulfilled]: (state, action) => {
+      state.consignmentNotesData = state.consignmentNotesData
+        .filter(({ id }) => !action.payload.includes(String(id)));
+    },
+    [setConsignmentNote.fulfilled]: (state, action) => {
+      state.consignmentNotesData.push(action.payload);
     },
   },
 });
 
-export const { setConsignmentNotes, deleteConsignmentNotes } = consignmentNoteSlice.actions;
-
 export default consignmentNoteSlice.reducer;
-
-export const dispatchGetConsignmentNotes = () => (dispatch) => (
-  api.getConsignmentNotes()
-    .then((data) => dispatch(setConsignmentNotes(data)))
-);
-
-export const dispatchDeleteConsignmentNotes = (ids) => (dispatch) => (
-  api.deleteConsignmentNotes(ids)
-    .then(() => {
-      dispatch(deleteConsignmentNotes(ids));
-      dispatch(enqueueToast({ message: 'ТТН были успешно удалены', type: TOAST_TYPES.SUCCESS }));
-    })
-);
-
-export const dispatchCreateConsignmentNote = (data) => (dispatch) => (
-  api.createConsignmentNote(data)
-    .then((createdNote) => {
-      dispatch(enqueueToast({
-        message: `ТТН ${createdNote.consignmentNote} успешно зарегистрирована`,
-        type: TOAST_TYPES.SUCCESS,
-      }));
-    })
-);

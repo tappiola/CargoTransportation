@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteUsers, dispatchGetUsers } from './usersSlice';
+import { deleteUsers, getUsers } from './usersSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -27,7 +27,7 @@ function UsersList() {
   const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
 
   useEffect(() => {
-    dispatch(dispatchGetUsers());
+    dispatch(getUsers());
   }, []);
 
   const columns = [
@@ -37,10 +37,6 @@ function UsersList() {
     COLUMNS.UNN,
     COLUMNS.STATUS,
   ];
-
-  useEffect(() => {
-    dispatch(dispatchGetUsers());
-  }, []);
 
   return (
     <>
@@ -63,7 +59,7 @@ function UsersList() {
           onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
             setIsDialogOpen(false);
-            dispatch(dispatchDeleteUsers(selection));
+            dispatch(deleteUsers(selection));
             setSelection([]);
           }}
         />
