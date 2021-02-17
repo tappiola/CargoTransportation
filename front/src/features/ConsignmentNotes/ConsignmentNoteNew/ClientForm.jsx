@@ -3,18 +3,21 @@ import { useDispatch } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { dispatchGetClients } from 'features/Clients/clientsSlice';
+import { getClients } from 'features/Clients/clientsSlice';
 
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
+const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
+
 const ClientForm = ({ onAddClient }) => {
   const dispatch = useDispatch();
-  useEffect(() => { dispatch(dispatchGetClients()); }, []);
-
   const { options, onChange } = useElastic(ELASTIC_INDICIES.CLIENTS, 'fullName');
-  const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
+
+  useEffect(() => {
+    dispatch(getClients());
+  }, []);
 
   return (
     <>

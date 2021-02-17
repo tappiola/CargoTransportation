@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteClients, dispatchGetClients } from './clientsSlice';
+import { deleteClients, getClients } from './clientsSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -21,7 +21,7 @@ function ClientsList() {
   const columns = [FULLNAME(path), EMAIL, COMPANY, STATUS];
 
   useEffect(() => {
-    dispatch(dispatchGetClients());
+    dispatch(getClients());
   }, []);
 
   return (
@@ -45,7 +45,7 @@ function ClientsList() {
           onPopupClose={() => setIsOpen(false)}
           onActionConfirm={() => {
             setIsOpen(false);
-            dispatch(dispatchDeleteClients(selection));
+            dispatch(deleteClients(selection));
             setSelection([]);
           }}
         />

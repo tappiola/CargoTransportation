@@ -8,17 +8,15 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import { warehouseResolver as resolver } from './warehouseResolver';
-import { dispatchSetWarehouse, dispatchUpdateWarehouse } from './warehousesSlice';
+import { setWarehouse, updateWarehouse } from './warehousesSlice';
 import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
-import { TOAST_TYPES } from 'constants/toastsTypes';
 import { usePending } from 'utils';
 
 const selector = (warehouseId) => ({ warehouses }) => warehouses.warehousesData.find(
@@ -36,16 +34,9 @@ function User() {
 
   const sendFormData = (clientId) => (formData) => dispatch(
     clientId
-      ? dispatchUpdateWarehouse(formData, clientId)
-      : dispatchSetWarehouse(formData),
-  )
-    .then(() => history.push('/warehouses'))
-    .catch((e) => {
-      dispatch(enqueueToast({
-        message: `Ошибка при создании склада: ${e.message}`,
-        type: TOAST_TYPES.ERROR,
-      }));
-    });
+      ? updateWarehouse(formData, clientId)
+      : setWarehouse(formData),
+  ).then(() => history.push('/warehouses'));
 
   const { bindPending, handler } = usePending(sendFormData(id));
 

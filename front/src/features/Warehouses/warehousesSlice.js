@@ -1,9 +1,72 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import * as api from 'api';
 import { TOAST_TYPES } from 'constants/toastsTypes';
+
+export const getWarehouses = createAsyncThunk(
+  'warehouses/getWarehouses',
+  api.getWarehouses,
+);
+
+export const setWarehouse = createAsyncThunk(
+  'warehouses/setWarehouse',
+  async (data, { dispatch }) => {
+    api.setWarehouse(data)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Склад успешно добавлен в систему',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'Склад успешно добавлен в систему',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return data;
+  },
+);
+
+export const updateWarehouse = createAsyncThunk(
+  'warehouses/updateWarehouse',
+  async ({ data, warehouseId }, { dispatch }) => {
+    await api.updateWarehouse(data, warehouseId)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Изменения успешно сохранены',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'Изменения успешно сохранены',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+  },
+);
+
+export const deleteWarehouses = createAsyncThunk(
+  'warehouses/deleteWarehouses',
+  async (ids, { dispatch }) => {
+    await api.deleteWarehouses(ids)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Ошибка при создании склада',
+          type: TOAST_TYPES.ERROR,
+        }));
+      });
+
+    dispatch(enqueueToast({
+      message: 'Склады были успешно удалены',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return ids;
+  },
+);
 
 const initialState = {
   warehousesData: [],
@@ -11,48 +74,21 @@ const initialState = {
 };
 
 const warehousesSlice = createSlice({
-  name: 'clients',
+  name: 'warehouses',
   initialState,
-  reducers: {
-    setWarehouses(state, action) {
+  extraReducers: {
+    [getWarehouses.fulfilled]: (state, action) => {
       state.warehousesData = action.payload;
       state.warehousesLoadComplete = true;
     },
-    deleteWarehouses: {
-      reducer: (state, action) => {
-        state.clientsData = state.clientsData
-          .filter(({ id }) => !action.payload.includes(String(id)));
-      },
+    [deleteWarehouses.fulfilled]: (state, action) => {
+      state.warehousesData = state.warehoussData
+        .filter(({ id }) => !action.payload.includes(String(id)));
+    },
+    [setWarehouse.fulfilled]: (state, action) => {
+      state.warehoussData.push(action.payload);
     },
   },
 });
 
-export const { setWarehouses, deleteWarehouses } = warehousesSlice.actions;
-
 export default warehousesSlice.reducer;
-
-export const dispatchGetWarehouses = () => (dispatch) => {
-  api.getWarehouses().then((data) => dispatch(setWarehouses(data)));
-};
-
-export const dispatchDeleteWarehouses = (ids) => (dispatch) => (
-  api.deleteWarehouses(ids)
-    .then(() => {
-      dispatch(deleteWarehouses(ids));
-      dispatch(enqueueToast({ message: 'Склады были успешно удалены', type: TOAST_TYPES.SUCCESS }));
-    })
-);
-
-export const dispatchUpdateWarehouse = (data, warehouseId) => (dispatch) => (
-  api.updateWarehouse(data, warehouseId)
-    .then(() => {
-      dispatch(enqueueToast({ message: 'Изменения успешно сохранены', type: TOAST_TYPES.SUCCESS }));
-    })
-);
-
-export const dispatchSetWarehouse = (data) => (dispatch) => (
-  api.setWarehouse(data)
-    .then(() => {
-      dispatch(enqueueToast({ message: 'Склад успешно добавлен в систему', type: TOAST_TYPES.SUCCESS }));
-    })
-);

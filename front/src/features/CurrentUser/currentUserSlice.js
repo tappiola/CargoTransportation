@@ -24,6 +24,10 @@ export const loginUser = createAsyncThunk(
         }));
       });
 
+    if (!response) {
+      throw new Error();
+    }
+
     dispatch(enqueueToast({
       message: 'Вход в систему выполнен успешно',
       type: TOAST_TYPES.SUCCESS,
@@ -38,7 +42,7 @@ const currentUserSlice = createSlice({
   initialState,
   reducers: {
     setUserProfile(state, action) {
-      const { roles, companyName, fullName } = action.payload;
+      const { roles, companyName, fullName } = action?.payload;
       state.roles = roles;
       state.company = companyName;
       state.fullName = fullName;
@@ -49,7 +53,7 @@ const currentUserSlice = createSlice({
   },
   extraReducers: {
     [loginUser.fulfilled]: (state, action) => {
-      const { token, roles, companyId } = action.payload;
+      const { token, roles, companyId } = action.payload || {};
       state.isAuthorized = true;
       state.roles = roles.map(({ role }) => role);
       state.companyId = companyId;

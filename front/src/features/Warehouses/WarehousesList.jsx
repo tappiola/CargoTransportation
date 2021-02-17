@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteWarehouses, dispatchGetWarehouses } from './warehousesSlice';
+import { deleteWarehouses, getWarehouses } from './warehousesSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -27,7 +27,7 @@ function WarehousesList() {
   ];
 
   useEffect(() => {
-    dispatch(dispatchGetWarehouses());
+    dispatch(getWarehouses());
   }, []);
 
   return (
@@ -51,7 +51,7 @@ function WarehousesList() {
           onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
             setIsDialogOpen(false);
-            dispatch(dispatchDeleteWarehouses(selection));
+            dispatch(deleteWarehouses(selection));
             setSelection([]);
           }}
         />

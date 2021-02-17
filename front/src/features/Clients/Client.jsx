@@ -10,15 +10,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
-import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import { clientResolver as resolver } from './clientResolver';
-import { dispatchSetClient, dispatchUpdateClient, dispatchGetClients } from './clientsSlice';
+import { setClient, updateClient, getClients } from './clientsSlice';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField, { DateField } from 'components/ControlledField';
 import PaddedContainer from 'components/PaddedContainer';
-import { TOAST_TYPES } from 'constants/toastsTypes';
 import { URLS } from 'constants/urls';
 import { usePending } from 'utils';
 
@@ -34,24 +32,20 @@ function Client({ isPopup = false, onPopupClose }) {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
-  const sendFormData = (clientId) => (formData) => dispatch(
-    clientId
-      ? dispatchUpdateClient(formData, clientId)
-      : dispatchSetClient(formData),
-  ).then(() => {
-    if (isPopup) {
-      onPopupClose();
-      dispatch(dispatchGetClients());
-    } else {
-      history.push(URLS.CLIENTS);
-    }
-  })
-    .catch((e) => {
-      dispatch(enqueueToast({
-        message: `Ошибка при создании клиента: ${e.message}`,
-        type: TOAST_TYPES.ERROR,
-      }));
+  const sendFormData = (clientId) => async (formData) => {
+    dispatch(
+      clientId
+        ? updateClient({ formData, clientId })
+        : setClient({ formData }),
+    ).then(() => {
+      if (isPopup) {
+        onPopupClose();
+        dispatch(getClients());
+      } else {
+        history.push(URLS.CLIENTS);
+      }
     });
+  };
 
   const { bindPending, handler } = usePending(sendFormData(id));
 

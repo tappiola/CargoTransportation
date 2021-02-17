@@ -10,15 +10,15 @@ import { useStyles } from './SignIn.styles';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import Logo from 'components/Logo';
-import { usePending } from 'utils';
+// import { usePending } from 'utils';
 
 function SignIn() {
   const classes = useStyles();
   const methods = useForm({ resolver });
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
-  const sendFormData = ({ email, password }) => dispatch(loginUser({ email, password }));
-  const { bindPending, handler } = usePending(sendFormData);
+  const sendFormData = async ({ email, password }) => dispatch(loginUser({ email, password }));
+  // const { bindPending, handler } = usePending(sendFormData);
 
   return (
     <Container maxWidth="xs">
@@ -26,13 +26,13 @@ function SignIn() {
         <Logo className={classes.avatar} />
         <FormProvider {...methods}>
           <form
-            onSubmit={handleSubmit(handler)}
+            onSubmit={handleSubmit(sendFormData)}
             className={classes.form}
             noValidate
           >
             <BaseField name="email" label="email" />
             <BaseField name="password" label="Пароль" type="password" />
-            <SubmitButton className={classes.submit} {...bindPending} />
+            <SubmitButton className={classes.submit} />
           </form>
         </FormProvider>
       </div>
