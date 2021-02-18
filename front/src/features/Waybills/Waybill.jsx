@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { Container, Grid, Typography } from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
 
 import { PointsGrid } from './PointsGrid';
 import { waybillResolver as resolver } from './waybillResolver';
+import { updateWaybill } from './waybillsSlice';
 import * as api from 'api';
 import Index from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
@@ -33,11 +34,17 @@ const Row = ({ children, title }) => (
 );
 
 function Waybill() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const { id: waybillId } = useParams();
   const { consignmentNotesData } = useSelector(({ consignmentNotes }) => consignmentNotes);
   const methods = useForm({ resolver });
   const { handleSubmit, errors, reset } = methods;
-  const sendFormData = (id) => (data) => api.updateWaybill(id, data);
+  const sendFormData = (id) => (data) => (
+    dispatch(updateWaybill({ id, data }))
+      .then(() => history.push('./'))
+  );
+
   const { bindPending, handler } = usePending(sendFormData(waybillId));
 
   useEffect(async () => {

@@ -31,6 +31,26 @@ export const deleteWaybills = createAsyncThunk(
   },
 );
 
+export const updateWaybill = createAsyncThunk(
+  'waybills/updateWaybill',
+  async ({ id, data }, { dispatch }) => {
+    await api.updateWaybill(id, data)
+      .catch((err) => {
+        dispatch(enqueueToast({
+          message: err.message || 'Ошибка при обновлении путевого листа',
+          type: TOAST_TYPES.ERROR,
+        }));
+
+        throw err;
+      });
+
+    dispatch(enqueueToast({
+      message: 'Путевой лист успешно обновлен',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+  },
+);
+
 const initialState = {
   waybillsData: [],
   waybillsLoadComplete: false,

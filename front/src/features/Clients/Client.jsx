@@ -32,20 +32,18 @@ function Client({ isPopup = false, onPopupClose }) {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
-  const sendFormData = (clientId) => async (formData) => {
-    dispatch(
-      clientId
-        ? updateClient({ formData, clientId })
-        : setClient({ formData }),
-    ).then(() => {
-      if (isPopup) {
-        onPopupClose();
-        dispatch(getClients());
-      } else {
-        history.push(URLS.CLIENTS);
-      }
-    });
-  };
+  const sendFormData = (clientId) => async (formData) => dispatch(
+    clientId
+      ? updateClient({ formData, clientId })
+      : setClient({ formData }),
+  ).then(() => {
+    if (isPopup) {
+      onPopupClose();
+      dispatch(getClients());
+    } else {
+      history.push(URLS.CLIENTS);
+    }
+  });
 
   const { bindPending, handler } = usePending(sendFormData(id));
 
@@ -93,7 +91,7 @@ function Client({ isPopup = false, onPopupClose }) {
                   />
                 </FormGroup>
               </FormControl>
-              <SubmitButton {...bindPending}>Готово</SubmitButton>
+              <SubmitButton {...bindPending}>Сохранить</SubmitButton>
             </Grid>
           </form>
         </FormProvider>

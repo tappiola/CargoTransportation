@@ -32,9 +32,9 @@ function User() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
-  const sendFormData = (clientId) => (formData) => dispatch(
+  const sendFormData = (clientId) => async (formData) => dispatch(
     clientId
-      ? updateWarehouse(formData, clientId)
+      ? updateWarehouse({ formData, clientId })
       : setWarehouse(formData),
   ).then(() => history.push('/warehouses'));
 
