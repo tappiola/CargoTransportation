@@ -18,12 +18,14 @@ export const getConsignmentNotes = createAsyncThunk(
 export const deleteConsignmentNotes = createAsyncThunk(
   'consignmentNotes/deleteConsignmentNotes',
   async (ids, { dispatch }) => {
-    const response = await api.deleteConsignmentNotes(ids)
+    await api.deleteConsignmentNotes(ids)
       .catch((err) => {
         dispatch(enqueueToast({
-          message: err.message || 'Error',
+          message: err.message || 'Ошибка при удалении ТТН',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
@@ -31,7 +33,7 @@ export const deleteConsignmentNotes = createAsyncThunk(
       type: TOAST_TYPES.SUCCESS,
     }));
 
-    return response;
+    return ids;
   },
 );
 
@@ -44,6 +46,8 @@ export const setConsignmentNote = createAsyncThunk(
           message: err.message || 'Ошибка при создании ТТН',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({

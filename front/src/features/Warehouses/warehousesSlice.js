@@ -19,6 +19,8 @@ export const setWarehouse = createAsyncThunk(
           message: err.message || 'Склад успешно добавлен в систему',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
@@ -39,6 +41,8 @@ export const updateWarehouse = createAsyncThunk(
           message: err.message || 'Изменения успешно сохранены',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
@@ -57,6 +61,8 @@ export const deleteWarehouses = createAsyncThunk(
           message: err.message || 'Ошибка при создании склада',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({

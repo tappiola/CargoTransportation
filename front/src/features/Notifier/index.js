@@ -22,6 +22,14 @@ function Notifier() {
     }
   }, [notifications]);
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = null;
+    };
+  }, []);
+
   return null;
 }
 

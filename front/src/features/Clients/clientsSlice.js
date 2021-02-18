@@ -19,12 +19,16 @@ export const deleteClients = createAsyncThunk(
           message: err.message || 'Ошибка при удалении клиента',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
       message: 'Клиенты были успешно удалены',
       type: TOAST_TYPES.SUCCESS,
     }));
+
+    return ids;
   },
 );
 
@@ -37,6 +41,8 @@ export const updateClient = createAsyncThunk(
           message: err.message || 'Ошибка при обновлении клиента',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
@@ -55,11 +61,9 @@ export const setClient = createAsyncThunk(
           message: err.message || 'Ошибка при создании клиента',
           type: TOAST_TYPES.ERROR,
         }));
-      });
 
-    if (!response) {
-      throw new Error();
-    }
+        throw err;
+      });
 
     dispatch(enqueueToast({
       message: 'Клиент успешно добавлен',

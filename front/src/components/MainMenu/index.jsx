@@ -13,7 +13,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
-import { dispatchLogoutUser } from 'features/CurrentUser/currentUserSlice';
+import { logoutUser } from 'features/CurrentUser/currentUserSlice';
 import PropTypes from 'prop-types';
 
 import { useMenuStyles } from './MainMenu.styles';
@@ -28,7 +28,7 @@ export default function MainMenu({
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
-  const logout = () => dispatch(dispatchLogoutUser());
+  const logout = () => dispatch(logoutUser());
 
   return (
     <div className={classes.root}>

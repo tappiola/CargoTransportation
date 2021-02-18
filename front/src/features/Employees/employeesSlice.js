@@ -31,12 +31,16 @@ export const deleteEmployees = createAsyncThunk(
           message: err.message || 'Oшибка при удалении сотрудников',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
       message: 'Удаление сотрудников прошло успешно',
       type: TOAST_TYPES.SUCCESS,
     }));
+
+    return ids;
   },
 );
 

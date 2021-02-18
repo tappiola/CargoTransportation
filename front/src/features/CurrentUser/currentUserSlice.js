@@ -22,11 +22,9 @@ export const loginUser = createAsyncThunk(
           message: err.message || 'Произошла ошибка',
           type: TOAST_TYPES.ERROR,
         }));
-      });
 
-    if (!response) {
-      throw new Error();
-    }
+        throw err;
+      });
 
     dispatch(enqueueToast({
       message: 'Вход в систему выполнен успешно',
@@ -37,20 +35,35 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+export const getUserProfile = createAsyncThunk(
+  'currentUser/getUserProfile',
+  api.getUserProfile,
+);
+
+export const logoutUser = createAsyncThunk(
+  'currentUser/logoutUser',
+  async () => localStorage.removeItem('token'),
+);
+
+export const refreshTokenIfExpired = createAsyncThunk(
+  'currentUser/updateToken',
+  async () => {
+    const lsToken = getAuthToken();
+
+    if (lsToken) {
+      const { exp } = jwtDecode(lsToken);
+
+      if (exp && exp > Date.now()) {
+        const { updateToken } = await api.updateToken();
+        localStorage.setItem('token', updateToken);
+      }
+    }
+  },
+);
+
 const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState,
-  reducers: {
-    setUserProfile(state, action) {
-      const { roles, companyName, fullName } = action?.payload;
-      state.roles = roles;
-      state.company = companyName;
-      state.fullName = fullName;
-    },
-    logoutUser(state) {
-      state.isAuthorized = false;
-    },
-  },
   extraReducers: {
     [loginUser.fulfilled]: (state, action) => {
       const { token, roles, companyId } = action.payload || {};
@@ -62,34 +75,19 @@ const currentUserSlice = createSlice({
     [loginUser.rejected]: (state) => {
       state.isAuthorized = false;
     },
+    [getUserProfile.fulfilled]: (state, action) => {
+      const { roles, companyName, fullName } = action?.payload;
+      state.roles = roles;
+      state.company = companyName;
+      state.fullName = fullName;
+    },
+    [logoutUser.fulfilled]: (state) => {
+      state.isAuthorized = false;
+    },
   },
 });
 
-export const { setUserProfile, logoutUser } = currentUserSlice.actions;
-
 export default currentUserSlice.reducer;
-
-export const dispatchLogoutUser = () => (dispatch) => {
-  dispatch(logoutUser);
-  localStorage.removeItem('token');
-};
-
-export const refreshTokenIfExpired = () => {
-  const lsToken = getAuthToken();
-
-  if (lsToken) {
-    const { exp } = jwtDecode(lsToken);
-    if (exp && exp > Date.now()) {
-      api.updateToken()
-        .then((res) => localStorage.setItem('token', res.updateToken));
-    }
-  }
-};
-
-export const getUserProfile = () => (dispatch) => (
-  api.getUserProfile()
-    .then((data) => dispatch(setUserProfile(data)))
-);
 
 export const subscribeOnMessages = () => (dispatch) => {
   const url = new URL(BACKEND_HOST);

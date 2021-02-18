@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { dispatchDeleteWaybills, dispatchGetWaybills } from './waybillsSlice';
+import { deleteWaybills, getWaybills } from './waybillsSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -35,7 +35,7 @@ function WaybillsList() {
   ];
 
   useEffect(() => {
-    dispatch(dispatchGetWaybills());
+    dispatch(getWaybills());
   }, []);
 
   return (
@@ -59,7 +59,7 @@ function WaybillsList() {
         onPopupClose={() => setIsDialogOpen(false)}
         onActionConfirm={() => {
           setIsDialogOpen(false);
-          dispatch(dispatchDeleteWaybills(selection));
+          dispatch(deleteWaybills(selection));
           setSelection([]);
         }}
       />

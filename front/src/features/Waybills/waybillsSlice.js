@@ -1,7 +1,35 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { enqueueToast } from 'features/Notifier/NotifierSlice';
 
 import * as api from 'api';
+import { TOAST_TYPES } from 'constants/toastsTypes';
+
+export const getWaybills = createAsyncThunk(
+  'waybills/getWaybills',
+  api.getWaybills,
+);
+
+export const deleteWaybills = createAsyncThunk(
+  'waybills/deleteWaybills',
+  async (ids, { dispatch }) => {
+    await api.deleteWaybills(ids).catch((err) => {
+      dispatch(enqueueToast({
+        message: err.message || 'Ошибка при удалении путевого листа',
+        type: TOAST_TYPES.ERROR,
+      }));
+
+      throw err;
+    });
+
+    dispatch(enqueueToast({
+      message: 'Путевые листы успешно удалены',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+
+    return ids;
+  },
+);
 
 const initialState = {
   waybillsData: [],
@@ -11,30 +39,16 @@ const initialState = {
 const waybillsSlice = createSlice({
   name: 'waybills',
   initialState,
-  reducers: {
-    setWaybills(state, action) {
+  extraReducers: {
+    [getWaybills.fulfilled]: (state, action) => {
       state.waybillsData = action.payload;
       state.waybillsLoadComplete = true;
     },
-    deleteWaybills: {
-      reducer: (state, action) => {
-        state.waybillsData = state.waybillsData
-          .filter(({ id }) => !action.payload.includes(String(id)));
-      },
+    [deleteWaybills.fulfilled]: (state, action) => {
+      state.waybillsData = state.waybillsData
+        .filter(({ id }) => !action.payload.includes(String(id)));
     },
   },
 });
 
-export const { setWaybills, deleteWaybills } = waybillsSlice.actions;
-
 export default waybillsSlice.reducer;
-
-export const dispatchGetWaybills = () => (dispatch) => (
-  api.getWaybills()
-    .then((data) => dispatch(setWaybills(data)))
-);
-
-export const dispatchDeleteWaybills = (ids) => (dispatch) => (
-  api.deleteWaybills(ids)
-    .then(() => dispatch(deleteWaybills(ids)))
-);

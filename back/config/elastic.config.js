@@ -1,6 +1,7 @@
 // const { Client } = require('@elastic/elasticsearch');
 
-// module.exports = new Client({
+module.exports = () => {};
+//   module.exports = new Client({
 //   cloud: {
 //     id: process.env.ELASTIC_CLOUD_ID,
 //   },

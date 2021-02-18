@@ -24,6 +24,8 @@ export const deleteUsers = createAsyncThunk(
           message: err.message || 'Oшибка при удалении сотрудников',
           type: TOAST_TYPES.ERROR,
         }));
+
+        throw err;
       });
 
     dispatch(enqueueToast({
