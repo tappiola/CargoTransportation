@@ -4,7 +4,6 @@ import { enqueueToast } from 'features/Notifier/NotifierSlice';
 import jwtDecode from 'jwt-decode';
 
 import * as api from 'api';
-import { BACKEND_HOST } from 'constants/environment';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
 
@@ -90,7 +89,7 @@ const currentUserSlice = createSlice({
 export default currentUserSlice.reducer;
 
 export const subscribeOnMessages = () => (dispatch) => {
-  const url = new URL(BACKEND_HOST);
+  const url = new URL(window.location.origin);
   url.protocol = 'ws:';
 
   let ws = new WebSocket(`${url.origin}/notifications`);
