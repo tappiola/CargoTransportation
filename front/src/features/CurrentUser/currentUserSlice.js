@@ -90,7 +90,7 @@ export default currentUserSlice.reducer;
 
 export const subscribeOnMessages = () => (dispatch) => {
   const url = new URL(window.location.origin);
-  url.protocol = 'ws:';
+  url.protocol = 'wss:';
 
   let ws = new WebSocket(`${url.origin}/notifications`);
 
