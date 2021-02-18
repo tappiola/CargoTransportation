@@ -12,7 +12,21 @@ export const getUsers = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'users/updateUser',
-  api.updateUser,
+  async ({ id, ...data }, { dispatch }) => {
+    await api.updateUser(data, id).catch((err) => {
+      dispatch(enqueueToast({
+        message: err.message || 'Oшибка при обновлении пользователя',
+        type: TOAST_TYPES.ERROR,
+      }));
+
+      throw err;
+    });
+
+    dispatch(enqueueToast({
+      message: 'Изменения успешно сохранены',
+      type: TOAST_TYPES.SUCCESS,
+    }));
+  },
 );
 
 export const deleteUsers = createAsyncThunk(
@@ -21,7 +35,7 @@ export const deleteUsers = createAsyncThunk(
     await api.deleteUsers(ids)
       .catch((err) => {
         dispatch(enqueueToast({
-          message: err.message || 'Oшибка при удалении сотрудников',
+          message: err.message || 'Oшибка при удалении пользователей',
           type: TOAST_TYPES.ERROR,
         }));
 
