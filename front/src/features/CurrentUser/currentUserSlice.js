@@ -104,7 +104,7 @@ export const subscribeOnMessages = () => (dispatch) => {
       return;
     }
 
-    dispatch(enqueueToast({ message, type }));
+    dispatch(enqueueToast({ message, type, duration: 60 * 1000 * 5 }));
   };
 
   ws.onerror = () => {
