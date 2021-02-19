@@ -75,6 +75,5 @@ module.exports = {
   ConsignmentNoteStatus,
   WaybillStatus,
   ControlPoint,
-  ControlPointStatus
   CongratulationTemplate,
 };

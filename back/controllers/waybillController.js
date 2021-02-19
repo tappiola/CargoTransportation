@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint, ControlPointStatus } = require('../models');
+const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES, WAYBILL_STATUSES_ID, CONTROL_POINT_STATUSES_ID } = require('../constants');
 
@@ -139,7 +139,6 @@ router.get('/mobile/:driverId', async (req, res) => {
         order: [
           ['expectedArrivalAt', 'ASC'],
         ],
-        include: [{ model: ControlPointStatus }],
       },
     ],
     order: [
@@ -162,16 +161,16 @@ router.put('/mobile/checkPoint/:pointId', async (req, res) => {
 
     return res.status(200).json(point);
   } catch (e) {
-    return res.status(400).json({error:{message:e.message}});
+    return res.status(400).json({ error:{ message:e.message } });
   }
 });
 
 router.put('/mobile/finish/:id', async (req, res) => {
-  const {id} = req.params;
-  const waybill = await Waybill.findOne({where: {id}});
+  const { id } = req.params;
+  const waybill = await Waybill.findOne({ where: { id } });
 
   if (!waybill) {
-    return res.status(400).json({error: {message: 'Путевой лист не найден.'}});
+    return res.status(400).json({ error: { message: 'Путевой лист не найден.' } });
   }
 
   try {
@@ -180,7 +179,7 @@ router.put('/mobile/finish/:id', async (req, res) => {
 
     return res.status(200).json(waybill);
   } catch (e) {
-    return res.status(400).json({error:{message:e.message}});
+    return res.status(400).json({ error:{ message:e.message } });
   }
 });
 
