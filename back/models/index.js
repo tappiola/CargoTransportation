@@ -34,6 +34,7 @@ ConsignmentNote.belongsTo(Company, { as: 'linkedCompany' });
 ConsignmentNote.belongsTo(User, { as: 'driver' });
 ConsignmentNote.belongsTo(User, { as: 'createdBy' });
 ConsignmentNote.belongsTo(User, { as: 'assignedTo' });
+ConsignmentNote.hasMany(Good);
 
 Good.belongsTo(GoodStatus);
 Good.belongsTo(User, { as: 'checkedBy' });
@@ -44,6 +45,7 @@ ConsignmentNote.hasOne(Waybill);
 Waybill.belongsTo(ConsignmentNote);
 Waybill.belongsTo(Warehouse);
 Waybill.belongsTo(Company, { as: 'linkedCompany' });
+Waybill.hasMany(ControlPoint);
 
 ControlPoint.belongsTo(ControlPointStatus);
 ControlPoint.belongsTo(Waybill);
@@ -73,5 +75,6 @@ module.exports = {
   ConsignmentNoteStatus,
   WaybillStatus,
   ControlPoint,
+  ControlPointStatus
   CongratulationTemplate,
 };
