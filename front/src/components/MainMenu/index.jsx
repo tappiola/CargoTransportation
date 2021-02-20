@@ -13,12 +13,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
+import { logoutUser } from 'features/CurrentUser/currentUserSlice';
 import PropTypes from 'prop-types';
 
 import { useMenuStyles } from './MainMenu.styles';
 import { MenuItems } from './MenuItems';
 import { URLS } from 'constants/urls';
-import { dispatchLogoutUser } from 'redux/actions';
 
 export default function MainMenu({
   children, modules, userName, company,
@@ -28,7 +28,7 @@ export default function MainMenu({
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
-  const logout = () => dispatch(dispatchLogoutUser());
+  const logout = () => dispatch(logoutUser());
 
   return (
     <div className={classes.root}>

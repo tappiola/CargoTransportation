@@ -2,14 +2,9 @@ import React from 'react';
 
 import Button from '@material-ui/core/Button';
 
-const DeleteButton = ({ isDisabled, onButtonClick, ...props }) => (
-  <Button
-    {...props}
-    color="secondary"
-    disabled={isDisabled}
-    onClick={onButtonClick}
-  >
-    Удалить
+const DeleteButton = ({ children, ...props }) => (
+  <Button {...props} color="secondary">
+    {children || 'Удалить'}
   </Button>
 );
 

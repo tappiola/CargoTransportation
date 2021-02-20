@@ -8,9 +8,7 @@ const BackButton = ({ link, text }) => (
   <NavButton
     variant="outlined"
     to={link}
-    startIcon={(
-      <KeyboardBackspaceIcon />
-    )}
+    startIcon={<KeyboardBackspaceIcon />}
   >
     {text}
   </NavButton>
