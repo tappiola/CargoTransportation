@@ -4,7 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
-import { getCompanies } from './companiesSlice';
+import { getCompanies, deleteCompanies } from './companiesSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -26,7 +26,7 @@ function CompaniesList() {
   }, []);
 
   const columns = [
-    COLUMNS.COMPANIES_NAME,
+    COLUMNS.COMPANIES_NAME(path),
     COLUMNS.COMPANIES_UNN,
   ];
 
@@ -49,11 +49,11 @@ function CompaniesList() {
           title="Удаление компаний"
           description="Вы уверены, что хотите удалить выбранные компании?"
           onPopupClose={() => setIsDialogOpen(false)}
-          // onActionConfirm={() => {
-          //   setIsDialogOpen(false);
-          //   dispatch(deleteUsers(selection));
-          //   setSelection([]);
-          // }}
+          onActionConfirm={() => {
+            setIsDialogOpen(false);
+            dispatch(deleteCompanies(selection));
+            setSelection([]);
+          }}
         />
       )}
     </>
