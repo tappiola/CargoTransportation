@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -11,14 +11,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 
-import { getCompanies } from '../Companies/companiesSlice';
 import { userResolver as resolver } from './userResolver';
 import { setUser, updateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
+import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField, { DateField } from 'components/ControlledField';
 import { ROLE_NAMES, ROLES } from 'constants/permissions';
 import { usePending } from 'utils';
@@ -27,16 +24,18 @@ const ALLOWED_ROLES = Object.entries(ROLE_NAMES).filter(
   ([name]) => name !== ROLES.GLOBAL_ADMIN,
 );
 
-const selector = (id) => ({ users }) => {
+const selector = (id) => ({ users, companies: { companiesData } }) => {
   const user = users.usersData.find(({ id: _id }) => _id.toString() === id);
   const roles = user?.roles && user.roles.map(({ role }) => role);
+  const company = companiesData.find(({ id: _id }) => _id === user?.companyId);
 
-  return user && { ...user, roles };
+  return user ? { ...user, roles, company, companiesData } : { companiesData };
 };
 
-const normalize = ({ roles: asObj, ...data }, id) => ({
+const normalize = ({ roles: asObj, company, ...data }, id) => ({
   ...data,
   id,
+  companyId: company.id,
   roles: Object.entries(asObj || {})
     .filter(([, checked]) => checked)
     .map(([role]) => role),
@@ -44,52 +43,35 @@ const normalize = ({ roles: asObj, ...data }, id) => ({
 
 function User() {
   const { id } = useParams();
-  const defaultValues = useSelector(selector(id));
   const dispatch = useDispatch();
+  const { companiesData, ...defaultValues } = useSelector(selector(id));
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
-  const [companiesList, setCompaniesList] = useState([]);
-  const [companyId, setCompanyId] = useState(defaultValues.companyId);
-
-  const sendFormData = (userId, formData) => dispatch(
+  const sendFormData = (userId) => (formData) => dispatch(
     userId
       ? updateUser(normalize(formData, userId))
       : setUser(normalize(formData)),
   );
 
-  const { bindPending, handler } = usePending(sendFormData.bind(null, id));
+  const { bindPending, handler } = usePending(sendFormData(id));
 
-  const companiesData = useSelector(({ companies }) => companies.companiesData);
-  useEffect(() => {
-    dispatch(getCompanies());
-    setCompaniesList(companiesData);
-  }, []);
+  const getOption = ({ name: option }, { name: value }) => (!option) || option === value;
 
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
         <form noValidate onSubmit={handleSubmit(handler)}>
           <Grid container direction="column">
-
-            <FormControl margin="normal">
-              <InputLabel id="company-label" shrink>Компания</InputLabel>
-              <Select
-                labelId="company-label"
-                id="company"
-                value={companyId}
-                onChange={(e) => setCompanyId(e.target.value)}
-              >
-                <MenuItem value="">
-                  <em>Выбрать</em>
-                </MenuItem>
-                {companiesList.map((item) => (
-                  <MenuItem key={item.id} value={item.id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <ControlledAutocomplete
+              name="company"
+              fieldName="name"
+              options={companiesData}
+              getOptionLabel={(option) => option.name || ''}
+              getOptionSelected={getOption}
+              label="Компания"
+              defaultValue={{}}
+            />
 
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
