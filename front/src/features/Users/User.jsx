@@ -15,7 +15,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-import { getCompanies } from './companiesSlice';
+import { getCompanies } from '../Companies/companiesSlice';
 import { userResolver as resolver } from './userResolver';
 import { setUser, updateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';

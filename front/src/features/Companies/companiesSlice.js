@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from 'api';
 
 export const getCompanies = createAsyncThunk(
-  'users/getCompanies',
+  'companies/getCompanies',
   api.getCompanies,
 );
 
@@ -19,6 +19,7 @@ const companiesSlice = createSlice({
   extraReducers: {
     [getCompanies.fulfilled]: (state, action) => {
       state.companiesData = action.payload;
+      state.companiesLoadComplete = true;
     },
   },
 });

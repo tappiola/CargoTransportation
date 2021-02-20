@@ -39,6 +39,20 @@ export const EMAIL = {
   ),
 };
 
+export const COMPANIES_NAME = {
+  field: 'name',
+  headerName: 'Компания',
+  flex: 3,
+  renderCell: valueOrBlank,
+};
+
+export const COMPANIES_UNN = {
+  field: 'unn',
+  headerName: 'УНН',
+  flex: 1,
+  renderCell: valueOrBlank,
+};
+
 export const COMPANY = {
   field: 'companyName',
   headerName: 'Компания',
