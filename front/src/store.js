@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import reportsReducer from 'features/Acts/actSlice';
 import clientsReducer from 'features/Clients/clientsSlice';
 import consignmentNotesReducer from 'features/ConsignmentNotes/consignmentNotesSlice';
 import currentUserReducer from 'features/CurrentUser/currentUserSlice';
@@ -34,6 +35,7 @@ const store = configureStore({
     users: usersReducer,
     warehouses: warehousesReducer,
     waybills: waybillsReducer,
+    reports: reportsReducer,
   },
   preloadedState,
   devTools: process.env.NODE_ENV !== 'production',

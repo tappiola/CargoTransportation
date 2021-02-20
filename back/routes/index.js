@@ -9,6 +9,7 @@ const documentController = require('../controllers/documentController');
 const mailController = require('../controllers/mailController');
 const publicController = require('../controllers/publicController');
 const notificationController = require('../controllers/notificationController');
+const reportController = require('../controllers/reportController');
 
 module.exports = (app) => {
   app.ws('/notifications', notificationController);
@@ -21,5 +22,6 @@ module.exports = (app) => {
   app.use('/api/waybills', waybillRouter);
   app.use('/api/documents', documentController);
   app.use('/api/mails', mailController);
+  app.use('/api/reports', reportController);
   app.use('/', publicController);
 };

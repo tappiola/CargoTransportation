@@ -48,6 +48,13 @@ export {
   deleteConsignmentNotes,
 } from './consignmentNotes';
 
+export {
+  setReport,
+  getReports,
+  updateReport,
+  deleteReports,
+} from './reports';
+
 export { fetchAPI } from './fetchAPI';
 export { getOptions } from './elastic';
 export { getDocuments } from './documents';
