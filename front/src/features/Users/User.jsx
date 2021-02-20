@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -11,7 +11,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
+import { getCompanies } from './companiesSlice';
 import { userResolver as resolver } from './userResolver';
 import { setUser, updateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
@@ -45,6 +49,9 @@ function User() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit, errors } = methods;
 
+  const [companiesList, setCompaniesList] = useState([]);
+  const [companyId, setCompanyId] = useState(defaultValues.companyId);
+
   const sendFormData = (userId, formData) => dispatch(
     userId
       ? updateUser(normalize(formData, userId))
@@ -53,11 +60,37 @@ function User() {
 
   const { bindPending, handler } = usePending(sendFormData.bind(null, id));
 
+  const companiesData = useSelector(({ companies }) => companies.companiesData);
+  useEffect(() => {
+    dispatch(getCompanies());
+    setCompaniesList(companiesData);
+  }, []);
+
   return (
     <Container maxWidth="sm">
       <FormProvider {...methods}>
         <form noValidate onSubmit={handleSubmit(handler)}>
           <Grid container direction="column">
+
+            <FormControl margin="normal">
+              <InputLabel id="company-label" shrink>Компания</InputLabel>
+              <Select
+                labelId="company-label"
+                id="company"
+                value={companyId}
+                onChange={(e) => setCompanyId(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>Выбрать</em>
+                </MenuItem>
+                {companiesList.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <BaseField name="lastName" label="Фамилия" />
             <BaseField name="firstName" label="Имя" />
             <BaseField name="middleName" label="Отчество" />

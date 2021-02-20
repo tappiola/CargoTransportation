@@ -9,11 +9,13 @@ const documentController = require('../controllers/documentController');
 const mailController = require('../controllers/mailController');
 const publicController = require('../controllers/publicController');
 const notificationController = require('../controllers/notificationController');
+const companyRouter = require('../controllers/companyController');
 
 module.exports = (app) => {
   app.ws('/notifications', notificationController);
   app.use('/api/elastic', elasticRouter);
   app.use('/api/users', userRouter);
+  app.use('/api/companies', companyRouter);
   app.use('/api/employees', employeeRouter);
   app.use('/api/clients', clientRouter);
   app.use('/api/warehouses', warehouseRouter);

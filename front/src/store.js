@@ -4,6 +4,7 @@ import consignmentNotesReducer from 'features/ConsignmentNotes/consignmentNotesS
 import currentUserReducer from 'features/CurrentUser/currentUserSlice';
 import employeesReducer from 'features/Employees/employeesSlice';
 import notificationsReducer, { enqueueToast } from 'features/Notifier/NotifierSlice';
+import companiesReducer from 'features/Users/companiesSlice';
 import usersReducer from 'features/Users/usersSlice';
 import warehousesReducer from 'features/Warehouses/warehousesSlice';
 import waybillsReducer from 'features/Waybills/waybillsSlice';
@@ -31,6 +32,7 @@ const store = configureStore({
     currentUser: currentUserReducer,
     employees: employeesReducer,
     notifications: notificationsReducer,
+    companies: companiesReducer,
     users: usersReducer,
     warehouses: warehousesReducer,
     waybills: waybillsReducer,
