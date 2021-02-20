@@ -58,11 +58,18 @@ const menuItems = [
     module: MODULE_NAMES.WAYBILLS,
     basePath: URLS.WAYBILLS,
   },
+  {
+    module: MODULE_NAMES.VEHICLES,
+    basePath: URLS.VEHICLES,
+  },
 ];
 
 const MENU_ITEMS_CONFIG = {
   [MODULE_NAMES.CLIENTS]: {
     menuItemName: 'Клиенты', icon: PeopleIcon,
+  },
+  [MODULE_NAMES.VEHICLES]: {
+    menuItemName: 'Машины', icon: LocalShippingIcon,
   },
   [MODULE_NAMES.ACTS]: {
     menuItemName: 'Акты', icon: ReportIcon,

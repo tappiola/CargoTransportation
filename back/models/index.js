@@ -12,6 +12,7 @@ const { Waybill, WaybillStatus } = require('./Waybill');
 const { ControlPoint, ControlPointStatus } = require('./ControlPoint');
 const LossReport = require('./LossReport');
 const CongratulationTemplate = require('./CongratulationTemplate');
+const Vehicles = require('./Vehicles');
 const Logger = require('../config/logger');
 
 User.belongsTo(Company);
@@ -55,6 +56,10 @@ LossReport.belongsTo(User, { as: 'responsible' });
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
+const AutoPark = db.define('auto_park');
+Vehicles.belongsToMany(ConsignmentNote, { through: AutoPark });
+Vehicles.belongsToMany(Waybill, { through: AutoPark });
+
 db.sync({ alter: true, logging: false }).then(
   () => Logger.info('DB sync completed'),
   (err) => Logger.error(err)
@@ -76,4 +81,5 @@ module.exports = {
   WaybillStatus,
   ControlPoint,
   CongratulationTemplate,
+  Vehicles
 };

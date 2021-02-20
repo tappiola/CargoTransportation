@@ -1,4 +1,11 @@
 export {
+  getVehicles,
+  setVehicles,
+  updateVehicles,
+  deleteVehicles,
+} from './vehicles';
+
+export {
   getCompanies,
   setCompany,
   updateCompany,

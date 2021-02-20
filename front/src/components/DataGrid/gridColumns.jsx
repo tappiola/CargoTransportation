@@ -204,3 +204,12 @@ export const DEPARTURE_DATE = {
   flex: 3,
   renderCell: ({ value }) => value && value.slice(0, 10),
 };
+
+export const VEHICLES_NAME = (path) => ({
+  field: 'number',
+  headerName: 'Название',
+  flex: 1,
+  renderCell: ({ value, row }) => (
+    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+  ),
+});
