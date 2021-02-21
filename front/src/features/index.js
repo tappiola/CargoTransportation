@@ -13,6 +13,7 @@ const Companies = lazy(() => import('features/Companies'));
 const Users = lazy(() => import('features/Users'));
 const Warehouses = lazy(() => import('features/Warehouses'));
 const Waybills = lazy(() => import('features/Waybills'));
+const Vehicles = lazy(() => import('features/Vehicles'));
 
 const { GLOBAL_ADMIN, MANAGER, ADMIN, DRIVER, DISPATCHER } = ROLES;
 
@@ -76,5 +77,11 @@ export const PROTECTED_ROUTES = [
     basePath: URLS.WAYBILLS,
     component: Waybills,
     roles: [ADMIN, DRIVER, MANAGER],
+  },
+  {
+    module: MODULE_NAMES.VEHICLES,
+    basePath: URLS.VEHICLES,
+    component: Vehicles,
+    roles: [ADMIN, MANAGER],
   },
 ];

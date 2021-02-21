@@ -55,6 +55,13 @@ export {
   deleteConsignmentNotes,
 } from './consignmentNotes';
 
+export {
+  getVehicles,
+  setVehicles,
+  updateVehicles,
+  deleteVehicles,
+} from './vehicles';
+
 export { fetchAPI } from './fetchAPI';
 export { getOptions } from './elastic';
 export { getDocuments } from './documents';
