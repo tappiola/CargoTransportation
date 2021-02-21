@@ -66,7 +66,7 @@ export const setReport = createAsyncThunk(
       });
 
     dispatch(enqueueToast({
-      message: 'Клиент успешно добавлен',
+      message: 'Акт успешно добавлен',
       type: TOAST_TYPES.SUCCESS,
     }));
 

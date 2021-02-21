@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { LossReport, Good } = require('../models');
+const { LossReport, Good, User, Company } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER } } = require('../constants');
 
@@ -10,8 +10,17 @@ router.get('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId } = req;
 
   const reports = await LossReport.findAll({
-    where: { linkedCompanyId },
-    include: [Good],
+    where: { linkedCompanyId: linkedCompanyId || 2 },
+    include: [
+      Good,
+      { 
+        model: Company,
+        as: 'linkedCompany',
+      },
+      { 
+        model: User,
+        as: 'responsible',
+      }],
   });
 
   res.status(200).json(reports);
@@ -27,9 +36,11 @@ router.post('/register', auth, async (req, res) => {
     responsibleId,
   });
 
-  goods.forEach(async ({ id, ...good }) => {
-    await report.createGood(good);
-  });
+  if (goods) {
+    goods.forEach(async ({ id, ...good }) => {
+      await report.createGood(good);
+    });
+  }
 
   return res.status(200).json(report);
 
