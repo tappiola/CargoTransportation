@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
-import { getCompanies } from 'features/Companies/companiesSlice';
 
 import { deleteUsers, getUsers } from './usersSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
@@ -29,7 +28,6 @@ function UsersList() {
 
   useEffect(() => {
     dispatch(getUsers());
-    dispatch(getCompanies());
   }, []);
 
   const columns = [
