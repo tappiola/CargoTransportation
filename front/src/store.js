@@ -6,6 +6,7 @@ import currentUserReducer from 'features/CurrentUser/currentUserSlice';
 import employeesReducer from 'features/Employees/employeesSlice';
 import notificationsReducer, { enqueueToast } from 'features/Notifier/NotifierSlice';
 import usersReducer from 'features/Users/usersSlice';
+import vehiclesReducer from 'features/Vehicles/vehiclesSlice';
 import warehousesReducer from 'features/Warehouses/warehousesSlice';
 import waybillsReducer from 'features/Waybills/waybillsSlice';
 
@@ -36,6 +37,7 @@ const store = configureStore({
     users: usersReducer,
     warehouses: warehousesReducer,
     waybills: waybillsReducer,
+    vehicles: vehiclesReducer,
   },
   preloadedState,
   devTools: process.env.NODE_ENV !== 'production',

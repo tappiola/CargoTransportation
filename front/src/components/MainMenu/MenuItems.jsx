@@ -58,6 +58,10 @@ const menuItems = [
     module: MODULE_NAMES.WAYBILLS,
     basePath: URLS.WAYBILLS,
   },
+  {
+    module: MODULE_NAMES.VEHICLES,
+    basePath: URLS.VEHICLES,
+  },
 ];
 
 const MENU_ITEMS_CONFIG = {
@@ -90,6 +94,9 @@ const MENU_ITEMS_CONFIG = {
   },
   [MODULE_NAMES.MAILINGS]: {
     menuItemName: 'Рассылки', icon: EmailIcon,
+  },
+  [MODULE_NAMES.VEHICLES]: {
+    menuItemName: 'Машины', icon: LocalShippingIcon,
   },
 };
 

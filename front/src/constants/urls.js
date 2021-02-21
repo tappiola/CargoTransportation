@@ -12,4 +12,5 @@ export const URLS = {
   SETTINGS: '/settings',
   STYLE_GUIDE: '/styleguide',
   SIGN_IN: '/signin',
+  VEHICLES: '/vehicles',
 };

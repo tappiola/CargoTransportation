@@ -13,6 +13,7 @@ const { ControlPoint, ControlPointStatus } = require('./ControlPoint');
 const LossReport = require('./LossReport');
 const CongratulationTemplate = require('./CongratulationTemplate');
 const Logger = require('../config/logger');
+const Vehicles = require('./Vehicles');
 
 User.belongsTo(Company);
 User.hasOne(CongratulationTemplate);
@@ -76,4 +77,5 @@ module.exports = {
   WaybillStatus,
   ControlPoint,
   CongratulationTemplate,
+  Vehicles
 };
