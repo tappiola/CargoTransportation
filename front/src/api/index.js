@@ -1,4 +1,11 @@
 export {
+  getCompanies,
+  setCompany,
+  updateCompany,
+  deleteCompanies,
+} from './companies';
+
+export {
   getUsers,
   setUser,
   updateUser,

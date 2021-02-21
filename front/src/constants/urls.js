@@ -4,6 +4,7 @@ export const URLS = {
   CONSIGNMENT_NOTES: '/consignment-notes',
   MAILINGS: '/mailings',
   REPORTS: '/reports',
+  COMPANIES: '/companies',
   USERS: '/users',
   EMPLOYEES: '/employees',
   WAREHOUSES: '/warehouses',

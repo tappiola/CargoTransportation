@@ -39,6 +39,22 @@ export const EMAIL = {
   ),
 };
 
+export const COMPANIES_NAME = (path) => ({
+  field: 'name',
+  headerName: 'Компания',
+  flex: 3,
+  renderCell: ({ value, row }) => (
+    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+  ),
+});
+
+export const COMPANIES_UNN = {
+  field: 'unn',
+  headerName: 'УНН',
+  flex: 1,
+  renderCell: valueOrBlank,
+};
+
 export const COMPANY = {
   field: 'companyName',
   headerName: 'Компания',

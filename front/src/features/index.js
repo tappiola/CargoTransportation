@@ -9,6 +9,7 @@ const Clients = lazy(() => import('features/Clients'));
 const ConsignmentNotes = lazy(() => import('features/ConsignmentNotes'));
 const Mailings = lazy(() => import('features/Mailings'));
 const Reports = lazy(() => import('features/Reports'));
+const Companies = lazy(() => import('features/Companies'));
 const Users = lazy(() => import('features/Users'));
 const Warehouses = lazy(() => import('features/Warehouses'));
 const Waybills = lazy(() => import('features/Waybills'));
@@ -45,6 +46,12 @@ export const PROTECTED_ROUTES = [
     basePath: URLS.REPORTS,
     component: Reports,
     roles: [MANAGER],
+  },
+  {
+    module: MODULE_NAMES.COMPANIES,
+    basePath: URLS.COMPANIES,
+    component: Companies,
+    roles: [GLOBAL_ADMIN],
   },
   {
     module: MODULE_NAMES.USERS,

@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 
 import { ConfirmDialog } from '@tappiola/material-ui-externals';
-import { getCompanies } from 'features/Companies/companiesSlice';
 
-import { deleteUsers, getUsers } from './usersSlice';
+import { getCompanies, deleteCompanies } from './companiesSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
@@ -13,55 +12,46 @@ import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 
-export const usersSelector = ({ usersData }) => usersData.map((u) => {
-  const { company, ...user } = u;
-  return { ...user, ...company };
-});
-
-function UsersList() {
+function CompaniesList() {
   const dispatch = useDispatch();
   const { path } = useRouteMatch();
   const [selection, setSelection] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const usersData = useSelector(({ users }) => usersSelector(users));
-  const usersLoadComplete = useSelector(({ users }) => users.usersLoadComplete);
+  const companiesData = useSelector(({ companies }) => companies.companiesData);
+  const companiesLoadComplete = useSelector(({ companies }) => companies.companiesLoadComplete);
 
   useEffect(() => {
-    dispatch(getUsers());
     dispatch(getCompanies());
   }, []);
 
   const columns = [
-    COLUMNS.FULLNAME(path),
-    COLUMNS.EMAIL,
-    COLUMNS.COMPANY,
-    COLUMNS.UNN,
-    COLUMNS.STATUS,
+    COLUMNS.COMPANIES_NAME(path),
+    COLUMNS.COMPANIES_UNN,
   ];
 
   return (
     <>
       <PaddedContainer>
-        <GridToolbar title="Пользователи">
-          <NavButton color="primary" to={`${path}/new`}>Новый пользователь</NavButton>
+        <GridToolbar title="Компании">
+          <NavButton color="primary" to={`${path}/new`}>Новая компания</NavButton>
           <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
-          rows={usersData}
+          rows={companiesData}
           columns={columns}
-          loading={!usersLoadComplete}
+          loading={!companiesLoadComplete}
           onSelectionChange={(newSelection) => setSelection(newSelection.rowIds)}
         />
       </PaddedContainer>
       {isDialogOpen && (
         <ConfirmDialog
-          title="Удаление пользователей"
-          description="Вы уверены, что хотите удалить выбранных пользователей?"
+          title="Удаление компаний"
+          description="Вы уверены, что хотите удалить выбранные компании?"
           onPopupClose={() => setIsDialogOpen(false)}
           onActionConfirm={() => {
             setIsDialogOpen(false);
-            dispatch(deleteUsers(selection));
+            dispatch(deleteCompanies(selection));
             setSelection([]);
           }}
         />
@@ -70,4 +60,4 @@ function UsersList() {
   );
 }
 
-export default UsersList;
+export default CompaniesList;
