@@ -43,7 +43,10 @@ export const getUserProfile = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'currentUser/logoutUser',
-  async () => localStorage.removeItem('token'),
+  async () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('state');
+  },
 );
 
 export const refreshTokenIfExpired = createAsyncThunk(
