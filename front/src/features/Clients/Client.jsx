@@ -15,7 +15,7 @@ import { clientResolver as resolver } from './clientResolver';
 import { setClient, updateClient, getClients } from './clientsSlice';
 import BackButton from 'components/Buttons/BackButton';
 import SubmitButton from 'components/Buttons/SubmitButton';
-import BaseField, { DateField } from 'components/ControlledField';
+import BaseField from 'components/ControlledField';
 import PaddedContainer from 'components/PaddedContainer';
 import { URLS } from 'constants/urls';
 import { usePending } from 'utils';
@@ -54,10 +54,6 @@ function Client({ isPopup = false, onPopupClose }) {
         <FormProvider {...methods}>
           <form noValidate onSubmit={handleSubmit(handler)}>
             <Grid container direction="column">
-              <BaseField name="lastName" label="Фамилия" />
-              <BaseField name="firstName" label="Имя" />
-              <BaseField name="middleName" label="Отчество" />
-              <BaseField name="email" label="email" />
               <BaseField name="companyName" label="Компания" />
 
               <Grid container spacing={1} justify="space-between">
@@ -75,7 +71,10 @@ function Client({ isPopup = false, onPopupClose }) {
                 </Grid>
               </Grid>
 
-              <DateField name="birthday" label="Дата рождения" />
+              <BaseField name="lastName" label="Фамилия" />
+              <BaseField name="firstName" label="Имя" />
+              <BaseField name="middleName" label="Отчество" />
+              <BaseField name="email" label="email" />
               <FormControl margin="normal">
                 <FormLabel>Статус: </FormLabel>
                 <FormGroup>

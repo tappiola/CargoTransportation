@@ -13,12 +13,9 @@ import SubmitButton from 'components/Buttons/SubmitButton';
 import BaseField from 'components/ControlledField';
 import { usePending } from 'utils';
 
-const selector = (companyId) => ({ companies }) => {
-  console.log(companies);
-  return companies.companiesData.find(
-    ({ id }) => id.toString() === companyId,
-  );
-};
+const selector = (companyId) => ({ companies }) => companies.companiesData.find(
+  ({ id }) => id.toString() === companyId,
+);
 
 const normalize = ({ ...data }, id) => ({
   ...data,
