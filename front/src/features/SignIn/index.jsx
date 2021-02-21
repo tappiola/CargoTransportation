@@ -30,7 +30,7 @@ function SignIn() {
             className={classes.form}
             noValidate
           >
-            <BaseField name="email" label="email" />
+            <BaseField name="email" label="Email" />
             <BaseField name="password" label="Пароль" type="password" />
             <SubmitButton className={classes.submit} {...bindPending} />
           </form>
