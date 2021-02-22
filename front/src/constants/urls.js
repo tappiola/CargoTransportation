@@ -3,6 +3,8 @@ export const URLS = {
   CLIENTS: '/clients',
   CONSIGNMENT_NOTES: '/consignment-notes',
   MAILINGS: '/mailings',
+  REPORTS: '/reports',
+  COMPANIES: '/companies',
   USERS: '/users',
   EMPLOYEES: '/employees',
   WAREHOUSES: '/warehouses',
@@ -10,4 +12,5 @@ export const URLS = {
   SETTINGS: '/settings',
   STYLE_GUIDE: '/styleguide',
   SIGN_IN: '/signin',
+  VEHICLES: '/vehicles',
 };

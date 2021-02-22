@@ -2,10 +2,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    height: '100vh',
+    justifyContent: 'center',
+    marginTop: -50,
   },
   avatar: {
     margin: theme.spacing(1),

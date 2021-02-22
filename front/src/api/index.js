@@ -1,4 +1,11 @@
 export {
+  getCompanies,
+  setCompany,
+  updateCompany,
+  deleteCompanies,
+} from './companies';
+
+export {
   getUsers,
   setUser,
   updateUser,
@@ -54,6 +61,13 @@ export {
   updateReport,
   deleteReports,
 } from './reports';
+
+export {
+  getVehicles,
+  setVehicles,
+  updateVehicles,
+  deleteVehicles,
+} from './vehicles';
 
 export { fetchAPI } from './fetchAPI';
 export { getOptions } from './elastic';

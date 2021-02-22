@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import BarChartIcon from '@material-ui/icons/BarChart';
+import BusinessIcon from '@material-ui/icons/Business';
 import EmailIcon from '@material-ui/icons/Email';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import PeopleIcon from '@material-ui/icons/People';
@@ -38,6 +39,10 @@ const menuItems = [
     basePath: URLS.REPORTS,
   },
   {
+    module: MODULE_NAMES.COMPANIES,
+    basePath: URLS.COMPANIES,
+  },
+  {
     module: MODULE_NAMES.USERS,
     basePath: URLS.USERS,
   },
@@ -53,6 +58,10 @@ const menuItems = [
     module: MODULE_NAMES.WAYBILLS,
     basePath: URLS.WAYBILLS,
   },
+  {
+    module: MODULE_NAMES.VEHICLES,
+    basePath: URLS.VEHICLES,
+  },
 ];
 
 const MENU_ITEMS_CONFIG = {
@@ -61,6 +70,9 @@ const MENU_ITEMS_CONFIG = {
   },
   [MODULE_NAMES.ACTS]: {
     menuItemName: 'Акты', icon: ReportIcon,
+  },
+  [MODULE_NAMES.COMPANIES]: {
+    menuItemName: 'Компании', icon: BusinessIcon,
   },
   [MODULE_NAMES.USERS]: {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
@@ -82,6 +94,9 @@ const MENU_ITEMS_CONFIG = {
   },
   [MODULE_NAMES.MAILINGS]: {
     menuItemName: 'Рассылки', icon: EmailIcon,
+  },
+  [MODULE_NAMES.VEHICLES]: {
+    menuItemName: 'Машины', icon: LocalShippingIcon,
   },
 };
 

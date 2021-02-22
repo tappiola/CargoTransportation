@@ -7,6 +7,7 @@ import * as api from 'api';
 import { BACKEND_HOST } from 'constants/environment';
 import { TOAST_TYPES } from 'constants/toastsTypes';
 import { getAuthToken } from 'utils';
+import { isProduction } from 'utils/environment';
 
 const initialState = {
   isAuthorized: !!getAuthToken(),
@@ -42,7 +43,10 @@ export const getUserProfile = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'currentUser/logoutUser',
-  async () => localStorage.removeItem('token'),
+  async () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('state');
+  },
 );
 
 export const refreshTokenIfExpired = createAsyncThunk(
@@ -90,8 +94,8 @@ const currentUserSlice = createSlice({
 export default currentUserSlice.reducer;
 
 export const subscribeOnMessages = () => (dispatch) => {
-  const url = new URL(BACKEND_HOST);
-  url.protocol = 'ws:';
+  const url = new URL(BACKEND_HOST || window.location.origin);
+  url.protocol = isProduction() ? 'wss:' : 'ws:';
 
   let ws = new WebSocket(`${url.origin}/notifications`);
 
@@ -103,7 +107,7 @@ export const subscribeOnMessages = () => (dispatch) => {
       return;
     }
 
-    dispatch(enqueueToast({ message, type }));
+    dispatch(enqueueToast({ message, type, duration: 60 * 1000 * 5 }));
   };
 
   ws.onerror = () => {

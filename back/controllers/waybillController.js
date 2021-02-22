@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint, ControlPointStatus } = require('../models');
+const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES, WAYBILL_STATUSES_ID, CONTROL_POINT_STATUSES_ID } = require('../constants');
 
@@ -139,7 +139,6 @@ router.get('/mobile/:driverId', async (req, res) => {
         order: [
           ['expectedArrivalAt', 'ASC'],
         ],
-        include: [{ model: ControlPointStatus }],
       },
     ],
     order: [

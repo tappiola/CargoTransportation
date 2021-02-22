@@ -1,6 +1,7 @@
 export const MODULE_NAMES = {
   CLIENTS: 'CLIENTS',
   ACTS: 'ACTS',
+  COMPANIES: 'COMPANIES',
   USERS: 'USERS',
   WAREHOUSES: 'WAREHOUSES',
   CONSIGNMENT_NOTES: 'CONSIGNMENT_NOTES',
@@ -9,6 +10,7 @@ export const MODULE_NAMES = {
   MAILINGS: 'MAILINGS',
   EMPLOYEES: 'EMPLOYEES',
   TEMPLATES: 'TEMPLATES',
+  VEHICLES: 'VEHICLES',
 };
 
 // object values should correspond to role names in DB, table 'role'

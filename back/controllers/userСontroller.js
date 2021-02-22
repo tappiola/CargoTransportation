@@ -17,11 +17,12 @@ const router = Router();
 const auth = authorize(ADMIN, GLOBAL_ADMIN);
 
 router.post('/register', [auth, validate.register], async (req, res, next) => {
-  const { companyId } = req;
-  const { email, roles: role, ...userData } = req.body;
+  const { companyId: creatorCompanyId } = req;
+  const { email, roles: role, companyId: newUserCompanyId, ...userData } = req.body;
+  
   const user = await User.findOne({ where: { email } });
-  const company = await Company.findByPk(companyId);
   const roles = await Role.findAll({ where: { role } });
+  const company = await Company.findByPk(newUserCompanyId || creatorCompanyId);
 
   if (user) {
     return res.status(400).json({ error: { message: 'Email уже используется!' } });
@@ -54,7 +55,7 @@ router.post('/register', [auth, validate.register], async (req, res, next) => {
       .then(({ messageId }) => Logger.log('Email sent...', messageId))
       .catch((err) => Logger.error(err.message));
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, newUser });
   } catch (e) {
     e.status = 400;
     return next(e);

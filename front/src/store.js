@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import reportsReducer from 'features/Acts/actSlice';
 import clientsReducer from 'features/Clients/clientsSlice';
+import companiesReducer from 'features/Companies/companiesSlice';
 import consignmentNotesReducer from 'features/ConsignmentNotes/consignmentNotesSlice';
 import currentUserReducer from 'features/CurrentUser/currentUserSlice';
 import employeesReducer from 'features/Employees/employeesSlice';
 import notificationsReducer, { enqueueToast } from 'features/Notifier/NotifierSlice';
 import usersReducer from 'features/Users/usersSlice';
+import vehiclesReducer from 'features/Vehicles/vehiclesSlice';
 import warehousesReducer from 'features/Warehouses/warehousesSlice';
 import waybillsReducer from 'features/Waybills/waybillsSlice';
 
@@ -32,10 +34,12 @@ const store = configureStore({
     currentUser: currentUserReducer,
     employees: employeesReducer,
     notifications: notificationsReducer,
+    companies: companiesReducer,
     users: usersReducer,
     warehouses: warehousesReducer,
     waybills: waybillsReducer,
     reports: reportsReducer,
+    vehicles: vehiclesReducer,
   },
   preloadedState,
   devTools: process.env.NODE_ENV !== 'production',

@@ -73,7 +73,7 @@ export default function Mailings() {
       text,
     }));
 
-    await fetch('http://localhost:5000/api/mails', {
+    await fetch(`${BACKEND_HOST}/api/mails`, {
       method: 'POST',
       body: formData,
       headers: {
