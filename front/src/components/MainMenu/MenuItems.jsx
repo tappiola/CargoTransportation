@@ -11,6 +11,8 @@ import BusinessIcon from '@material-ui/icons/Business';
 import EmailIcon from '@material-ui/icons/Email';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import PeopleIcon from '@material-ui/icons/People';
+import ReceiptIcon from '@material-ui/icons/Receipt';
+import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import ReportIcon from '@material-ui/icons/Report';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
@@ -78,13 +80,13 @@ const MENU_ITEMS_CONFIG = {
     menuItemName: 'Пользователи', icon: AccountBoxIcon,
   },
   [MODULE_NAMES.EMPLOYEES]: {
-    menuItemName: 'Сотрудники', icon: AccountBoxIcon,
+    menuItemName: 'Сотрудники', icon: RecentActorsIcon,
   },
   [MODULE_NAMES.WAREHOUSES]: {
     menuItemName: 'Склады', icon: ShoppingCartIcon,
   },
   [MODULE_NAMES.WAYBILLS]: {
-    menuItemName: 'Путевые листы', icon: LocalShippingIcon,
+    menuItemName: 'Путевые листы', icon: ReceiptIcon,
   },
   [MODULE_NAMES.CONSIGNMENT_NOTES]: {
     menuItemName: 'ТТН', icon: AssignmentIcon,
