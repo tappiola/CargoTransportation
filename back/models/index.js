@@ -51,8 +51,10 @@ Waybill.hasMany(ControlPoint);
 ControlPoint.belongsTo(ControlPointStatus);
 ControlPoint.belongsTo(Waybill);
 
-LossReport.belongsTo(Good);
+LossReport.hasMany(Good);
 LossReport.belongsTo(User, { as: 'responsible' });
+LossReport.belongsTo(Company, { as: 'linkedCompany' });
+LossReport.belongsTo(ConsignmentNote);
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
@@ -77,5 +79,5 @@ module.exports = {
   WaybillStatus,
   ControlPoint,
   CongratulationTemplate,
-  Vehicles
+  Vehicles,
 };

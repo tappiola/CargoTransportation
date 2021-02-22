@@ -5,6 +5,7 @@ import consignmentNotesReducer from 'features/ConsignmentNotes/consignmentNotesS
 import currentUserReducer from 'features/CurrentUser/currentUserSlice';
 import employeesReducer from 'features/Employees/employeesSlice';
 import notificationsReducer, { enqueueToast } from 'features/Notifier/NotifierSlice';
+import reportsReducer from 'features/Reports/actSlice';
 import usersReducer from 'features/Users/usersSlice';
 import vehiclesReducer from 'features/Vehicles/vehiclesSlice';
 import warehousesReducer from 'features/Warehouses/warehousesSlice';
@@ -37,6 +38,7 @@ const store = configureStore({
     users: usersReducer,
     warehouses: warehousesReducer,
     waybills: waybillsReducer,
+    reports: reportsReducer,
     vehicles: vehiclesReducer,
   },
   preloadedState,

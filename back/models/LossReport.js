@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, NOW } = require('sequelize');
 const db = require('../database/db');
 
 const LossReport = db.define('loss_report', {
@@ -13,6 +13,8 @@ const LossReport = db.define('loss_report', {
   },
   reportedAt: {
     type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: NOW,
   },
 });
 

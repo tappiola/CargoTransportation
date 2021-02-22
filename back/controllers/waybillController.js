@@ -161,7 +161,7 @@ router.put('/mobile/checkPoint/:pointId', async (req, res) => {
 
     return res.status(200).json(point);
   } catch (e) {
-    return res.status(400).json({ error:{ message:e.message } });
+    return res.status(400).json({ error: { message: e.message } });
   }
 });
 
@@ -179,7 +179,7 @@ router.put('/mobile/finish/:id', async (req, res) => {
 
     return res.status(200).json(waybill);
   } catch (e) {
-    return res.status(400).json({ error:{ message:e.message } });
+    return res.status(400).json({ error: { message: e.message } });
   }
 });
 

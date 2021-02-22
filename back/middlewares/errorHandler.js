@@ -7,6 +7,6 @@ module.exports = (app) => {
 
   app.use((err, req, res) => {
     const status = err.status || 500;
-    res.status(status).json({ error: { message: err.message } });
+    res.status(status).json({ message: err.message });
   });
 };

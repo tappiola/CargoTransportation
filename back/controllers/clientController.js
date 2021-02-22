@@ -21,7 +21,7 @@ router.post('/register', auth, async (req, res, next) => {
   const client = await Client.findOne({ where: { email } });
   
   if (client) {
-    return res.status(400).json({ error: { message: 'Email уже используется!' } });
+    return res.status(400).json({ message: 'Email уже используется!' });
   }
 
   try {
@@ -46,7 +46,7 @@ router.put('/:id', auth, async (req, res) => {
   const client = await Client.findOne({ where: { id, linkedCompanyId } });
 
   if (!client) {
-    return res.status(400).json({ error: { message: 'client not found' } });
+    return res.status(400).json({ message: 'Не найдено' });
   }
 
   await client.update(clientData).catch((err) => {

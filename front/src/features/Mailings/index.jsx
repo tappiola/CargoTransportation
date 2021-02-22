@@ -127,7 +127,7 @@ export default function Mailings() {
                         alt="avatar"
                         className={classes.image}
                         onClick={() => setSelectedImage(src)}
-                        src={isDataURL(src) ? src : `${BACKEND_HOST}/${src}`}
+                        src={isDataURL(src) ? src : `${BACKEND_HOST}/uploads/${src}`}
                       />
                     </Grid>
                   ))}

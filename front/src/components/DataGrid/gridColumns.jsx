@@ -2,13 +2,17 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { Link, Checkbox, Button } from '@material-ui/core';
-import { Search as SearchIcon, Edit as EditIcon, LocalShipping } from '@material-ui/icons';
+import {
+  Search as SearchIcon,
+  Edit as EditIcon,
+  LocalShipping,
+} from '@material-ui/icons';
 
 import { ROLE_NAMES } from 'constants/permissions';
 import { URLS } from 'constants/urls';
 
 const valueOrBlank = ({ value }) => value || '-';
-const getRolesCellValue = ({ value }) => (value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ')) || '-';
+const getRolesCellValue = ({ value }) => value.map((r) => ROLE_NAMES[r.role] || r.role).join(', ') || '-';
 
 export const FULLNAME = (path) => ({
   field: 'fullName',
@@ -16,7 +20,9 @@ export const FULLNAME = (path) => ({
   disableClickEventBubbling: true,
   flex: 3,
   renderCell: ({ value, row }) => (
-    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+    <Link component={NavLink} to={`${path}/${row.id}`}>
+      {value}
+    </Link>
   ),
 });
 
@@ -26,7 +32,9 @@ export const LEGAL_NAME = (path) => ({
   disableClickEventBubbling: true,
   flex: 2,
   renderCell: ({ value, row }) => (
-    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+    <Link component={NavLink} to={`${path}/${row.id}`}>
+      {value}
+    </Link>
   ),
 });
 
@@ -35,7 +43,9 @@ export const EMAIL = {
   headerName: 'Email',
   flex: 3,
   renderCell: ({ value }) => (
-    <Link href={`mailto:${value}`} color="textPrimary">{value}</Link>
+    <Link href={`mailto:${value}`} color="textPrimary">
+      {value}
+    </Link>
   ),
 };
 
@@ -109,7 +119,9 @@ export const TNN_NUMBER = (path) => ({
   headerName: 'Номер',
   flex: 2,
   renderCell: ({ value, row }) => (
-    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+    <Link component={NavLink} to={`${path}/${row.id}`}>
+      {value}
+    </Link>
   ),
 });
 
@@ -143,29 +155,29 @@ export const TTN_DRIVER = {
 
 export const TTN_WAYBILL = {
   field: 'waybill',
-  headerName: <LocalShipping fontSize="large" style={{ margin: '24px 16px 0' }} />,
+  headerName: (
+    <LocalShipping fontSize="large" style={{ margin: '24px 16px 0' }} />
+  ),
   width: 90,
-  renderCell: ({ value }) => (value
-    ? (
-      <Button
-        variant="outlined"
-        color="primary"
-        to={`${URLS.WAYBILLS}/${value.id}`}
-        component={NavLink}
-      >
-        <SearchIcon fontSize="small" />
-      </Button>
-    )
-    : (
-      <Button
-        variant="outlined"
-        color="primary"
-        component={NavLink}
-        to={`${URLS.WAYBILLS}/new`}
-      >
-        <EditIcon fontSize="small" />
-      </Button>
-    )),
+  renderCell: ({ value }) => (value ? (
+    <Button
+      variant="outlined"
+      color="primary"
+      to={`${URLS.WAYBILLS}/${value.id}`}
+      component={NavLink}
+    >
+      <SearchIcon fontSize="small" />
+    </Button>
+  ) : (
+    <Button
+      variant="outlined"
+      color="primary"
+      component={NavLink}
+      to={`${URLS.WAYBILLS}/new`}
+    >
+      <EditIcon fontSize="small" />
+    </Button>
+  )),
 };
 
 export const WAYBILL_TTN = (path) => ({
@@ -173,7 +185,9 @@ export const WAYBILL_TTN = (path) => ({
   headerName: 'ТТН',
   flex: 2,
   renderCell: ({ value, row }) => (
-    <Link component={NavLink} to={`${path}/${row.id}`}>{value}</Link>
+    <Link component={NavLink} to={`${path}/${row.id}`}>
+      {value}
+    </Link>
   ),
 });
 
@@ -203,6 +217,57 @@ export const DEPARTURE_DATE = {
   headerName: 'Дата отправки',
   flex: 3,
   renderCell: ({ value }) => value && value.slice(0, 10),
+};
+
+export const REPORT_DATE = {
+  field: 'reportedAt',
+  headerName: 'Дата составления',
+  flex: 3,
+  renderCell: ({ value }) => value && value.slice(0, 10),
+};
+
+export const REPORT_NUMBER = (path) => ({
+  field: 'id',
+  headerName: 'Акт',
+  flex: 3,
+  renderCell: ({ value, row }) => (
+    <Link component={NavLink} to={`${path}/${row.id}`}>
+      {`Акт утери №${value}`}
+    </Link>
+  ),
+});
+
+export const REPORT_RESPONSIBLE = {
+  field: 'responsible',
+  headerName: 'Ответственный',
+  flex: 3,
+  renderCell: ({ value }) => (
+    <Link component={NavLink} to={`employees/${value?.id}`}>
+      {value?.shortFullName}
+    </Link>
+  ),
+};
+
+export const REPORT_TTN = {
+  field: 'consignmentNoteId',
+  headerName: 'Накладная',
+  flex: 3,
+  renderCell: ({ value }) => (
+    <Link component={NavLink} to={`consignment-notes/${value}`}>
+      {value}
+    </Link>
+  ),
+};
+
+export const REPORT_COMPANY = {
+  field: 'linkedCompany',
+  headerName: 'Заказчик',
+  flex: 3,
+  renderCell: ({ value }) => (
+    <Link component={NavLink} to={`companies/${value?.id}`}>
+      {value?.name}
+    </Link>
+  ),
 };
 
 export const VEHICLES_NAME = (path) => ({

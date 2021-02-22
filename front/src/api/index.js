@@ -56,6 +56,13 @@ export {
 } from './consignmentNotes';
 
 export {
+  setReport,
+  getReports,
+  updateReport,
+  deleteReports,
+} from './reports';
+
+export {
   getVehicles,
   setVehicles,
   updateVehicles,

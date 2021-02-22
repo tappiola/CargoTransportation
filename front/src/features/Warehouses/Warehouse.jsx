@@ -36,7 +36,7 @@ function User() {
   const methods = useForm({ defaultValues, resolver });
   const { register, handleSubmit } = methods;
 
-  const sendFormData = (clientId) => async (formData) => dispatch(
+  const sendFormData = (clientId) => (formData) => dispatch(
     clientId
       ? updateWarehouse(normalize(formData, clientId))
       : setWarehouse(formData),
