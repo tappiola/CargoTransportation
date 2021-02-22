@@ -180,16 +180,38 @@ export const TTN_WAYBILL = {
   )),
 };
 
-export const WAYBILL_TTN = (path) => ({
-  field: 'number',
-  headerName: 'ТТН',
+export const WAYBILL_NUMBER = (path) => ({
+  field: 'id',
+  headerName: 'Номер',
   flex: 2,
   renderCell: ({ value, row }) => (
     <Link component={NavLink} to={`${path}/${row.id}`}>
+      Путевой лист №
       {value}
     </Link>
   ),
 });
+
+export const WAYBILL_TTN = {
+  field: 'number',
+  headerName: 'ТТН',
+  flex: 2,
+  renderCell: valueOrBlank,
+};
+
+export const WAYBILL_DRIVER = {
+  field: 'shortFullName',
+  headerName: 'Водитель',
+  flex: 2,
+  renderCell: valueOrBlank,
+};
+
+export const WAYBILL_CAR = {
+  field: 'vehicle',
+  headerName: 'Машина',
+  flex: 2,
+  renderCell: valueOrBlank,
+};
 
 export const WAYBILL_START_ADDRESS = {
   field: 'fullAddress',

@@ -13,7 +13,7 @@ import PaddedContainer from 'components/PaddedContainer';
 
 export const waybillsSelector = ({ waybillsData }) => waybillsData.map((u) => {
   const { consignment_note: consignmentNote, ...other } = u;
-  return { ...other, ...consignmentNote };
+  return { ...other, ...consignmentNote, ...consignmentNote.driver };
 });
 
 function WaybillsList() {
@@ -26,10 +26,10 @@ function WaybillsList() {
   const waybillsLoadComplete = useSelector(({ waybills }) => waybills.waybillsLoadComplete);
 
   const columns = [
-    COLUMNS.WAYBILL_TTN(path),
-    COLUMNS.DEPARTURE_DATE,
-    COLUMNS.WAYBILL_START_ADDRESS,
-    COLUMNS.WAYBILL_END_ADDRESS,
+    COLUMNS.WAYBILL_NUMBER(path),
+    COLUMNS.WAYBILL_TTN,
+    COLUMNS.WAYBILL_DRIVER,
+    COLUMNS.WAYBILL_CAR,
     COLUMNS.WAYBILL_STATUS,
   ];
 

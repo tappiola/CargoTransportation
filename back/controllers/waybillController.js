@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint } = require('../models');
+const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint, User } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES, WAYBILL_STATUSES_ID, CONTROL_POINT_STATUSES_ID } = require('../constants');
 
@@ -22,7 +22,14 @@ router.get('/', auth, async (req, res) => {
       },
       {
         model: ConsignmentNote,
-        attributes: ['number'],
+        attributes: ['number', 'vehicle', 'driverId'],
+        include:[
+          {
+            model: User,
+            as: 'driver',
+            attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+          },
+        ],
       },
       {
         model: Warehouse,
