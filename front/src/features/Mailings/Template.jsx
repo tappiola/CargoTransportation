@@ -35,7 +35,7 @@ const Template = ({ color, image, user }) => {
         <img
           alt="gift"
           className={classes.gift}
-          src={isDataURL(image) ? image : `${BACKEND_HOST}/${image}`}
+          src={isDataURL(image) ? image : `${BACKEND_HOST}/uploads/${image}`}
         />
         <p className={classes.text}>
           {text}

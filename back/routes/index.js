@@ -26,6 +26,6 @@ module.exports = (app) => {
   app.use('/api/documents', documentController);
   app.use('/api/mails', mailController);
   app.use('/api/reports', reportController);
-  app.use('/', publicController);
+  app.use('/uploads', publicController);
   app.use('/api/vehicles', vehicleRouter);
 };
