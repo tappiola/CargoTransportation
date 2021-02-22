@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res) => {
 
 router.get('/mobile/:driverId', auth, async (req, res) => {
   const reports = await LossReport.findAll({
-    where: {responsibleId: req.params.driverId},
+    where: { responsibleId: req.params.driverId },
     include: [Good, {
       model: ConsignmentNote,
       attributes: ['number', 'issuedDate'],

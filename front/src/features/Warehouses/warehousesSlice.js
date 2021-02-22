@@ -12,8 +12,8 @@ export const getWarehouses = createAsyncThunk(
 
 export const setWarehouse = createAsyncThunk(
   'warehouses/setWarehouse',
-  async (data, { dispatch }) => {
-    api.setWarehouse(data)
+  async (formData, { dispatch }) => {
+    const warehouse = await api.setWarehouse(formData)
       .catch((err) => {
         dispatch(enqueueToast({
           message: err.message || 'Ошибка при добавлении склада в систему',
@@ -28,14 +28,14 @@ export const setWarehouse = createAsyncThunk(
       type: TOAST_TYPES.SUCCESS,
     }));
 
-    return data;
+    return warehouse;
   },
 );
 
 export const updateWarehouse = createAsyncThunk(
   'warehouses/updateWarehouse',
-  async ({ data, clientId }, { dispatch }) => {
-    await api.updateWarehouse(data, clientId)
+  async ({ formData, clientId }, { dispatch }) => {
+    await api.updateWarehouse(formData, clientId)
       .catch((err) => {
         dispatch(enqueueToast({
           message: err.message || 'Изменения успешно сохранены',
@@ -92,7 +92,7 @@ const warehousesSlice = createSlice({
         .filter(({ id }) => !action.payload.includes(String(id)));
     },
     [setWarehouse.fulfilled]: (state, action) => {
-      state.warehoussData.push(action.payload);
+      state.warehousesData.push(action.payload);
     },
   },
 });
