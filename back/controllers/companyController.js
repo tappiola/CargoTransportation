@@ -2,9 +2,9 @@ const { Router } = require('express');
 
 const router = Router();
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { GLOBAL_ADMIN } } = require('../constants');
+const { ROLES: { GLOBAL_ADMIN, ADMIN, MANAGER } } = require('../constants');
 
-const auth = authorize(GLOBAL_ADMIN);
+const auth = authorize(GLOBAL_ADMIN, ADMIN, MANAGER);
 const { Company } = require('../models');
 
 router.get('/', auth, async (req, res) => {
@@ -33,7 +33,7 @@ router.post('/create', auth, async (req, res) => {
 router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
   if (!id) {
-    return res.status(400).json({ error: { message: 'Неверно переданный Id!' } });
+    return res.status(400).json({ message: 'Некорректные данные' });
   }
 
   try {
@@ -42,7 +42,7 @@ router.put('/:id', auth, async (req, res) => {
 
     return res.status(200).end();
   } catch (e) {
-    return res.status(400).json(e);
+    return res.status(400).json({ message: 'Ошибка обновления' });
   }
 });
 

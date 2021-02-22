@@ -4,7 +4,6 @@ import Employees from './Employees';
 import { MODULE_NAMES, ROLES } from 'constants/permissions';
 import { URLS } from 'constants/urls';
 
-const Acts = lazy(() => import('features/Acts'));
 const Clients = lazy(() => import('features/Clients'));
 const ConsignmentNotes = lazy(() => import('features/ConsignmentNotes'));
 const Mailings = lazy(() => import('features/Mailings'));
@@ -21,7 +20,7 @@ export const PROTECTED_ROUTES = [
   {
     module: MODULE_NAMES.ACTS,
     basePath: URLS.ACTS,
-    component: Acts,
+    component: Reports,
     roles: [ADMIN, MANAGER, DRIVER],
   },
   {

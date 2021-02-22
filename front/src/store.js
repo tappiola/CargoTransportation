@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import reportsReducer from 'features/Acts/actSlice';
 import clientsReducer from 'features/Clients/clientsSlice';
 import companiesReducer from 'features/Companies/companiesSlice';
 import consignmentNotesReducer from 'features/ConsignmentNotes/consignmentNotesSlice';
 import currentUserReducer from 'features/CurrentUser/currentUserSlice';
 import employeesReducer from 'features/Employees/employeesSlice';
 import notificationsReducer, { enqueueToast } from 'features/Notifier/NotifierSlice';
+import reportsReducer from 'features/Reports/actSlice';
 import usersReducer from 'features/Users/usersSlice';
 import vehiclesReducer from 'features/Vehicles/vehiclesSlice';
 import warehousesReducer from 'features/Warehouses/warehousesSlice';

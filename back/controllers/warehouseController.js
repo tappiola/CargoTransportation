@@ -68,7 +68,7 @@ router.put('/:id', auth, async (req, res) => {
     const warehouse = await Warehouse.findOne({ where: { id, linkedCompanyId } });
 
     if (!warehouse) {
-      return res.status(400).json({ error: { message: 'Склад не найден' } });
+      return res.status(400).json({ message: 'Склад не найден' });
     }
 
     await warehouse.update(req.body);

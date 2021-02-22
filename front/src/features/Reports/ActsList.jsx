@@ -8,7 +8,7 @@ import { getReports, deleteReports } from './actSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
 import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
-import { REPORT_DATE, REPORT_RESPONSIBLE, REPORT_NUMBER, REPORT_COMPANY } from 'components/DataGrid/gridColumns';
+import { REPORT_DATE, REPORT_RESPONSIBLE, REPORT_NUMBER, REPORT_COMPANY, REPORT_TTN } from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 
@@ -18,7 +18,13 @@ export default function Reports() {
   const { reportsData, reportsLoadComplete } = useSelector(({ reports }) => reports);
   const [selection, setSelection] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const columns = [REPORT_NUMBER(path), REPORT_COMPANY, REPORT_DATE, REPORT_RESPONSIBLE];
+  const columns = [
+    REPORT_NUMBER(path),
+    REPORT_TTN,
+    REPORT_COMPANY,
+    REPORT_DATE,
+    REPORT_RESPONSIBLE,
+  ];
 
   useEffect(() => {
     dispatch(getReports());

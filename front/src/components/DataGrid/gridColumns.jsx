@@ -248,6 +248,17 @@ export const REPORT_RESPONSIBLE = {
   ),
 };
 
+export const REPORT_TTN = {
+  field: 'consignmentNoteId',
+  headerName: 'Накладная',
+  flex: 3,
+  renderCell: ({ value }) => (
+    <Link component={NavLink} to={`consignment-notes/${value}`}>
+      {value}
+    </Link>
+  ),
+};
+
 export const REPORT_COMPANY = {
   field: 'linkedCompany',
   headerName: 'Заказчик',

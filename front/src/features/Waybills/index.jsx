@@ -10,7 +10,6 @@ export default function Warehouses() {
   return (
     <Switch>
       <Route path={`${path}/:id(\\d+)`} component={Waybill} />
-      <Route path={`${path}/new`}>Страница добавления путевого листа </Route>
       <Route exact path={path} component={WaybillsList} />
       <Route>Страница не найдена</Route>
     </Switch>

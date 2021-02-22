@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -9,7 +9,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { parseISO, format } from 'date-fns';
+import { getCompanies } from 'features/Companies/companiesSlice';
 import Goods from 'features/ConsignmentNotes/ConsignmentNoteNew/Goods';
+import { getEmployees } from 'features/Employees/employeesSlice';
 
 import { updateReport, setReport } from './actSlice';
 import Index from 'components/Buttons/BackButton';
@@ -19,8 +21,15 @@ import BaseField, { DateField } from 'components/ControlledField';
 import GridToolbar from 'components/GridToolbar';
 import PaddedContainer from 'components/PaddedContainer';
 import PaddedPaper from 'components/PaddedPaper';
+import { usePending } from 'utils';
 
 const TABLE_COLUMNS = ['Наименование', 'Кол-во', 'Ед. измерения', 'Стоимость (руб)', 'Масса (кг)', 'Примечания'];
+
+const selector = ({ employees, companies }) => ({
+  driversData: employees.employeesData
+    .filter(({ roles }) => roles.some(({ role }) => role === 'driver')),
+  companiesData: companies?.companiesData || [],
+});
 
 const Act = () => {
   const { id: reportId } = useParams();
@@ -29,30 +38,31 @@ const Act = () => {
     if (!reportId) {
       return {};
     }
+
     const { reportedAt, ...report } = reports.reportsData.find(({ id }) => id === Number(reportId));
+
     return {
       ...report,
       reportedAt: format(parseISO(reportedAt), 'yyyy-MM-dd'),
     };
   });
 
-  const { driversData, companiesData } = useSelector(({ employees, copmanies }) => ({
-    driversData: employees.employeesData
-      .filter(({ roles }) => roles.some(({ role }) => role === 'driver')),
-    companiesData: copmanies?.companiesData || [],
-  }));
+  const { driversData, companiesData } = useSelector(selector);
+
+  useEffect(() => {
+    dispatch(getCompanies());
+    dispatch(getEmployees());
+  }, []);
 
   const methods = useForm({ defaultValues });
   const { handleSubmit } = methods;
   const disabled = !!reportId;
 
-  const sendFormData = ({ linkedCompany, user, goods: gs, reportedAt, consignmentNoteId }) => {
+  const sendFormData = ({ linkedCompany, user, ...rest }) => {
     const formData = {
       userId: user?.id,
-      consignmentNoteId,
       linkedCompanyId: linkedCompany?.id,
-      goods: gs,
-      reportedAt,
+      ...rest,
     };
 
     return dispatch(
@@ -62,18 +72,20 @@ const Act = () => {
     );
   };
 
+  const { bindPending, handler } = usePending(sendFormData);
+
   return (
     <PaddedContainer>
       <Index link="/acts" text="К списку актов" />
       <GridToolbar title="Просмотр акта утери" />
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(sendFormData)}>
+        <form onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
-            <BaseField name="id" label="Номер акта" disabled={disabled} />
+            {reportId && <BaseField name="id" label="Номер акта" disabled={disabled} />}
             <BaseField name="consignmentNoteId" label="Номер накладной" disabled={disabled} />
             <ControlledAutocomplete
               name="linkedCompany"
-              fieldName="fullName"
+              fieldName="name"
               options={companiesData}
               getOptionLabel={({ name }) => name || ''}
               label="Заказчик"
@@ -115,7 +127,7 @@ const Act = () => {
               <Goods />
             )}
           </PaddedPaper>
-          <SubmitButton>Сохранить</SubmitButton>
+          <SubmitButton {...bindPending}>Сохранить</SubmitButton>
         </form>
       </FormProvider>
     </PaddedContainer>

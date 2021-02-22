@@ -25,7 +25,7 @@ router.post('/register', [auth, validate.register], async (req, res, next) => {
   const company = await Company.findByPk(newUserCompanyId || creatorCompanyId);
 
   if (user) {
-    return res.status(400).json({ error: { message: 'Email уже используется!' } });
+    return res.status(400).json({ message: 'Email уже используется!' });
   }
 
   try {
@@ -172,7 +172,7 @@ router.put('/:id', authorize(GLOBAL_ADMIN, ADMIN), async (req, res) => {
   const roles = await Role.findAll({ where: { role } });
 
   if (!user) {
-    return res.status(400).json({ error: { message: 'user not found' } });
+    return res.status(400).json({ message: 'user not found' });
   }
 
   if (roles) {
@@ -188,7 +188,7 @@ router.post('/update-token', async (req, res) => {
   const token = req.headers.authorization.split('Bearer ')[1];
 
   if (!token) {
-    return res.status(403).json({ error: { message: 'token not found' } });
+    return res.status(403).json({ message: 'Токен не найден' });
   }
 
   const { id } = jwt.verify(token, process.env.jwtToken);

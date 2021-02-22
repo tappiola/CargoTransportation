@@ -7,10 +7,7 @@ const router = Router();
 const auth = authorize(ADMIN, MANAGER);
 
 router.get('/', auth, async (req, res) => {
-  const { companyId: linkedCompanyId } = req;
-
   const reports = await LossReport.findAll({
-    where: { linkedCompanyId },
     include: [
       Good,
       { 
@@ -34,6 +31,8 @@ router.post('/register', auth, async (req, res) => {
     linkedCompanyId,
     responsibleId,
     reportedAt,
+  }).catch(() => {
+    res.status(400).json({ message: 'Некорректные данные' });
   });
 
   if (goods) {
@@ -65,12 +64,10 @@ router.put('/:id', auth, async (req, res) => {
 
 router.delete('/', auth, async (req, res) => {
   const ids = req.body;
-  const { companyId: linkedCompanyId } = req;
 
   await LossReport.destroy({
     where: {
       id: ids.map((id) => Number(id)),
-      linkedCompanyId,
     },
   });
  

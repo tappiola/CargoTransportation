@@ -6,7 +6,6 @@ import { ConfirmDialog } from '@tappiola/material-ui-externals';
 
 import { deleteWaybills, getWaybills } from './waybillsSlice';
 import DeleteButton from 'components/Buttons/DeleteButton';
-import NavButton from 'components/Buttons/NavButton';
 import CustomGrid from 'components/DataGrid';
 import * as COLUMNS from 'components/DataGrid/gridColumns';
 import GridToolbar from 'components/GridToolbar';
@@ -42,7 +41,6 @@ function WaybillsList() {
     <>
       <PaddedContainer>
         <GridToolbar title="Путевые листы">
-          <NavButton color="primary" to={`${path}/new`}>Добавить путевой лист</NavButton>
           <DeleteButton disabled={!selection.length} onClick={() => setIsDialogOpen(true)} />
         </GridToolbar>
         <CustomGrid
