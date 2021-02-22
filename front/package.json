@@ -1,5 +1,6 @@
 {
   "name": "front",
+  "homepage": "https://jslab-cargo-transportation.herokuapp.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
