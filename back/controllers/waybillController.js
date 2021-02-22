@@ -162,16 +162,16 @@ router.put('/mobile/checkPoint/:pointId', async (req, res) => {
 
     return res.status(200).json(point);
   } catch (e) {
-    return res.status(400).json({error:{message:e.message}});
+    return res.status(400).json({ error: { message: e.message } });
   }
 });
 
 router.put('/mobile/finish/:id', async (req, res) => {
-  const {id} = req.params;
-  const waybill = await Waybill.findOne({where: {id}});
+  const { id } = req.params;
+  const waybill = await Waybill.findOne({ where: { id } });
 
   if (!waybill) {
-    return res.status(400).json({error: {message: 'Путевой лист не найден.'}});
+    return res.status(400).json({ error: { message: 'Путевой лист не найден.' } });
   }
 
   try {
@@ -180,7 +180,7 @@ router.put('/mobile/finish/:id', async (req, res) => {
 
     return res.status(200).json(waybill);
   } catch (e) {
-    return res.status(400).json({error:{message:e.message}});
+    return res.status(400).json({ error: { message: e.message } });
   }
 });
 

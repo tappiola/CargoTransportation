@@ -46,12 +46,13 @@ const Act = () => {
   const { handleSubmit } = methods;
   const disabled = !!reportId;
 
-  const sendFormData = ({ linkedCompany, user, goods: gs }) => {
-    console.log(user);
+  const sendFormData = ({ linkedCompany, user, goods: gs, reportedAt, consignmentNoteId }) => {
     const formData = {
       userId: user?.id,
+      consignmentNoteId,
       linkedCompanyId: linkedCompany?.id,
       goods: gs,
+      reportedAt,
     };
 
     return dispatch(

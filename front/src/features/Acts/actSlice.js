@@ -54,7 +54,7 @@ export const updateReport = createAsyncThunk(
 
 export const setReport = createAsyncThunk(
   'reports/setReport',
-  async ({ formData }, { dispatch }) => {
+  async (formData, { dispatch }) => {
     const response = await api.setReport(formData)
       .catch((err) => {
         dispatch(enqueueToast({

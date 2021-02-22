@@ -227,7 +227,7 @@ export const REPORT_RESPONSIBLE = {
   flex: 3,
   renderCell: ({ value }) => (
     <Link component={NavLink} to={`employees/${value?.id}`}>
-      {value.shortFullName}
+      {value?.shortFullName}
     </Link>
   ),
 };
@@ -238,7 +238,7 @@ export const REPORT_COMPANY = {
   flex: 3,
   renderCell: ({ value }) => (
     <Link component={NavLink} to={`companies/${value?.id}`}>
-      {value.name}
+      {value?.name}
     </Link>
   ),
 };

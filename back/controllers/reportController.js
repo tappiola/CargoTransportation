@@ -10,7 +10,7 @@ router.get('/', auth, async (req, res) => {
   const { companyId: linkedCompanyId } = req;
 
   const reports = await LossReport.findAll({
-    where: { linkedCompanyId: linkedCompanyId || 2 },
+    where: { linkedCompanyId },
     include: [
       Good,
       { 
@@ -27,13 +27,13 @@ router.get('/', auth, async (req, res) => {
 });
 
 router.post('/register', auth, async (req, res) => {
-  const { goods, userId: responsibleId, consignmentNoteId } = req.body;
-  const { companyId: linkedCompanyId } = req;
+  const { goods, userId: responsibleId, consignmentNoteId, linkedCompanyId, reportedAt } = req.body;
 
   const report = await LossReport.create({ 
     consignmentNoteId,
     linkedCompanyId,
     responsibleId,
+    reportedAt,
   });
 
   if (goods) {
