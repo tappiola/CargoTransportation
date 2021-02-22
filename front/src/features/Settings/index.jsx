@@ -10,6 +10,7 @@ import { THEME } from 'constants/themes';
 
 export default function Settings({ theme, onThemeChange }) {
   const [muted, setMuted] = useState(localStorage.getItem('muted') === 'true');
+  const [showMenu, setShowMenu] = useState(localStorage.getItem('showMenu') === 'true');
 
   const switchMuted = () => {
     localStorage.setItem('muted', !muted);
@@ -19,6 +20,11 @@ export default function Settings({ theme, onThemeChange }) {
   const switchTheme = () => (
     onThemeChange(theme === THEME.DARK ? THEME.LIGHT : THEME.DARK)
   );
+
+  const switchShowMenu = () => {
+    localStorage.setItem('showMenu', !showMenu);
+    setShowMenu(!showMenu);
+  };
 
   return (
     <PaddedContainer>
@@ -31,6 +37,10 @@ export default function Settings({ theme, onThemeChange }) {
           <FormControlLabel
             control={<Switch checked={muted} onChange={switchMuted} />}
             label="Скрыть уведомления"
+          />
+          <FormControlLabel
+            control={<Switch checked={showMenu} onChange={switchShowMenu} />}
+            label="Рзвернуть боковое меню"
           />
         </Grid>
       </PaddedPaper>

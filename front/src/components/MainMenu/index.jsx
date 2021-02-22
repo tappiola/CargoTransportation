@@ -25,7 +25,7 @@ export default function MainMenu({
 }) {
   const dispatch = useDispatch();
   const classes = useMenuStyles();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(localStorage.getItem('showMenu'));
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
   const logout = () => dispatch(logoutUser());
