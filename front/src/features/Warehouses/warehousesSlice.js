@@ -34,8 +34,8 @@ export const setWarehouse = createAsyncThunk(
 
 export const updateWarehouse = createAsyncThunk(
   'warehouses/updateWarehouse',
-  async ({ formData, clientId }, { dispatch }) => {
-    await api.updateWarehouse(formData, clientId)
+  async ({ id, ...formData }, { dispatch }) => {
+    await api.updateWarehouse(formData, id)
       .catch((err) => {
         dispatch(enqueueToast({
           message: err.message || 'Изменения успешно сохранены',
