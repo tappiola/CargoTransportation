@@ -22,6 +22,10 @@ import { usePending } from 'utils';
 const selector = (warehouseId) => ({ warehouses }) => warehouses.warehousesData.find(
   ({ id }) => id.toString() === warehouseId,
 );
+const normalize = ({ ...data }, id) => ({
+  ...data,
+  id,
+});
 
 function User() {
   const history = useHistory();
@@ -34,7 +38,7 @@ function User() {
 
   const sendFormData = (clientId) => async (formData) => dispatch(
     clientId
-      ? updateWarehouse({ formData, clientId })
+      ? updateWarehouse(normalize(formData, clientId))
       : setWarehouse(formData),
   ).then(() => history.push('/warehouses'));
 
