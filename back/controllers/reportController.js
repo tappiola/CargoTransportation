@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { LossReport, Good, User, Company } = require('../models');
+const { LossReport, Good, User, Company, ConsignmentNote } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES: { ADMIN, MANAGER } } = require('../constants');
 
@@ -10,11 +10,11 @@ router.get('/', auth, async (req, res) => {
   const reports = await LossReport.findAll({
     include: [
       Good,
-      { 
+      {
         model: Company,
         as: 'linkedCompany',
       },
-      { 
+      {
         model: User,
         as: 'responsible',
       }],
@@ -23,10 +23,22 @@ router.get('/', auth, async (req, res) => {
   res.status(200).json(reports);
 });
 
+router.get('/mobile/:driverId', auth, async (req, res) => {
+  const reports = await LossReport.findAll({
+    where: {responsibleId: req.params.driverId},
+    include: [Good, {
+      model: ConsignmentNote,
+      attributes: ['number', 'issuedDate'],
+    }],
+  });
+
+  res.status(200).json(reports);
+});
+
 router.post('/register', auth, async (req, res) => {
   const { goods, userId: responsibleId, consignmentNoteId, linkedCompanyId, reportedAt } = req.body;
 
-  const report = await LossReport.create({ 
+  const report = await LossReport.create({
     consignmentNoteId,
     linkedCompanyId,
     responsibleId,
@@ -42,7 +54,6 @@ router.post('/register', auth, async (req, res) => {
   }
 
   return res.status(200).json(report);
-
 });
 
 router.put('/:id', auth, async (req, res) => {
@@ -70,7 +81,7 @@ router.delete('/', auth, async (req, res) => {
       id: ids.map((id) => Number(id)),
     },
   });
- 
+
   res.status(204).end();
 });
 
