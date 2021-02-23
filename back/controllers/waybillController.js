@@ -56,9 +56,25 @@ router.get('/:id', auth, async (req, res) => {
   const { id } = req.params;
   const waybill = await Waybill.findOne({
     where: { id },
-    include: [{
-      model: Warehouse,
-    }]
+    include: [
+      {
+        model: ConsignmentNote,
+        include: [
+          {
+            model: User,
+            as: 'driver',
+            attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+          },
+          {
+            model: Client,
+            attributes: ['shortFullName', 'lastName', 'firstName', 'middleName'],
+          },
+        ]
+      },
+      {
+        model: Warehouse,
+      },
+    ]
   });
   const controlPoints = await ControlPoint.findAll({ where: { waybillId: id } });
 

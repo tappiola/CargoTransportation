@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { Container, Grid, Typography } from '@material-ui/core';
@@ -37,7 +37,6 @@ function Waybill() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { id: waybillId } = useParams();
-  const { consignmentNotesData } = useSelector(({ consignmentNotes }) => consignmentNotes);
   const methods = useForm({ resolver });
   const { handleSubmit, errors, reset } = methods;
   const sendFormData = (id) => (data) => (
@@ -49,9 +48,9 @@ function Waybill() {
 
   useEffect(async () => {
     const { waybill } = await api.getWaybill(waybillId);
-    const { fullAddress, departedAt, expectedArrivalAt, consignmentNoteId } = waybill;
+    const { fullAddress, departedAt, expectedArrivalAt } = waybill;
 
-    const consignmentNote = consignmentNotesData.find(({ id }) => id === consignmentNoteId);
+    const consignmentNote = waybill.consignment_note;
     const { driver, vehicle, issuedDate, number, client } = consignmentNote;
 
     reset({
@@ -88,25 +87,25 @@ function Waybill() {
         <form noValidate onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
             <Row title="Накладная">
-              <BaseField name="consignmentNote.number" label="Номер" disabled />
-              <DateField name="consignmentNote.issuedDate" label="Дата оформления" disabled />
+              <BaseField name="consignmentNote.number" label="Номер" />
+              <DateField name="consignmentNote.issuedDate" label="Дата оформления" />
             </Row>
             <Row title="Путевой лист">
-              <BaseField name="waybill.number" label="Номер" disabled />
-              <DateField name="waybill.issuedDate" label="Дата оформления" disabled />
+              <BaseField name="waybill.number" label="Номер" />
+              <DateField name="waybill.issuedDate" label="Дата оформления" />
             </Row>
             <Row title="Автомобиль">
-              <BaseField name="vehicle.number" label="Марка, номер" disabled />
-              <BaseField name="vehicle.driver" label="Водитель" disabled />
+              <BaseField name="vehicle.number" label="Марка, номер" />
+              <BaseField name="vehicle.driver" label="Водитель" />
             </Row>
             <Row title="Начальная точка маршрута">
-              <BaseField name="client.shortFullName" label="Отправитель" disabled />
-              <BaseField name="client.fullAddress" label="Адрес" disabled />
+              <BaseField name="client.shortFullName" label="Отправитель" />
+              <BaseField name="client.fullAddress" label="Адрес" />
               <DateField name="client.departedAt" label="Дата выезда" />
             </Row>
             <Row title="Конечная точка маршрута">
-              <BaseField name="warehouse.name" label="Получатель" disabled />
-              <BaseField name="warehouse.fullAddress" label="Адрес" disabled />
+              <BaseField name="warehouse.name" label="Получатель" />
+              <BaseField name="warehouse.fullAddress" label="Адрес" />
               <DateField name="warehouse.expectedArrivalAt" label="Дата прибытия" />
             </Row>
             <Typography color="primary" variant="subtitle1" style={{ marginTop: 24 }}>
