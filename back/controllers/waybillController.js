@@ -145,6 +145,9 @@ router.get('/mobile/:driverId', async (req, res) => {
   }
 
   const waybills = await Waybill.findAll({
+    where: {
+      waybillStatusId: WAYBILL_STATUSES_ID.ISSUED,
+    },
     include: [
       {
         model: WaybillStatus,
