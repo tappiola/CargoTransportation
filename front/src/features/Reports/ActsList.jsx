@@ -18,6 +18,10 @@ export default function Reports() {
   const { reportsData, reportsLoadComplete } = useSelector(({ reports }) => reports);
   const [selection, setSelection] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const newReportsData = reportsData.map((item) => ({
+    ...item,
+    noteNumber: item.consignment_note.number,
+  }));
   const columns = [
     REPORT_NUMBER(path),
     REPORT_TTN,
@@ -38,7 +42,7 @@ export default function Reports() {
           <DeleteButton disabled={!selection.length} onClick={() => setIsOpen(true)} />
         </GridToolbar>
         <CustomGrid
-          rows={reportsData}
+          rows={newReportsData}
           columns={columns}
           loading={!reportsLoadComplete}
           onSelectionChange={({ rowIds }) => setSelection(rowIds)}

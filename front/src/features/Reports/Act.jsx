@@ -82,7 +82,7 @@ const Act = () => {
         <form onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
             {reportId && <BaseField name="id" label="Номер акта" disabled={disabled} />}
-            <BaseField name="consignmentNoteId" label="Номер накладной" disabled={disabled} />
+            <BaseField name="consignment_note.number" label="Номер накладной" disabled={disabled} />
             <ControlledAutocomplete
               name="linkedCompany"
               fieldName="name"
@@ -90,7 +90,6 @@ const Act = () => {
               getOptionLabel={({ name }) => name || ''}
               label="Заказчик"
               defaultValue={defaultValues?.linkedCompany?.name}
-              disabled={disabled}
             />
             <DateField name="reportedAt" label="Дата регистрации" disabled={disabled} />
             <ControlledAutocomplete

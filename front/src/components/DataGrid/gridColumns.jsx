@@ -271,11 +271,11 @@ export const REPORT_RESPONSIBLE = {
 };
 
 export const REPORT_TTN = {
-  field: 'consignmentNoteId',
+  field: 'noteNumber',
   headerName: 'Накладная',
   flex: 3,
-  renderCell: ({ value }) => (
-    <Link component={NavLink} to={`consignment-notes/${value}`}>
+  renderCell: ({ row, value }) => (
+    <Link component={NavLink} to={`consignment-notes/${row.consignmentNoteId}`}>
       {value}
     </Link>
   ),
@@ -285,11 +285,7 @@ export const REPORT_COMPANY = {
   field: 'linkedCompany',
   headerName: 'Заказчик',
   flex: 3,
-  renderCell: ({ value }) => (
-    <Link component={NavLink} to={`companies/${value?.id}`}>
-      {value?.name}
-    </Link>
-  ),
+  renderCell: ({ value }) => value?.name,
 };
 
 export const VEHICLES_NAME = (path) => ({

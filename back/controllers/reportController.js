@@ -50,7 +50,7 @@ router.post('/register', auth, async (req, res) => {
 
   const report = await LossReport.create({
     consignmentNoteId,
-    linkedCompanyId,
+    linkedCompanyId: linkedCompanyId || 1,
     responsibleId,
     reportedAt,
   }).catch(() => {
