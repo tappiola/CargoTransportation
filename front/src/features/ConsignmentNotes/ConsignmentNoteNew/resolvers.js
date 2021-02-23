@@ -18,7 +18,7 @@ const consignmentNoteSchema = yup.object().shape({
   driver: yup.object({ fullName: yup.string().required() }),
   client: yup.object({ fullName: yup.string().required() }),
   passportIssuedBy: yup.string().required().min(6).max(50),
-  vehicleNumber: yup.object({ vehicle: yup.string().required().min(5).max(30) }),
+  vehicle: yup.string().required().min(6).max(50),
   goodsRows: yup.array().of(
     yup.object().shape({
       name: yup.string().required(),
