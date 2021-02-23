@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 
+import { getVehicles } from '../../Vehicles/vehiclesSlice';
 import * as api from 'api';
 import ControlledAutocomplete from 'components/ControlledAutocomplete';
 import BaseField, { DateField } from 'components/ControlledField';
@@ -10,6 +12,7 @@ import { ELASTIC_INDICIES } from 'constants/elastic';
 import { useElastic } from 'utils';
 
 const DriverForm = () => {
+  const dispatch = useDispatch();
   const [driverId, setDriverId] = useState();
   const [passportData, setPassportData] = useState({});
 
@@ -17,6 +20,7 @@ const DriverForm = () => {
   const { options, onChange } = useElastic(ELASTIC_INDICIES.DRIVERS, 'fullName');
 
   const getOption = ({ fullName: option }, { fullName: value }) => (!option) || option === value;
+  const getCarOption = ({ number: option }, { number: value }) => (!option) || option === value;
 
   useEffect(() => {
     if (driverId) {
@@ -34,10 +38,16 @@ const DriverForm = () => {
     }
   }, [driverId]);
 
-  return (
-    <Grid container spacing={3} justify="space-between" alignItems="center">
-      <Grid item xs={12} md={7}>
+  const vehiclesData = useSelector(({ vehicles }) => vehicles.vehiclesData);
+  useEffect(() => {
+    if (!vehiclesData.length) {
+      dispatch(getVehicles());
+    }
+  });
 
+  return (
+    <Grid container spacing={3} justify="space-between" alignItems="flex-start">
+      <Grid item xs={12} md={7}>
         <ControlledAutocomplete
           name="driver"
           fieldName="fullName"
@@ -51,7 +61,15 @@ const DriverForm = () => {
         />
       </Grid>
       <Grid item xs={12} md={5}>
-        <BaseField name="vehicle" label="Транспортное средство" value={passportData.passportNumber} />
+        <ControlledAutocomplete
+          name="vehicle"
+          fieldName="vehicleNumber"
+          options={vehiclesData}
+          getOptionLabel={(option) => option.number || ''}
+          getOptionSelected={getCarOption}
+          label="Транспортное средство"
+          defaultValue={{}}
+        />
       </Grid>
       <Grid item xs={12} md={3}>
         <BaseField name="passportNumber" label="Номер паспорта" value={passportData.passportNumber} />
