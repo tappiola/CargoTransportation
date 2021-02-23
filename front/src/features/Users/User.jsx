@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 
+import { getCompanies } from '../Companies/companiesSlice';
 import { userResolver as resolver } from './userResolver';
 import { setUser, updateUser } from './usersSlice';
 import SubmitButton from 'components/Buttons/SubmitButton';
@@ -57,6 +58,12 @@ function User() {
   const { bindPending, handler } = usePending(sendFormData(id));
 
   const getOption = ({ name: option }, { name: value }) => (!option) || option === value;
+
+  useEffect(() => {
+    if (!companiesData.length) {
+      dispatch(getCompanies());
+    }
+  });
 
   return (
     <Container maxWidth="sm">
