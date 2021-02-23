@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const { LossReport, Good, User, Company, ConsignmentNote } = require('../models');
 const { authorize } = require('../middlewares/auth');
-const { ROLES: { ADMIN, MANAGER } } = require('../constants');
+const { ROLES: { ADMIN, MANAGER, DRIVER } } = require('../constants');
 
 const router = Router();
-const auth = authorize(ADMIN, MANAGER);
+const auth = authorize(ADMIN, MANAGER, DRIVER);
 
 router.get('/', auth, async (req, res) => {
   const reports = await LossReport.findAll({
@@ -15,9 +15,16 @@ router.get('/', auth, async (req, res) => {
         as: 'linkedCompany',
       },
       {
+        model: ConsignmentNote,
+        attributes: ['number'],
+      },
+      {
         model: User,
         as: 'responsible',
       }],
+    order: [
+      ['reportedAt', 'DESC'],
+    ]
   });
 
   res.status(200).json(reports);
@@ -30,6 +37,9 @@ router.get('/mobile/:driverId', auth, async (req, res) => {
       model: ConsignmentNote,
       attributes: ['number', 'issuedDate'],
     }],
+    order:[
+      ['reportedAt', 'DESC'],
+    ]
   });
 
   res.status(200).json(reports);
@@ -58,9 +68,8 @@ router.post('/register', auth, async (req, res) => {
 
 router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
-  const { companyId: linkedCompanyId } = req;
 
-  const report = await LossReport.findOne({ where: { id, linkedCompanyId } });
+  const report = await LossReport.findOne({ where: { id } });
 
   if (!report) {
     return res.status(400).json({ message: 'Акт не найден' });
