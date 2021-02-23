@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { Waybill, WaybillStatus, ConsignmentNote, Warehouse, Client, Good, ControlPoint, User } = require('../models');
 const { authorize } = require('../middlewares/auth');
 const { ROLES, WAYBILL_STATUSES_ID, CONTROL_POINT_STATUSES_ID } = require('../constants');
@@ -146,7 +147,10 @@ router.get('/mobile/:driverId', async (req, res) => {
 
   const waybills = await Waybill.findAll({
     where: {
-      waybillStatusId: WAYBILL_STATUSES_ID.ISSUED,
+      [Op.or]: [
+        { waybillStatusId: WAYBILL_STATUSES_ID.ISSUED },
+        { waybillStatusId: WAYBILL_STATUSES_ID.COMPLETED },
+      ],
     },
     include: [
       {
