@@ -58,6 +58,8 @@ LossReport.belongsTo(ConsignmentNote);
 
 CongratulationTemplate.belongsTo(Company, { as: 'linkedCompany' });
 
+Vehicles.belongsTo(Company, { as: 'linkedCompany' });
+
 db.sync({ alter: true, logging: false }).then(
   () => Logger.info('DB sync completed'),
   (err) => Logger.error(err)

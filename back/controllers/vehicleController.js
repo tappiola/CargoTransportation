@@ -21,9 +21,12 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 router.post('/create', auth, async (req, res) => {
+  const { companyId: linkedCompanyId } = req;
+
   try {
     const newVehicle = await Vehicles.create({
       ...req.body,
+      linkedCompanyId
     });
     return res.status(200).json(newVehicle);
   } catch (e) {
@@ -33,13 +36,19 @@ router.post('/create', auth, async (req, res) => {
 
 router.put('/:id', auth, async (req, res) => {
   const { id } = req.params;
+  const { companyId: linkedCompanyId } = req;
+
   if (!id) {
     return res.status(400).end();
   }
 
   try {
-    const vehicle = await Vehicles.findByPk(id);
-    await vehicle.update(req.body);
+    const vehicle = await Vehicles.findOne({
+      where: { id, linkedCompanyId },
+    });
+    vehicle.number = req.body.number;
+    vehicle.linkedCompanyId = linkedCompanyId;
+    await vehicle.save();
 
     return res.status(200).end();
   } catch (e) {
