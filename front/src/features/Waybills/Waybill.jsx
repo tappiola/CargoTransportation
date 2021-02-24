@@ -87,25 +87,25 @@ function Waybill() {
         <form noValidate onSubmit={handleSubmit(handler)}>
           <PaddedPaper>
             <Row title="Накладная">
-              <BaseField name="consignmentNote.number" label="Номер" />
-              <DateField name="consignmentNote.issuedDate" label="Дата оформления" />
+              <BaseField name="consignmentNote.number" label="Номер" disabled />
+              <DateField name="consignmentNote.issuedDate" label="Дата оформления" disabled />
             </Row>
             <Row title="Путевой лист">
               <BaseField name="waybill.number" label="Номер" />
-              <DateField name="waybill.issuedDate" label="Дата оформления" />
+              <DateField name="waybill.issuedDate" label="Дата оформления" disabled />
             </Row>
             <Row title="Автомобиль">
-              <BaseField name="vehicle.number" label="Марка, номер" />
-              <BaseField name="vehicle.driver" label="Водитель" />
+              <BaseField name="vehicle.number" label="Марка, номер" disabled />
+              <BaseField name="vehicle.driver" label="Водитель" disabled />
             </Row>
             <Row title="Начальная точка маршрута">
-              <BaseField name="client.shortFullName" label="Отправитель" />
-              <BaseField name="client.fullAddress" label="Адрес" />
+              <BaseField name="client.shortFullName" label="Отправитель" disabled />
+              <BaseField name="client.fullAddress" label="Адрес" disabled />
               <DateField name="client.departedAt" label="Дата выезда" />
             </Row>
             <Row title="Конечная точка маршрута">
-              <BaseField name="warehouse.name" label="Получатель" />
-              <BaseField name="warehouse.fullAddress" label="Адрес" />
+              <BaseField name="warehouse.name" label="Получатель" disabled />
+              <BaseField name="warehouse.fullAddress" label="Адрес" disabled />
               <DateField name="warehouse.expectedArrivalAt" label="Дата прибытия" />
             </Row>
             <Typography color="primary" variant="subtitle1" style={{ marginTop: 24 }}>
