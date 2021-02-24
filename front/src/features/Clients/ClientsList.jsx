@@ -18,7 +18,7 @@ function ClientsList() {
   const { clientsData, clientsLoadComplete } = useSelector(({ clients }) => clients);
   const [selection, setSelection] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const columns = [FULLNAME(path), EMAIL, COMPANY, STATUS];
+  const columns = [FULLNAME(path), COMPANY, EMAIL, STATUS];
 
   useEffect(() => {
     dispatch(getClients());

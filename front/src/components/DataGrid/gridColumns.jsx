@@ -68,7 +68,7 @@ export const COMPANIES_UNN = {
 export const COMPANY = {
   field: 'companyName',
   headerName: 'Компания',
-  flex: 2,
+  flex: 3,
   renderCell: valueOrBlank,
 };
 
@@ -96,7 +96,7 @@ export const UNN = {
 export const STATUS = {
   field: 'isActive',
   headerName: 'Статус',
-  flex: 2,
+  flex: 1,
   renderCell: ({ value }) => (value ? 'Активный' : 'Неактивный'),
 };
 
