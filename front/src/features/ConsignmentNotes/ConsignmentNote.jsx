@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -82,13 +83,44 @@ function ConsignmentNote() {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handler)}>
           <PaddedPaper title="Данные о накладной">
-            <BaseField name="number" label="Номер накладной" disabled />
-            <BaseField name="createdBy.shortFullName" label="Зарегистрировал" disabled />
-            <DateField name="registerDate" label="Дата регистрации" disabled />
-            <BaseField name="assignedTo.shortFullName" label="Проверил" disabled />
-            <BaseField name="issuedDate" label="Дата оформления" disabled />
+            <Grid container spacing={3} justify="space-between" alignItems="center">
+              <Grid item xs={12} md={6}>
+                <BaseField name="number" label="Номер накладной" disabled />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DateField name="registerDate" label="Дата регистрации" disabled />
+              </Grid>
+            </Grid>
             <BaseField name="client.shortFullName" label="Клиент" disabled />
             <BaseField name="driver.shortFullName" label="Водитель" disabled />
+            <BaseField name="createdBy.shortFullName" label="Отпуск произвел" disabled />
+            <Grid container spacing={3} justify="space-between" alignItems="center">
+              <Grid item xs={12} md={8}>
+                <BaseField name="assignedTo.shortFullName" label="Отпуск разрешил" disabled />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <BaseField name="issuedDate" label="Дата оформления" disabled />
+              </Grid>
+            </Grid>
+          </PaddedPaper>
+          <PaddedPaper title="Пункт назначения">
+            <Grid container spacing={3} justify="space-between" alignItems="center">
+              <Grid item xs={12} md={6}>
+                <ControlledAutocomplete
+                  label="Склад"
+                  name="warehouse"
+                  fieldName="name"
+                  defaultValue={{}}
+                  disabled={isNoteIssued}
+                  options={warehousesData}
+                  getOptionLabel={(option) => option.name || ''}
+                  getOptionSelected={(val, opt) => opt?.warehouse?.name === val?.warehouse?.name}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {isNoteIssued && <BaseField name="warehouse.fullAddress" label="Адрес" disabled />}
+              </Grid>
+            </Grid>
           </PaddedPaper>
           <PaddedPaper title="Товарная партия">
             <Table>
@@ -109,19 +141,6 @@ function ConsignmentNote() {
                 ))}
               </TableBody>
             </Table>
-          </PaddedPaper>
-          <PaddedPaper title="Пункт назначения">
-            <ControlledAutocomplete
-              label="Склад"
-              name="warehouse"
-              fieldName="name"
-              defaultValue={{}}
-              disabled={isNoteIssued}
-              options={warehousesData}
-              getOptionLabel={(option) => option.name || ''}
-              getOptionSelected={(val, opt) => opt?.warehouse?.name === val?.warehouse?.name}
-            />
-            {isNoteIssued && <BaseField name="warehouse.fullAddress" label="Адрес" disabled />}
           </PaddedPaper>
           <SubmitButton {...bindPending}>Отметить как проверенную</SubmitButton>
         </form>
